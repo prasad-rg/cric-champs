@@ -9,7 +9,7 @@ import {
   } from 'react-native';
   import React from 'react';
   
-import boardingpage3 from "/Volumes/Development/CricChamps/cric-champs/assets/images/boardingpage3.png"
+import boardingpage3 from "../../../assets/images/boardingpage3.png"
 import GradientButton from '../../components/GradientButton';
   
   const OnBoardingScreenThree = ({navigation}) => {
