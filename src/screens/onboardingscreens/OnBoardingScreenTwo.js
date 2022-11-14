@@ -34,13 +34,17 @@ import GradientButton from '../../components/GradientButton';
               umpires, overs etc. and manage {'\n'} them thereafter.
             </Text>
           </View>
+          <View style={styles.bottomView}>
           <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="NEXT"
           onPress={() => navigation.navigate('OnBoardingScreenThree')}
+          style={{height:50,width:"100%"}} 
+          textstyle={{height:16,fontWeight:"500",fontSize:14,letterSpacing:0.5,lineHeight:19,width:38}}
         />
+        </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -72,7 +76,7 @@ import GradientButton from '../../components/GradientButton';
       padding: 1,
     },
     welcome: {
-      height: 350,
+      height: 400,
       width: 350,
  
       alignSelf:"center"
@@ -81,6 +85,7 @@ import GradientButton from '../../components/GradientButton';
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+    // marginTop:1
     },
     circle1: {
       height: 9,
@@ -115,16 +120,15 @@ import GradientButton from '../../components/GradientButton';
       color: '#4A4A4A',
       //    height:55,
       //    width:273,
-      fontSize: 14,
-      letterSpacing: 0,
+      fontSize: 15,
+      letterSpacing: 0.4,
       lineHeight: 19,
       textAlign: 'center',
-      marginTop: 18,
+      marginTop: 25,
     },
-    Button:{
-  borderWidth:1,
-  alignSelf:"center",
-    
-    }
+    bottomView:{
+      marginTop:95,
+     
+        }
   });
   

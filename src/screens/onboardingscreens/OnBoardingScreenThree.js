@@ -30,13 +30,17 @@ import GradientButton from '../../components/GradientButton';
               viewing live scores and updates of {'\n'} a tournament.
             </Text>
           </View>
+          <View style={styles.bottomView}>
           <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="LET'S START"
-          onPress={() => navigation.navigate('HomeScreen')}
+          onPress={() => navigation.reset({index:0,routes:[{name:"HomeScreen"}]})}
+          style={{height:50,width:"100%"}} 
+          textstyle={{height:16,fontWeight:"500",fontSize:14,letterSpacing:0.5,lineHeight:19}}
         />
+        </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -69,15 +73,15 @@ import GradientButton from '../../components/GradientButton';
     },
     welcome: {
       height: 400,
-      width: 400,
-    // margin:60,
+      width: 350,
+   marginTop:55,
       alignSelf:"center"
     },
     circleView: {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      // marginBottom:30,
+      
     },
     circle1: {
       height: 9,
@@ -112,16 +116,14 @@ import GradientButton from '../../components/GradientButton';
       color: '#4A4A4A',
       //    height:55,
       //    width:273,
-      fontSize: 14,
-      letterSpacing: 0,
+      fontSize: 15,
+      letterSpacing: 0.4,
       lineHeight: 19,
       textAlign: 'center',
-      marginTop: 18,
+      marginTop: 25,
     },
-    Button:{
-  borderWidth:1,
-  alignSelf:"center",
-    
-    }
+    bottomView:{
+      marginTop:83
+        }
   });
   

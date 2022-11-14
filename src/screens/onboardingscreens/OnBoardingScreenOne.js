@@ -34,15 +34,17 @@ const OnBoardingScreenOne = ({navigation}) => {
             your own cricket tournaments and share it{'\n'} with your viewers
           </Text>
         </View>
-        
+        <View style={styles.bottomView}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="NEXT"
           onPress={() => navigation.navigate('OnBoardingScreenTwo')}
-          style={{height:50,width:"100%",fontWeight:"500"}} 
+          style={{height:50,width:"100%"}} 
+          textstyle={{height:16,fontWeight:"500",fontSize:14,letterSpacing:0.5,lineHeight:19,width:38}}
           />
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -117,11 +119,14 @@ const styles = StyleSheet.create({
     color: '#4A4A4A',
     //    height:55,
     //    width:273,
-    fontSize: 14,
-    letterSpacing: 0,
+    fontSize: 15,
+    letterSpacing: 0.3,
     lineHeight: 19,
     textAlign: 'center',
-    marginTop: 18,
+    marginTop: 25,
   },
+  bottomView:{
+marginTop:95
+  }
   
 });
