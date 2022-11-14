@@ -1,7 +1,7 @@
 import {Pressable, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-const GradientButton = ({start,end,colors,text,onPress,style={}}) => {
+const GradientButton = ({start,end,colors,text,onPress,style={},textstyle={}}) => {
   return (
     <LinearGradient
       start={start}
@@ -9,7 +9,7 @@ const GradientButton = ({start,end,colors,text,onPress,style={}}) => {
       colors={colors}
       style={[styles.gradientBackground,{...style}]}>
       <Pressable style={styles.gradientButton} onPress={onPress}>
-        <Text style={styles.createTournament}>{text}</Text>
+        <Text style={[styles.createTournament,{...textstyle}]}>{text}</Text>
       </Pressable>
     </LinearGradient>
   );
@@ -20,9 +20,11 @@ export default GradientButton;
 const styles = StyleSheet.create({
   gradientButton: {
     height: 40,
-    width: 241,
+    width: "100%",
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth:1,
+
   },
   createTournament: {
     height: 18,
@@ -40,5 +42,7 @@ const styles = StyleSheet.create({
     boxShadow: '0 8 30 0 rgba(222,235,251,0.71)',
     alignSelf: 'center',
     marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
