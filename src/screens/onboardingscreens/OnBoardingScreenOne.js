@@ -23,9 +23,9 @@ const OnBoardingScreenOne = ({navigation}) => {
 
         <Image source={Welcome} style={styles.welcome} />
         <View style={styles.circleView}>
-          <Text style={styles.circle1}></Text>
-          <Text style={styles.circle2}></Text>
-          <Text style={styles.circle2}></Text>
+          <Text style={styles.circle1} />
+          <Text style={styles.circle2} />
+          <Text style={styles.circle2} />
         </View>
         <View>
           <Text style={styles.boldText}>Welcome to Cric Champs!</Text>
@@ -35,16 +35,23 @@ const OnBoardingScreenOne = ({navigation}) => {
           </Text>
         </View>
         <View style={styles.bottomView}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="NEXT"
-          onPress={() => navigation.navigate('OnBoardingScreenTwo')}
-          style={{height:50,width:"100%"}} 
-          textstyle={{height:16,fontWeight:"500",fontSize:14,letterSpacing:0.5,lineHeight:19,width:38}}
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="NEXT"
+            onPress={() => navigation.navigate('OnBoardingScreenTwo')}
+            style={{height: 50, width: '100%'}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+              width: 38,
+            }}
           />
-          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -125,8 +132,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 25,
   },
-  bottomView:{
-marginTop:95
-  }
-  
+  bottomView: {
+    marginTop: 95,
+  },
 });

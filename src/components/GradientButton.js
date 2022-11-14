@@ -1,15 +1,23 @@
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-const GradientButton = ({start,end,colors,text,onPress,style={},textstyle={}}) => {
+const GradientButton = ({
+  start,
+  end,
+  colors,
+  text,
+  onPress,
+  style = {},
+  textstyle = {},
+}) => {
   return (
     <LinearGradient
       start={start}
       end={end}
       colors={colors}
-      style={[styles.gradientBackground,{...style}]}>
+      style={[styles.gradientBackground, {...style}]}>
       <TouchableOpacity style={styles.gradientButton} onPress={onPress}>
-        <Text style={[styles.createTournament,{...textstyle}]}>{text}</Text>
+        <Text style={[styles.createTournament, {...textstyle}]}>{text}</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -20,11 +28,10 @@ export default GradientButton;
 const styles = StyleSheet.create({
   gradientButton: {
     height: 40,
-    width: "100%",
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     // borderWidth:1,
-
   },
   createTournament: {
     height: 18,
