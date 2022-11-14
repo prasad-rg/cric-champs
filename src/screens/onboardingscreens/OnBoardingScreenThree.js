@@ -10,7 +10,7 @@ import {
   import React from 'react';
   
 import boardingpage3 from "/Volumes/Development/CricChamps/cric-champs/assets/images/boardingpage3.png"
-  
+import GradientButton from '../../components/GradientButton';
   
   const OnBoardingScreenThree = ({navigation}) => {
     return (
@@ -30,9 +30,13 @@ import boardingpage3 from "/Volumes/Development/CricChamps/cric-champs/assets/im
               viewing live scores and updates of {'\n'} a tournament.
             </Text>
           </View>
-          <TouchableOpacity style={styles.Button} onPress={()=>navigation.navigate('OnBoardingScreenOne')}>
-            <Text>Let's start</Text>
-          </TouchableOpacity>
+          <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="LET'S START"
+          onPress={() => navigation.navigate('HomeScreen')}
+        />
         </ScrollView>
       </SafeAreaView>
     );

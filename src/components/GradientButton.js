@@ -1,14 +1,14 @@
 import {Pressable, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-const GradientButton = ({start,end,colors,text,onPress,style={}}) => {
+const GradientButton = ({start,end,colors,text,style={}}) => {
   return (
     <LinearGradient
       start={start}
       end={end}
       colors={colors}
       style={[styles.gradientBackground,{...style}]}>
-      <Pressable style={styles.gradientButton} onPress={onPress}>
+      <Pressable style={styles.gradientButton}>
         <Text style={styles.createTournament}>{text}</Text>
       </Pressable>
     </LinearGradient>

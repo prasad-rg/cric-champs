@@ -15,7 +15,7 @@ const OnBoardingScreenOne = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
           <View style={styles.skipView}>
             <Text style={styles.skipButton}>SKIP</Text>
           </View>
@@ -31,20 +31,18 @@ const OnBoardingScreenOne = ({navigation}) => {
           <Text style={styles.boldText}>Welcome to Cric Champs!</Text>
           <Text style={styles.paraText}>
             Your one stop app for Creating and managing{'\n'}
-            Your own cricket tournaments and share it{'\n'} with your viewers
+            your own cricket tournaments and share it{'\n'} with your viewers
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.Button}
-          onPress={() => navigation.navigate('OnBoardingScreenTwo')}>
-          <Text>Next</Text>
-        </TouchableOpacity>
+        
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="CREATE TOURNAMENT"
-        />
+          text="NEXT"
+          onPress={() => navigation.navigate('OnBoardingScreenTwo')}
+          style={{height:50,width:"100%",fontWeight:"500"}} 
+          />
       </ScrollView>
     </SafeAreaView>
   );
@@ -125,8 +123,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 18,
   },
-  Button: {
-    borderWidth: 1,
-    alignSelf: 'center',
-  },
+  
 });

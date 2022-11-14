@@ -10,13 +10,13 @@ import {
   import React from 'react';
   
 import boardingpage2 from "/Volumes/Development/CricChamps/cric-champs/assets/images/boardingpage2.png"
-  
+import GradientButton from '../../components/GradientButton';
   
   const OnBoardingScreenTwo = ({navigation}) => {
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
           <View style={styles.skipView}>
             <Text style={styles.skipButton}>SKIP</Text>
           </View>
@@ -34,9 +34,13 @@ import boardingpage2 from "/Volumes/Development/CricChamps/cric-champs/assets/im
               umpires, overs etc. and manage {'\n'} them thereafter.
             </Text>
           </View>
-          <TouchableOpacity style={styles.Button} onPress={()=>navigation.navigate('OnBoardingScreenThree')}>
-            <Text>Next</Text>
-          </TouchableOpacity>
+          <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="NEXT"
+          onPress={() => navigation.navigate('OnBoardingScreenThree')}
+        />
         </ScrollView>
       </SafeAreaView>
     );
