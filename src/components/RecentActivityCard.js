@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderRadius: 10,
     paddingRight: 14,
+    marginBottom:16,
   },
   header: {
     flexDirection: 'row',
