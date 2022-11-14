@@ -1,11 +1,11 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 const OutlinedButton = ({text}) => {
   return (
-    <Pressable style={styles.enterButton}>
+    <TouchableOpacity style={styles.enterButton}>
       <Text style={styles.enter}>{text}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

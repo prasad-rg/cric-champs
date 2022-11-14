@@ -6,50 +6,62 @@ import {
   Image,
   TextInput,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 
 import React from 'react';
 import GradientButton from '../components/GradientButton';
 import OutlinedButton from '../components/OutlinedButton';
+import RecentActivityCard from '../components/RecentActivityCard';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   return (
-    <SafeAreaView>
-      <View style={styles.header}>
-        <Pressable>
-        <Image
-          source={require('../../assets/images/burgermenu.png')}
-          style={styles.burgermenu}
-        />
-        </Pressable>
-        <Text style={styles.cricket}>Cricket</Text>
-      </View>
-      <View>
-        <View style={styles.subheader}>
-          <Text style={styles.viewManage}>View or Manage Tournament</Text>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView>
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/burgermenu.png')}
+              style={styles.burgermenu}
+            />
+          </TouchableOpacity>
+          <Text style={styles.cricket}>Cricket</Text>
         </View>
         <View>
-          <Text style={styles.enterTournament}>
-            Enter tournament code to view / manage
-          </Text>
-          <View style={styles.middleView}>
-            <TextInput style={styles.textInput} />
-            <OutlinedButton text='ENTER'/>
+          <View style={styles.subheader}>
+            <Text style={styles.viewManage}>View or Manage Tournament</Text>
           </View>
-          <Text style={styles.codeAcquired}>
-            Code can be acquired from the admin.
-          </Text>
-          <Text style={styles.or}>Or</Text>
-          <GradientButton
-            start={{x: 0, y: 0}}
-            end={{x: 2, y: 0}}
-            colors={['#FFBA8C', '#FE5C6A']}
-            text="CREATE TOURNAMENT"
-            // onPress={}
-            //  style={{width:'100%'}}
-          />
+          <View>
+            <Text style={styles.enterTournament}>
+              Enter tournament code to view / manage
+            </Text>
+            <View style={styles.middleView}>
+              <TextInput style={styles.textInput} />
+              <OutlinedButton text="ENTER" />
+            </View>
+            <Text style={styles.codeAcquired}>
+              Code can be acquired from the admin.
+            </Text>
+            <Text style={styles.or}>Or</Text>
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#FFBA8C', '#FE5C6A']}
+              text="CREATE TOURNAMENT"
+              // onPress={}
+              //  style={{width:'100%'}}
+            />
+            <View style={styles.recentActivityView}>
+              <Text style={styles.recentActivityText}>Recent Activities</Text>
+              <RecentActivityCard />
+              <RecentActivityCard />
+              <RecentActivityCard />
+              <RecentActivityCard />
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -68,6 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FFFFFF',
     boxShadow: '0 8 30 0 rgba(223,223,223,0.37)',
+    paddingHorizontal: 10,
   },
 
   header: {
@@ -146,5 +159,23 @@ const styles = StyleSheet.create({
     lineheight: 16,
     textAlign: 'center',
     marginTop: 20,
+  },
+  recentActivityView: {
+    // flex:1,
+    padding: 20,
+    backgroundColor: '#EEF1F4',
+    marginTop: 20,
+    height: '100%',
+  },
+  recentActivityText: {
+    height: 19,
+    width: 248,
+    color: '#8E9BA8',
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+    marginBottom: 16,
   },
 });
