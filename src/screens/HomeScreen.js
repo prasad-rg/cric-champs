@@ -16,10 +16,12 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.header}>
+        <Pressable>
         <Image
           source={require('../../assets/images/burgermenu.png')}
           style={styles.burgermenu}
         />
+        </Pressable>
         <Text style={styles.cricket}>Cricket</Text>
       </View>
       <View>
