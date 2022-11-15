@@ -21,7 +21,7 @@ const UmpiresList = () => {
                     style={styles.backButtonImage}
                   />
                 </TouchableOpacity>
-                <Text style={styles.groundText}>Grounds</Text>
+                <Text style={styles.groundText}>Umpires</Text>
               </View>
 
               <TouchableOpacity style={styles.groundButton}>
