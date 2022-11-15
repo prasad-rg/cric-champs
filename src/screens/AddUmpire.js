@@ -12,6 +12,8 @@ import React, {useState} from 'react';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
+import AddProfileDetails from '../components/AddProfileDetails';
+
 
 const AddUmpire = () => {
   const [name, setName] = useState('');
@@ -24,31 +26,8 @@ const AddUmpire = () => {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView>
-        <ImageBackground
-          source={require('../../assets/images/umpire.png')}
-          resizeMode="cover">
-          <View style={styles.backgroundBeyondSafeArea}>
-            <SafeAreaView>
-              <View style={styles.profileDetailsContainer}>
-                <View style={styles.header}>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('../../assets/images/goback.png')}
-                      style={styles.gobackbutton}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.addUmpire}>Add Umpire</Text>
-                </View>
-                <View style={styles.profileView}>
-                  <Image
-                    source={require('../../assets/images/profile1.png')}
-                    style={styles.profile}
-                  />
-                </View>
-              </View>
-            </SafeAreaView>
-          </View>
-        </ImageBackground>
+        <AddProfileDetails profilePictureUri = {require('../../assets/images/profile2.png')}
+  backroundImageUri = {require('../../assets/images/umpire.png')} title='Add Umpire'/>
         <View style={styles.form}>
           <TextField
             label="Umpire Name"
@@ -56,12 +35,12 @@ const AddUmpire = () => {
             onSubmitEditing={this.onSubmit}
             ref={this.fieldRef}
             textColor="#666666"
-
             tintColor="rgba(0, 0, 0, 0.4)"
             baseColor="rgba(0, 0, 0, .38)"
             lineWidth={1}
             onChangeText={text => setName(text)}
             autoCapitalize="none"
+            // labelTextStyle={{ fontFamily:"Roboto-Medium",fontWeight:'500',color:"#000000",opacity:0.8}}
           />
           <TextField
             label="City / Town (Optional)"
@@ -69,7 +48,7 @@ const AddUmpire = () => {
             onSubmitEditing={this.onSubmit}
             ref={this.fieldRef}
             textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
+            tintColor="rgba(0, 0, 0, 0.4)"
             lineWidth={1}
             onChangeText={text => setCity(text)}
             autoCapitalize="none"
@@ -81,9 +60,8 @@ const AddUmpire = () => {
             onSubmitEditing={this.onSubmit}
             ref={this.fieldRef}
             textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
+            tintColor="rgba(0, 0, 0, 0.4)"
             lineWidth={1}
-            
             onChangeText={text => setPhone(text)}
             autoCapitalize="none"
           />
@@ -135,7 +113,7 @@ const styles = StyleSheet.create({
     height: 28,
     width: 174,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily:"Roboto-Medium",
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -170,7 +148,8 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 30,
-    marginTop:10
+    marginTop:10,
+   
 
   },
 });
