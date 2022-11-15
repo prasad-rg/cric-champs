@@ -2,9 +2,9 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
 
-const RegisterUserScreen = () => {
+const RegisterUserScreen = ({navigation}) => {
   return (
-    <AddProfileDetails>
+    <AddProfileDetails navigation={navigation}>
       <View style={styles.container}>
         <Text>Hello</Text>
       </View>

@@ -15,6 +15,7 @@ const AddProfileDetails = ({
   children,
   profilePictureUri = '',
   backroundImageUri = '',
+  title = 'Register',
 }) => {
   const {width, height} = useWindowDimensions();
   return (
@@ -29,6 +30,7 @@ const AddProfileDetails = ({
         <AppBar
           style={{backgroundColor: 'rgba(0, 102, 226, 0.85)'}}
           navigation={navigation}
+          title={title}
         />
         <View
           style={[
