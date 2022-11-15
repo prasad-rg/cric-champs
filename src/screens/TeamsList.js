@@ -9,40 +9,90 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
-import {color} from 'react-native-reanimated';
 
+import TeamListName from '../components/TeamListName';
+import GradientButton from '../components/GradientButton';
 const TeamsList = () => {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/images/cricketTeam.png')}
-        resizeMode="cover">
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={styles.profileDetailsContainer}>
-              <View style={styles.headerText}>
-                <TouchableOpacity style={styles.closeButton}>
-                  <Image
-                    source={require('../../assets/images/backicon.png')}
-                    style={styles.backButtonImage}
-                  />
-                </TouchableOpacity>
-                <Text style={styles.teamText}>Teams List</Text>
-              </View>
+      <ScrollView>
+        <ImageBackground
+          source={require('../../assets/images/cricketTeam.png')}
+          resizeMode="cover">
+          <View style={styles.backgroundBeyondSafeArea}>
+            <SafeAreaView>
+              <View style={styles.profileDetailsContainer}>
+                <View style={styles.headerText}>
+                  <TouchableOpacity>
+                    <Image
+                      source={require('../../assets/images/backicon.png')}
+                      style={styles.backButtonImage}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.teamText}>Teams List</Text>
+                </View>
 
-              <View style={styles.addButton}>
-                <TouchableOpacity>
+                <TouchableOpacity style={styles.addButton}>
                   <Text style={styles.addTeamText}>ADD TEAM</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-         
-          </SafeAreaView>
-        </View>
-      </ImageBackground>
+            </SafeAreaView>
+          </View>
+        </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.teams}>Teams</Text>
+          <View style={styles.teamsView}>
+            <TeamListName
+              source={require('../../assets/images/team1.png')}
+              text="Udupi Design Labs"
+            />
+            <TeamListName
+              source={require('../../assets/images/team2.png')}
+              text="Paras XI"
+            />
+            <TeamListName
+              source={require('../../assets/images/team3.png')}
+              text="Team Lions"
+            />
+            <TeamListName
+              source={require('../../assets/images/team4.png')}
+              text="Parra Warriors"
+            />
+            <TeamListName
+              source={require('../../assets/images/team5.png')}
+              text="Team Dabangg"
+            />
+            <TeamListName
+              source={require('../../assets/images/team3.png')}
+              text="Team Lions"
+            />
+            <TeamListName
+              source={require('../../assets/images/team4.png')}
+              text="Parra Warriors"
+            />
+            <TeamListName
+              source={require('../../assets/images/team5.png')}
+              text="Team Dabangg"
+            />
           </View>
+        </View>
+      </ScrollView>
+      <View>
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="PROCEED"
+          style={{height: 50, width: '100%', marginBottom: 20, marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -52,9 +102,10 @@ export default TeamsList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'rgba(217,226,233,0.5)',
   },
   profileDetailsContainer: {
-    height: 309,
+    height: 280,
     marginTop: 15,
   },
   backButtonImage: {
@@ -99,81 +150,35 @@ const styles = StyleSheet.create({
     width: 210,
     borderWidth: 2,
     borderRadius: 20,
-    boxShadow: '0 8 30 0 rgba(223,223,223,0.37)',
+
     borderColor: '#FFFFFF',
     alignSelf: 'center',
     justifyContent: 'center',
-    marginTop:210,
+    marginTop: 180,
   },
-  teams:{
+  teams: {
     height: 16,
-//   width: 43,
-  color: '#8E9BA8',
-  fontFamily: 'Roboto',
-  fontSize: 14,
-  fontWeight: '500',
-  letterSpacing: 0,
-  lineHeight: 16,
-  margin:20,
-  },
-  secondView:{
-    backgroundColor:"rgba(255,255,255,0.87)",
-    flex:1,
-  },
-
-
-
-
-
-
-
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 50,
-  },
-  nameText: {
-    fontFamily: 'Roboto-Medium',
-    color: '#DEEBFB',
-    fontSize: 14,
+    color: '#8E9BA8',
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: '500',
+    letterSpacing: 0,
     lineHeight: 16,
+    margin: 20,
   },
-  profileView: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  secondView: {
+    flex: 1,
   },
-  textContainer: {
-    marginLeft: 20,
+  teamsView: {
+    marginTop: -15,
   },
-  emailText: {
-    color: 'rgba(236, 239, 241, 0.5)',
-    fontSize: 12,
-    lineHeight: 14,
-  },
-  listContainer: {
-    padding: 28,
-    paddingTop: 17,
-  },
-  line: {
-    borderWidth: 1,
-    borderColor: '#EEF1F4',
-  },
-  text: {
-    fontSize: 14,
-    lineHeight: 16,
-    color: 'rgba(0,0,0,0.87)',
-    marginTop: 25,
-  },
-  logout: {
-    backgroundColor: '#F7F7F7',
-    justifyContent: 'center',
-    height: 48,
-    width: '100%',
-    paddingLeft: 28,
-  },
-  logoutText: {
-    fontSize: 14,
-    lineHeight: 16,
-    color: 'rgba(0,0,0,0.87)',
+  card: {
+    height: 68,
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 20,
+
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginTop: 15,
   },
 });
