@@ -28,6 +28,12 @@ const AddTeam = ({navigation}) => {
     console.log(tournamentName);
     navigation.navigate('CreateTournamentSuccess');
   };
+  const handlePlayer = () => {
+    navigation.navigate('AddPlayer');
+  };
+  const handleBack = () => {
+    navigation.navigate('TeamsList');
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +45,7 @@ const AddTeam = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.header}>
-                  <TouchableOpacity style={styles.closeButton}>
+                  <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
                     <Image
                       source={require('../../assets/images/goback.png')}
                       style={styles.gobackbutton}
@@ -61,7 +67,7 @@ const AddTeam = ({navigation}) => {
                     ref={this.fieldRef}
                     textColor="#FFFFFF"
                     tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="#E0E0E0"
+                    baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
                     onChangeText={text => setTournamentName(text)}
                     autoCapitalize="none"
@@ -91,7 +97,7 @@ const AddTeam = ({navigation}) => {
                     ref={this.fieldRef}
                     textColor="#FFFFFF"
                     tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="#E0E0E0"
+                    baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
                     onChangeText={text => setTournamentName(text)}
                     autoCapitalize="none"
@@ -102,7 +108,7 @@ const AddTeam = ({navigation}) => {
                       marginTop: -6,
                     }}
                     style={{
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Roboto-Medium',
                       fontSize: 16,
                       fontWeight: 'bold',
                       letterSpacing: 0.57,
@@ -116,7 +122,7 @@ const AddTeam = ({navigation}) => {
         </ImageBackground>
         <View style={styles.tournamentTypeView}>
           <View style={styles.addButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handlePlayer}>
             <Text style={styles.addTeamText}>ADD PLAYER</Text>
           </TouchableOpacity>
         </View>
@@ -131,7 +137,7 @@ const AddTeam = ({navigation}) => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="CREATE TOURNAMENT"
+          text="SAVE TEAM"
           style={{width: '100%', marginTop: 0, height: 48}}
           textstyle={{
             height: 16,
