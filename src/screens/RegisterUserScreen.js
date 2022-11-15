@@ -4,7 +4,7 @@ import AddProfileDetails from '../components/AddProfileDetails';
 
 const RegisterUserScreen = ({navigation}) => {
   return (
-    <AddProfileDetails navigation={navigation}>
+    <AddProfileDetails navigation={navigation} title="Register">
       <View style={styles.container}>
         <Text>Hello</Text>
       </View>

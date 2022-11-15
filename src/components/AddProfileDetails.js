@@ -15,7 +15,7 @@ const AddProfileDetails = ({
   children,
   profilePictureUri = '',
   backroundImageUri = '',
-  title = 'Register',
+  title,
 }) => {
   const {width, height} = useWindowDimensions();
   return (
