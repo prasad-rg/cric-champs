@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const AppBar = ({navigation}) => {
+const AppBar = ({navigation, title = 'Forgot Password', style = {}}) => {
   return (
-    <View style={styles.appBar}>
+    <View style={[styles.appBar, {...style}]}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -19,7 +19,7 @@ const AppBar = ({navigation}) => {
               style={styles.backIcon}
             />
           </TouchableOpacity>
-          <Text style={styles.text}>Forgot Password</Text>
+          <Text style={styles.text}>{title}</Text>
         </View>
       </SafeAreaView>
     </View>

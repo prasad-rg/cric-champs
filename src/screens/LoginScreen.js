@@ -34,7 +34,10 @@ const LoginScreen = ({navigation}) => {
         </SafeAreaView>
         <View style={styles.newUser}>
           <Text style={styles.newUserText}>New User?</Text>
-          <Text style={styles.register}> Register</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('RegisterUserScreen')}>
+            <Text style={styles.register}> Register</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.form}>
           <TextField
