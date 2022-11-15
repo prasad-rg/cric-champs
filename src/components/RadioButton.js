@@ -1,50 +1,82 @@
-import RadioForm from 'react-native-simple-radio-button';
-import {View, Text} from 'react-native';
+import RadioForm, {
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
 import React from 'react';
 import {useState} from 'react';
+import {RadioButton} from 'react-native-simple-radio-button';
+import {StyleSheet} from 'react-native';
 
-const radio_props = [
-  {label: 'League', value: 'League'},
-  {label: 'Knockout', value: 'Knockout'},
-  {label: 'Individual Match', value: 'Individual Match'},
-];
+const RadioButtonComponent = ({radio_props,formHorizontal}) => {
+  const [value, setValue] = useState({value: 0});
+  const [index, setIndex] = useState({index: 0});
 
-const RadioButton = () => {
-  const [value, setValue] = useState({value: -1});
-  const [selectedLabelColor, setLabelColor] = useState('#4A90E2');
-  const [buttonColor, setButtonColor] = useState('#4A90E2');
-  const [selectedButtonColor, setSelectedButtonColor] = useState('#4A90E2');
+  const onPress = (value, index) => {
+    setValue({value: value});
+    setIndex(index);
+  };
 
   return (
-    <RadioForm
-      radio_props={radio_props}
-      initial={0}
-      selectedLabelColor={selectedLabelColor}
-      buttonColor={buttonColor}
-      selectedButtonColor={selectedButtonColor}
-      buttonSize={12}
-      buttonOuterSize={20}
-      labelColor={'#4A90E2'}
-      borderWidth={2}
-      buttonStyle={{
-        borderWidth:1
-      }}
-      labelStyle={{
-        height: 16,
-        fontFamily: 'Roboto',
-        fontSize: 14,
-        letterSpacing: -0.34,
-        lineHeight: 16,
-      }}
-      onPress={value => {
-        setValue({value: value});
-        console.log(value);
-        setLabelColor('#FA7171');
-        // setButtonColor('#FA7171');
-        setSelectedButtonColor('#FA7171');
-      }}
-    />
+    <RadioForm animation={true} formHorizontal={formHorizontal}>
+      {radio_props.map((obj, i) => (
+        <RadioButton 
+        key={i} 
+        isSelected={index === i}
+        style={{
+            borderWidth: 1,
+            alignItems: 'center',
+            height: 40,
+            width: 150,
+            borderWidth: 0.8,
+            borderColor: index === i ? '#FA7171' : '#4A90E2',
+            borderRadius: 24,
+        }}
+        >
+          <RadioButtonInput
+            obj={obj}
+            index={i}
+            isSelected={index === i}
+            onPress={(value, i) => onPress(value, i)}
+            borderWidth={1}
+            buttonInnerColor={index === i ? '#FA7171' : '#4A90E2'}
+            buttonOuterColor={index === i ? '#FA7171' : '#4A90E2'}
+            buttonSize={12}
+            buttonOuterSize={20}
+            buttonStyle={{}}
+            buttonWrapStyle={{marginLeft: 10}}
+          />
+          <RadioButtonLabel
+            obj={obj}
+            index={i}
+            isSelected={index === i}
+            labelHorizontal={true}
+            onPress={onPress}
+            labelColor={index === i ? '#FA7171' : '#4A90E2'}
+            labelStyle={{
+              height: 16,
+              fontFamily: 'Roboto',
+              fontSize: 14,
+              letterSpacing: -0.34,
+              lineHeight: 16,
+            }}
+            labelWrapStyle={{}}
+          />
+        </RadioButton>
+      ))}
+    </RadioForm>
   );
 };
 
-export default RadioButton;
+export default RadioButtonComponent;
+
+const styles = StyleSheet.create({
+  radioButtonView: {
+    borderWidth: 1,
+    alignItems: 'center',
+    height: 40,
+    width: 150,
+    borderWidth: 0.8,
+    borderColor: '#FA7171',
+    borderRadius: 24,
+  },
+});

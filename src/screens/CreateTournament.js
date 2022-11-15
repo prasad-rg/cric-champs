@@ -11,6 +11,14 @@ import {
 import React from 'react';
 import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
+
+
+const radio_props = [
+  {label: 'League', value: 'League', id: 0},
+  {label: 'Knockout', value: 'Knockout', id: 1},
+  {label: 'Individual Match', value: 'Individual Match', id: 2},
+];
+
 const CreateTournament = () => {
   return (
     <View style={styles.container}>
@@ -41,7 +49,7 @@ const CreateTournament = () => {
         </View>
       </ImageBackground>
       <View>
-        <RadioButton />
+        <RadioButton radio_props={radio_props} formHorizontal={false}/>
       </View>
     </View>
   );
