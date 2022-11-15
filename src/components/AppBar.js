@@ -8,7 +8,12 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const AppBar = ({navigation, title = 'Forgot Password', style = {}}) => {
+const AppBar = ({
+  navigation,
+  title = 'Forgot Password',
+  style = {},
+  iconTint = {},
+}) => {
   return (
     <View style={[styles.appBar, {...style}]}>
       <SafeAreaView>
@@ -16,7 +21,7 @@ const AppBar = ({navigation, title = 'Forgot Password', style = {}}) => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               source={require('../../assets/images/back.png')}
-              style={styles.backIcon}
+              style={[styles.backIcon, {...iconTint}]}
             />
           </TouchableOpacity>
           <Text style={styles.text}>{title}</Text>

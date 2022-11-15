@@ -92,7 +92,7 @@ const RegisterUserScreen = ({navigation}) => {
         end={{x: 2, y: 0}}
         colors={['#FFBA8C', '#FE5C6A']}
         text="PROCEED"
-        //onPress={() => handelLogin()}
+        onPress={() => navigation.navigate('SetPasswordScreen')}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{width: '100%', marginBottom: 10, height: 48}}
       />
