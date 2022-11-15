@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Platform,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
 const TeamsList = () => {
+  const [team, setTeam] = useState(true);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -41,49 +43,56 @@ const TeamsList = () => {
         </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.teams}>Teams</Text>
-          <View style={styles.teamsView}>
-            <TeamListName
-              source={require('../../assets/images/team1.png')}
-              text="Udupi Design Labs"
-            />
-            <TeamListName
-              source={require('../../assets/images/team2.png')}
-              text="Paras XI"
-            />
-            <TeamListName
-              source={require('../../assets/images/team3.png')}
-              text="Team Lions"
-            />
-            <TeamListName
-              source={require('../../assets/images/team4.png')}
-              text="Parra Warriors"
-            />
-            <TeamListName
-              source={require('../../assets/images/team5.png')}
-              text="Team Dabangg"
-            />
-            <TeamListName
-              source={require('../../assets/images/team3.png')}
-              text="Team Lions"
-            />
-            <TeamListName
-              source={require('../../assets/images/team4.png')}
-              text="Parra Warriors"
-            />
-            <TeamListName
-              source={require('../../assets/images/team5.png')}
-              text="Team Dabangg"
-            />
-          </View>
+
+          {team ? (
+            <View>
+              <Text style={styles.noteam}>No Teams Added Yet!</Text>
+            </View>
+          ) : (
+            <View style={styles.teamsView}>
+              <TeamListName
+                source={require('../../assets/images/team1.png')}
+                text="Udupi Design Labs"
+              />
+              <TeamListName
+                source={require('../../assets/images/team2.png')}
+                text="Paras XI"
+              />
+              <TeamListName
+                source={require('../../assets/images/team3.png')}
+                text="Team Lions"
+              />
+              <TeamListName
+                source={require('../../assets/images/team4.png')}
+                text="Parra Warriors"
+              />
+              <TeamListName
+                source={require('../../assets/images/team5.png')}
+                text="Team Dabangg"
+              />
+              <TeamListName
+                source={require('../../assets/images/team3.png')}
+                text="Team Lions"
+              />
+              <TeamListName
+                source={require('../../assets/images/team4.png')}
+                text="Parra Warriors"
+              />
+              <TeamListName
+                source={require('../../assets/images/team5.png')}
+                text="Team Dabangg"
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
-      <View>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
+          colors={team ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
-          style={{height: 50, width: '100%', marginBottom: 20, marginTop: 0}}
+          style={{height: 48, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
             fontWeight: '500',
@@ -180,5 +189,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
     marginTop: 15,
+  },
+  noteam: {
+    height: 24,
+    // width: 209,
+    color: '#A3A3A3',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 22,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 24,
+    textAlign: 'center',
   },
 });
