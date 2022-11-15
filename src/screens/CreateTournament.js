@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import UserActions from '../components/UserActions';
-
+import RadioButton from '../components/RadioButton';
 const CreateTournament = () => {
   return (
     <View style={styles.container}>
@@ -40,6 +40,9 @@ const CreateTournament = () => {
           </SafeAreaView>
         </View>
       </ImageBackground>
+      <View>
+        <RadioButton />
+      </View>
     </View>
   );
 };
@@ -82,14 +85,14 @@ const styles = StyleSheet.create({
   },
   teamlogoview: {
     width: 120,
-    height:120,
+    height: 120,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
     marginTop: 35,
     borderWidth: 7,
-    borderRadius:60,
-    borderColor:'rgba(255, 255, 255, 0.6)',
+    borderRadius: 60,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
