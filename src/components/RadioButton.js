@@ -7,7 +7,7 @@ import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
 
-const RadioButtonComponent = ({radio_props,formHorizontal}) => {
+const RadioButtonComponent = ({radio_props,formHorizontal,style={}}) => {
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
 
@@ -22,7 +22,7 @@ const RadioButtonComponent = ({radio_props,formHorizontal}) => {
         <RadioButton 
         key={i} 
         isSelected={index === i}
-        style={{
+        style={[{
             borderWidth: 1,
             alignItems: 'center',
             height: 40,
@@ -30,7 +30,7 @@ const RadioButtonComponent = ({radio_props,formHorizontal}) => {
             borderWidth: 0.8,
             borderColor: index === i ? '#FA7171' : '#4A90E2',
             borderRadius: 24,
-        }}
+        },{...style}]}
         >
           <RadioButtonInput
             obj={obj}
