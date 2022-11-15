@@ -1,79 +1,88 @@
-import { StyleSheet, Text, View,ScrollView,ImageBackground,SafeAreaView,TouchableOpacity,Image} from 'react-native'
-import React from 'react'
-import StadiumList from '../components/StadiumList'
-import GradientButton from '../components/GradientButton'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ImageBackground,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import React, {useState} from 'react';
+import StadiumList from '../components/StadiumList';
+import GradientButton from '../components/GradientButton';
 
 const Ground = () => {
+
   return (
     <View style={styles.container}>
-    <ScrollView>
-      <ImageBackground
-        source={require('../../assets/images/stadium3.png')}
-        resizeMode="cover">
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={styles.profileDetailsContainer}>
-              <View style={styles.headerText}>
-                <TouchableOpacity >
-                  <Image
-                    source={require('../../assets/images/backicon.png')}
-                    style={styles.backButtonImage}
-                  />
+      <ScrollView>
+        <ImageBackground
+          source={require('../../assets/images/stadium3.png')}
+          resizeMode="cover">
+          <View style={styles.backgroundBeyondSafeArea}>
+            <SafeAreaView>
+              <View style={styles.profileDetailsContainer}>
+                <View style={styles.headerText}>
+                  <TouchableOpacity>
+                    <Image
+                      source={require('../../assets/images/backicon.png')}
+                      style={styles.backButtonImage}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.groundText}>Grounds</Text>
+                </View>
+
+                <TouchableOpacity style={styles.groundButton}>
+                  <Text style={styles.addGroundText}>ADD GROUND</Text>
                 </TouchableOpacity>
-                <Text style={styles.groundText}>Grounds</Text>
               </View>
+            </SafeAreaView>
+          </View>
+        </ImageBackground>
+        <View style={styles.secondView}>
+          <Text style={styles.ground}>Grounds</Text>
 
-              <TouchableOpacity style={styles.groundButton}>
-                <Text style={styles.addGroundText}>ADD GROUND</Text>
-              </TouchableOpacity>
-            </View>
-          </SafeAreaView>
+          <View style={styles.groundView}>
+            <StadiumList
+              source={require('../../assets/images/ground1.png')}
+              text="Santhekatte Stadium"
+              place="Santhekatte"
+            />
+            <StadiumList
+              source={require('../../assets/images/ground2.png')}
+              text="Manjunath Stadium"
+              place="Udupi"
+            />
+            <StadiumList
+              source={require('../../assets/images/ground3.png')}
+              text="Surathkal Sports Academy"
+              place="Surathkal"
+            />
+          </View>
         </View>
-      </ImageBackground>
-      <View style={styles.secondView}>
-        <Text style={styles.ground}>Grounds</Text>
-        <View style={styles.groundView}>
-         
-          <StadiumList
-            source={require('../../assets/images/ground1.png')}
-            text="Santhekatte Stadium"
-            place="Santhekatte"
-          />
-           <StadiumList
-            source={require('../../assets/images/ground2.png')}
-            text="Manjunath Stadium"
-            place="Udupi"
-          />
-           <StadiumList
-            source={require('../../assets/images/ground3.png')}
-            text="Surathkal Sports Academy"
-            place="Surathkal"
-          />
-         
-        </View>
+      </ScrollView>
+      <View>
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="PROCEED"
+          style={{height: 50, width: '100%', marginBottom: 20, marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
       </View>
-    </ScrollView>
-    <View>
-      <GradientButton
-        start={{x: 0, y: 0}}
-        end={{x: 2, y: 0}}
-        colors={['#FFBA8C', '#FE5C6A']}
-        text="PROCEED"
-        style={{height: 50, width: '100%', marginBottom: 20, marginTop: 0}}
-        textstyle={{
-          height: 16,
-          fontWeight: '500',
-          fontSize: 14,
-          letterSpacing: 0.5,
-          lineHeight: 19,
-        }}
-      />
     </View>
-  </View>
-  )
-}
+  );
+};
 
-export default Ground
+export default Ground;
 
 const styles = StyleSheet.create({
   container: {
@@ -157,4 +166,4 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 15,
   },
-})
+});
