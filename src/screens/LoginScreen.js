@@ -7,38 +7,94 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import React from 'react';
-import {
-  TextField,
-  FilledTextField,
-  OutlinedTextField,
-} from 'rn-material-ui-textfield';
+import React, {useState} from 'react';
+import {TextField} from 'rn-material-ui-textfield';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import GradientButton from '../components/GradientButton';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handelLogin = () => {
+    console.log(email, password);
+  };
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <ImageBackground
-            source={require('../../assets/images/loginLogo.png')}
-            style={styles.logo}>
-            <View style={[styles.triangle]} />
-          </ImageBackground>
+      <KeyboardAwareScrollView>
+        <SafeAreaView>
+          <View style={styles.header}>
+            <ImageBackground
+              source={require('../../assets/images/loginLogo.png')}
+              style={styles.logo}>
+              <View style={[styles.triangle]} />
+            </ImageBackground>
+          </View>
+          <Text style={styles.title}>Cric Champs</Text>
+          <View style={styles.line} />
+        </SafeAreaView>
+        <View style={styles.newUser}>
+          <Text style={styles.newUserText}>New User?</Text>
+          <Text style={styles.register}> Register</Text>
         </View>
-        <Text style={styles.title}>Cric Champs</Text>
-        <View style={styles.line} />
-      </SafeAreaView>
-      <View style={styles.newUser}>
-        <Text style={styles.newUserText}>New User?</Text>
-        <Text style={styles.register}> Register</Text>
-      </View>
-      <TextField
-        label="Phone number"
-        keyboardType="phone-pad"
-        formatText={this.formatText}
-        onSubmitEditing={this.onSubmit}
-        ref={this.fieldRef}
-      />
+        <View style={styles.form}>
+          <TextField
+            label="Email"
+            keyboardType="email-address"
+            formatText={this.formatText}
+            onSubmitEditing={this.onSubmit}
+            ref={this.fieldRef}
+            textColor="#666666"
+            tintColor="rgba(153, 153, 153, 0.4)"
+            baseColor="rgba(0, 0, 0, .38)"
+            lineWidth={1}
+            onChangeText={text => setEmail(text)}
+            autoCapitalize="none"
+          />
+          <TextField
+            label="Password"
+            keyboardType="email-address"
+            formatText={this.formatText}
+            onSubmitEditing={this.onSubmit}
+            ref={this.fieldRef}
+            textColor="#666666"
+            tintColor="rgba(153, 153, 153, 0.4)"
+            lineWidth={1}
+            secureTextEntry={true}
+            onChangeText={text => setPassword(text)}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={styles.forgotPasswordButton}
+            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="LOGIN"
+            onPress={() => handelLogin()}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{width: '90%'}}
+          />
+          <View style={styles.eitherSideLineComntainer}>
+            <View style={styles.lineEitherSide} />
+            <View>
+              <Text style={styles.centeredText}>Or</Text>
+            </View>
+            <View style={styles.lineEitherSide} />
+          </View>
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#7197E1', '#7197E1']}
+            text="LOGIN WITH FACEBOOK"
+            // onPress={}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{width: '90%'}}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
@@ -53,7 +109,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   logo: {
     width: 74,
@@ -90,6 +146,36 @@ const styles = StyleSheet.create({
   newUserText: {
     fontFamily: 'Roboto-Regular',
     letterSpacing: 0.5,
+    fontSize: 14,
+  },
+  form: {
+    paddingHorizontal: 10,
+  },
+  forgotPasswordButton: {
+    marginTop: 20,
+  },
+  forgotPasswordText: {
+    color: '#4A90E2',
+    fontFamily: 'Roboto-Regular',
+    letterSpacing: 0.5,
+    textAlign: 'center',
+  },
+  eitherSideLineComntainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  lineEitherSide: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E0E0E0',
+  },
+  centeredText: {
+    width: 50,
+    textAlign: 'center',
+    color: '#858585',
+    fontFamily: 'Roboto-Light',
     fontSize: 14,
   },
 });
