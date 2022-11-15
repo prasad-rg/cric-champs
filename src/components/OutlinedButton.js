@@ -1,10 +1,10 @@
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, Image, View} from 'react-native';
 import React from 'react';
 
-const OutlinedButton = ({text}) => {
+const  OutlinedButton = ({text,source,style={},buttonstyle={}}) => {
   return (
-    <TouchableOpacity style={styles.enterButton}>
-      <Text style={styles.enter}>{text}</Text>
+    <TouchableOpacity style={[styles.enterButton,{...buttonstyle}]}>
+      <View style={styles.shareview}><Image source={source} style={style.shareimage}/><Text style={[styles.enter,{...style}]}>{text}</Text></View>
     </TouchableOpacity>
   );
 };
@@ -33,5 +33,13 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 0,
     lineHeight: 14,
+  },
+  shareview:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  shareimage:{
+    height: 12,
+    width: 12,
   },
 });
