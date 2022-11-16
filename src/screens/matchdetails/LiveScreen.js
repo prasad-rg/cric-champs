@@ -1,7 +1,21 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { Table,TableWrapper,Row,Rows,Col } from 'react-native-table-component';
 
 const LiveScreen = () => {
+
+    const Content={
+        tableHead:['Batsman','R','B','4s','6s','SR'],
+        tableTitle:['Anupam K','Sripathi J'],
+        tableData:[
+            ['0','0','0','0','0'],
+            ['0','0','0','0','0'],
+        ],
+    }
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.headerText}>
@@ -29,9 +43,31 @@ const LiveScreen = () => {
       </View>
 
         <Text style={styles.runsText}>Coastal Riders need 29 runs to win</Text>
- <View style={{borderWidth:1}}>
 
- </View>
+
+        <View>
+        <Table borderStyle={{}}>
+            <Row data={Content.tableHead}
+            flexArr={[4,1,1,1,1,1]}
+            style={styles.header}
+            textStyle={styles.header_text}
+            />
+            <TableWrapper style={styles.tableWrapper}>
+                <Col data={Content.tableTitle}
+                style={styles.S_no}
+                heightArr={[28,28]}
+                textStyle={styles.S_no_text}
+                />
+                <Rows
+                data={Content.tableData}
+                style={styles.S_no}
+                // flexArr={[0.1,1,1,1,1,1]}
+                textStyle={styles.S_no_text}
+                />
+
+            </TableWrapper>
+        </Table>
+        </View>
     </View>
   );
 };
@@ -181,5 +217,21 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 16,
     marginHorizontal:25,
+  },
+  header:{
+    backgroundColor: 'rgba(217,226,233,0.5)',
+    height:48,
+    
+  },
+  header_text:{
+    // height: 24,
+//   width: 53,
+  color: 'rgba(0,0,0,0.87)',
+  fontFamily: 'Roboto-Bold',
+  fontSize: 13,
+  fontWeight: 'bold',
+  letterSpacing: 0,
+  lineHeight: 24,
+  padding:10
   }
 });
