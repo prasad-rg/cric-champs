@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const TeamsScreen = ({navigation}) => {
+const InfoScreen = () => {
   return (
     <View>
-      <Text>TeamsScreen</Text>
+      <Text>InfoScreen</Text>
     </View>
   )
 }
 
-export default TeamsScreen
+export default InfoScreen
 
 const styles = StyleSheet.create({})

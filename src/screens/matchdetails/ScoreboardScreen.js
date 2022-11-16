@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const TeamsScreen = ({navigation}) => {
+const ScoreboardScreen = () => {
   return (
     <View>
-      <Text>TeamsScreen</Text>
+      <Text>ScoreboardScreen</Text>
     </View>
   )
 }
 
-export default TeamsScreen
+export default ScoreboardScreen
 
 const styles = StyleSheet.create({})

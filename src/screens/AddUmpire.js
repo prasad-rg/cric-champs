@@ -41,6 +41,13 @@ const AddUmpire = () => {
             onChangeText={text => setName(text)}
             autoCapitalize="none"
             // labelTextStyle={{ fontFamily:"Roboto-Medium",fontWeight:'500',color:"#000000",opacity:0.8}}
+            style={{
+              fontFamily: 'Roboto-Medium',
+              fontSize: 16,
+              fontWeight: '500',
+              letterSpacing: 0.57,
+              lineHeight: 19,
+            }}
           />
           <TextField
             label="City / Town (Optional)"
@@ -52,6 +59,13 @@ const AddUmpire = () => {
             lineWidth={1}
             onChangeText={text => setCity(text)}
             autoCapitalize="none"
+            style={{
+              fontFamily: 'Roboto-Medium',
+              fontSize: 16,
+              fontWeight: '500',
+              letterSpacing: 0.57,
+              lineHeight: 19,
+            }}
           />
           <TextField
             label="Phone No, (Optional)"
@@ -64,7 +78,15 @@ const AddUmpire = () => {
             lineWidth={1}
             onChangeText={text => setPhone(text)}
             autoCapitalize="none"
+            style={{
+              fontFamily: 'Roboto-Medium',
+              fontSize: 16,
+              fontWeight: '500',
+              letterSpacing: 0.57,
+              lineHeight: 19,
+            }}
           />
+          
          
         </View>
      
@@ -95,6 +117,7 @@ export default AddUmpire;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"#FFFFFF"
   },
   profileDetailsContainer: {
     height: 297,
@@ -149,6 +172,8 @@ const styles = StyleSheet.create({
   form: {
     paddingHorizontal: 30,
     marginTop:10,
+    backgroundColor:"#FFFFFF",
+   
    
 
   },
