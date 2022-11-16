@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {TextField} from 'rn-material-ui-textfield';
@@ -27,8 +27,13 @@ const registrationValidationSchema = yup.object().shape({
 
 const RegisterUserScreen = ({navigation}) => {
   const [gender, setGender] = useState('');
+  const [profilePictureUri, setProfilePictureUri] = useState('');
   const getData = data => {
     setGender(data);
+  };
+
+  const getDetails = data => {
+    setProfilePictureUri(data);
   };
 
   return (
@@ -41,7 +46,19 @@ const RegisterUserScreen = ({navigation}) => {
           phoneNumber: '',
           city: '',
         }}
-        onSubmit={values => console.log({...values, gender: gender})}>
+        onSubmit={values => {
+          if (profilePictureUri !== '') {
+            // console.log({...values, gender: gender, image: profilePictureUri});
+            let regDetails = {
+              ...values,
+              gender: gender,
+              image: profilePictureUri,
+            };
+            navigation.navigate('SetPasswordScreen', {regDetails});
+          } else {
+            Alert.alert('Please Add profile picture');
+          }
+        }}>
         {({
           handleChange,
           handleBlur,
@@ -53,7 +70,10 @@ const RegisterUserScreen = ({navigation}) => {
         }) => (
           <>
             <KeyboardAwareScrollView>
-              <AddProfileDetails navigation={navigation} title="Register">
+              <AddProfileDetails
+                navigation={navigation}
+                title="Register"
+                getImageUri={getDetails}>
                 <View style={styles.container}>
                   <TextField
                     label="Full Name"
@@ -174,8 +194,8 @@ const RegisterUserScreen = ({navigation}) => {
               end={{x: 2, y: 0}}
               colors={['#FFBA8C', '#FE5C6A']}
               text="PROCEED"
-              onPress={() => navigation.navigate('SetPasswordScreen')}
-              // onPress={handleSubmit}
+              // onPress={() => navigation.navigate('SetPasswordScreen')}
+              onPress={handleSubmit}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{width: '100%', marginBottom: 10, height: 48}}
             />

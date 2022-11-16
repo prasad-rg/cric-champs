@@ -6,9 +6,12 @@ import {
   ImageBackground,
   Image,
   useWindowDimensions,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import AppBar from './AppBar';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const AddProfileDetails = ({
   navigation,
@@ -16,8 +19,51 @@ const AddProfileDetails = ({
   profilePictureUri = '',
   backroundImageUri = '',
   title,
+  getImageUri,
 }) => {
   const {width, height} = useWindowDimensions();
+  const [imageUri, setImageUri] = useState('');
+
+  const getImageFromCamera = () => {
+    ImagePicker.openCamera({
+      width: 104,
+      height: 104,
+      cropping: true,
+    }).then(image => {
+      setImageUri(image.path);
+      console.log(image);
+    });
+  };
+
+  const getImageFromGallary = () => {
+    ImagePicker.openPicker({
+      width: 104,
+      height: 104,
+      cropping: true,
+    }).then(image => {
+      setImageUri(image.path);
+      getImageUri(image.path);
+      // console.log(image.path);
+    });
+  };
+
+  const createThreeButtonAlert = () =>
+    Alert.alert('Select Picture From', '', [
+      {
+        text: 'Camera',
+        onPress: () => getImageFromCamera(),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {
+        text: 'Gallary',
+        onPress: () => getImageFromGallary(),
+      },
+    ]);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -52,6 +98,8 @@ const AddProfileDetails = ({
                 source={
                   profilePictureUri
                     ? profilePictureUri
+                    : imageUri
+                    ? {uri: imageUri}
                     : require('../../assets/images/profile4.png')
                 }
                 style={styles.imageSize}
@@ -69,10 +117,15 @@ const AddProfileDetails = ({
                       {right: Dimensions.get('window').width / 2.33},
                     ]
               }>
-              <Image
-                source={require('../../assets/images/camera.png')}
-                style={styles.gobackbutton}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  createThreeButtonAlert();
+                }}>
+                <Image
+                  source={require('../../assets/images/camera.png')}
+                  style={styles.gobackbutton}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
