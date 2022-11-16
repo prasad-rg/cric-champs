@@ -57,6 +57,23 @@ const AddProfileDetails = ({
                 style={styles.imageSize}
               />
             </View>
+            <View
+              style={
+                height > width
+                  ? [
+                      styles.imagepicker,
+                      {right: Dimensions.get('window').width / 2.86},
+                    ]
+                  : [
+                      styles.imagepicker,
+                      {right: Dimensions.get('window').width / 2.33},
+                    ]
+              }>
+              <Image
+                source={require('../../assets/images/camera.png')}
+                style={styles.gobackbutton}
+              />
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -121,6 +138,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 102, 226, 0.85)',
   },
   appBar: {},
+  imagepicker: {
+    height: 34,
+    width: 34,
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 2 8 0 rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    position: 'absolute',
+    bottom: 0,
+    // left: Dimensions.get('window').width / 2.86,
+    // right: '35%',
+    // right: Dimensions.get('window').width / 2.86,
+    elevation: 20,
+    shadowColor: '#52006A',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
 });
 
 export default AddProfileDetails;
