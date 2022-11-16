@@ -1,17 +1,20 @@
-import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import {Switch} from 'react-native-switch';
 
-const ToggleSwitch = () => {
+const ToggleSwitch = ({onPress, id}) => {
   const [clicked, setClicked] = useState(false);
-  const handleValue = (val) => {
-    setClicked(!clicked);
-    console.log(val);
+
+  const handleValue = val => {
+    setClicked(val);
+    onPress(val, id);
   };
   return (
     <Switch
+      id={id}
       value={clicked}
-      onValueChange={val => handleValue(val)}
+      onValueChange={value => {
+        handleValue(value);
+      }}
       disabled={false}
       activeText={'On'}
       inActiveText={'Off'}

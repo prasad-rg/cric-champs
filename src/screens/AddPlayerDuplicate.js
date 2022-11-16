@@ -8,7 +8,7 @@ import RadioButton from '../components/RadioButton';
 import ToggleSwitch from '../components/ToggleSwitch';
 import RadioButtonDisabled from '../components/RadioButtonDisabled';
 
-const AddPlayer = ({navigation}) => {
+const AddPlayerDuplicate = ({navigation}) => {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [phone, setPhone] = useState('');
@@ -18,39 +18,35 @@ const AddPlayer = ({navigation}) => {
   const [bowling, setBowling] = useState('');
   const [bowlingtype, setBowlingType] = useState('');
 
-  const [enableSwitch, setEnableSwitch] = useState(true);
-  const [id, setId] = useState({
-    designation: {id: 1, isEnabled: false},
-    expertise: {id: 2},
-    batting: {id: 3},
-    bowling: {id: 4},
-    bowlingtype: {id: 5},
+//   const [whiteList.designation.isVisble, setEnableSwitch] = useState(true);
+  const [whiteList, setWhiteList] = useState({
+    designation: {isVisble: false},
+    expertise: {isVisble: false},
+    batting: {isVisble: false},
+    bowling: {isVisble: false},
+    bowlingtype: {isVisble: false},
   });
-  console.log(enableSwitch, id);
+
   const enableDesignation = (data, id) => {
-    // designation.setEnableSwitch(data);
-    // console.log(id.designation.id)
-    // setId((id) => {...id,designation:{id: 1, isEnabled:!designation.isEnabled}});
-    setEnableSwitch(data);
-    setId(prev => {
-      prev, {designation: {id: 1, isEnabled: !designation.isEnabled}};
-    });
+    // console.log(whiteList);
+    // setWhiteList(prev =>
+    //     {...whiteList,designation: {isVisble: data}}
+    // );
+    setWhiteList(prev => ({...prev, designation: {isVisble: data}}));
+    // console.log(whiteList);
+    // console.log({...whiteList, designation: {isVisble: data}});
   };
   const enableExpertise = (data, id) => {
-    setEnableSwitch(data);
-    setId(id);
+    setWhiteList(prev => ({...prev, expertise: {isVisble: data}}));
   };
   const enableBatting = (data, id) => {
-    setEnableSwitch(data);
-    setId(id);
+    setWhiteList(prev => ({...prev, batting: {isVisble: data}}));
   };
   const enableBowling = (data, id) => {
-    setEnableSwitch(data);
-    setId(id);
+    setWhiteList(prev => ({...prev, bowling: {isVisble: data}}));
   };
   const enableBowlingType = (data, id) => {
-    setEnableSwitch(data);
-    setId(id);
+    setWhiteList(prev => ({...prev, bowlingtype: {isVisble: data}}));
   };
 
   const getDesignation = data => {
@@ -184,10 +180,10 @@ const AddPlayer = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Designation :`}</Text>
-            <ToggleSwitch onPress={enableDesignation} id={1} />
+            <ToggleSwitch id={1} onPress={enableDesignation} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            {enableSwitch && console.log(id) ? (
+            {whiteList.designation.isVisble ? (
               <RadioButton
                 radio_props={Designation}
                 formHorizontal={true}
@@ -223,7 +219,7 @@ const AddPlayer = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Expertise :`}</Text>
-            <ToggleSwitch onPress={enableExpertise} id={2} />
+            <ToggleSwitch id={2} onPress={enableExpertise} />
           </View>
           <View
             style={{
@@ -231,7 +227,7 @@ const AddPlayer = ({navigation}) => {
               height: 119,
               paddingTop: 9,
             }}>
-            {enableSwitch && id == 2 ? (
+            {whiteList.expertise.isVisble ? (
               <RadioButton
                 radio_props={Expertise}
                 formHorizontal={true}
@@ -270,10 +266,10 @@ const AddPlayer = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Batting :`}</Text>
-            <ToggleSwitch onPress={enableBatting} id={3} />
+            <ToggleSwitch id={3} onPress={enableBatting} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            {enableSwitch && id == 3 ? (
+            {whiteList.batting.isVisble ? (
               <RadioButton
                 radio_props={Batting}
                 formHorizontal={true}
@@ -308,10 +304,10 @@ const AddPlayer = ({navigation}) => {
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Bowling :`}</Text>
-            <ToggleSwitch onPress={enableBowling} id={4} />
+            <ToggleSwitch id={4} onPress={enableBowling} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            {enableSwitch && id == 4 ? (
+            {whiteList.bowling.isVisble ? (
               <RadioButton
                 radio_props={Bowling}
                 formHorizontal={true}
@@ -349,7 +345,7 @@ const AddPlayer = ({navigation}) => {
             <ToggleSwitch onPress={enableBowlingType} id={5} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            {enableSwitch && id == 5 ? (
+            {whiteList.bowlingtype.isVisble ? (
               <RadioButton
                 radio_props={BowlingType}
                 formHorizontal={true}
@@ -397,7 +393,7 @@ const AddPlayer = ({navigation}) => {
   );
 };
 
-export default AddPlayer;
+export default AddPlayerDuplicate;
 
 const styles = StyleSheet.create({
   container: {
