@@ -5,7 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
 import RadioButton from '../components/RadioButton';
-import ToggleButton from '../components/ToggleButton';
+import ToggleSwitch from '../components/ToggleSwitch';
 
 const AddPlayer = ({navigation}) => {
   const [name, setName] = useState('');
@@ -118,9 +118,9 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
             <Text style={styles.designation}>{`Designation :`}</Text>
-           <ToggleButton/>
+           <ToggleSwitch/>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
             <RadioButton
@@ -143,9 +143,9 @@ const AddPlayer = ({navigation}) => {
             marginTop: 31,
             flexWrap: 'wrap',
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
             <Text style={styles.designation}>{`Expertise :`}</Text>
-            <Text>Togggle</Text>
+            <ToggleSwitch/>
           </View>
           <View
             style={{
@@ -175,9 +175,9 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
             <Text style={styles.designation}>{`Batting :`}</Text>
-            <Text>Togggle</Text>
+            <ToggleSwitch/>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
             <RadioButton
@@ -199,9 +199,9 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
             <Text style={styles.designation}>{`Bowling :`}</Text>
-            <Text>Togggle</Text>
+            <ToggleSwitch/>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
             <RadioButton
@@ -223,7 +223,7 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',alignItems:'center'}}>
             <Text style={styles.designation}>{`Bowling Type :`}</Text>
             <Text>Togggle</Text>
           </View>

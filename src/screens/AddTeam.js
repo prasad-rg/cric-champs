@@ -66,7 +66,7 @@ const AddTeam = ({navigation}) => {
                 <View style={styles.imagepicker}>
                   <Image
                     source={require('../../assets/images/camera.png')}
-                    style={styles.gobackbutton}
+                    // style={styles.gobackbutton}
                   />
                 </View>
                 <View>
