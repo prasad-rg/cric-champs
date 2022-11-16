@@ -30,34 +30,6 @@ const RegistrationSuccessScreen = ({navigation}) => {
             email ID and verify{'\n'}your account.
           </Text>
         </View>
-        <View style={styles.emailField}>
-          <TextField
-            label="Set Password"
-            formatText={this.formatText}
-            onSubmitEditing={this.onSubmit}
-            ref={this.fieldRef}
-            textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
-            baseColor="rgba(0, 0, 0, .38)"
-            lineWidth={1}
-            onChangeText={text => setEmail(text)}
-            autoCapitalize="none"
-            value={email}
-          />
-          <TextField
-            label="Confirm Password"
-            formatText={this.formatText}
-            onSubmitEditing={this.onSubmit}
-            ref={this.fieldRef}
-            textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
-            baseColor="rgba(0, 0, 0, .38)"
-            lineWidth={1}
-            onChangeText={text => setEmail(text)}
-            autoCapitalize="none"
-            value={email}
-          />
-        </View>
       </KeyboardAwareScrollView>
       <GradientButton
         start={{x: 0, y: 0}}
