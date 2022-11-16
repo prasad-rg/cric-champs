@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  Platform
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
+import GradientButton from '../components/GradientButton';
+import {TextField} from 'rn-material-ui-textfield';
 
 
 const radio_props = [
@@ -19,9 +22,19 @@ const radio_props = [
   {label: 'Individual Match', value: 'Individual Match', id: 2},
 ];
 
-const CreateTournament = () => {
+
+const CreateTournament = ({navigation}) => {
+
+  const [tournamentName,setTournamentName]=useState('')
+
+  const handlePress = () =>{
+    console.log(tournamentName);
+    navigation.navigate('CreateTournamentSuccess');
+  }
+  
   return (
     <View style={styles.container}>
+      <ScrollView>
       <ImageBackground
         source={require('../../assets/images/IndiaTeam.png')}
         resizeMode="cover"
@@ -44,12 +57,55 @@ const CreateTournament = () => {
                   style={styles.teamlogo}
                 />
               </View>
+              <View style={styles.textInput}>
+              <TextField
+                label="Tournament Name"
+                formatText={this.formatText}
+                onSubmitEditing={this.onSubmit}
+                ref={this.fieldRef}
+                textColor="#FFFFFF"
+                tintColor="rgba(224, 224, 224, 0.7)"
+                baseColor="#E0E0E0"
+                lineWidth={1}
+                onChangeText={text => setTournamentName(text)}
+                autoCapitalize="none"
+                style={{
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  letterSpacing: 0.57,
+                  lineHeight: 19,
+                }}
+              /></View>
             </View>
           </SafeAreaView>
         </View>
       </ImageBackground>
-      <View>
-        <RadioButton radio_props={radio_props} formHorizontal={false}/>
+      <View style={styles.tournamentTypeView}>
+        <Text style={styles.tournamentTypeText}>Tournament Type</Text>
+        <RadioButton
+          radio_props={radio_props}
+          formHorizontal={false}
+          style={{marginBottom: 20}}
+        />
+      </View> 
+      </ScrollView>
+      <View style={styles.gradientButton}>
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="CREATE TOURNAMENT"
+          style={{width: '100%', marginTop: 0,height:48}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+          onPress={handlePress}
+        />
       </View>
     </View>
   );
@@ -58,6 +114,8 @@ const CreateTournament = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: '100%',
+    // backgroundColor:'yellow',
   },
   profileDetailsContainer: {
     height: 297,
@@ -108,6 +166,30 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 60,
     // shadowOpacity: 0.9,
+  },
+  tournamentTypeView: {
+    // height: '100%',
+    flex: 1,
+    marginHorizontal: 15,
+    marginTop: 20,
+  },
+  tournamentTypeText: {
+    height: 16,
+    color: '#8E9BA8',
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+    marginBottom: 21,
+  },
+  gradientButton: {
+    alignItems: 'flex-end',
+    marginBottom:Platform.OS === 'ios' ? 20:0
+  },
+  textInput:{
+    alignSelf:'center',
+    width:260,
   },
 });
 
