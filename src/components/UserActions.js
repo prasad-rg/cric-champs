@@ -5,11 +5,15 @@ const UserActions = ({
   imageSource = require('../../assets/images/home.png'),
   title = 'Home',
   onPress,
+  tintColor,
 }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image source={imageSource} style={styles.image} />
-      <Text style={styles.text}>{title}</Text>
+      <Image
+        source={imageSource}
+        style={[styles.image, {tintColor: tintColor}]}
+      />
+      <Text style={[styles.text, {color: tintColor}]}>{title}</Text>
     </TouchableOpacity>
   );
 };

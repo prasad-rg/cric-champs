@@ -7,20 +7,31 @@ import * as yup from 'yup';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 
-const forgotPasswordValidationSchema = yup.object().shape({
-  email: yup
+const passwordValidationSchema = yup.object().shape({
+  password: yup
     .string()
-    .email('Please enter valid email')
-    .required('Email Address is Required'),
+    .matches(/\w*[a-z]\w*/, 'Password must have a small letter')
+    .matches(/\w*[A-Z]\w*/, 'Password must have a capital letter')
+    .matches(/\d/, 'Password must have a number')
+    .matches(
+      /[!@#$%^&*()\-_"=+{}; :,<.>]/,
+      'Password must have a special character',
+    )
+    .min(8, ({min}) => `Password must be at least ${min} characters`)
+    .required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords do not match')
+    .required('Confirm password is required'),
 });
 
-const ForgotPasswordScreen = ({navigation}) => {
+const SetPasswordScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
   return (
     <View style={styles.container}>
-      <AppBar navigation={navigation} />
       <Formik
-        validationSchema={forgotPasswordValidationSchema}
-        initialValues={{email: ''}}
+        validationSchema={passwordValidationSchema}
+        initialValues={{password: '', confirmPassword: ''}}
         onSubmit={values => console.log(values)}>
         {({
           handleChange,
@@ -32,23 +43,19 @@ const ForgotPasswordScreen = ({navigation}) => {
           touched,
         }) => (
           <>
+            <AppBar navigation={navigation} title="Set Password" />
             <KeyboardAwareScrollView>
               <View style={styles.contentContainer}>
                 <Image
-                  source={require('../../assets/images/sendEmail.png')}
+                  source={require('../../assets/images/resetPass.png')}
                   style={styles.image}
                 />
-                <Text style={styles.heroText}>Forgot your password?</Text>
-                <Text style={styles.secondaryText}>
-                  Enter your registered email below {'\n'} to receive password
-                  reset instructions
-                </Text>
+                <Text style={styles.heroText}>Set your password</Text>
               </View>
               <View style={styles.emailField}>
                 <TextField
-                  label="Email"
-                  name="email"
-                  keyboardType="email-address"
+                  label="Set Password"
+                  name="password"
                   formatText={this.formatText}
                   onSubmitEditing={this.onSubmit}
                   ref={this.fieldRef}
@@ -56,14 +63,33 @@ const ForgotPasswordScreen = ({navigation}) => {
                   tintColor="rgba(153, 153, 153, 0.4)"
                   baseColor="rgba(0, 0, 0, .38)"
                   lineWidth={1}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
                   autoCapitalize="none"
-                  autoCorrect={false}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
+                  secureTextEntry={true}
                 />
-                {errors.email && touched.email && (
-                  <Text style={styles.errorText}>{errors.email}</Text>
+                {errors.password && touched.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+                <TextField
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  formatText={this.formatText}
+                  onSubmitEditing={this.onSubmit}
+                  ref={this.fieldRef}
+                  textColor="#666666"
+                  tintColor="rgba(153, 153, 153, 0.4)"
+                  baseColor="rgba(0, 0, 0, .38)"
+                  lineWidth={1}
+                  onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
+                  value={values.confirmPassword}
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                />
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <Text style={styles.errorText}>{errors.confirmPassword}</Text>
                 )}
               </View>
             </KeyboardAwareScrollView>
@@ -72,7 +98,8 @@ const ForgotPasswordScreen = ({navigation}) => {
               end={{x: 2, y: 0}}
               colors={['#FFBA8C', '#FE5C6A']}
               text="SUBMIT"
-              onPress={handleSubmit}
+              onPress={() => navigation.navigate('RegistrationSuccessScreen')}
+              // onPress={handleSubmit}
               style={styles.buttonStyle}
             />
           </>
@@ -127,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordScreen;
+export default SetPasswordScreen;

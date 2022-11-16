@@ -12,13 +12,15 @@ const RadioButtonComponent = ({
   formHorizontal,
   style = {},
   flexWrap = {},
+  onPress,
 }) => {
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
 
-  const onPress = (value, index) => {
+  const setData = (value, index) => {
     setValue({value: value});
     setIndex(index);
+    onPress(value);
   };
 
   return (
@@ -46,7 +48,7 @@ const RadioButtonComponent = ({
             obj={obj}
             index={i}
             isSelected={index === i}
-            onPress={(value, i) => onPress(value, i)}
+            onPress={(value, i) => setData(value, i)}
             borderWidth={1}
             buttonInnerColor={index === i ? '#FA7171' : '#4A90E2'}
             buttonOuterColor={index === i ? '#FA7171' : '#4A90E2'}
@@ -60,7 +62,7 @@ const RadioButtonComponent = ({
             index={i}
             isSelected={index === i}
             labelHorizontal={true}
-            onPress={onPress}
+            onPress={setData}
             labelColor={index === i ? '#FA7171' : '#4A90E2'}
             labelStyle={{
               height: 16,
