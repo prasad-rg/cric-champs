@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Table,Row,TableWrapper,Rows } from 'react-native-table-component';
 
@@ -20,6 +20,7 @@ const StandingsScreen = ({navigation}) => {
  
   ]);
   return (
+    <ScrollView>
     <View style={{marginTop: 20}}>
     <Table>
       <Row
@@ -39,7 +40,7 @@ const StandingsScreen = ({navigation}) => {
       </TableWrapper>
     </Table>
   </View>
-  // <View
+</ScrollView>
   //   style={{
   //     borderBottomWidth: 1,
   //     borderBottomColor: 'rgba(217,226,233,0.8)',
