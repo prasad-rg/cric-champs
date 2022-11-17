@@ -9,6 +9,8 @@ import {
   ScrollView,
   Platform,
   FlatList,
+  Dimensions,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import UserActions from '../components/UserActions';
@@ -18,6 +20,7 @@ import {TextField} from 'rn-material-ui-textfield';
 import {useWindowDimensions} from 'react-native';
 import TeamListName from '../components/TeamListName';
 import {useSelector} from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -29,8 +32,51 @@ const AddTeam = ({navigation}) => {
   const [teamname, setTeamName] = useState('');
   const [city, setCity] = useState('');
   const [team, setTeam] = useState(true);
+  const {width, height} = useWindowDimensions();
+  const [imageUri, setImageUri] = useState('');
+  const [profilePictureUri, setProfilePictureUri] = useState('');
+
+  const getImageFromCamera = () => {
+    ImagePicker.openCamera({
+      width: 104,
+      height: 104,
+      cropping: true,
+    }).then(image => {
+      setImageUri(image.path);
+      console.log(image);
+    });
+  };
+
+  const getImageFromGallary = () => {
+    ImagePicker.openPicker({
+      width: 104,
+      height: 104,
+      cropping: true,
+    }).then(image => {
+      setImageUri(image.path);
+      getImageUri(image.path);
+      // console.log(image.path);
+    });
+  };
+
+  const createThreeButtonAlert = () =>
+    Alert.alert('Select Picture From', '', [
+      {
+        text: 'Camera',
+        onPress: () => getImageFromCamera(),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {
+        text: 'Gallary',
+        onPress: () => getImageFromGallary(),
+      },
+    ]);
   const participantdata = useSelector(state => state.participantdata.value);
-  console.log(participantdata)
+
   const data = {
     image: '',
     name: teamname,
@@ -53,6 +99,7 @@ const AddTeam = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
         <ImageBackground
+          style={{width: Dimensions.get('window').width}}
           source={require('../../assets/images/IndiaTeam.png')}
           resizeMode="cover">
           <View style={styles.backgroundBeyondSafeArea}>
@@ -69,15 +116,42 @@ const AddTeam = ({navigation}) => {
                   </TouchableOpacity>
                   <Text style={styles.createTournament}>Add Team</Text>
                 </View>
+
                 <View style={styles.teamlogoview}>
                   <Image
-                    source={require('../../assets/images/team1.png')}
+                    source={
+                      profilePictureUri
+                        ? profilePictureUri
+                        : imageUri
+                        ? {uri: imageUri}
+                        : require('../../assets/images/team4.png')
+                    }
                     style={styles.teamlogo}
                   />
                 </View>
-                <View style={styles.imagepicker}>
-                  <Image source={require('../../assets/images/camera.png')} />
+                <View
+                  style={
+                    height > width
+                      ? [
+                          styles.imagepicker,
+                          {right: Dimensions.get('window').width / 2.86},
+                        ]
+                      : [
+                          styles.imagepicker,
+                          {right: Dimensions.get('window').width / 2.55},
+                        ]
+                  }>
+                  <TouchableOpacity
+                    onPress={() => {
+                      createThreeButtonAlert();
+                    }}>
+                    <Image
+                      source={require('../../assets/images/camera.png')}
+                      style={styles.gobackbutton}
+                    />
+                  </TouchableOpacity>
                 </View>
+
                 <View>
                   <TextField
                     label="Team Name"
@@ -150,7 +224,7 @@ const AddTeam = ({navigation}) => {
             </View>
           ) : (
             <View style={styles.teamsView}>
-              <FlatList
+              {/* <FlatList
                 data={participantdata}
                 keyExtractor={item => item.tempId}
                 renderItem={({item}) => (
@@ -160,7 +234,20 @@ const AddTeam = ({navigation}) => {
                     text={item.name}
                   />
                 )}
-              />
+              /> */}
+              {participantdata.map(
+                value => (
+                  console.log('I ammmmmmmm Uriiiii from map', value.image),
+                  (
+                    <View key={value.tempId}>
+                      <TeamListName
+                        // source={require(`${value.image}`)}
+                        text={value.name}
+                      />
+                    </View>
+                  )
+                ),
+              )}
             </View>
           )}
         </View>
