@@ -25,14 +25,17 @@ const passwordValidationSchema = yup.object().shape({
     .required('Confirm password is required'),
 });
 
-const SetPasswordScreen = ({navigation}) => {
+const SetPasswordScreen = ({navigation, route}) => {
   const [email, setEmail] = useState('');
+  console.log('Check Here', route.params.regDetails);
   return (
     <View style={styles.container}>
       <Formik
         validationSchema={passwordValidationSchema}
         initialValues={{password: '', confirmPassword: ''}}
-        onSubmit={values => console.log(values)}>
+        onSubmit={values =>
+          console.log({...route.params.regDetails, password: values.password})
+        }>
         {({
           handleChange,
           handleBlur,
@@ -98,8 +101,8 @@ const SetPasswordScreen = ({navigation}) => {
               end={{x: 2, y: 0}}
               colors={['#FFBA8C', '#FE5C6A']}
               text="SUBMIT"
-              onPress={() => navigation.navigate('RegistrationSuccessScreen')}
-              // onPress={handleSubmit}
+              // onPress={() => navigation.navigate('RegistrationSuccessScreen')}
+              onPress={handleSubmit}
               style={styles.buttonStyle}
             />
           </>

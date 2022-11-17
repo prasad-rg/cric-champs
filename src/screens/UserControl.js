@@ -11,8 +11,8 @@ import {
 import React, {useState} from 'react';
 import UserActions from '../components/UserActions';
 
-const UserControl = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+const UserControl = ({navigation}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -22,7 +22,9 @@ const UserControl = () => {
         <View style={styles.backgroundBeyondSafeArea}>
           <SafeAreaView>
             <View style={styles.profileDetailsContainer}>
-              <TouchableOpacity style={styles.closeButton}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => navigation.navigate('CreateTournament')}>
                 <Image
                   source={require('../../assets/images/icon-close.png')}
                   style={styles.closeButtonImage}
