@@ -8,9 +8,22 @@ import {
   ImageBackground,
 } from 'react-native';
 import React, {useState} from 'react';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
+
+const loginValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter valid email')
+    .required('Email Address is Required'),
+  password: yup
+    .string()
+    .min(8, ({min}) => `Password must be at least ${min} characters`)
+    .required('Password is required'),
+});
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -40,46 +53,78 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.form}>
-          <TextField
-            label="Email"
-            keyboardType="email-address"
-            formatText={this.formatText}
-            onSubmitEditing={this.onSubmit}
-            ref={this.fieldRef}
-            textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
-            baseColor="rgba(0, 0, 0, .38)"
-            lineWidth={1}
-            onChangeText={text => setEmail(text)}
-            autoCapitalize="none"
-          />
-          <TextField
-            label="Password"
-            keyboardType="email-address"
-            formatText={this.formatText}
-            onSubmitEditing={this.onSubmit}
-            ref={this.fieldRef}
-            textColor="#666666"
-            tintColor="rgba(153, 153, 153, 0.4)"
-            lineWidth={1}
-            secureTextEntry={true}
-            onChangeText={text => setPassword(text)}
-            autoCapitalize="none"
-          />
-          <TouchableOpacity
-            style={styles.forgotPasswordButton}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <GradientButton
-            start={{x: 0, y: 0}}
-            end={{x: 2, y: 0}}
-            colors={['#FFBA8C', '#FE5C6A']}
-            text="LOGIN"
-            onPress={() => handelLogin()}
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{width: '90%'}}
-          />
+          <Formik
+            validationSchema={loginValidationSchema}
+            initialValues={{email: '', password: ''}}
+            onSubmit={values => console.log(values)}>
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              isValid,
+              touched,
+            }) => (
+              <>
+                <TextField
+                  label="Email"
+                  name="email"
+                  keyboardType="email-address"
+                  formatText={this.formatText}
+                  onSubmitEditing={this.onSubmit}
+                  ref={this.fieldRef}
+                  textColor="#666666"
+                  tintColor="rgba(153, 153, 153, 0.4)"
+                  baseColor="rgba(0, 0, 0, .38)"
+                  lineWidth={1}
+                  autoCapitalize="none"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  autoCorrect={false}
+                />
+                {errors.email && touched.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+                <TextField
+                  label="Password"
+                  name="password"
+                  keyboardType="email-address"
+                  formatText={this.formatText}
+                  onSubmitEditing={this.onSubmit}
+                  ref={this.fieldRef}
+                  textColor="#666666"
+                  tintColor="rgba(153, 153, 153, 0.4)"
+                  lineWidth={1}
+                  secureTextEntry={true}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  autoCapitalize="none"
+                />
+                {errors.password && touched.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+                <TouchableOpacity
+                  style={styles.forgotPasswordButton}
+                  onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+                  <Text style={styles.forgotPasswordText}>
+                    Forgot Password?
+                  </Text>
+                </TouchableOpacity>
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={['#FFBA8C', '#FE5C6A']}
+                  text="LOGIN"
+                  onPress={handleSubmit}
+                  // eslint-disable-next-line react-native/no-inline-styles
+                  style={{width: '90%'}}
+                />
+              </>
+            )}
+          </Formik>
           <View style={styles.eitherSideLineComntainer}>
             <View style={styles.lineEitherSide} />
             <View>
@@ -106,6 +151,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#FFFFFF',
   },
   header: {
     height: 167,
@@ -180,6 +226,10 @@ const styles = StyleSheet.create({
     color: '#858585',
     fontFamily: 'Roboto-Light',
     fontSize: 14,
+  },
+  errorText: {
+    fontSize: 10,
+    color: 'red',
   },
 });
 

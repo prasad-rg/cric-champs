@@ -13,8 +13,14 @@ import React, { useState } from 'react';
 
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
-const TeamsList = () => {
+const TeamsList = ({navigation}) => {
   const [team, setTeam] = useState(true);
+  const handleBack =()=>{
+    navigation.navigate('CreateTournamentSuccess')
+  }
+  const handleTeam =()=>{
+    navigation.navigate('AddTeam')
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -25,7 +31,7 @@ const TeamsList = () => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleBack}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -34,7 +40,7 @@ const TeamsList = () => {
                   <Text style={styles.teamText}>Teams List</Text>
                 </View>
 
-                <TouchableOpacity style={styles.addButton}>
+                <TouchableOpacity style={styles.addButton} onPress={handleTeam}>
                   <Text style={styles.addTeamText}>ADD TEAM</Text>
                 </TouchableOpacity>
               </View>

@@ -7,22 +7,12 @@ import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
 
-const RadioButtonComponent = ({
+const RadioButtonDisabled = ({
   radio_props,
   formHorizontal,
   style = {},
   flexWrap = {},
-  onPress,
 }) => {
-  const [value, setValue] = useState({value: 0});
-  const [index, setIndex] = useState({index: 0});
-
-  const setData = (value, index) => {
-    setValue({value: value});
-    setIndex(index);
-    onPress(value);
-  };
-
   return (
     <RadioForm
       animation={true}
@@ -31,7 +21,7 @@ const RadioButtonComponent = ({
       {radio_props.map((obj, i) => (
         <RadioButton
           key={i}
-          isSelected={index === i}
+          isSelected={false}
           style={[
             {
               borderWidth: 1,
@@ -39,31 +29,31 @@ const RadioButtonComponent = ({
               height: 40,
               width: 150,
               borderWidth: 0.8,
-              borderColor: index === i ? '#FA7171' : '#4A90E2',
               borderRadius: 24,
+              borderColor: '#C0C0C0',
             },
             {...style},
           ]}>
           <RadioButtonInput
             obj={obj}
             index={i}
-            isSelected={index === i}
-            onPress={(value, i) => setData(value, i)}
+            buttonOuterColor="#C0C0C0"
             borderWidth={1}
-            buttonInnerColor={index === i ? '#FA7171' : '#4A90E2'}
-            buttonOuterColor={index === i ? '#FA7171' : '#4A90E2'}
+            buttonInnerColor="#FFFFFF"
             buttonSize={12}
             buttonOuterSize={20}
             buttonStyle={{}}
             buttonWrapStyle={{marginLeft: 10}}
+            isSelected={false}
+            onPress={() => null}
           />
           <RadioButtonLabel
             obj={obj}
             index={i}
-            isSelected={index === i}
+            isSelected={false}
             labelHorizontal={true}
-            onPress={setData}
-            labelColor={index === i ? '#FA7171' : '#4A90E2'}
+            onPress={() => null}
+            labelColor="#C0C0C0"
             labelStyle={{
               height: 16,
               fontFamily: 'Roboto',
@@ -79,7 +69,7 @@ const RadioButtonComponent = ({
   );
 };
 
-export default RadioButtonComponent;
+export default RadioButtonDisabled;
 
 const styles = StyleSheet.create({
   radioButtonView: {

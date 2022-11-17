@@ -66,9 +66,7 @@ const HomeScreen = () => {
 };
 export default HomeScreen;
 
-const styles = StyleSheet.create({
-  // text:{
-  //   fontFamily:'HelveticaNeue Bold'
+const styles = StyleSheet.create({ 
   textInput: {
     boxSizing: 'border-box',
     height: 41,

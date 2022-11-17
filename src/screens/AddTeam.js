@@ -8,12 +8,16 @@ import {
   ImageBackground,
   ScrollView,
   Platform,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
+import {useWindowDimensions} from 'react-native';
+import TeamListName from '../components/TeamListName';
+import {useSelector} from 'react-redux';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -22,11 +26,27 @@ const radio_props = [
 ];
 
 const AddTeam = ({navigation}) => {
-  const [tournamentName, setTournamentName] = useState('');
+  const [teamname, setTeamName] = useState('');
+  const [city, setCity] = useState('');
+  const [team, setTeam] = useState(true);
+  const participantdata = useSelector(state => state.participantdata.value);
+  console.log(participantdata)
+  const data = {
+    image: '',
+    name: teamname,
+    city: city,
+    tournamentId: '',
+  };
 
   const handlePress = () => {
-    console.log(tournamentName);
+    console.log(data);
     navigation.navigate('CreateTournamentSuccess');
+  };
+  const handlePlayer = () => {
+    navigation.navigate('AddPlayer');
+  };
+  const handleBack = () => {
+    navigation.navigate('TeamsList');
   };
 
   return (
@@ -39,7 +59,9 @@ const AddTeam = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.header}>
-                  <TouchableOpacity style={styles.closeButton}>
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={handleBack}>
                     <Image
                       source={require('../../assets/images/goback.png')}
                       style={styles.gobackbutton}
@@ -53,6 +75,9 @@ const AddTeam = ({navigation}) => {
                     style={styles.teamlogo}
                   />
                 </View>
+                <View style={styles.imagepicker}>
+                  <Image source={require('../../assets/images/camera.png')} />
+                </View>
                 <View>
                   <TextField
                     label="Team Name"
@@ -61,9 +86,9 @@ const AddTeam = ({navigation}) => {
                     ref={this.fieldRef}
                     textColor="#FFFFFF"
                     tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="#E0E0E0"
+                    baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
-                    onChangeText={text => setTournamentName(text)}
+                    onChangeText={text => setTeamName(text)}
                     autoCapitalize="none"
                     style={{
                       fontFamily: 'Roboto',
@@ -78,10 +103,6 @@ const AddTeam = ({navigation}) => {
                       height: 61,
                       marginTop: -6,
                     }}
-                    //   containerStyle={{
-                    //    paddingTop:-9,
-
-                    //   }}
                   />
 
                   <TextField
@@ -91,9 +112,9 @@ const AddTeam = ({navigation}) => {
                     ref={this.fieldRef}
                     textColor="#FFFFFF"
                     tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="#E0E0E0"
+                    baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
-                    onChangeText={text => setTournamentName(text)}
+                    onChangeText={text => setCity(text)}
                     autoCapitalize="none"
                     inputContainerStyle={{
                       alignSelf: 'center',
@@ -102,7 +123,7 @@ const AddTeam = ({navigation}) => {
                       marginTop: -6,
                     }}
                     style={{
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Roboto-Medium',
                       fontSize: 16,
                       fontWeight: 'bold',
                       letterSpacing: 0.57,
@@ -116,14 +137,32 @@ const AddTeam = ({navigation}) => {
         </ImageBackground>
         <View style={styles.tournamentTypeView}>
           <View style={styles.addButton}>
-          <TouchableOpacity>
-            <Text style={styles.addTeamText}>ADD PLAYER</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity onPress={handlePlayer}>
+              <Text style={styles.addTeamText}>ADD PLAYER</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.showaddedplayer}>
-            <Text style={styles.players}>Players</Text>
-            <View style={styles.noplayerView}><Text style={styles.noplayers}>No Players Added Yet!</Text></View>
+          <Text style={styles.players}>Players</Text>
+          {!team ? (
+            <View style={styles.noplayerView}>
+              <Text style={styles.noplayers}>No Players Added Yet!</Text>
+            </View>
+          ) : (
+            <View style={styles.teamsView}>
+              <FlatList
+                data={participantdata}
+                keyExtractor={item => item.tempId}
+                renderItem={({item}) => (
+                  console.log('I am item', item.tempId),
+                  <TeamListName
+                    source={require('../../assets/images/team1.png')}
+                    text={item.name}
+                  />
+                )}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
       <View style={styles.gradientButton}>
@@ -131,7 +170,7 @@ const AddTeam = ({navigation}) => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="CREATE TOURNAMENT"
+          text="SAVE TEAM"
           style={{width: '100%', marginTop: 0, height: 48}}
           textstyle={{
             height: 16,
@@ -151,7 +190,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    // backgroundColor:'yellow',
   },
   profileDetailsContainer: {
     height: 351,
@@ -202,14 +240,13 @@ const styles = StyleSheet.create({
       height: 3,
     },
     shadowRadius: 60,
-    // shadowOpacity: 0.9,
   },
   tournamentTypeView: {
     height: 80,
-    width:'100%',
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'#FFFFFF'
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
   tournamentTypeText: {
     height: 16,
@@ -249,11 +286,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
-  showaddedplayer:{
-    height:'100%',
+  showaddedplayer: {
+    height: '100%',
     backgroundColor: 'rgba(217,226,233,0.5)',
   },
-  players:{
+  players: {
     height: 16,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
@@ -261,10 +298,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-    marginLeft:16,
-    marginTop:20,
+    marginLeft: 16,
+    marginTop: 20,
   },
-  noplayers:{
+  noplayers: {
     height: 24,
     width: 200,
     color: '#A3A3A3',
@@ -273,12 +310,29 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 24,
-    marginTop:18,
-    textAlign:'center',
+    marginTop: 18,
+    textAlign: 'center',
   },
-  noplayerView:{
-    alignItems:'center'
-  }
+  noplayerView: {
+    alignItems: 'center',
+  },
+  imagepicker: {
+    height: 34,
+    width: 34,
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 2 8 0 rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    position: 'absolute',
+    top: '49%',
+    right: '35%',
+    elevation: 20,
+    shadowColor: '#52006A',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
 });
 
 export default AddTeam;

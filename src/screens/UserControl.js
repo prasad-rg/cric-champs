@@ -8,10 +8,11 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import UserActions from '../components/UserActions';
 
-const UserControl = () => {
+const UserControl = ({navigation}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -21,21 +22,45 @@ const UserControl = () => {
         <View style={styles.backgroundBeyondSafeArea}>
           <SafeAreaView>
             <View style={styles.profileDetailsContainer}>
-              <TouchableOpacity style={styles.closeButton}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => navigation.navigate('CreateTournament')}>
                 <Image
                   source={require('../../assets/images/icon-close.png')}
                   style={styles.closeButtonImage}
                 />
               </TouchableOpacity>
               <View style={styles.profileView}>
-                <Image
-                  source={require('../../assets/images/profile4.png')}
-                  style={styles.avatar}
-                />
-                <View style={styles.textContainer}>
-                  <Text style={styles.nameText}>Natash Aston</Text>
-                  <Text style={styles.emailText}>natashaston@gmail.com</Text>
-                </View>
+                {isLoggedIn ? (
+                  <>
+                    <Image
+                      source={require('../../assets/images/profile4.png')}
+                      style={styles.avatar}
+                    />
+                    <View style={styles.textContainer}>
+                      <Text style={styles.nameText}>Natash Aston</Text>
+                      <Text style={styles.emailText}>
+                        natashaston@gmail.com
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      source={require('../../assets/images/loginLogo.png')}
+                      style={[styles.avatar, {tintColor: '#FFFFFF'}]}
+                    />
+                    <View style={styles.textContainer}>
+                      <Text
+                        style={[
+                          styles.nameText,
+                          {fontSize: 25, lineHeight: 28},
+                        ]}>
+                        Cric Champs
+                      </Text>
+                    </View>
+                  </>
+                )}
               </View>
             </View>
           </SafeAreaView>
@@ -46,10 +71,12 @@ const UserControl = () => {
         <UserActions
           imageSource={require('../../assets/images/cricketTournament.png')}
           title="Create Tournament"
+          tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
         />
         <UserActions
           title="Manage Tournament"
           imageSource={require('../../assets/images/cap.png')}
+          tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
         />
         <UserActions
           title="View Tournament"
@@ -79,9 +106,15 @@ const UserControl = () => {
         </TouchableOpacity>
       </ScrollView>
       <SafeAreaView>
-        <TouchableOpacity style={styles.logout}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
+        {isLoggedIn ? (
+          <TouchableOpacity style={styles.logout}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.logout}>
+            <Text style={styles.logoutText}>Login</Text>
+          </TouchableOpacity>
+        )}
       </SafeAreaView>
     </View>
   );

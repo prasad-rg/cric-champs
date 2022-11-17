@@ -6,6 +6,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import CreateTournament from '../screens/CreateTournament';
 import CreateTournamentSuccess from '../screens/CreateTournamentSuccess';
 import TeamsList from '../screens/TeamsList';
+import AddTeam from '../screens/AddTeam';
+import AddPlayer from '../screens/AddPlayer';
+
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
@@ -30,6 +33,16 @@ const AppStack = () => {
         <Stack.Screen
           name="TeamsList"
           component={TeamsList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddTeam"
+          component={AddTeam}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddPlayer"
+          component={AddPlayer}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
