@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
+import {loginUser} from '../services/auth';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -56,7 +57,10 @@ const LoginScreen = ({navigation}) => {
           <Formik
             validationSchema={loginValidationSchema}
             initialValues={{email: '', password: ''}}
-            onSubmit={values => console.log(values)}>
+            onSubmit={values => {
+              console.log(values);
+              loginUser(values);
+            }}>
             {({
               handleChange,
               handleBlur,
