@@ -8,13 +8,16 @@ import {
   ImageBackground,
   ScrollView,
   Platform,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
-import { useWindowDimensions } from 'react-native';
+import {useWindowDimensions} from 'react-native';
+import TeamListName from '../components/TeamListName';
+import {useSelector} from 'react-redux';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -23,11 +26,20 @@ const radio_props = [
 ];
 
 const AddTeam = ({navigation}) => {
-  const [tournamentName, setTournamentName] = useState('');
-  
+  const [teamname, setTeamName] = useState('');
+  const [city, setCity] = useState('');
+  const [team, setTeam] = useState(true);
+  const participantdata = useSelector(state => state.participantdata.value);
+  console.log(participantdata)
+  const data = {
+    image: '',
+    name: teamname,
+    city: city,
+    tournamentId: '',
+  };
 
   const handlePress = () => {
-    console.log(tournamentName);
+    console.log(data);
     navigation.navigate('CreateTournamentSuccess');
   };
   const handlePlayer = () => {
@@ -64,10 +76,7 @@ const AddTeam = ({navigation}) => {
                   />
                 </View>
                 <View style={styles.imagepicker}>
-                  <Image
-                    source={require('../../assets/images/camera.png')}
-                    // style={styles.gobackbutton}
-                  />
+                  <Image source={require('../../assets/images/camera.png')} />
                 </View>
                 <View>
                   <TextField
@@ -79,7 +88,7 @@ const AddTeam = ({navigation}) => {
                     tintColor="rgba(224, 224, 224, 0.7)"
                     baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
-                    onChangeText={text => setTournamentName(text)}
+                    onChangeText={text => setTeamName(text)}
                     autoCapitalize="none"
                     style={{
                       fontFamily: 'Roboto',
@@ -105,7 +114,7 @@ const AddTeam = ({navigation}) => {
                     tintColor="rgba(224, 224, 224, 0.7)"
                     baseColor="rgba(224, 224, 224, 0.7)"
                     lineWidth={1}
-                    onChangeText={text => setTournamentName(text)}
+                    onChangeText={text => setCity(text)}
                     autoCapitalize="none"
                     inputContainerStyle={{
                       alignSelf: 'center',
@@ -135,9 +144,25 @@ const AddTeam = ({navigation}) => {
         </View>
         <View style={styles.showaddedplayer}>
           <Text style={styles.players}>Players</Text>
-          <View style={styles.noplayerView}>
-            <Text style={styles.noplayers}>No Players Added Yet!</Text>
-          </View>
+          {!team ? (
+            <View style={styles.noplayerView}>
+              <Text style={styles.noplayers}>No Players Added Yet!</Text>
+            </View>
+          ) : (
+            <View style={styles.teamsView}>
+              <FlatList
+                data={participantdata}
+                keyExtractor={item => item.tempId}
+                renderItem={({item}) => (
+                  console.log('I am item', item.tempId),
+                  <TeamListName
+                    source={require('../../assets/images/team1.png')}
+                    text={item.name}
+                  />
+                )}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
       <View style={styles.gradientButton}>
@@ -165,7 +190,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    // backgroundColor:'yellow',
   },
   profileDetailsContainer: {
     height: 351,
@@ -216,7 +240,6 @@ const styles = StyleSheet.create({
       height: 3,
     },
     shadowRadius: 60,
-
   },
   tournamentTypeView: {
     height: 80,

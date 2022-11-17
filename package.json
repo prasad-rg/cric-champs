@@ -29,7 +29,9 @@
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-switch": "^1.5.1",
     "react-native-tab-view": "^3.3.0",
+    "react-native-uuid": "^2.0.1",
     "react-redux": "^8.0.5",
+    "redux-persist": "^6.0.0",
     "rn-material-ui-textfield": "^1.0.9",
     "yup": "^0.32.11"
   },

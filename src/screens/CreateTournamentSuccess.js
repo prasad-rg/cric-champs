@@ -6,19 +6,36 @@ import {
   Image,
   SafeAreaView,
   Platform,
+  Share,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import OutlinedButton from '../components/OutlinedButton';
 import GradientButton from '../components/GradientButton';
 
 const CreateTournamentSuccess = ({navigation}) => {
+  const [tournamentcode, setTournamentCode] = useState('85b68e');
 
-    const handleBack = () =>{
-        navigation.navigate('CreateTournament')
+  const handleBack = () => {
+    navigation.navigate('CreateTournament');
+  };
+  const handleProceed = () => {
+    navigation.navigate('TeamsList');
+  };
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${tournamentcode}, Share the tournament code to invite your friends`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      alert(error.message);
     }
-    const handleProceed = () =>{
-        navigation.navigate('TeamsList')
-    }
+  };
   return (
     <View style={styles.container}>
       <SafeAreaView style={{flex: 1}}>
@@ -33,7 +50,7 @@ const CreateTournamentSuccess = ({navigation}) => {
             source={require('../../assets/images/trophy.png')}
             style={styles.trophy}
           />
-          <Text style={styles.tournamentId}>85b68e</Text>
+          <Text style={styles.tournamentId}>{tournamentcode}</Text>
           <Text style={styles.leagueName}>Robosoft Premiere League</Text>
           <Text style={styles.successMessage}>Successfully Created!</Text>
         </View>
@@ -42,15 +59,16 @@ const CreateTournamentSuccess = ({navigation}) => {
           text="SHARE"
           style={{marginLeft: 10}}
           buttonstyle={{width: 151, alignSelf: 'center', marginTop: 19.5}}
+          onPress={() => onShare()}
         />
       </SafeAreaView>
-      <View style={{marginBottom:Platform.OS === 'ios' ? 20:0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
-          style={{width: '100%',height:48,marginTop:0}}
+          style={{width: '100%', height: 48, marginTop: 0}}
           textstyle={{
             height: 16,
             fontWeight: '500',
