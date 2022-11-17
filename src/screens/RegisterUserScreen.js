@@ -14,11 +14,11 @@ const radio_props = [
 ];
 
 const registrationValidationSchema = yup.object().shape({
-  fullName: yup
+  name: yup
     .string()
     .matches(/(\w.+\s).+/, 'Enter your First Name and Last Name')
     .required('Full name is required'),
-  phoneNumber: yup.string().matches(/(\d){10}\b/, 'Enter a valid phone number'),
+  phone: yup.string().matches(/(\d){10}\b/, 'Enter a valid phone number'),
   email: yup
     .string()
     .email('Please enter valid email')
@@ -42,8 +42,8 @@ const RegisterUserScreen = ({navigation}) => {
         validationSchema={registrationValidationSchema}
         initialValues={{
           email: '',
-          fullName: '',
-          phoneNumber: '',
+          name: '',
+          phone: '',
           city: '',
         }}
         onSubmit={values => {
@@ -77,7 +77,7 @@ const RegisterUserScreen = ({navigation}) => {
                 <View style={styles.container}>
                   <TextField
                     label="Full Name"
-                    name="fullName"
+                    name="name"
                     formatText={this.formatText}
                     onSubmitEditing={this.onSubmit}
                     ref={this.fieldRef}
@@ -85,9 +85,9 @@ const RegisterUserScreen = ({navigation}) => {
                     tintColor="rgba(153, 153, 153, 0.4)"
                     baseColor="rgba(0, 0, 0, .38)"
                     lineWidth={1}
-                    onChangeText={handleChange('fullName')}
-                    onBlur={handleBlur('fullName')}
-                    value={values.fullName}
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
                     style={{
                       fontFamily: 'Roboto-Medium',
                       color: '#666666',
@@ -95,8 +95,8 @@ const RegisterUserScreen = ({navigation}) => {
                       letterSpacing: 0.57,
                     }}
                   />
-                  {errors.fullName && touched.fullName && (
-                    <Text style={styles.errorText}>{errors.fullName}</Text>
+                  {errors.name && touched.name && (
+                    <Text style={styles.errorText}>{errors.name}</Text>
                   )}
                   <TextField
                     label="Email"
@@ -125,7 +125,7 @@ const RegisterUserScreen = ({navigation}) => {
                   )}
                   <TextField
                     label="Phone No (Optional)"
-                    name="phoneNumber"
+                    name="phone"
                     keyboardType="email-address"
                     formatText={this.formatText}
                     onSubmitEditing={this.onSubmit}
@@ -135,9 +135,9 @@ const RegisterUserScreen = ({navigation}) => {
                     baseColor="rgba(0, 0, 0, .38)"
                     lineWidth={1}
                     autoCapitalize="none"
-                    onChangeText={handleChange('phoneNumber')}
-                    onBlur={handleBlur('phoneNumber')}
-                    value={values.phoneNumber}
+                    onChangeText={handleChange('phone')}
+                    onBlur={handleBlur('phone')}
+                    value={values.phone}
                     style={{
                       fontFamily: 'Roboto-Medium',
                       color: '#666666',
@@ -145,8 +145,8 @@ const RegisterUserScreen = ({navigation}) => {
                       letterSpacing: 0.57,
                     }}
                   />
-                  {errors.phoneNumber && touched.phoneNumber && (
-                    <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+                  {errors.phone && touched.phone && (
+                    <Text style={styles.errorText}>{errors.phone}</Text>
                   )}
                   <TextField
                     label="City (Optional)"

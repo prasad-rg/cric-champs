@@ -39,7 +39,6 @@ const SetPasswordScreen = ({navigation, route}) => {
             password: values.password,
           });
           registerUser(formData);
-          // console.log(formData);
         }}>
         {({
           handleChange,
