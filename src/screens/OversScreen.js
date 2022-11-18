@@ -69,7 +69,7 @@ const OversScreen = () => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="PROCEED"
+          text="OK"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
