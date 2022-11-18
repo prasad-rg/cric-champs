@@ -18,9 +18,11 @@ import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
 import {useWindowDimensions} from 'react-native';
-import TeamListName from '../components/TeamListName';
+import PlayersList from '../components/PlayersList';
 import {useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -95,136 +97,172 @@ const AddTeam = ({navigation}) => {
     navigation.navigate('TeamsList');
   };
 
+  const addPlayerValidationSchema = yup.object().shape({
+    name: yup.string().required(),
+    city: yup.string().required(),
+    phoneNo: yup.string().required(),
+  });
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <ImageBackground
-          style={{width: Dimensions.get('window').width}}
-          source={require('../../assets/images/IndiaTeam.png')}
-          resizeMode="cover">
-          <View style={styles.backgroundBeyondSafeArea}>
-            <SafeAreaView>
-              <View style={styles.profileDetailsContainer}>
-                <View style={styles.header}>
-                  <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={handleBack}>
-                    <Image
-                      source={require('../../assets/images/goback.png')}
-                      style={styles.gobackbutton}
-                    />
+      <Formik
+        validationSchema={addPlayerValidationSchema}
+        initialValues={{
+          name: '',
+          city: '',
+          phoneNo: '',
+        }}
+        onSubmit={values => {
+          if (profilePictureUri !== '') {
+            let data = {
+              ...values,
+              tempId: uuid.v4(),
+              designation: designation,
+              expertise: expertise,
+              batting: batting,
+              bowling: bowling,
+              bowlingtype: bowlingtype,
+              image: profilePictureUri,
+            };
+            console.log('I am data from AddPlayer', data);
+            dispatch(addTeam(data));
+          } else {
+            Alert.alert('Please Add profile picture');
+          }
+        }}>
+        {({handleChange, handleBlur, handleSubmit, values}) => (
+          <>
+            <ScrollView>
+              <ImageBackground
+                style={{width: Dimensions.get('window').width}}
+                source={require('../../assets/images/IndiaTeam.png')}
+                resizeMode="cover">
+                <View style={styles.backgroundBeyondSafeArea}>
+                  <SafeAreaView>
+                    <View style={styles.profileDetailsContainer}>
+                      <View style={styles.header}>
+                        <TouchableOpacity
+                          style={styles.closeButton}
+                          onPress={handleBack}>
+                          <Image
+                            source={require('../../assets/images/goback.png')}
+                            style={styles.gobackbutton}
+                          />
+                        </TouchableOpacity>
+                        <Text style={styles.createTournament}>Add Team</Text>
+                      </View>
+
+                      <View style={styles.teamlogoview}>
+                        <Image
+                          source={
+                            profilePictureUri
+                              ? profilePictureUri
+                              : imageUri
+                              ? {uri: imageUri}
+                              : require('../../assets/images/team4.png')
+                          }
+                          style={styles.teamlogo}
+                        />
+                      </View>
+                      <View
+                        style={
+                          height > width
+                            ? [
+                                styles.imagepicker,
+                                {right: Dimensions.get('window').width / 2.86},
+                              ]
+                            : [
+                                styles.imagepicker,
+                                {right: Dimensions.get('window').width / 2.55},
+                              ]
+                        }>
+                        <TouchableOpacity
+                          onPress={() => {
+                            createThreeButtonAlert();
+                          }}>
+                          <Image
+                            source={require('../../assets/images/camera.png')}
+                            style={styles.gobackbutton}
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      <View>
+                        <TextField
+                          label="Team Name"
+                          formatText={this.formatText}
+                          onSubmitEditing={this.onSubmit}
+                          ref={this.fieldRef}
+                          textColor="#FFFFFF"
+                          tintColor="rgba(224, 224, 224, 0.7)"
+                          baseColor="rgba(224, 224, 224, 0.7)"
+                          lineWidth={1}
+                          autoCapitalize="none"
+                          onChangeText={handleChange('teamname')}
+                          onBlur={handleBlur('teamname')}
+                          value={values.teamname}
+                          style={{
+                            fontFamily: 'Roboto',
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                            letterSpacing: 0.57,
+                            lineHeight: 19,
+                          }}
+                          inputContainerStyle={{
+                            alignSelf: 'center',
+                            width: 260,
+                            height: 61,
+                            marginTop: -6,
+                          }}
+                        />
+
+                        <TextField
+                          label="City / Town (Optional)"
+                          formatText={this.formatText}
+                          onSubmitEditing={this.onSubmit}
+                          ref={this.fieldRef}
+                          textColor="#FFFFFF"
+                          tintColor="rgba(224, 224, 224, 0.7)"
+                          baseColor="rgba(224, 224, 224, 0.7)"
+                          lineWidth={1}
+                          onChangeText={handleChange('city')}
+                          onBlur={handleBlur('city')}
+                          value={values.city}
+                          autoCapitalize="none"
+                          inputContainerStyle={{
+                            alignSelf: 'center',
+                            width: 260,
+                            height: 61,
+                            marginTop: -6,
+                          }}
+                          style={{
+                            fontFamily: 'Roboto-Medium',
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                            letterSpacing: 0.57,
+                            lineHeight: 19,
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </SafeAreaView>
+                </View>
+              </ImageBackground>
+              <View style={styles.tournamentTypeView}>
+                <View style={styles.addButton}>
+                  <TouchableOpacity onPress={handlePlayer}>
+                    <Text style={styles.addTeamText}>ADD PLAYER</Text>
                   </TouchableOpacity>
-                  <Text style={styles.createTournament}>Add Team</Text>
-                </View>
-
-                <View style={styles.teamlogoview}>
-                  <Image
-                    source={
-                      profilePictureUri
-                        ? profilePictureUri
-                        : imageUri
-                        ? {uri: imageUri}
-                        : require('../../assets/images/team4.png')
-                    }
-                    style={styles.teamlogo}
-                  />
-                </View>
-                <View
-                  style={
-                    height > width
-                      ? [
-                          styles.imagepicker,
-                          {right: Dimensions.get('window').width / 2.86},
-                        ]
-                      : [
-                          styles.imagepicker,
-                          {right: Dimensions.get('window').width / 2.55},
-                        ]
-                  }>
-                  <TouchableOpacity
-                    onPress={() => {
-                      createThreeButtonAlert();
-                    }}>
-                    <Image
-                      source={require('../../assets/images/camera.png')}
-                      style={styles.gobackbutton}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  <TextField
-                    label="Team Name"
-                    formatText={this.formatText}
-                    onSubmitEditing={this.onSubmit}
-                    ref={this.fieldRef}
-                    textColor="#FFFFFF"
-                    tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="rgba(224, 224, 224, 0.7)"
-                    lineWidth={1}
-                    onChangeText={text => setTeamName(text)}
-                    autoCapitalize="none"
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      letterSpacing: 0.57,
-                      lineHeight: 19,
-                    }}
-                    inputContainerStyle={{
-                      alignSelf: 'center',
-                      width: 260,
-                      height: 61,
-                      marginTop: -6,
-                    }}
-                  />
-
-                  <TextField
-                    label="City / Town (Optional)"
-                    formatText={this.formatText}
-                    onSubmitEditing={this.onSubmit}
-                    ref={this.fieldRef}
-                    textColor="#FFFFFF"
-                    tintColor="rgba(224, 224, 224, 0.7)"
-                    baseColor="rgba(224, 224, 224, 0.7)"
-                    lineWidth={1}
-                    onChangeText={text => setCity(text)}
-                    autoCapitalize="none"
-                    inputContainerStyle={{
-                      alignSelf: 'center',
-                      width: 260,
-                      height: 61,
-                      marginTop: -6,
-                    }}
-                    style={{
-                      fontFamily: 'Roboto-Medium',
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      letterSpacing: 0.57,
-                      lineHeight: 19,
-                    }}
-                  />
                 </View>
               </View>
-            </SafeAreaView>
-          </View>
-        </ImageBackground>
-        <View style={styles.tournamentTypeView}>
-          <View style={styles.addButton}>
-            <TouchableOpacity onPress={handlePlayer}>
-              <Text style={styles.addTeamText}>ADD PLAYER</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.showaddedplayer}>
-          <Text style={styles.players}>Players</Text>
-          {!team ? (
-            <View style={styles.noplayerView}>
-              <Text style={styles.noplayers}>No Players Added Yet!</Text>
-            </View>
-          ) : (
-            <View style={styles.teamsView}>
-              {/* <FlatList
+              <View style={styles.showaddedplayer}>
+                <Text style={styles.players}>Players</Text>
+                {!team ? (
+                  <View style={styles.noplayerView}>
+                    <Text style={styles.noplayers}>No Players Added Yet!</Text>
+                  </View>
+                ) : (
+                  <View style={styles.teamsView}>
+                    {/* <FlatList
                 data={participantdata}
                 keyExtractor={item => item.tempId}
                 renderItem={({item}) => (
@@ -235,40 +273,46 @@ const AddTeam = ({navigation}) => {
                   />
                 )}
               /> */}
-              {participantdata.map(
-                value => (
-                  console.log('I ammmmmmmm Uriiiii from map', value.image),
-                  (
-                    <View key={value.tempId}>
-                      <TeamListName
-                        source={value.image}
-                        text={value.name}
-                      />
-                    </View>
-                  )
-                ),
-              )}
+                    {participantdata.map(
+                      value => (
+                        console.log(
+                          'I ammmmmmmm Uriiiii from map',
+                          value,
+                        ),
+                        (
+                          <View key={value.tempId}>
+                            <PlayersList
+                              source={value.image}
+                              text={value.name}
+                            />
+                          </View>
+                        )
+                      ),
+                    )}
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+            <View style={styles.gradientButton}>
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={['#FFBA8C', '#FE5C6A']}
+                text="SAVE TEAM"
+                style={{width: '100%', marginTop: 0, height: 48}}
+                textstyle={{
+                  height: 16,
+                  fontWeight: '500',
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  lineHeight: 19,
+                }}
+                onPress={handlePress}
+              />
             </View>
-          )}
-        </View>
-      </ScrollView>
-      <View style={styles.gradientButton}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="SAVE TEAM"
-          style={{width: '100%', marginTop: 0, height: 48}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={handlePress}
-        />
-      </View>
+          </>
+        )}
+      </Formik>
     </View>
   );
 };
