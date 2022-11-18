@@ -6,27 +6,77 @@ import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
 import RadioButton from '../components/RadioButton';
 import ToggleSwitch from '../components/ToggleSwitch';
+import RadioButtonDisabled from '../components/RadioButtonDisabled';
+import { useDispatch } from 'react-redux';
+import uuid from 'react-native-uuid';
+import { addTeam } from '../redux/ParticipantSlice';
 
 const AddPlayer = ({navigation}) => {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [phone, setPhone] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [expertise, setExpertise] = useState('');
+  const [batting, setBatting] = useState('');
+  const [bowling, setBowling] = useState('');
+  const [bowlingtype, setBowlingType] = useState('');
+  const dispatch = useDispatch();
+
+  const [whiteList, setWhiteList] = useState({
+    designation: {isVisble: false},
+    expertise: {isVisble: false},
+    batting: {isVisble: false},
+    bowling: {isVisble: false},
+    bowlingtype: {isVisble: false},
+  });
+
+  const enableDesignation = (data, id) => {
+    setWhiteList(prev => ({...prev, designation: {isVisble: data}}));
+  };
+  const enableExpertise = (data, id) => {
+    setWhiteList(prev => ({...prev, expertise: {isVisble: data}}));
+  };
+  const enableBatting = (data, id) => {
+    setWhiteList(prev => ({...prev, batting: {isVisble: data}}));
+  };
+  const enableBowling = (data, id) => {
+    setWhiteList(prev => ({...prev, bowling: {isVisble: data}}));
+  };
+  const enableBowlingType = (data, id) => {
+    setWhiteList(prev => ({...prev, bowlingtype: {isVisble: data}}));
+  };
+
+  const getDesignation = data => {
+    setDesignation(data);
+  };
+  const getExpertise = data => {
+    setExpertise(data);
+  };
+  const getBatting = data => {
+    setBatting(data);
+  };
+  const getBowling = data => {
+    setBowling(data);
+  };
+  const getBowlingType = data => {
+    setBowlingType(data);
+  };
 
   const Designation = [
-    {label: 'Captain', value: 'League', id: 0},
-    {label: 'Vice Captain', value: 'Knockout', id: 1},
+    {label: 'Captain', value: 'Captain', id: 0},
+    {label: 'Vice Captain', value: 'Vice Captain', id: 1},
   ];
 
   const Expertise = [
     {label: 'Batting', value: 'Batting', id: 0},
     {label: 'Bowling', value: 'Bowling', id: 1},
-    {label: 'All Rounder', value: 'All Rounder', id: 1},
-    {label: 'Wicket Keeper', value: 'Wicket Keeper', id: 1},
+    {label: 'All Rounder', value: 'All Rounder', id: 2},
+    {label: 'Wicket Keeper', value: 'Wicket Keeper', id: 3},
   ];
 
   const Batting = [
-    {label: 'Captain', value: 'Captain', id: 0},
-    {label: 'Vice Captain', value: 'Vice Captain', id: 1},
+    {label: 'Right Handed', value: 'Right Handed', id: 0},
+    {label: 'Left Handed', value: 'Left Handed', id: 1},
   ];
 
   const Bowling = [
@@ -34,13 +84,17 @@ const AddPlayer = ({navigation}) => {
     {label: 'Left Handed', value: 'Left Handed', id: 1},
   ];
   const BowlingType = [
-    {label: 'Right Handed', value: 'Right Handed', id: 0},
-    {label: 'Left Handed', value: 'Left Handed', id: 1},
+    {label: 'Fast', value: 'Fast', id: 0},
+    {label: 'Slow', value: 'Slow', id: 1},
   ];
 
-  const handelLogin = () => {
-    console.log(name, city, phone);
+  const data = 
+    {tempId: uuid.v4(),role: 'player',tournamentId: '',name: name,city: city,phoneNo: phone,countryCode: '+91',batting: batting,image: '',teamId: ''}
+  ;
+  const handelSavePlayer = () => {
+    dispatch(addTeam(data));
   };
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView>
@@ -58,11 +112,12 @@ const AddPlayer = ({navigation}) => {
             ref={this.fieldRef}
             textColor="#666666"
             tintColor="rgba(0, 0, 0, 0.4)"
-            // baseColor="rgba(224, 224, 224, 1)"
-            baseColor="rgba(0, 0, 0, .38)"
+            baseColor="rrgba(0, 0, 0, 0.4)"
             lineWidth={1}
             onChangeText={text => setName(text)}
             autoCapitalize="none"
+            inputContainerStyle={{}}
+            activeLineWidth={1}
             style={{
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
@@ -70,7 +125,6 @@ const AddPlayer = ({navigation}) => {
               letterSpacing: 0.57,
               lineHeight: 19,
             }}
-            // labelTextStyle={{ fontFamily:"Roboto-Medium",fontWeight:'500',color:"#000000",opacity:0.8}}
           />
           <TextField
             label="City / Town (Optional)"
@@ -83,6 +137,7 @@ const AddPlayer = ({navigation}) => {
             lineWidth={1}
             onChangeText={text => setCity(text)}
             autoCapitalize="none"
+            activeLineWidth={1}
             style={{
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
@@ -102,6 +157,7 @@ const AddPlayer = ({navigation}) => {
             lineWidth={1}
             onChangeText={text => setPhone(text)}
             autoCapitalize="none"
+            activeLineWidth={1}
             style={{
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
@@ -111,6 +167,7 @@ const AddPlayer = ({navigation}) => {
             }}
           />
         </View>
+
         <View
           style={{
             height: 84,
@@ -118,23 +175,45 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Designation :`}</Text>
-           <ToggleSwitch/>
+            <ToggleSwitch id={1} onPress={enableDesignation} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            <RadioButton
-              radio_props={Designation}
-              formHorizontal={true}
-              style={{
-                marginBottom: 0,
-                width: 'auto',
-                paddingRight: 10,
-                marginRight: 15,
-              }}
-            />
+            {whiteList.designation.isVisble ? (
+              <RadioButton
+                radio_props={Designation}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+                onPress={getDesignation}
+              />
+            ) : (
+              <RadioButtonDisabled
+                radio_props={Designation}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+              />
+            )}
           </View>
         </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 0.5,
+            borderColor: 'rgba(224, 224, 224, 1)',
+            marginTop: 16,
+          }}
+        />
         <View
           style={{
             height: 139,
@@ -143,31 +222,54 @@ const AddPlayer = ({navigation}) => {
             marginTop: 31,
             flexWrap: 'wrap',
           }}>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Expertise :`}</Text>
-            <ToggleSwitch/>
+            <ToggleSwitch id={2} onPress={enableExpertise} />
           </View>
           <View
             style={{
               width: 300,
               height: 119,
-              paddingTop:9,
+              paddingTop: 9,
             }}>
-            <RadioButton
-              radio_props={Expertise}
-              formHorizontal={true}
-              flexWrap={{flexWrap:'wrap'}}
-              style={{
-                marginBottom: 0,
-                width: 'auto',
-                paddingRight: 10,
-                marginRight: 15,
-                marginTop:15
-              }}
-           
-            />
+            {whiteList.expertise.isVisble ? (
+              <RadioButton
+                radio_props={Expertise}
+                formHorizontal={true}
+                flexWrap={{flexWrap: 'wrap'}}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                  marginTop: 15,
+                }}
+                onPress={getExpertise}
+              />
+            ) : (
+              <RadioButtonDisabled
+                radio_props={Expertise}
+                formHorizontal={true}
+                flexWrap={{flexWrap: 'wrap'}}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                  marginTop: 15,
+                }}
+              />
+            )}
           </View>
         </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 0.5,
+            borderColor: 'rgba(224, 224, 224, 1)',
+            marginTop: 16,
+          }}
+        />
         <View
           style={{
             height: 84,
@@ -175,23 +277,45 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Batting :`}</Text>
-            <ToggleSwitch/>
+            <ToggleSwitch id={3} onPress={enableBatting} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            <RadioButton
-              radio_props={Batting}
-              formHorizontal={true}
-              style={{
-                marginBottom: 0,
-                width: 'auto',
-                paddingRight: 10,
-                marginRight: 15,
-              }}
-            />
+            {whiteList.batting.isVisble ? (
+              <RadioButton
+                radio_props={Batting}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+                onPress={getBatting}
+              />
+            ) : (
+              <RadioButtonDisabled
+                radio_props={Batting}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+              />
+            )}
           </View>
         </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 0.5,
+            borderColor: 'rgba(224, 224, 224, 1)',
+            marginTop: 16,
+          }}
+        />
         <View
           style={{
             height: 84,
@@ -199,23 +323,45 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Bowling :`}</Text>
-            <ToggleSwitch/>
+            <ToggleSwitch id={4} onPress={enableBowling} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            <RadioButton
-              radio_props={Bowling}
-              formHorizontal={true}
-              style={{
-                marginBottom: 0,
-                width: 'auto',
-                paddingRight: 10,
-                marginRight: 15,
-              }}
-            />
+            {whiteList.bowling.isVisble ? (
+              <RadioButton
+                radio_props={Bowling}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+                onPress={getBowling}
+              />
+            ) : (
+              <RadioButtonDisabled
+                radio_props={Bowling}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+              />
+            )}
           </View>
         </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 0.5,
+            borderColor: 'rgba(224, 224, 224, 1)',
+            marginTop: 16,
+          }}
+        />
         <View
           style={{
             height: 84,
@@ -223,23 +369,45 @@ const AddPlayer = ({navigation}) => {
             marginLeft: 50,
             marginTop: 31,
           }}>
-          <View style={{flexDirection: 'row',alignItems:'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.designation}>{`Bowling Type :`}</Text>
-            <Text>Togggle</Text>
+            <ToggleSwitch onPress={enableBowlingType} id={5} />
           </View>
           <View style={{flexDirection: 'row', paddingTop: 24}}>
-            <RadioButton
-              radio_props={BowlingType}
-              formHorizontal={true}
-              style={{
-                marginBottom: 0,
-                width: 'auto',
-                paddingRight: 10,
-                marginRight: 15,
-              }}
-            />
+            {whiteList.bowlingtype.isVisble ? (
+              <RadioButton
+                radio_props={BowlingType}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+                onPress={getBowlingType}
+              />
+            ) : (
+              <RadioButtonDisabled
+                radio_props={BowlingType}
+                formHorizontal={true}
+                style={{
+                  marginBottom: 0,
+                  width: 'auto',
+                  paddingRight: 10,
+                  marginRight: 15,
+                }}
+              />
+            )}
           </View>
         </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 0.5,
+            borderColor: 'rgba(255, 255, 255, 1)',
+            marginTop: 16,
+          }}
+        />
       </KeyboardAwareScrollView>
       <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
         <GradientButton
@@ -247,7 +415,7 @@ const AddPlayer = ({navigation}) => {
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="SAVE PLAYER"
-          onPress={() => handelLogin()}
+          onPress={() => handelSavePlayer()}
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
@@ -275,7 +443,6 @@ const styles = StyleSheet.create({
   },
   designation: {
     height: 16,
-    width: 86,
     color: '#999999',
     fontFamily: 'Roboto',
     fontSize: 14,

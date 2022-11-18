@@ -1,9 +1,9 @@
 import {Text, StyleSheet, TouchableOpacity, Image, View} from 'react-native';
 import React from 'react';
 
-const  OutlinedButton = ({text,source,style={},buttonstyle={}}) => {
+const  OutlinedButton = ({text,source,style={},buttonstyle={},onPress}) => {
   return (
-    <TouchableOpacity style={[styles.enterButton,{...buttonstyle}]}>
+    <TouchableOpacity onPress={onPress} style={[styles.enterButton,{...buttonstyle}]}>
       <View style={styles.shareview}><Image source={source} style={style.shareimage}/><Text style={[styles.enter,{...style}]}>{text}</Text></View>
     </TouchableOpacity>
   );

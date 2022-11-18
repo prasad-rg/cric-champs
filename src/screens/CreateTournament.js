@@ -14,6 +14,7 @@ import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
+import { useSelector } from 'react-redux';
 
 
 const radio_props = [
@@ -22,14 +23,25 @@ const radio_props = [
   {label: 'Individual Match', value: 'Individual Match', id: 2},
 ];
 
-
 const CreateTournament = ({navigation}) => {
+  const reduxdata = useSelector(state => state.participantdata.value);
+console.log(reduxdata)
 
   const [tournamentName,setTournamentName]=useState('')
+  const [tournamenttype, setTournamentType] = useState('');
 
+  const data ={
+    name:tournamentName,
+    tournamentType:tournamenttype,
+    email:'',
+    image:'',
+  }
   const handlePress = () =>{
-    console.log(tournamentName);
+    console.log(data)
     navigation.navigate('CreateTournamentSuccess');
+  }
+  const getData= data =>{
+    setTournamentType(data)
   }
   
   return (
@@ -87,6 +99,7 @@ const CreateTournament = ({navigation}) => {
           radio_props={radio_props}
           formHorizontal={false}
           style={{marginBottom: 20}}
+          onPress={getData}
         />
       </View> 
       </ScrollView>
@@ -115,7 +128,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    // backgroundColor:'yellow',
+    backgroundColor:'#FFFFFF',
   },
   profileDetailsContainer: {
     height: 297,

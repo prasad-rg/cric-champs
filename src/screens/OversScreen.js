@@ -69,7 +69,7 @@ const OversScreen = () => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="PROCEED"
+          text="OK"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 100,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily:"Roboto-Medium",
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   overs: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily: 'Roboto',
+    fontFamily:"Roboto-Medium",
     fontSize: 15,
     fontWeight: '500',
     letterSpacing: 0,
