@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   teamlogo: {
     height: 104,
     width: 104,
+    borderRadius:52,
   },
   teamlogoview: {
     width: 120,
