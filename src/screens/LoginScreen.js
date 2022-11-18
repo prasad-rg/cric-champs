@@ -15,6 +15,8 @@ import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import {loginUser} from '../services/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {userLogin} from '../redux/authSlice';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -28,20 +30,24 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const LoginScreen = ({navigation}) => {
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const {isLoading, isLoggedIn, error} = useSelector(state => state.auth);
+  console.log(isLoading, isLoggedIn, error);
+  // const [error, setError] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
   const handelLogin = async values => {
-    setError('');
-    setIsLoading(true);
-    const response = await loginUser(values);
-    if (response.statusCode !== 200) {
-      setError(response);
-      setIsLoading(false);
-    }
-    if (response.statusCode === 200) {
-      setError('');
-      setIsLoading(false);
-    }
+    dispatch(userLogin(values));
+    // setError('');
+    // // setIsLoading(true);
+    // const response = await loginUser(values);
+    // if (response.statusCode !== 200) {
+    //   setError(response);
+    //   // setIsLoading(false);
+    // }
+    // if (response.statusCode === 200) {
+    //   setError('');
+    //   // setIsLoading(false);
+    // }
   };
   return (
     <View style={styles.container}>

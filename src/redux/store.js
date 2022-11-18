@@ -2,6 +2,7 @@ import ParticipantReducer from './ParticipantSlice';
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import authReducer from './authSlice';
 
 const persistConfig = {
   key: 'root',
@@ -10,14 +11,15 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
-    participantdata : ParticipantReducer
+  participantdata: ParticipantReducer,
+  auth: authReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 
 export default configureStore({
-    reducer: persistRed,
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
+  reducer: persistRed,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});

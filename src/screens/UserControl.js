@@ -24,7 +24,7 @@ const UserControl = ({navigation}) => {
             <View style={styles.profileDetailsContainer}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => navigation.navigate('CreateTournament')}>
+                onPress={() => navigation.goBack()}>
                 <Image
                   source={require('../../assets/images/icon-close.png')}
                   style={styles.closeButtonImage}
@@ -81,6 +81,7 @@ const UserControl = ({navigation}) => {
         <UserActions
           title="View Tournament"
           imageSource={require('../../assets/images/glasses.png')}
+          onPress={() => navigation.navigate('ViewScreen')}
         />
         <View style={styles.line} />
         <TouchableOpacity>

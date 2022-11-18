@@ -4,7 +4,7 @@ import {BASE_URL} from '../api/baseURL';
 export const loginUser = async userData => {
   try {
     const response = await axios.post(`${BASE_URL}/api/user/login`, userData);
-    return response.data;
+    return response;
   } catch (error) {
     return error.response.data.message;
   }
