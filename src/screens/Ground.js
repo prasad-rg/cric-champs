@@ -15,7 +15,7 @@ import GradientButton from '../components/GradientButton';
 const Ground = ({navigation}) => {
 
   const handlePress=()=>{
-    navigation.navigate('UmpiresScreen')
+    navigation.navigate('UmpiresList')
   }
   return (
     <View style={styles.container}>
