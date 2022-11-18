@@ -1,27 +1,57 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
-const PlayersList = ({source, text}) => {
+const PlayersList = ({
+  source,
+  name,
+  designation,
+  batting,
+  expertise,
+  bowling,
+}) => {
   return (
     <View style={styles.card}>
-      <View style={{alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+        }}>
         <Image source={{uri: source}} style={styles.team} />
         <View>
-          <Text style={styles.playerName}>{text}</Text>
-          <Text style={styles.playerData}>{text}</Text>
+          <Text style={styles.playerName}>{name}</Text>
+          <Text style={styles.playerData}>
+            {batting
+              ? batting
+              : bowling
+              ? bowling
+              : expertise
+              ? expertise
+              : designation
+              ? designation
+              : ''}
+          </Text>
         </View>
       </View>
       <View
         style={{
           height: 22,
           width: 62,
-          backgroundColor: '#B8E986',
+          //   backgroundColor: '#B8E986',
+          backgroundColor:
+            designation == 'Captain'
+              ? '#B8E986'
+              : designation == 'V C'
+              ? '#FFBA7F'
+              : expertise == 'W K'
+              ? '#7FC2FF'
+              : '#FFFFFF',
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: 4,
-        //   borderWidth: 1,
-          marginRight:14,
-          marginTop:14,
+          //   borderWidth: 1,
+          marginRight: 14,
+          marginTop: 14,
         }}>
         <TouchableOpacity>
           <Text
@@ -35,7 +65,11 @@ const PlayersList = ({source, text}) => {
               letterSpacing: 0,
               textAlign: 'center',
             }}>
-            {text}
+            {designation
+              ? designation.toUpperCase()
+              : expertise == 'W K'
+              ? expertise.toUpperCase()
+              : ' '}
           </Text>
         </TouchableOpacity>
       </View>
@@ -54,7 +88,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 15,
     flexDirection: 'row',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
 
   team: {
@@ -62,9 +96,8 @@ const styles = StyleSheet.create({
     width: 49,
     borderRadius: 24,
     overflow: 'hidden',
-    borderWidth: 1,
-    marginVerical:9,
-    marginLeft:9,
+    marginVerical: 9,
+    marginLeft: 9,
   },
   playerName: {
     height: 15.36,
@@ -78,7 +111,7 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     alignSelf: 'center',
   },
-  playerData:{
+  playerData: {
     height: 16,
     width: 144,
     color: '#999999',

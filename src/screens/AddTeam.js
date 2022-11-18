@@ -23,73 +23,17 @@ import {useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-
-const radio_props = [
-  {label: 'League', value: 'League', id: 0},
-  {label: 'Knockout', value: 'Knockout', id: 1},
-  {label: 'Individual Match', value: 'Individual Match', id: 2},
-];
+import ProfileImagePicker from '../components/ProfileImagePicker';
 
 const AddTeam = ({navigation}) => {
-  const [teamname, setTeamName] = useState('');
-  const [city, setCity] = useState('');
-  const [team, setTeam] = useState(true);
-  const {width, height} = useWindowDimensions();
-  const [imageUri, setImageUri] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
 
-  const getImageFromCamera = () => {
-    ImagePicker.openCamera({
-      width: 104,
-      height: 104,
-      cropping: true,
-    }).then(image => {
-      setImageUri(image.path);
-      console.log(image);
-    });
+  const getDetails = data => {
+    setProfilePictureUri(data);
   };
 
-  const getImageFromGallary = () => {
-    ImagePicker.openPicker({
-      width: 104,
-      height: 104,
-      cropping: true,
-    }).then(image => {
-      setImageUri(image.path);
-      getImageUri(image.path);
-      // console.log(image.path);
-    });
-  };
-
-  const createThreeButtonAlert = () =>
-    Alert.alert('Select Picture From', '', [
-      {
-        text: 'Camera',
-        onPress: () => getImageFromCamera(),
-      },
-      {
-        text: 'Cancel',
-        onPress: () => null,
-        style: 'cancel',
-      },
-      {
-        text: 'Gallary',
-        onPress: () => getImageFromGallary(),
-      },
-    ]);
   const participantdata = useSelector(state => state.participantdata.value);
 
-  const data = {
-    image: '',
-    name: teamname,
-    city: city,
-    tournamentId: '',
-  };
-
-  const handlePress = () => {
-    console.log(data);
-    navigation.navigate('CreateTournamentSuccess');
-  };
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
@@ -100,7 +44,6 @@ const AddTeam = ({navigation}) => {
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
     city: yup.string().required(),
-    phoneNo: yup.string().required(),
   });
   return (
     <View style={styles.container}>
@@ -109,25 +52,24 @@ const AddTeam = ({navigation}) => {
         initialValues={{
           name: '',
           city: '',
-          phoneNo: '',
         }}
         onSubmit={values => {
-          if (profilePictureUri !== '') {
-            let data = {
-              ...values,
-              tempId: uuid.v4(),
-              designation: designation,
-              expertise: expertise,
-              batting: batting,
-              bowling: bowling,
-              bowlingtype: bowlingtype,
-              image: profilePictureUri,
-            };
-            console.log('I am data from AddPlayer', data);
-            dispatch(addTeam(data));
-          } else {
-            Alert.alert('Please Add profile picture');
-          }
+          let teamDetails = {
+            ...values,
+            image: profilePictureUri,
+          };
+          console.log(teamDetails)
+          navigation.goBack()
+          // if (profilePictureUri !== '') {
+          //   let data = {
+          //     ...values,
+          //     image: profilePictureUri,
+          //   };
+          //   console.log(data)
+          //   // dispatch(addTeam(data));
+          // } else {
+          //   Alert.alert('Please Add profile picture');
+          // }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>
@@ -151,40 +93,7 @@ const AddTeam = ({navigation}) => {
                         <Text style={styles.createTournament}>Add Team</Text>
                       </View>
 
-                      <View style={styles.teamlogoview}>
-                        <Image
-                          source={
-                            profilePictureUri
-                              ? profilePictureUri
-                              : imageUri
-                              ? {uri: imageUri}
-                              : require('../../assets/images/team4.png')
-                          }
-                          style={styles.teamlogo}
-                        />
-                      </View>
-                      <View
-                        style={
-                          height > width
-                            ? [
-                                styles.imagepicker,
-                                {right: Dimensions.get('window').width / 2.86},
-                              ]
-                            : [
-                                styles.imagepicker,
-                                {right: Dimensions.get('window').width / 2.55},
-                              ]
-                        }>
-                        <TouchableOpacity
-                          onPress={() => {
-                            createThreeButtonAlert();
-                          }}>
-                          <Image
-                            source={require('../../assets/images/camera.png')}
-                            style={styles.gobackbutton}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                      <ProfileImagePicker getImageUri={getDetails} />
 
                       <View>
                         <TextField
@@ -197,9 +106,10 @@ const AddTeam = ({navigation}) => {
                           baseColor="rgba(224, 224, 224, 0.7)"
                           lineWidth={1}
                           autoCapitalize="none"
-                          onChangeText={handleChange('teamname')}
-                          onBlur={handleBlur('teamname')}
-                          value={values.teamname}
+                          onChangeText={handleChange('name')}
+                          onBlur={handleBlur('name')}
+                          value={values.name}
+                          activeLineWidth={1}
                           style={{
                             fontFamily: 'Roboto',
                             fontSize: 16,
@@ -209,9 +119,9 @@ const AddTeam = ({navigation}) => {
                           }}
                           inputContainerStyle={{
                             alignSelf: 'center',
-                            width: 260,
                             height: 61,
                             marginTop: -6,
+                            marginHorizontal: 30,
                           }}
                         />
 
@@ -228,11 +138,12 @@ const AddTeam = ({navigation}) => {
                           onBlur={handleBlur('city')}
                           value={values.city}
                           autoCapitalize="none"
+                          activeLineWidth={1}
                           inputContainerStyle={{
                             alignSelf: 'center',
-                            width: 260,
                             height: 61,
                             marginTop: -6,
+                            marginHorizontal: 30,
                           }}
                           style={{
                             fontFamily: 'Roboto-Medium',
@@ -256,39 +167,25 @@ const AddTeam = ({navigation}) => {
               </View>
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
-                {!team ? (
+                {!participantdata != [] ? (
                   <View style={styles.noplayerView}>
                     <Text style={styles.noplayers}>No Players Added Yet!</Text>
                   </View>
                 ) : (
                   <View style={styles.teamsView}>
-                    {/* <FlatList
-                data={participantdata}
-                keyExtractor={item => item.tempId}
-                renderItem={({item}) => (
-                  console.log('I am item', item.tempId),
-                  <TeamListName
-                    source={require('../../assets/images/team1.png')}
-                    text={item.name}
-                  />
-                )}
-              /> */}
-                    {participantdata.map(
-                      value => (
-                        console.log(
-                          'I ammmmmmmm Uriiiii from map',
-                          value,
-                        ),
-                        (
-                          <View key={value.tempId}>
-                            <PlayersList
-                              source={value.image}
-                              text={value.name}
-                            />
-                          </View>
-                        )
-                      ),
-                    )}
+                    {participantdata.map(value => (
+                      <View key={value.tempId}>
+                        <PlayersList
+                          source={value.image}
+                          name={value.name}
+                          designation={value.designation}
+                          expertise={value.expertise}
+                          batting={value.batting}
+                          bowling={value.bowling}
+                          bowlingtype={value.bowlingtype}
+                        />
+                      </View>
+                    ))}
                   </View>
                 )}
               </View>
@@ -307,7 +204,7 @@ const AddTeam = ({navigation}) => {
                   letterSpacing: 0.5,
                   lineHeight: 19,
                 }}
-                onPress={handlePress}
+                onPress={handleSubmit}
               />
             </View>
           </>

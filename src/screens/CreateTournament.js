@@ -15,6 +15,7 @@ import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
 import { useSelector } from 'react-redux';
+import ProfileImagePicker from '../components/ProfileImagePicker';
 
 
 const radio_props = [
@@ -29,13 +30,18 @@ console.log(reduxdata)
 
   const [tournamentName,setTournamentName]=useState('')
   const [tournamenttype, setTournamentType] = useState('');
+  const [profilePictureUri, setProfilePictureUri] = useState('');
+
 
   const data ={
     name:tournamentName,
     tournamentType:tournamenttype,
     email:'',
-    image:'',
+    image:profilePictureUri,
   }
+  const getDetails = data => {
+    setProfilePictureUri(data);
+  };
   const handlePress = () =>{
     console.log(data)
     navigation.navigate('CreateTournamentSuccess');
@@ -63,12 +69,13 @@ console.log(reduxdata)
                 </TouchableOpacity>
                 <Text style={styles.createTournament}>Create Tournament</Text>
               </View>
-              <View style={styles.teamlogoview}>
+              {/* <View style={styles.teamlogoview}>
                 <Image
                   source={require('../../assets/images/team3.png')}
                   style={styles.teamlogo}
                 />
-              </View>
+              </View> */}
+              <ProfileImagePicker getImageUri={getDetails}/>
               <View style={styles.textInput}>
               <TextField
                 label="Tournament Name"
@@ -132,6 +139,7 @@ const styles = StyleSheet.create({
   },
   profileDetailsContainer: {
     height: 297,
+
   },
   header: {
     flexDirection: 'row',

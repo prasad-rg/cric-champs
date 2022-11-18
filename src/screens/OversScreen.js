@@ -13,7 +13,7 @@ import React from 'react';
 
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
-const OversScreen = () => {
+const OversScreen = ({navigation}) => {
   const radio_props = [
     {label: '5', value: '5', id: 0},
     {label: '10', value: '10', id: 1},
@@ -24,6 +24,9 @@ const OversScreen = () => {
     {label: '40', value: '40', id: 6},
     {label: '50', value: '50', id: 7},
   ];
+  const handlePress = () =>{
+    navigation.navigate('Ground')
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -69,7 +72,7 @@ const OversScreen = () => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
-          text="OK"
+          text="PROCEED"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
@@ -78,6 +81,7 @@ const OversScreen = () => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
+          onPress={handlePress}
         />
       </View>
     </View>
