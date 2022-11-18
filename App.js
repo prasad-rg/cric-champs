@@ -10,14 +10,21 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import ProfileImagePicker from './src/components/ProfileImagePicker';
+import {Button, RadioButton} from 'react-native-paper';
+import ReadMeExampleSingle from './test';
 
 let persistor = persistStore(store);
 
 const App = () => {
+  const [checked, setChecked] = React.useState('first');
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <AppStack />
+        {/* <AppStack /> */}
+        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+        <ReadMeExampleSingle />
+        </View>
+        {/* <Text>Hello</Text> */}
       </PersistGate>
     </Provider>
     // <ProfileImagePicker/>
