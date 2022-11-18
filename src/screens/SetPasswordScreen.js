@@ -38,6 +38,10 @@ const SetPasswordScreen = ({navigation, route}) => {
             ...route.params.regDetails,
             password: values.password,
           });
+          // console.log({
+          //   ...route.params.regDetails,
+          //   password: values.password,
+          // });
           registerUser(formData);
         }}>
         {({

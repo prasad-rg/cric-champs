@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import AppBar from './AppBar';
-// import ImagePicker from 'react-native-image-crop-picker';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const AddProfileDetails = ({
   navigation,
@@ -26,51 +26,51 @@ const AddProfileDetails = ({
   const [imageUri, setImageUri] = useState('');
 
   const getImageFromCamera = () => {
-    // ImagePicker.openCamera({
-    // width: 104,
-    //   height: 104,
-    //   cropping: true,
-    // }).then(image => {
-    //   setImageUri(image.path);
-    //   console.log(image);
-    // });
+    ImagePicker.openCamera({
+      width: 104,
+      height: 104,
+      cropping: true,
+    }).then(image => {
+      setImageUri(image.path);
+      console.log(image);
+    });
   };
 
   const getImageFromGallary = async () => {
-    const options = {
-      title: 'Select Image',
-      type: 'library',
-      selectionLimit: 1,
-      mediaType: 'image',
-      includeBase64: false,
-      quality: 0.5,
-      customButtons: [
-        {name: 'button_id_1', title: 'CustomButton 1'},
-        {name: 'button_id_2', title: 'CustomButton 2'},
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    const result = await launchImageLibrary(options, res => {
-      console.log(res);
-    });
-    // console.log(result.assets[0]);
-    setImageUri(result.assets[0].uri);
-    const {uri, type, fileName} = result.assets[0];
-    getImageUri({uri, type, fileName});
-    // ImagePicker.openPicker({
-    //   width: 104,
-    //   height: 104,
-    //   cropping: true,
-    //   includeBase64: true,
-    // }).then(image => {
-    //   console.log();
-    //   setImageUri(image.path);
-    // const {sourceURL, filename, mime} = image;
-    // getImageUri({sourceURL, filename, mime});
+    // const options = {
+    //   title: 'Select Image',
+    //   type: 'library',
+    //   selectionLimit: 1,
+    //   mediaType: 'image',
+    //   includeBase64: false,
+    //   quality: 0.5,
+    //   customButtons: [
+    //     {name: 'button_id_1', title: 'CustomButton 1'},
+    //     {name: 'button_id_2', title: 'CustomButton 2'},
+    //   ],
+    //   storageOptions: {
+    //     skipBackup: true,
+    //     path: 'images',
+    //   },
+    // };
+    // const result = await launchImageLibrary(options, res => {
+    //   console.log(res);
     // });
+    // // console.log(result.assets[0]);
+    // setImageUri(result.assets[0].uri);
+    // const {uri, type, fileName} = result.assets[0];
+    // getImageUri({uri, type, fileName});
+    ImagePicker.openPicker({
+      width: 104,
+      height: 104,
+      cropping: true,
+      includeBase64: true,
+    }).then(image => {
+      // console.log(image);
+      setImageUri(`file://${image.path}`);
+      const {path, filename, mime} = image;
+      getImageUri({path, filename, mime});
+    });
   };
 
   const createThreeButtonAlert = () =>
