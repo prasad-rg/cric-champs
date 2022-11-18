@@ -5,7 +5,7 @@ const TeamListName = ({source, text}) => {
   return (
     <View>
       <View style={styles.card}>
-        <Image source={source} style={styles.team} />
+        <Image source={{uri: source}} style={styles.team} />
         <Text style={styles.teamName}>{text}</Text>
       </View>
     </View>

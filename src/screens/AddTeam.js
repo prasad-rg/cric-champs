@@ -241,7 +241,7 @@ const AddTeam = ({navigation}) => {
                   (
                     <View key={value.tempId}>
                       <TeamListName
-                        // source={require(`${value.image}`)}
+                        source={value.image}
                         text={value.name}
                       />
                     </View>
