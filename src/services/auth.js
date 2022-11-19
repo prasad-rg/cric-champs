@@ -18,5 +18,10 @@ export const registerUser = async formData => {
     //   'Content-Type': 'multipart/form-data;',
     // },
   });
-  console.log(res);
+  // console.log(res);
+  return res;
 };
+
+// export const logoutUser = async userDetails => {
+//   let res = await axios.delete(`${BASE_URL}/api/user/login`,)
+// }

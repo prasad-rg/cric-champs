@@ -8,3 +8,26 @@ export const setToken = async tokenValue => {
     return {status: false};
   }
 };
+
+export const getToken = async () => {
+  try {
+    const authTokens = await EncryptedStorage.getItem('auth');
+    if (authTokens !== undefined) {
+      return authTokens;
+    }
+    return undefined;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
+export const deleteToken = async () => {
+  try {
+    await EncryptedStorage.removeItem('auth');
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
