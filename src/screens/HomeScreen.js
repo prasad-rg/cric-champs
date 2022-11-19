@@ -14,12 +14,12 @@ import OutlinedButton from '../components/OutlinedButton';
 import RecentActivityCard from '../components/RecentActivityCard';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('UserControls')}>
             <Image
               source={require('../../assets/images/burgermenu.png')}
               style={styles.burgermenu}
@@ -48,7 +48,7 @@ const HomeScreen = () => {
               end={{x: 2, y: 0}}
               colors={['#FFBA8C', '#FE5C6A']}
               text="CREATE TOURNAMENT"
-              // onPress={}
+              onPress={() => navigation.navigate('AuthStack')}
               //  style={{width:'100%'}}
             />
             <View style={styles.recentActivityView}>
@@ -66,7 +66,7 @@ const HomeScreen = () => {
 };
 export default HomeScreen;
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   textInput: {
     boxSizing: 'border-box',
     height: 41,

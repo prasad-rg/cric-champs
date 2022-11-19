@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Formik} from 'formik';
@@ -13,6 +14,9 @@ import * as yup from 'yup';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
+import {loginUser} from '../services/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {userLogin} from '../redux/authSlice';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -26,10 +30,24 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const handelLogin = () => {
-    console.log(email, password);
+  const dispatch = useDispatch();
+  const {isLoading, isLoggedIn, error} = useSelector(state => state.auth);
+  console.log(isLoading, isLoggedIn, error);
+  // const [error, setError] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
+  const handelLogin = async values => {
+    dispatch(userLogin(values));
+    // setError('');
+    // // setIsLoading(true);
+    // const response = await loginUser(values);
+    // if (response.statusCode !== 200) {
+    //   setError(response);
+    //   // setIsLoading(false);
+    // }
+    // if (response.statusCode === 200) {
+    //   setError('');
+    //   // setIsLoading(false);
+    // }
   };
   return (
     <View style={styles.container}>
@@ -56,7 +74,9 @@ const LoginScreen = ({navigation}) => {
           <Formik
             validationSchema={loginValidationSchema}
             initialValues={{email: '', password: ''}}
-            onSubmit={values => console.log(values)}>
+            onSubmit={values => {
+              handelLogin(values);
+            }}>
             {({
               handleChange,
               handleBlur,
@@ -106,6 +126,7 @@ const LoginScreen = ({navigation}) => {
                 {errors.password && touched.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}
+                {error && <Text style={styles.errorText}>{error}</Text>}
                 <TouchableOpacity
                   style={styles.forgotPasswordButton}
                   onPress={() => navigation.navigate('ForgotPasswordScreen')}>
@@ -113,15 +134,21 @@ const LoginScreen = ({navigation}) => {
                     Forgot Password?
                   </Text>
                 </TouchableOpacity>
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={['#FFBA8C', '#FE5C6A']}
-                  text="LOGIN"
-                  onPress={handleSubmit}
-                  // eslint-disable-next-line react-native/no-inline-styles
-                  style={{width: '90%'}}
-                />
+                {isLoading ? (
+                  <View style={{marginTop: 20}}>
+                    <ActivityIndicator size="large" color="#FFBA8C" />
+                  </View>
+                ) : (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={['#FFBA8C', '#FE5C6A']}
+                    text="LOGIN"
+                    onPress={handleSubmit}
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    style={{width: '90%'}}
+                  />
+                )}
               </>
             )}
           </Formik>
@@ -132,15 +159,17 @@ const LoginScreen = ({navigation}) => {
             </View>
             <View style={styles.lineEitherSide} />
           </View>
-          <GradientButton
-            start={{x: 0, y: 0}}
-            end={{x: 2, y: 0}}
-            colors={['#7197E1', '#7197E1']}
-            text="LOGIN WITH FACEBOOK"
-            // onPress={}
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{width: '90%'}}
-          />
+          {
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#7197E1', '#7197E1']}
+              text="LOGIN WITH FACEBOOK"
+              // onPress={}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{width: '90%'}}
+            />
+          }
         </View>
       </KeyboardAwareScrollView>
     </View>
