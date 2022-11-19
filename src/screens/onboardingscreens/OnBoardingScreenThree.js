@@ -11,8 +11,11 @@ import React from 'react';
 
 import boardingpage3 from '../../../assets/images/boardingpage3.png';
 import GradientButton from '../../components/GradientButton';
+import {useDispatch} from 'react-redux';
+import {changeInitialLaunchStatus} from '../../redux/authSlice';
 
 const OnBoardingScreenThree = ({navigation}) => {
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
@@ -36,9 +39,7 @@ const OnBoardingScreenThree = ({navigation}) => {
             end={{x: 2, y: 0}}
             colors={['#FFBA8C', '#FE5C6A']}
             text="LET'S START"
-            onPress={() =>
-              navigation.reset({index: 0, routes: [{name: 'HomeScreen'}]})
-            }
+            onPress={() => dispatch(changeInitialLaunchStatus())}
             style={{height: 50, width: '100%'}}
             textstyle={{
               height: 16,
