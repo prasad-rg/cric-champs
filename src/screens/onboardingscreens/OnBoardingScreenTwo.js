@@ -34,7 +34,8 @@ const OnBoardingScreenTwo = ({navigation}) => {
             umpires, overs etc. and manage {'\n'} them thereafter.
           </Text>
         </View>
-        <View style={styles.bottomView}>
+      </ScrollView>
+        <View style={{marginBottom: Platform.OS === 'ios' ? -10 : 0}}>
           <GradientButton
             start={{x: 0, y: 0}}
             end={{x: 2, y: 0}}
@@ -52,7 +53,6 @@ const OnBoardingScreenTwo = ({navigation}) => {
             }}
           />
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 25,
   },
-  bottomView: {
-    marginTop: 95,
-  },
+  // bottomView: {
+  //   marginTop: 95,
+  // },
 });

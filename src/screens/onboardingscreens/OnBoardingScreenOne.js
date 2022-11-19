@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 import React from 'react';
 import GradientButton from '../../components/GradientButton';
@@ -34,7 +35,8 @@ const OnBoardingScreenOne = ({navigation}) => {
             your own cricket tournaments and share it{'\n'} with your viewers
           </Text>
         </View>
-        <View style={styles.bottomView}>
+      </ScrollView>
+        <View style={{marginBottom: Platform.OS === 'ios' ? -10 : 0}}>
           <GradientButton
             start={{x: 0, y: 0}}
             end={{x: 2, y: 0}}
@@ -52,7 +54,6 @@ const OnBoardingScreenOne = ({navigation}) => {
             }}
           />
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 25,
   },
-  bottomView: {
-    marginTop: 95,
-  },
+  // bottomView: {
+  //   marginTop: 95,
+  // },
 });

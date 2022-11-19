@@ -1,28 +1,26 @@
-import {ScrollView, StyleSheet, Text, View,Platform} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Platform} from 'react-native';
 import React from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
 const Tournament = ({navigation}) => {
   return (
-    <View style={{flex:1}}>
-    <ScrollView>
-      <View style={styles.mainView}>
-        <TournamentInputList text="Teams" number="6" />
-        <TournamentInputList text="Overs" number="5" />
-        <TournamentInputList text="Grounds" number="4" />
-        <TournamentInputList text="Umpires" number="4" />
-        <TournamentInputList text="Start Date" number="Sat, Oct 15 2017" />
-        <TournamentInputList text="End Date" number="Sun, Oct 16 2017" />
-        <TournamentInputList text="Start of Play" number="9:00 AM" />
-        <TournamentInputList text="End of Play" number="6:00 PM" />
-      </View>
-      <View style={styles.card}>
-  <Text style={styles.cancelText}>
-    Cancel Tournament
-  </Text>
-      </View>
-    </ScrollView>
-    <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+    <View style={{flex: 1}}>
+      <ScrollView>
+        <View style={styles.mainView}>
+          <TournamentInputList text="Teams" number="6" />
+          <TournamentInputList text="Overs" number="5" />
+          <TournamentInputList text="Grounds" number="4" />
+          <TournamentInputList text="Umpires" number="4" />
+          <TournamentInputList text="Start Date" number="Sat, Oct 15 2017" />
+          <TournamentInputList text="End Date" number="Sun, Oct 16 2017" />
+          <TournamentInputList text="Start of Play" number="9:00 AM" />
+          <TournamentInputList text="End of Play" number="6:00 PM" />
+        </View>
+        <View style={styles.card}>
+          <Text style={styles.cancelText}>Cancel Tournament</Text>
+        </View>
+      </ScrollView>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
@@ -38,7 +36,6 @@ const Tournament = ({navigation}) => {
           }}
         />
       </View>
-
     </View>
   );
 };
@@ -62,15 +59,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  cancelText:{
+  cancelText: {
     height: 17,
-  // width: 141,
-  color: '#F5112D',
-  fontFamily: "Roboto-Medium",
-  fontSize: 16,
-  fontWeight: '500',
-  letterSpacing: 0,
-  lineHeight: 15.36,
-  padding:5
-  }
+    // width: 141,
+    color: '#F5112D',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 15.36,
+    padding: 5,
+  },
 });
