@@ -36,7 +36,7 @@ export default function TimePickerPage() {
         // keyboardIcon="keyboard-outline" // optional, default is "keyboard-outline"
         // clockIcon="clock-outline" // optional, default is "clock-outline"
       />
-      <Button onPress={()=> setVisible(true)}>
+      <Button type='contained' onPress={()=> setVisible(true)}>
         Pick time
       </Button>
       
