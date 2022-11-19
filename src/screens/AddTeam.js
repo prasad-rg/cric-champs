@@ -167,7 +167,7 @@ const AddTeam = ({navigation}) => {
               </View>
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
-                {!participantdata != [] ? (
+                {!participantdata == [] ? (
                   <View style={styles.noplayerView}>
                     <Text style={styles.noplayers}>No Players Added Yet!</Text>
                   </View>
