@@ -7,7 +7,8 @@ import * as yup from 'yup';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import {createFormData} from '../utils/createFormData';
-import {registerUser} from '../services/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {userRegister} from '../redux/authSlice';
 
 const passwordValidationSchema = yup.object().shape({
   password: yup
@@ -28,6 +29,9 @@ const passwordValidationSchema = yup.object().shape({
 });
 
 const SetPasswordScreen = ({navigation, route}) => {
+  const dispatch = useDispatch();
+  const {isLoading, isLoggedIn, error} = useSelector(state => state.auth);
+  console.info(isLoading, isLoggedIn, error);
   return (
     <View style={styles.container}>
       <Formik
@@ -42,7 +46,8 @@ const SetPasswordScreen = ({navigation, route}) => {
           //   ...route.params.regDetails,
           //   password: values.password,
           // });
-          registerUser(formData);
+          dispatch(userRegister(formData));
+          // registerUser(formData);
         }}>
         {({
           handleChange,

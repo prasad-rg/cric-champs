@@ -6,7 +6,6 @@ export const createFormData = jsonObject => {
   for (let key in jsonObject) {
     if (key === 'image') {
       const imageData = jsonObject[key];
-      console.log(imageData);
       formData.append('image', {
         uri: imageData.path,
         type: imageData.mime,

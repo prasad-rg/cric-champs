@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {loginUser} from '../services/auth';
+import {loginUser, registerUser} from '../services/auth';
 import {setToken} from '../utils/token';
 
 export const userLogin = createAsyncThunk('user/login', async userData => {
@@ -27,6 +27,34 @@ export const userLogin = createAsyncThunk('user/login', async userData => {
   }
 });
 
+export const userRegister = createAsyncThunk(
+  'user/register',
+  async userData => {
+    try {
+      const response = await registerUser(userData);
+      console.log(response);
+      if (response.status === 200) {
+        const headers = response.headers;
+        let stringifiedToken = JSON.stringify({
+          accessToken: headers.authorization,
+          refreshToken: headers['refresh-token'],
+        });
+        const isSecurelyStored = await setToken(stringifiedToken);
+        if (isSecurelyStored) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return {error: response};
+      }
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  },
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -53,15 +81,34 @@ export const userSlice = createSlice({
     builder.addCase(userLogin.fulfilled, (state, action) => {
       if (action.payload?.error) {
         state.error = action.payload.error;
-        state.isLooggedIn = false;
+        state.isLoggedIn = false;
         state.isLoading = false;
       } else {
-        state.isLooggedIn = action.payload;
+        state.isLoggedIn = action.payload;
         state.error = null;
         state.isLoading = false;
       }
     });
     builder.addCase(userLogin.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(userRegister.pending, (state, action) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(userRegister.fulfilled, (state, action) => {
+      if (action.payload?.error) {
+        state.error = action.payload.error;
+        state.isLoggedIn = false;
+        state.isLoading = false;
+      } else {
+        state.isLoggedIn = action.payload;
+        state.error = null;
+        state.isLoading = false;
+      }
+    });
+    builder.addCase(userRegister.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     });
