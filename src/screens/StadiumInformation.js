@@ -39,23 +39,23 @@ const StadiumInformation = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrap}>
         <ScrollView
-          onScroll={({nativeEvent}) => onchange(nativeEvent)}
+          onScrollBeginDrag={({nativeEvent}) => onchange(nativeEvent)}
           showsHorizontalScrollIndicator={false}
-          paddingEnabled
+          paddingEnabled     
           horizontal
           style={styles.wrap}>
-          {images.map((e, index) => (
+          {images.map((item, index) => (
             <Image
-              key={e}
+              key={item}
               resizeMode="stretch"
               style={styles.wrap}
-              source={{uri: e}}
+              source={{uri: item}}
             />
           ))}
         </ScrollView>
         <View style={styles.dotWrap}>
-        {images.map((e, index) => (
-            <Text key={e} style={imgActive == index ? styles.dotActive: styles.dot}>●</Text>
+        {images.map((item, index) => (
+            <Text key={item} style={imgActive == index ? styles.dotActive: styles.dot}>●</Text>
           ))}
         </View>
       </View>
@@ -81,10 +81,13 @@ const styles = StyleSheet.create({
   },
   dotActive:{
     margin:3,
-    color:"black"
+    color:"orange"
   },
   dot:{
+    // height:2,
+    // width:2,
     margin:3,
-    color:"white"
+    color:"orange",
+    opacity:0.6,
   }
 });
