@@ -11,12 +11,15 @@ import React from 'react';
 
 import boardingpage2 from '../../../assets/images/boardingpage2.png';
 import GradientButton from '../../components/GradientButton';
+import {useDispatch} from 'react-redux';
+import {changeInitialLaunchStatus} from '../../redux/authSlice';
 
 const OnBoardingScreenTwo = ({navigation}) => {
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
-        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+        <TouchableOpacity onPress={() => dispatch(changeInitialLaunchStatus())}>
           <View style={styles.skipView}>
             <Text style={styles.skipButton}>SKIP</Text>
           </View>
