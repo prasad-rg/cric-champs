@@ -20,14 +20,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        {/* <AppStack /> */}
-        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-        <ReadMeExampleSingle />
-        </View>
-        {/* <Text>Hello</Text> */}
+        <AppStack />
       </PersistGate>
     </Provider>
-    // <ProfileImagePicker/>
   );
 };
 
