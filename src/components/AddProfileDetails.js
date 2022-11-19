@@ -90,6 +90,7 @@ const AddProfileDetails = ({
             style={[
               styles.triangle,
               {borderLeftWidth: Dimensions.get('window').width},
+              // changes for pull
             ]}
           />
           <View style={styles.profilePictureContainer}>
