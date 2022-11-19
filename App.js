@@ -14,6 +14,18 @@ import ProfileImagePicker from './src/components/ProfileImagePicker';
 let persistor = persistStore(store);
 
 const App = () => {
+  // return (
+  //   <View
+  //     style={{
+  //       flex: 1,
+  //       justifyContent: 'center',
+  //       alignItems: 'center',
+  //       backgroundColor: '#9B9B9B',
+  //       padding: 15,
+  //     }}>
+
+  //   </View>
+  // );
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
