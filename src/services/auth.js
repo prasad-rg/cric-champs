@@ -14,9 +14,9 @@ export const registerUser = async formData => {
   let res = await fetch(`${BASE_URL}/api/user`, {
     method: 'post',
     body: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data; ',
-    },
+    // headers: {
+    //   'Content-Type': 'multipart/form-data;',
+    // },
   });
   console.log(res);
 };
