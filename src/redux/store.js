@@ -3,6 +3,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import authReducer from './authSlice';
+import MatchReducer from './MatchSlice';
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +14,7 @@ const persistConfig = {
 const reducer = combineReducers({
   participantdata: ParticipantReducer,
   auth: authReducer,
+  matchdata: MatchReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 

@@ -9,11 +9,18 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 const OversScreen = ({navigation}) => {
+  const [overs, setOvers] = useState('');
+
+  const oversData ={
+    overs:overs,
+    tournamentId:'',
+  }
+
   const radio_props = [
     {label: '5', value: '5', id: 0},
     {label: '10', value: '10', id: 1},
@@ -26,6 +33,9 @@ const OversScreen = ({navigation}) => {
   ];
   const handlePress = () =>{
     navigation.navigate('Ground')
+  }
+  const getData= data =>{
+    setOvers(data)
   }
   return (
     <View style={styles.container}>
@@ -64,6 +74,7 @@ const OversScreen = ({navigation}) => {
             formHorizontal={true}
             style={{width: 70, marginRight: 15, marginBottom: 15}}
             flexWrap={{flexWrap: 'wrap'}}
+            onPress={getData}
           />
         </View>
       </ScrollView>

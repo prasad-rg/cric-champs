@@ -10,7 +10,6 @@ import {
   Platform
 } from 'react-native';
 import React, { useState } from 'react';
-import UserActions from '../components/UserActions';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';

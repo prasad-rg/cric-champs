@@ -27,6 +27,7 @@ const AddTeam = ({navigation}) => {
   };
 
   const participantdata = useSelector(state => state.participantdata.value);
+  console.log(participantdata)
 
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
@@ -37,7 +38,6 @@ const AddTeam = ({navigation}) => {
 
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
-    city: yup.string().required(),
   });
   return (
     <View style={styles.container}>
@@ -168,9 +168,10 @@ const AddTeam = ({navigation}) => {
                 ) : (
                   <View style={styles.teamsView}>
                     {participantdata.map(value => (
+                      // console.log(value.image.path)
                       <View key={value.tempId}>
                         <PlayersList
-                          source={value.image}
+                          source={value.image.path}
                           name={value.name}
                           designation={value.designation}
                           expertise={value.expertise}
