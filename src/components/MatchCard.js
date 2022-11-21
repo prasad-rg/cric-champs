@@ -2,54 +2,35 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 
 // const text = 'LIVE';
-const MatchCard = ({text}) => {
+const MatchCard = ({matchDetails}) => {
   return (
     <SafeAreaView>
       <View style={styles.card}>
-        <View
-          style={{
-            padding: 25,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
+        <View style={styles.cardHeader}>
           <View>
-            <Text style={styles.matchText}>Match 12</Text>
+            <Text style={styles.matchText}>
+              Match {matchDetails.matchNumber}
+            </Text>
             <Text style={styles.LeagueText}>League Play at Ground 1</Text>
           </View>
           <View
-            style={{
-              height: 22,
-              width: 78,
-              borderRadius: 4,
-              overflow: 'hidden',
-              backgroundColor:
-                text == 'ABONDONED'
-                  ? '#E05140'
-                  : text == 'PAST'
-                  ? '#0075E1'
-                  : text == 'LIVE'
-                  ? '#23C05C'
-                  : text == 'UPCOMING'
-                  ? '#FCA900'
-                  : '#FFFFFF',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                height: 13,
-                // width: 60.42,
-                width: 'auto',
-                color: '#FFFFFF',
-                fontFamily: 'Roboto-Black',
-                fontSize: 10,
-                fontWeight: '900',
-                letterSpacing: 0,
-                lineHeight: 11,
-                textAlign: 'center',
-              }}>
-              {text}
+            style={[
+              styles.statusContainer,
+              {
+                backgroundColor:
+                  matchDetails.status.toUpperCase() == 'ABONDONED'
+                    ? '#E05140'
+                    : matchDetails.status.toUpperCase() == 'PAST'
+                    ? '#0075E1'
+                    : matchDetails.status.toUpperCase() == 'LIVE'
+                    ? '#23C05C'
+                    : matchDetails.status.toUpperCase() == 'UPCOMING'
+                    ? '#FCA900'
+                    : '#FFFFFF',
+              },
+            ]}>
+            <Text style={styles.statusText}>
+              {matchDetails.status.toUpperCase()}
             </Text>
           </View>
         </View>
@@ -62,18 +43,67 @@ const MatchCard = ({text}) => {
             paddingTop: 20,
           }}>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>Rajput Sports</Text>
-            <Text style={styles.number}>98/5</Text>
-            <Text style={styles.overs}>(10.0)</Text>
+            <Text style={styles.name}>{matchDetails.team1Name}</Text>
+            {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            )}
           </View>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>Super gaints</Text>
-            <Text style={styles.number}>43/2</Text>
-            <Text style={styles.overs}>(5.6)</Text>
+            <Text style={styles.name}>{matchDetails.team2Name}</Text>
+            {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.number}>-</Text>
+                <Text style={styles.overs}>-</Text>
+              </>
+            )}
           </View>
         </View>
         <View style={styles.messageView}>
-          <Text style={styles.message}>Match abondoned due to rain</Text>
+          {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+            <Text style={styles.message}>
+              {matchDetails.matchDateInEnglish},{' '}
+              {matchDetails.matchStartTimingInNormal} IST
+            </Text>
+          ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+          ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+          ) : (
+            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -91,6 +121,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 15,
   },
+  cardHeader: {
+    padding: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   matchText: {
     height: 16,
     width: 60,
@@ -101,14 +137,12 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   LeagueText: {
-
     color: '#A6A6A6',
     fontFamily: 'Roboto-Regular',
     fontSize: 12,
     letterSpacing: 0,
     lineHeight: 14,
     marginTop: 5,
-
   },
   line: {
     width: '85%',
@@ -126,7 +160,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 14,
-    // textAlign: 'center',
+    textAlign: 'center',
   },
   number: {
     height: 28,
@@ -138,7 +172,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 28,
     marginTop: 5,
-    // textAlign: 'center',
+    textAlign: 'center',
   },
   overs: {
     height: 14,
@@ -149,7 +183,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 14,
     marginTop: 5,
-    // textAlign: 'center',
+    textAlign: 'center',
   },
   messageView: {
     height: 24,
@@ -169,6 +203,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0,
     lineHeight: 14,
+    textAlign: 'center',
+  },
+  statusContainer: {
+    height: 22,
+    width: 78,
+    borderRadius: 4,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusText: {
+    height: 13,
+    // width: 60.42,
+    width: 'auto',
+    color: '#FFFFFF',
+    fontFamily: 'Roboto-Black',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 0,
+    lineHeight: 11,
     textAlign: 'center',
   },
 });

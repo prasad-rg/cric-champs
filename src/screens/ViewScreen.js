@@ -10,12 +10,14 @@ import {
 } from 'react-native';
 import React from 'react';
 import ViewTournamentTab from '../navigation/ViewTournamentTab';
+import {useSelector} from 'react-redux';
 
-const ViewScreen = () => {
+const ViewScreen = ({navigation, route}) => {
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   return (
-    <View style={{flex:1}}>
-    <View style={styles.container}>
-      {/* <ScrollView> */}
+    <View style={{flex: 1}}>
+      <View style={styles.container}>
+        {/* <ScrollView> */}
         <ImageBackground
           source={require('../../assets/images/stadium3.png')}
           resizeMode="cover">
@@ -24,7 +26,7 @@ const ViewScreen = () => {
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
                   <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                       <Image
                         source={require('../../assets/images/backicon.png')}
                         style={styles.backButtonImage}
@@ -44,11 +46,11 @@ const ViewScreen = () => {
                   </View>
                 </View>
                 <View>
-                  <Text style={styles.heading}>Udupi Cup 2017</Text>
+                  <Text style={styles.heading}>{tournamentDetails.name}</Text>
                   <View style={{alignSelf: 'center', marginTop: 7}}>
                     <TouchableOpacity style={styles.tourButton}>
                       <Text style={styles.tourText}>
-                        Tournament Code:897546
+                        Tournament Code : {tournamentDetails.code}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -57,23 +59,22 @@ const ViewScreen = () => {
             </SafeAreaView>
           </View>
         </ImageBackground>
-      
-      {/* </ScrollView> */}
-    </View>
-    <ScrollView contentContainerStyle={{flex: 1}}>
+
+        {/* </ScrollView> */}
+      </View>
+      {/* <ScrollView contentContainerStyle={{flex: 1}}> */}
       <View
         style={{
-          // flex:1,
+          flex: 1,
           // borderWidth: 2,
           borderColor: 'red',
           justifyContent: 'center',
           alignItems: 'center',
-          height:"100%"
+          height: '100%',
         }}>
         <ViewTournamentTab />
       </View>
-      </ScrollView>
-  
+      {/* </ScrollView> */}
     </View>
   );
 };

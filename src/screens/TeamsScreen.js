@@ -1,45 +1,56 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import TeamListName from '../components/TeamListName'
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React from 'react';
+import TeamListName from '../components/TeamListName';
+import {useState} from 'react';
+import {getTeamsByTournamentId} from '../services/viewTournament';
+import {useSelector} from 'react-redux';
+import {useEffect} from 'react';
 const TeamsScreen = ({navigation}) => {
+  const [currentTeams, setCurrentTeams] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+
+  const loadTeams = async () => {
+    setIsLoading(true);
+    const response = await getTeamsByTournamentId('6377740a0e7585a1b37428a1');
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentTeams(response.data);
+    }
+  };
+
+  const renderItem = ({item}) => (
+    <TeamListName source={{uri: item.logo.url}} text={item.name} />
+  );
+
+  useEffect(() => {
+    loadTeams();
+  }, []);
   return (
-   <ScrollView>
-    <TeamListName
-                source={require('../../assets/images/team1.png')}
-                text="Udupi Design Labs"
-              />
-              <TeamListName
-                source={require('../../assets/images/team2.png')}
-                text="Paras XI"
-              />
-              <TeamListName
-                source={require('../../assets/images/team3.png')}
-                text="Team Lions"
-              />
-              <TeamListName
-                source={require('../../assets/images/team4.png')}
-                text="Parra Warriors"
-              />
-              <TeamListName
-                source={require('../../assets/images/team5.png')}
-                text="Team Dabangg"
-              />
-              <TeamListName
-                source={require('../../assets/images/team3.png')}
-                text="Team Lions"
-              />
-              <TeamListName
-                source={require('../../assets/images/team4.png')}
-                text="Parra Warriors"
-              />
-              <TeamListName
-                source={require('../../assets/images/team5.png')}
-                text="Team Dabangg"
-              />
-   </ScrollView>
-  )
-}
+    <View style={styles.container}>
+      <FlatList
+        data={currentTeams}
+        renderItem={renderItem}
+        keyExtractor={item => item._id}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={loadTeams} />
+        }
+      />
+    </View>
+  );
+};
 
-export default TeamsScreen
+export default TeamsScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

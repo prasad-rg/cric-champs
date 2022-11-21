@@ -1,21 +1,68 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import MatchCard from '../components/MatchCard';
+import {useSelector} from 'react-redux';
+import {getMatchesByTournamentId} from '../services/viewTournament';
 
 const MatchesScreen = ({navigation}) => {
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.dayText}>SATURDAY-OCTOBER 17,2017</Text>
- 
-          <MatchCard text="ABONDONED" />
-          <MatchCard text="PAST"/>
-          <Text style={styles.dayText}>SATURDAY-OCTOBER 18,2017</Text>
-          <MatchCard text="LIVE" />
-          <MatchCard text="UPCOMING"/>
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const [currentMatches, setCurrentMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  let prevDate = null;
+  const loadMatches = async () => {
+    setIsLoading(true);
+    const response = await getMatchesByTournamentId(tournamentDetails._id);
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentMatches(response.data.matches);
+    }
+  };
 
-      </View>
-    </ScrollView>
+  useEffect(() => {
+    loadMatches();
+  }, []);
+
+  const renderItem = ({item}) => {
+    let currentDate = item.matchDateInEnglish;
+    if (currentDate === prevDate) {
+      prevDate = currentDate;
+      return <MatchCard matchDetails={item} />;
+    } else {
+      prevDate = currentDate;
+      return (
+        <>
+          <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
+          <MatchCard matchDetails={item} />
+        </>
+      );
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {isLoading ? (
+        <View>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <FlatList
+          data={currentMatches}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={loadMatches} />
+          }
+        />
+      )}
+    </View>
   );
 };
 
@@ -35,5 +82,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 16,
     padding: 20,
+  },
+  loadingScreen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
