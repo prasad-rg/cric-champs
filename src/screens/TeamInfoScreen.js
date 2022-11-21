@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
-import TeamInfoTab from '../components/TeamInfoTab';
+import TeamInfoTab from '../navigation/TeamInfoTab';
 
 const TeamInfoScreen = () => {
   return (

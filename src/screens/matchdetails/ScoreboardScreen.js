@@ -19,7 +19,7 @@ const ScoreboardScreen = () => {
     'SR',
   ]);
   const [tableData, setTableData] = useState([
-    ['Anupam K\c Mohan b Nilesh', '0', '0', '0', '0', '0'],
+    ['Anupam K \nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
     // ['Sripathi J', '0', '0', '0', '0', '0'],
     // ['Anupam K', '0', '0', '0', '0', '0'],
     // ['Sripathi J', '0', '0', '0', '0', '0'],
