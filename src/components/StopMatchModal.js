@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, Text, View,  Animated,} from 'react-native'
 import React, { useState } from 'react'
 
-const CustomModal = ({visible,children}) => {
+const StopMatchModal = ({visible,children}) => {
     const [showModal,setShowModal]=useState(visible);
     const scaleValue = React.useRef(new Animated.Value(0)).current;
     React.useEffect(() => {
@@ -41,23 +41,28 @@ const CustomModal = ({visible,children}) => {
   )
 }
 
-export default CustomModal
+export default StopMatchModal
 
 const styles = StyleSheet.create({
     modalBackground:{
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth:1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // borderWidth:1,
+        marginTop:55,
+        paddingHorizontal:230
+      
 
        
     },
     modalContainer: {
-        height:"45%",
-        width: '80%',
+        height:48,
+        width:130,
         backgroundColor: '#FFFFFF',
-        alignItems:"center",
-        borderRadius: 20,
+        // alignItems:"center",
+        justifyContent: 'center',
+        padding:5,
+        borderRadius: 3,
       },
 })

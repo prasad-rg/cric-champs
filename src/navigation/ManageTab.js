@@ -3,9 +3,9 @@ import React from 'react';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import Tournament from '../screens/managedetails.js/Tournament';
-import Matches from '../screens/managedetails.js/Matches';
-import CoAdmins from '../screens/managedetails.js/CoAdmins';
+import Tournament from '../screens/managedetails/Tournament';
+import Matches from '../screens/managedetails/Matches';
+import CoAdmins from '../screens/managedetails/CoAdmins';
 
 const Tab = createMaterialTopTabNavigator();
 

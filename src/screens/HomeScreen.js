@@ -37,7 +37,10 @@ const HomeScreen = ({navigation}) => {
             </Text>
             <View style={styles.middleView}>
               <TextInput style={styles.textInput} />
-              <OutlinedButton text="ENTER" />
+              <OutlinedButton
+                text="ENTER"
+                onPress={() => navigation.navigate('ViewScreen')}
+              />
             </View>
             <Text style={styles.codeAcquired}>
               Code can be acquired from the admin.
