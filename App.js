@@ -22,7 +22,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <AppStack />
+        {/* <AppStack /> */}
+        <TimeScreen />
       </PersistGate>
     </Provider>
     // <ProfileImagePicker/>
