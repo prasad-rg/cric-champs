@@ -51,15 +51,15 @@ const UmpiresList = () => {
           ) : (
             <View style={styles.groundView}>
               <TeamListName
-                source={require('../../assets/images/profile1.png')}
+                // source={require('../../assets/images/profile1.png')}
                 text="Jeevan Lazarus"
               />
               <TeamListName
-                source={require('../../assets/images/profile2.png')}
+                // source={require('../../assets/images/profile2.png')}
                 text="Rajesh G"
               />
               <TeamListName
-                source={require('../../assets/images/profile3.png')}
+                // source={require('../../assets/images/profile3.png')}
                 text="Sunder Mohan"
               />
             </View>

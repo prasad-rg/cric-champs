@@ -8,6 +8,9 @@ import CreateTournamentSuccess from '../screens/CreateTournamentSuccess';
 import TeamsList from '../screens/TeamsList';
 import AddTeam from '../screens/AddTeam';
 import AddPlayer from '../screens/AddPlayer';
+import OversScreen from '../screens/OversScreen';
+import Ground from '../screens/Ground';
+import UmpiresList from '../screens/UmpiresList';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +46,21 @@ const AppStack = () => {
         <Stack.Screen
           name="AddPlayer"
           component={AddPlayer}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OversScreen"
+          component={OversScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Ground"
+          component={Ground}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="UmpiresList"
+          component={UmpiresList}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

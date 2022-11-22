@@ -12,8 +12,11 @@ import React, {useState} from 'react';
 import StadiumList from '../components/StadiumList';
 import GradientButton from '../components/GradientButton';
 
-const Ground = () => {
+const Ground = ({navigation}) => {
 
+  const handlePress=()=>{
+    navigation.navigate('UmpiresList')
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -76,6 +79,7 @@ const Ground = () => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
+          onPress={handlePress}
         />
       </View>
     </View>

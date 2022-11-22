@@ -1,7 +1,8 @@
 import {BASE_URL} from '../api/baseURL';
 import axios from 'axios';
 
-export const loginUser = async userData => {
+export const 
+loginUser = async userData => {
   try {
     const response = await axios.post(`${BASE_URL}/api/user/login`, userData);
     return response;
