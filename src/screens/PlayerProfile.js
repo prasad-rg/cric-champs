@@ -1,15 +1,10 @@
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
-import {TextField} from 'rn-material-ui-textfield';
-import GradientButton from '../components/GradientButton';
-import RadioButton from '../components/RadioButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from 'formik';
-import * as yup from 'yup';
+
 
 const PlayerProfile = ({navigation}) => {
-  const [gender, setGender] = useState('');
+
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const getDetails = data => {
     setProfilePictureUri(data);
