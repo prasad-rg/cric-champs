@@ -10,22 +10,15 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import ProfileImagePicker from './src/components/ProfileImagePicker';
+import {Button, RadioButton} from 'react-native-paper';
+import ReadMeExampleSingle from './test';
+import DateScreen from './src/screens/DateScreen';
+import TimeScreen from './src/screens/TimeScreen';
 
 let persistor = persistStore(store);
 
 const App = () => {
-  // return (
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       justifyContent: 'center',
-  //       alignItems: 'center',
-  //       backgroundColor: '#9B9B9B',
-  //       padding: 15,
-  //     }}>
-
-  //   </View>
-  // );
+  const [checked, setChecked] = React.useState('first');
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

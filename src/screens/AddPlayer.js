@@ -93,9 +93,6 @@ const AddPlayer = ({navigation}) => {
 
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
-    city: yup.string().required(),
-    phoneNo: yup.string().required(),
-
   });
 
   return (
@@ -121,7 +118,7 @@ const AddPlayer = ({navigation}) => {
           }
           dispatch(addTeam(data));
           navigation.goBack()
-          
+
         } else {
           Alert.alert('Please Add profile picture');
         }

@@ -8,19 +8,13 @@ import {
   ImageBackground,
   ScrollView,
   Platform,
-  FlatList,
   Dimensions,
-  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
-import UserActions from '../components/UserActions';
-import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
-import {useWindowDimensions} from 'react-native';
 import PlayersList from '../components/PlayersList';
 import {useSelector} from 'react-redux';
-import ImagePicker from 'react-native-image-crop-picker';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import ProfileImagePicker from '../components/ProfileImagePicker';
@@ -33,6 +27,7 @@ const AddTeam = ({navigation}) => {
   };
 
   const participantdata = useSelector(state => state.participantdata.value);
+  console.log(participantdata)
 
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
@@ -43,7 +38,6 @@ const AddTeam = ({navigation}) => {
 
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
-    city: yup.string().required(),
   });
   return (
     <View style={styles.container}>
@@ -58,8 +52,8 @@ const AddTeam = ({navigation}) => {
             ...values,
             image: profilePictureUri,
           };
-          console.log(teamDetails)
-          navigation.goBack()
+          console.log(teamDetails);
+          navigation.goBack();
           // if (profilePictureUri !== '') {
           //   let data = {
           //     ...values,
@@ -167,16 +161,17 @@ const AddTeam = ({navigation}) => {
               </View>
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
-                {!participantdata != [] ? (
+                {participantdata.length === 0 ? (
                   <View style={styles.noplayerView}>
                     <Text style={styles.noplayers}>No Players Added Yet!</Text>
                   </View>
                 ) : (
                   <View style={styles.teamsView}>
                     {participantdata.map(value => (
+                      // console.log(value.image.path)
                       <View key={value.tempId}>
                         <PlayersList
-                          source={value.image}
+                          source={value.image.path}
                           name={value.name}
                           designation={value.designation}
                           expertise={value.expertise}
