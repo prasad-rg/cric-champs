@@ -12,6 +12,8 @@ import {persistStore} from 'redux-persist';
 import ProfileImagePicker from './src/components/ProfileImagePicker';
 import {Button, RadioButton} from 'react-native-paper';
 import ReadMeExampleSingle from './test';
+import DateScreen from './src/screens/DateScreen';
+import TimeScreen from './src/screens/TimeScreen';
 
 let persistor = persistStore(store);
 
@@ -20,7 +22,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <AppStack />
+        {/* <AppStack /> */}
+        <TimeScreen />
       </PersistGate>
     </Provider>
   );
