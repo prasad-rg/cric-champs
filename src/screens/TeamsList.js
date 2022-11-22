@@ -16,7 +16,10 @@ import GradientButton from '../components/GradientButton';
 const TeamsList = ({navigation}) => {
   const [team, setTeam] = useState(true);
   const handleBack =()=>{
-    navigation.navigate('CreateTournamentSuccess')
+    navigation.goBack()
+  }
+  const handlePress=()=>{
+    navigation.navigate('OversScreen')
   }
   const handleTeam =()=>{
     navigation.navigate('AddTeam')
@@ -50,42 +53,42 @@ const TeamsList = ({navigation}) => {
         <View style={styles.secondView}>
           <Text style={styles.teams}>Teams</Text>
 
-          {team ? (
+          {!team ? (
             <View>
               <Text style={styles.noteam}>No Teams Added Yet!</Text>
             </View>
           ) : (
             <View style={styles.teamsView}>
               <TeamListName
-                source={require('../../assets/images/team1.png')}
+                // source={require('../../assets/images/team1.png')}
                 text="Udupi Design Labs"
               />
               <TeamListName
-                source={require('../../assets/images/team2.png')}
+                // source={require('../../assets/images/team2.png')}
                 text="Paras XI"
               />
               <TeamListName
-                source={require('../../assets/images/team3.png')}
+                // source={require('../../assets/images/team3.png')}
                 text="Team Lions"
               />
               <TeamListName
-                source={require('../../assets/images/team4.png')}
+                // source={require('../../assets/images/team4.png')}
                 text="Parra Warriors"
               />
               <TeamListName
-                source={require('../../assets/images/team5.png')}
+                // source={require('../../assets/images/team5.png')}
                 text="Team Dabangg"
               />
               <TeamListName
-                source={require('../../assets/images/team3.png')}
+                // source={require('../../assets/images/team3.png')}
                 text="Team Lions"
               />
               <TeamListName
-                source={require('../../assets/images/team4.png')}
+                // source={require('../../assets/images/team4.png')}
                 text="Parra Warriors"
               />
               <TeamListName
-                source={require('../../assets/images/team5.png')}
+                // source={require('../../assets/images/team5.png')}
                 text="Team Dabangg"
               />
             </View>
@@ -96,7 +99,7 @@ const TeamsList = ({navigation}) => {
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={team ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+          colors={!team ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
           style={{height: 48, width: '100%', marginTop: 0}}
           textstyle={{
@@ -106,6 +109,7 @@ const TeamsList = ({navigation}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
+          onPress={handlePress}
         />
       </View>
     </View>

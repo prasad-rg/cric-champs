@@ -5,35 +5,35 @@ const TeamsScreen = ({navigation}) => {
   return (
    <ScrollView>
     <TeamListName
-                source={require('../../assets/images/team1.png')}
+                // source={require('../../assets/images/team1.png')}
                 text="Udupi Design Labs"
               />
               <TeamListName
-                source={require('../../assets/images/team2.png')}
+                // source={require('../../assets/images/team2.png')}
                 text="Paras XI"
               />
               <TeamListName
-                source={require('../../assets/images/team3.png')}
+                // source={require('../../assets/images/team3.png')}
                 text="Team Lions"
               />
               <TeamListName
-                source={require('../../assets/images/team4.png')}
+                // source={require('../../assets/images/team4.png')}
                 text="Parra Warriors"
               />
               <TeamListName
-                source={require('../../assets/images/team5.png')}
+                // source={require('../../assets/images/team5.png')}
                 text="Team Dabangg"
               />
               <TeamListName
-                source={require('../../assets/images/team3.png')}
+                // source={require('../../assets/images/team3.png')}
                 text="Team Lions"
               />
               <TeamListName
-                source={require('../../assets/images/team4.png')}
+                // source={require('../../assets/images/team4.png')}
                 text="Parra Warriors"
               />
               <TeamListName
-                source={require('../../assets/images/team5.png')}
+                // source={require('../../assets/images/team5.png')}
                 text="Team Dabangg"
               />
    </ScrollView>

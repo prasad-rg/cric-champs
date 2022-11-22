@@ -1,6 +1,4 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {View, Text} from 'react-native';
-import React from 'react';
 
 const initialValues = [];
 
@@ -11,7 +9,7 @@ export const participantSlice = createSlice({
   },
   reducers: {
     addTeam: (state, action) => {
-
+        state.value.push(action.payload);
       },
   },
 });
