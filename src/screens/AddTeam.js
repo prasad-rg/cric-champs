@@ -18,16 +18,25 @@ import {useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import ProfileImagePicker from '../components/ProfileImagePicker';
+import {createFormData} from '../utils/createFormData';
+import {createTeam} from '../services/manageTournament';
+import { setTeamId } from '../redux/manageTournamentSlice';
+import { useDispatch } from 'react-redux';
 
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
-
+  const dispatch = useDispatch();
   const getDetails = data => {
     setProfilePictureUri(data);
   };
 
   const participantdata = useSelector(state => state.participantdata.value);
-  console.log(participantdata)
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  const teamId = useSelector(state => state.tournamentdata.teamId)
+
+  console.log(participantdata);
 
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
@@ -47,23 +56,26 @@ const AddTeam = ({navigation}) => {
           name: '',
           city: '',
         }}
-        onSubmit={values => {
-          let teamDetails = {
-            ...values,
-            image: profilePictureUri,
-          };
-          console.log(teamDetails);
-          navigation.goBack();
-          // if (profilePictureUri !== '') {
-          //   let data = {
-          //     ...values,
-          //     image: profilePictureUri,
-          //   };
-          //   console.log(data)
-          //   // dispatch(addTeam(data));
-          // } else {
-          //   Alert.alert('Please Add profile picture');
-          // }
+        onSubmit={async values => {
+          if (profilePictureUri !== '') {
+            const formData = createFormData({
+              ...values,
+              image: profilePictureUri,
+              tournamentId: tournamentId,
+            });
+            // const participantFormData = createFormData({
+
+            // })
+            const response = await createTeam(formData);
+            dispatch(setTeamId(response.data._id))
+            
+            if (response.status) {
+              console.log('HIIIIIIIIIIIII', response);
+              navigation.goBack();
+            }
+          } else {
+            Alert.alert('Please Add profile picture');
+          }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>

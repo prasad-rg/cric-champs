@@ -4,6 +4,7 @@ import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import authReducer from './authSlice';
 import MatchReducer from './MatchSlice';
+import manageTournamentReducer from './manageTournamentSlice';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   participantdata: ParticipantReducer,
   auth: authReducer,
   matchdata: MatchReducer,
+  tournamentdata: manageTournamentReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 
