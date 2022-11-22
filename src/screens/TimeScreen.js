@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
-import DateTab from '../navigation/DateTab';
+import TimeTab from '../navigation/TimeTab';
 
 const TimeScreen = ({navigation}) => {
   const handleBack = () => {
@@ -27,21 +27,28 @@ const TimeScreen = ({navigation}) => {
                     style={styles.backButtonImage}
                   />
                 </TouchableOpacity>
-                <Text style={styles.viewText}>Dates</Text>
+                <Text style={styles.viewText}>Time</Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                }}></View>
             </View>
-            <Text style={styles.year}>2017</Text>
-            <Text style={styles.date}>Sat, Oct 15</Text>
+            {/* <Text style={styles.year}>2017</Text>
+            <Text style={styles.date}>Sat, Oct 15</Text> */}
+            <View style={styles.datecontainer}>
+              <Text style={styles.timeinhour}>9</Text>
+              <Text style={styles.timeinmin}>:00</Text>
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.timeformatinam}>AM</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.timeformatinpm}>PM</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </SafeAreaView>
       </View>
       <ScrollView contentContainerStyle={{flex: 1}}>
-        <DateTab />
+        <TimeTab />
       </ScrollView>
     </View>
   );
@@ -140,4 +147,52 @@ const styles = StyleSheet.create({
     marginLeft: 62,
     marginTop: 1,
   },
+  datecontainer: {
+    flexDirection: 'row',
+    // justifyContent:'center',
+    alignItems:'center',
+    marginLeft:62,
+    marginTop:15,
+  },
+  timeinhour:{
+    height: 71,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 60,
+    letterSpacing: 0,
+    lineHeight: 71,
+    textAlign: 'right',
+  },
+  timeinmin:{
+    height: 71,
+    color: 'rgba(255,255,255,0.7)',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 60,
+    letterSpacing: 0,
+    lineHeight: 71,
+    textAlign: 'right',
+  },
+  timeformatinam:{
+    height: 19,
+    width: 25,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 19,
+    marginLeft:13,
+
+  },
+  timeformatinpm:{
+    height: 19,
+    width: 25,
+    color: 'rgba(255,255,255,0.7)',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 19,
+    marginLeft:13,
+  }
 });

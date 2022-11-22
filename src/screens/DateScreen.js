@@ -47,11 +47,6 @@ const DateScreen = ({navigation}) => {
                 </TouchableOpacity>
                 <Text style={styles.viewText}>Dates</Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                }}></View>
             </View>
             <Text style={styles.year}>{start ? startYear : end && endYear != 'Invalid date' ? endYear : " "}</Text>
             <Text style={styles.date}>
