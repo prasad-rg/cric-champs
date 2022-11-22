@@ -88,3 +88,35 @@ export const getUmpiresByTournamentId = async tournamentId => {
     return error.response.data;
   }
 };
+
+export const getPlayersByTeamIdAndTournamentId = async (
+  teamId,
+  tournamentId,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/participant/player/all?tournamentId=${tournamentId}&teamId=${teamId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getTeamInfoByTeamIdAndTournamentId = async (
+  teamId,
+  tournamentId,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/team/team-stats?tournamentId=${tournamentId}&teamId=${teamId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

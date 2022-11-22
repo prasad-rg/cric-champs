@@ -29,8 +29,15 @@ const TeamsScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigation.navigate('TeamInfoScreen')}>
-      <TeamListName source={{uri: item.logo.url}} text={item.name} />
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('TeamInfoScreen', {
+          teamId: item._id,
+          teamLogo: item.logo.url,
+          teamName: item.name,
+        })
+      }>
+      <TeamListName source={item.logo.url} text={item.name} />
     </TouchableOpacity>
   );
 

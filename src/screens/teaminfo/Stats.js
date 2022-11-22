@@ -1,50 +1,79 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
+import {getTeamInfoByTeamIdAndTournamentId} from '../../services/viewTournament';
 
-const Stats = ({navigation}) => {
-  const Details = [
+const Stats = ({navigation, route}) => {
+  const [currentInfo, setCurrentInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const loadInfo = async () => {
+    setIsLoading(true);
+    const response = await getTeamInfoByTeamIdAndTournamentId(
+      route.params.teamId,
+      tournamentDetails._id,
+    );
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentInfo(response.team);
+    }
+  };
+  const details = [
     {
-      id: 1,
+      id: currentInfo?.captainId,
       title: 'Captain',
-      value: 'Sailesh H (c)',
+      value: `${currentInfo?.captainName} (c)`,
+    },
+    {
+      id: currentInfo?.viceCaptainId,
+      title: 'Vice Captain',
+      value: `${currentInfo?.viceCaptainName} (vc)`,
     },
     {
       id: 2,
       title: 'City',
-      value: 'Udupi',
+      value: currentInfo?.city,
     },
     {
       id: 3,
       title: 'Matches',
-      value: '5',
+      value: currentInfo?.matchesPlayed,
     },
     {
       id: 4,
       title: 'Wins',
-      value: '2',
+      value: currentInfo?.wins,
     },
     {
       id: 5,
       title: 'Losses',
-      value: '2',
+      value: currentInfo?.losses,
     },
     {
       id: 6,
       title: 'Draw / Cancelled',
-      value: '1',
+      value: currentInfo?.draws,
     },
     {
       id: 7,
       title: 'Points',
-      value: '5',
+      value: currentInfo?.points,
     },
   ];
 
+  useEffect(() => {
+    loadInfo();
+  }, []);
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={loadInfo} />
+      }>
       <View style={styles.card}>
         <View>
-          {Details.map(item => (
+          {details.map(item => (
             <View key={item.id} style={styles.listview}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.value}>{item.value}</Text>

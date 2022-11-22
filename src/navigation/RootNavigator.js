@@ -11,6 +11,7 @@ import ViewTournamentTab from './ViewTournamentTab';
 import ViewScreen from '../screens/ViewScreen';
 import {useSelector} from 'react-redux';
 import TeamInfoScreen from '../screens/TeamInfoScreen';
+import PlayerProfile from '../screens/PlayerProfile';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="TeamInfoScreen"
           component={TeamInfoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PlayerProfile"
+          component={PlayerProfile}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

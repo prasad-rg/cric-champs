@@ -4,23 +4,65 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  FlatList,
+  RefreshControl,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import TeamListName from '../../components/TeamListName';
+import {getPlayersByTeamIdAndTournamentId} from '../../services/viewTournament';
+import {useSelector} from 'react-redux';
 
-const Players = ({navigation}) => {
+const Players = ({navigation, route}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentPlayers, setCurrentPlayers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  // console.log(tournamentDetails);
+
+  const loadPlayers = async () => {
+    setIsLoading(true);
+    const response = await getPlayersByTeamIdAndTournamentId(
+      route.params.teamId,
+      tournamentDetails._id,
+    );
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentPlayers(response.data);
+    }
+  };
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity onPress={() => navigation.navigate('PlayerProfile')}>
+      <TeamListName source={item.profilePic.url} text={item.name} />
+    </TouchableOpacity>
+  );
+  useEffect(() => {
+    loadPlayers();
+  }, []);
+
   return (
-    <ScrollView contentContainerStyle={{flex: 1}}>
-      <View style={styles.container}>
-        <TouchableOpacity>
-          <View style={styles.addButton}>
-            <Text style={styles.addTeamText}>ADD PLAYER</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+    <View style={{flex: 1}}>
+      {isLoggedIn && (
+        <View style={styles.container}>
+          <TouchableOpacity>
+            <View style={styles.addButton}>
+              <Text style={styles.addTeamText}>ADD PLAYER</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>
+        <FlatList
+          data={currentPlayers}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={loadPlayers} />
+          }
+        />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

@@ -8,10 +8,17 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import TeamInfoTab from '../components/TeamInfoTab';
+import ProfileImagePicker from '../components/ProfileImagePicker';
 
-const TeamInfoScreen = () => {
+const TeamInfoScreen = ({navigation, route}) => {
+  const [profilePictureUri, setProfilePictureUri] = useState('');
+
+  const getDetails = data => {
+    setProfilePictureUri(data);
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -22,13 +29,17 @@ const TeamInfoScreen = () => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
                     />
                   </TouchableOpacity>
-                  <Text style={styles.viewText}>UDL Strikers</Text>
+                  <Text style={styles.viewText}>
+                    {route.params?.teamName
+                      ? `${route.params?.teamName}`
+                      : 'UDL Strikers'}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -65,14 +76,21 @@ const TeamInfoScreen = () => {
                   style={styles.teamlogo}
                 />
               </View> */}
+              <ProfileImagePicker
+                getImageUri={getDetails}
+                profilePictureUri={{uri: route.params.teamLogo}}
+              />
             </View>
           </SafeAreaView>
         </View>
       </ImageBackground>
 
-      <ScrollView contentContainerStyle={{flex: 1}}>
+      {/* <ScrollView contentContainerStyle={{flex: 1}}>
         <TeamInfoTab />
-      </ScrollView>
+      </ScrollView> */}
+      <View style={{flex: 1}}>
+        <TeamInfoTab navigation={navigation} route={route} />
+      </View>
     </View>
   );
 };

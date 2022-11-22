@@ -28,7 +28,7 @@ const UmpiresScreen = () => {
   }, []);
 
   const renderItem = ({item}) => (
-    <TeamListName source={{uri: item.profilePic.url}} text={item.name} />
+    <TeamListName source={item.profilePic.url} text={item.name} />
   );
 
   return (

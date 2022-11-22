@@ -5,7 +5,8 @@ import Players from '../screens/teaminfo/Players';
 import Stats from '../screens/teaminfo/Stats';
 const Tab = createMaterialTopTabNavigator();
 
-export default function TeamInfoTab() {
+export default function TeamInfoTab(props) {
+  // console.error(route.params);
   return (
     // <NavigationContainer>
     <Tab.Navigator
@@ -35,8 +36,12 @@ export default function TeamInfoTab() {
           // height:1,
         },
       }}>
-      <Tab.Screen name="PLAYERS" component={Players} />
-      <Tab.Screen name="STATS" component={Stats} />
+      <Tab.Screen name="PLAYERS">
+        {() => <Players showProps={true} {...props} />}
+      </Tab.Screen>
+      <Tab.Screen name="INFO">
+        {() => <Stats showProps={true} {...props} />}
+      </Tab.Screen>
     </Tab.Navigator>
     // </NavigationContainer>
   );
