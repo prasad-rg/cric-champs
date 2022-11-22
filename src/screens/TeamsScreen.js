@@ -4,6 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -19,7 +21,7 @@ const TeamsScreen = ({navigation}) => {
 
   const loadTeams = async () => {
     setIsLoading(true);
-    const response = await getTeamsByTournamentId('6377740a0e7585a1b37428a1');
+    const response = await getTeamsByTournamentId(tournamentDetails._id);
     setIsLoading(false);
     if (response.status) {
       setCurrentTeams(response.data);
@@ -27,7 +29,9 @@ const TeamsScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => (
-    <TeamListName source={{uri: item.logo.url}} text={item.name} />
+    <TouchableOpacity onPress={() => navigation.navigate('TeamInfoScreen')}>
+      <TeamListName source={{uri: item.logo.url}} text={item.name} />
+    </TouchableOpacity>
   );
 
   useEffect(() => {

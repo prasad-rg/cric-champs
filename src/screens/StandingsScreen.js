@@ -1,30 +1,32 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Table, Row, TableWrapper, Rows} from 'react-native-table-component';
 import {useSelector} from 'react-redux';
 import {getStandingsByTournamentId} from '../services/viewTournament';
 
 const StandingsScreen = ({navigation}) => {
-  const [currentTeams, setCurrentTeams] = useState([]);
+  // const [currentTeams, setCurrentTeams] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [tableHead, setTableHead] = useState([
-    'Team',
+    'Team ',
     'M',
     'W',
     'L',
     'NR',
     'PTS',
-    'RR',
   ]);
+  const [tableData, setTableData] = useState([]);
   const loadStandings = async () => {
     setIsLoading(true);
     const response = await getStandingsByTournamentId(
-      '6377740a0e7585a1b37428a1',
+      '637b13e768749af12254602f',
     );
     setIsLoading(false);
+    console.log(response);
     if (response.status) {
-      let arrayResponse = response.data.map(team => [
+      // console.log(response.data.team);
+      let arrayResponse = response.data.team.map(team => [
         team.name,
         team.matchesPlayed,
         team.wins,
@@ -32,28 +34,32 @@ const StandingsScreen = ({navigation}) => {
         team.points,
         team.netRunRate,
       ]);
-      console.log(arrayResponse);
-      setCurrentTeams(arrayResponse);
+      // console.log(arrayResponse);
+      // setCurrentTeams(arrayResponse);
+      setTableData(arrayResponse);
     }
   };
 
-  const [tableData, setTableData] = useState([
-    ['UDL Strikers', '6', '4', '2', '0', '8', '3.678'],
-    ['Paras XI', '6', '3', '2', '1', '7', '3.678'],
-    ['Team Dabangg', '5', '3', '2', '0', '6', '3.678'],
-    ['Parra Warriors', '6', '2', '1', '0', '4', '3.678'],
-  ]);
+  // const [tableData, setTableData] = useState([
+  //   ['UDL Strikers', '6', '4', '2', '0', '8', '3.678'],
+  //   ['Paras XI', '6', '3', '2', '1', '7', '3.678'],
+  //   ['Team Dabangg', '5', '3', '2', '0', '6', '3.678'],
+  //   ['Parra Warriors', '6', '2', '1', '0', '4', '3.678'],
+  // ]);
 
   useEffect(() => {
     loadStandings();
   }, []);
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={loadStandings} />
+      }>
       <View style={{marginTop: 20}}>
         <Table>
           <Row
             data={tableHead}
-            flexArr={[3, 1.2, 1, 1, 1, 1.3, 1.8]}
+            flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.8]}
             style={styles.table_header}
             textStyle={styles.header_text}
           />
@@ -61,7 +67,7 @@ const StandingsScreen = ({navigation}) => {
             <Rows
               data={tableData}
               heightArr={[50, 50, 50, 50, 50, 50]}
-              flexArr={[3, 1.2, 1, 1, 1, 1.3, 1.8]}
+              flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.8]}
               style={styles.row}
               textStyle={styles.row_text}
             />
@@ -95,6 +101,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 24,
     paddingHorizontal: 15,
+    textAlign: 'center',
   },
   row: {
     // borderWidth:1,
@@ -107,5 +114,6 @@ const styles = StyleSheet.create({
   row_text: {
     paddingHorizontal: 15,
     fontFamily: 'Roboto-Regular',
+    textAlign: 'center',
   },
 });

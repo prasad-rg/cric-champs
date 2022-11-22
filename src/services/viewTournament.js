@@ -43,7 +43,46 @@ export const getStandingsByTournamentId = async tournamentId => {
       `${BASE_URL}/api/tournament/standings?tournamentId=${tournamentId}`,
     );
     const data = response.data;
-    console.log(data);
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getGroundsByTournamentId = async tournamentId => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/tournament/ground-details/all?tournamentId=${tournamentId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+// export const getStatsByTournamentId = async tournamentId => {
+//   try {
+//     const response = await axios.get(
+//       `${BASE_URL}/api/tournament/ground-details/all?tournamentId=${tournamentId}`,
+//     );
+//     const data = response.data;
+//     // console.log(data);
+//     return data;
+//   } catch (error) {
+//     return error.response.data;
+//   }
+// };
+
+export const getUmpiresByTournamentId = async tournamentId => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/participant/umpire/all?tournamentId=${tournamentId}`,
+    );
+    const data = response.data;
+    // console.log(data);
     return data;
   } catch (error) {
     return error.response.data;

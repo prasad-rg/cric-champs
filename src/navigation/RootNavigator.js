@@ -10,6 +10,7 @@ import HomeStack from './HomeStack';
 import ViewTournamentTab from './ViewTournamentTab';
 import ViewScreen from '../screens/ViewScreen';
 import {useSelector} from 'react-redux';
+import TeamInfoScreen from '../screens/TeamInfoScreen';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ViewScreen"
           component={ViewScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="TeamInfoScreen"
+          component={TeamInfoScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

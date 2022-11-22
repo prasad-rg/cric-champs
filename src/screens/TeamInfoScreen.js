@@ -59,12 +59,12 @@ const TeamInfoScreen = () => {
                 </View>
               </View>
 
-              <View style={styles.teamlogoview}>
+              {/* <View style={styles.teamlogoview}>
                 <Image
                   source={require('../../assets/images/team3.png')}
                   style={styles.teamlogo}
                 />
-              </View>
+              </View> */}
             </View>
           </SafeAreaView>
         </View>
