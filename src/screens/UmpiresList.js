@@ -12,9 +12,14 @@ import {
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import TeamListName from '../components/TeamListName';
+import {useSelector} from 'react-redux';
 
-const UmpiresList = () => {
-  const [umpire, setUmpire] = useState(true);
+const UmpiresList = ({navigation}) => {
+  const handlePress = () => {
+    navigation.navigate('DateScreen');
+  };
+
+  const umpiredata = useSelector(state => state.umpiredata.value);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -25,7 +30,7 @@ const UmpiresList = () => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -34,7 +39,9 @@ const UmpiresList = () => {
                   <Text style={styles.umpireText}>Umpires</Text>
                 </View>
 
-                <TouchableOpacity style={styles.umpireButton}>
+                <TouchableOpacity
+                  style={styles.umpireButton}
+                  onPress={() => navigation.navigate('AddUmpire')}>
                   <Text style={styles.addumpireText}>ADD UMPIRE</Text>
                 </TouchableOpacity>
               </View>
@@ -43,25 +50,20 @@ const UmpiresList = () => {
         </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.umpire}>Umpires</Text>
-
-          {umpire ? (
-            <View>
-              <Text style={styles.noUmpire}>No Umpires Added Yet!</Text>
+          {umpiredata.length === 0 ? (
+            <View style={styles.nogroundview}>
+              <Text style={styles.nogrounds}>No Umpires Added Yet!</Text>
             </View>
           ) : (
-            <View style={styles.groundView}>
-              <TeamListName
-                // source={require('../../assets/images/profile1.png')}
-                text="Jeevan Lazarus"
-              />
-              <TeamListName
-                // source={require('../../assets/images/profile2.png')}
-                text="Rajesh G"
-              />
-              <TeamListName
-                // source={require('../../assets/images/profile3.png')}
-                text="Sunder Mohan"
-              />
+            <View>
+              {umpiredata.map(value => (
+                <View key={value.tempId}>
+                  <TeamListName
+                    source={value?.groundPic.url}
+                    text={value.name}
+                  />
+                </View>
+              ))}
             </View>
           )}
         </View>
@@ -70,7 +72,11 @@ const UmpiresList = () => {
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={umpire ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+          colors={
+            umpiredata.length === 0
+              ? ['#999999', '#999999']
+              : ['#FFBA8C', '#FE5C6A']
+          }
           text="PROCEED"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
@@ -80,6 +86,7 @@ const UmpiresList = () => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
+          onPress={handlePress}
         />
       </View>
     </View>
@@ -111,7 +118,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 100,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -126,7 +133,7 @@ const styles = StyleSheet.create({
     height: 14,
     // width: 60,
     color: '#FFFFFF',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 12,
     fontWeight: '900',
     letterSpacing: 0,
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
   umpire: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 15,
     fontWeight: '500',
     letterSpacing: 0,
@@ -179,6 +186,21 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 24,
+    textAlign: 'center',
+  },
+  nogroundview: {
+    alignItems: 'center',
+  },
+  nogrounds: {
+    height: 24,
+    // width: 200,
+    color: '#A3A3A3',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 20,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 24,
+    marginTop: 18,
     textAlign: 'center',
   },
 });

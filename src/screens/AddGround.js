@@ -1,4 +1,4 @@
-import {StyleSheet, View, Platform, Text,Alert} from 'react-native';
+import {StyleSheet, View, Platform, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -6,10 +6,13 @@ import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {addGround} from '../redux/GroundSlice';
 import {useDispatch} from 'react-redux';
+import {createFormData} from '../utils/createFormData';
 import uuid from 'react-native-uuid';
+import {addGrounds} from '../services/manageTournament2';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {cleanSingle} from 'react-native-image-crop-picker';
 
 const AddGround = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -21,6 +24,7 @@ const AddGround = ({navigation}) => {
     name: yup.string().required(),
     city: yup.string().required(),
   });
+
   return (
     <View style={styles.container}>
       <Formik
@@ -31,20 +35,22 @@ const AddGround = ({navigation}) => {
           latitude: '',
           longitude: '',
         }}
-        onSubmit={values => {
+        onSubmit={async values => {
           if (profilePictureUri !== '') {
             let data = {
               ...values,
-                  image: profilePictureUri,
+              image: profilePictureUri,
+              tournamentId: '637da64ecd970c7863a0d13e',
             };
-            console.log(values);
-            dispatch(addGround(data));
-            navigation.goBack()
-  
-          } else {
+            const groundData = createFormData(data);
+            const response = await addGrounds(groundData);
+            if (response.status) {
+              dispatch(addGround(response.data.grounds));
+              navigation.navigate('Ground');
+            }
+
             Alert.alert('Please Add profile picture');
           }
-          
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>

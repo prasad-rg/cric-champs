@@ -1,4 +1,3 @@
-import GroundReducer from './GroundSlice';
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,6 +5,8 @@ import authReducer from './authSlice';
 import MatchReducer from './MatchSlice';
 import viewTournamentReducer from './viewTournamentSlice';
 import ParticipantReducer from './ParticipantSlice';
+import GroundReducer from './GroundSlice';
+import UmpireReducer from './umpireSlice';
 
 const persistConfig = {
   key: 'root',
@@ -16,6 +17,7 @@ const persistConfig = {
 const reducer = combineReducers({
   participantdata: ParticipantReducer,
   grounddata: GroundReducer,
+  umpiredata: UmpireReducer,
   auth: authReducer,
   matchdata: MatchReducer,
   tournamentDetails: viewTournamentReducer,

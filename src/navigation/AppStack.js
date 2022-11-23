@@ -12,6 +12,8 @@ import OversScreen from '../screens/OversScreen';
 import Ground from '../screens/Ground';
 import UmpiresList from '../screens/UmpiresList';
 import AddGround from '../screens/AddGround';
+import AddUmpire from '../screens/AddUmpire';
+import DateScreen from '../screens/DateScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +71,17 @@ const AppStack = () => {
           component={AddGround}
           options={{headerShown: false}}
         />
+          <Stack.Screen
+          name="AddUmpire"
+          component={AddUmpire}
+          options={{headerShown: false}}
+        />
+     
+         <Stack.Screen
+        name="DateScreen"
+        component={DateScreen}
+        options={{headerShown: false}}
+      />
       </Stack.Navigator>
     </NavigationContainer>
   );
