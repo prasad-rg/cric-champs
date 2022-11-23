@@ -26,3 +26,5 @@ export const registerUser = async formData => {
 // export const logoutUser = async userDetails => {
 //   let res = await axios.delete(`${BASE_URL}/api/user/login`,)
 // }
+
+
