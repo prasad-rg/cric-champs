@@ -1,5 +1,5 @@
-import axios from 'axios';
 import {BASE_URL} from '../api/baseURL';
+import axios from 'axios';
 
 export const 
 loginUser = async userData => {

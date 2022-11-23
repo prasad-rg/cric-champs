@@ -1,5 +1,5 @@
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {TextField} from 'rn-material-ui-textfield';
 import GradientButton from '../components/GradientButton';
@@ -7,44 +7,76 @@ import RadioButton from '../components/RadioButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {useSelector} from 'react-redux';
+import {getPlayerDetailsByTeamIdAndTournamentIdAndPlayerId} from '../services/viewTournament';
 
-const PlayerProfile = ({navigation}) => {
+const PlayerProfile = ({navigation, route}) => {
   const [gender, setGender] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const getDetails = data => {
     setProfilePictureUri(data);
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentPlayerDetails, setCurrentPlayerDetails] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+
+  const loadPlayerDetails = async () => {
+    setIsLoading(true);
+    const response = await getPlayerDetailsByTeamIdAndTournamentIdAndPlayerId(
+      route.params.playerId,
+      route.params.teamId,
+      tournamentDetails._id,
+    );
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentPlayerDetails(response.data);
+    }
+  };
+
   const Details = [
     {
       id: 1,
       title: 'City / Town',
-      value: 'Delhi',
+      value: currentPlayerDetails?.city,
     },
     {
       id: 2,
       title: 'Team',
-      value: 'Paras XI',
+      value: currentPlayerDetails?.teamId?.name,
     },
     {
       id: 3,
       title: 'Captain',
-      value: 'Yes',
+      value:
+        currentPlayerDetails?.designation?.toLowerCase() === 'captain'
+          ? 'Yes'
+          : 'No',
     },
     {
       id: 4,
       title: 'Role',
-      value: 'batsman / Captain',
+      // value: 'batsman / Captain',
+      value:
+        currentPlayerDetails?.expertise?.toLowerCase() === 'batting'
+          ? 'Batsman / '
+          : currentPlayerDetails?.expertise?.toLowerCase() === 'bowling'
+          ? 'Bowler / '
+          : currentPlayerDetails?.expertise?.toLowerCase() === 'all rounder'
+          ? 'All Rounder /'
+          : 'Player /',
     },
     {
       id: 5,
       title: 'Batting Style',
-      value: 'Right Handed',
+      value: currentPlayerDetails?.batting,
     },
     {
       id: 6,
       title: 'Bowling Style',
-      value: 'Right-arm medium',
+      value:
+        currentPlayerDetails?.bowling + ' ' + currentPlayerDetails?.bowlingType,
     },
     {
       id: 7,
@@ -54,12 +86,12 @@ const PlayerProfile = ({navigation}) => {
     {
       id: 8,
       title: 'Runs',
-      value: '151',
+      value: currentPlayerDetails?.runsConceded,
     },
     {
       id: 9,
       title: 'Wickets',
-      value: '4',
+      value: currentPlayerDetails?.wickets,
     },
     {
       id: 10,
@@ -67,21 +99,28 @@ const PlayerProfile = ({navigation}) => {
       value: 'Man of the Match (Match 5)',
     },
   ];
+
+  useEffect(() => {
+    loadPlayerDetails();
+  }, []);
   return (
     <View style={styles.primaryContainer}>
-        <ScrollView>
-      <AddProfileDetails
-        navigation={navigation}
-        title="James Arthur"
-        getImageUri={getDetails}></AddProfileDetails>
-      <View>
-        {Details.map(item => (
-          <View key={item.id} style={styles.listview}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.value}>{item.value}</Text>
-          </View>
-        ))}
-      </View>
+      <ScrollView>
+        <AddProfileDetails
+          navigation={navigation}
+          title={currentPlayerDetails?.name}
+          getImageUri={getDetails}
+          profilePictureUri={{
+            uri: currentPlayerDetails?.profilePic?.url,
+          }}></AddProfileDetails>
+        <View>
+          {Details.map(item => (
+            <View key={item.id} style={styles.listview}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.value}>{item.value}</Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
