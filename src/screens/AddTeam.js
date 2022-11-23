@@ -96,9 +96,20 @@ const AddTeam = ({navigation}) => {
                 return createparticipantresponse;
               }));
 
+
               const status = result.map((stat)=>{
-                console.log(stat)
-              })
+                if(stat.status){
+                  return true
+                }
+              }).every(element => element === true);
+
+              if (status){
+                navigation.goBack();
+              }
+
+              // const response=status.every(element => element === true);
+
+          
               // const participantFormData = createFormData(result);
               // console.log('I am form data after map', participantFormData);
               // const createparticipantresponse = await addParticipant(
