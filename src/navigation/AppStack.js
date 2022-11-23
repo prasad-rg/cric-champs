@@ -11,6 +11,7 @@ import AddPlayer from '../screens/AddPlayer';
 import OversScreen from '../screens/OversScreen';
 import Ground from '../screens/Ground';
 import UmpiresList from '../screens/UmpiresList';
+import AddGround from '../screens/AddGround';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,11 @@ const AppStack = () => {
         <Stack.Screen
           name="UmpiresList"
           component={UmpiresList}
+          options={{headerShown: false}}
+        />
+          <Stack.Screen
+          name="AddGround"
+          component={AddGround}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

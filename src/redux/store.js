@@ -1,4 +1,5 @@
 import ParticipantReducer from './ParticipantSlice';
+import GroundReducer from './GroundSlice';
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +14,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   participantdata: ParticipantReducer,
+  grounddata: GroundReducer,
   auth: authReducer,
   matchdata: MatchReducer,
 });
