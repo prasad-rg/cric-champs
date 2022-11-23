@@ -10,6 +10,7 @@ import HomeStack from './HomeStack';
 import ViewTournamentTab from './ViewTournamentTab';
 import ViewScreen from '../screens/ViewScreen';
 import {useSelector} from 'react-redux';
+import AppStack from './AppStack';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ const RootNavigator = () => {
           component={HomeStack}
           options={{headerShown: false}}
         />
-        {!isLoggedIn && (
+       
           <Stack.Screen
             name="AuthStack"
             component={AuthStack}
@@ -40,10 +41,15 @@ const RootNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
             }}
           />
-        )}
+        
         <Stack.Screen
           name="ViewScreen"
           component={ViewScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AppStack"
+          component={AppStack}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -107,12 +107,12 @@ const UserControl = ({navigation}) => {
         </TouchableOpacity>
       </ScrollView>
       <SafeAreaView>
-        {isLoggedIn ? (
+        {false ? (
           <TouchableOpacity style={styles.logout}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.logout}>
+          <TouchableOpacity style={styles.logout} onPress={()=>navigation.navigate('AuthStack')}>
             <Text style={styles.logoutText}>Login</Text>
           </TouchableOpacity>
         )}

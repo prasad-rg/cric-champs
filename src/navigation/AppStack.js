@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen
           name="UserControls"
@@ -64,7 +64,7 @@ const AppStack = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 };
 

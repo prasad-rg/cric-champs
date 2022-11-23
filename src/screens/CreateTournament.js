@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
-  Platform
+  Platform,
+  Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import ProfileImagePicker from '../components/ProfileImagePicker';
-
-
+import {createFormData} from '../utils/createFormData';
+import {createTournament} from '../services/manageTournament';
+import {useDispatch} from 'react-redux';
+import {setCode} from '../redux/manageTournamentSlice';
+import {setTournamentData} from '../redux/manageTournamentSlice';
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
   {label: 'Knockout', value: 'Knockout', id: 1},
@@ -24,90 +28,107 @@ const radio_props = [
 ];
 
 const CreateTournament = ({navigation}) => {
-  const reduxdata = useSelector(state => state.participantdata.value);
-console.log(reduxdata)
-
-  const [tournamentName,setTournamentName]=useState('')
+  const [tournamentName, setTournamentName] = useState('');
   const [tournamenttype, setTournamentType] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
 
+  const dispatch = useDispatch();
 
-  const data ={
-    name:tournamentName,
-    tournamentType:tournamenttype,
-    email:'',
-    image:profilePictureUri,
-  }
   const getDetails = data => {
     setProfilePictureUri(data);
   };
-  const handlePress = () =>{
-    console.log(data)
-    navigation.navigate('CreateTournamentSuccess');
-  }
-  const getData= data =>{
-    setTournamentType(data)
-  }
-  
+  const handlePress = async () => {
+    if (profilePictureUri !== '' && tournamentName !== '') {
+      const formData = createFormData({
+        name: tournamentName,
+        tournamentType: tournamenttype,
+        email: 'noor@gmail.com',
+        image: profilePictureUri,
+      });
+      const response = await createTournament(formData);
+      console.log("I am create tournament responseeee",response)
+      if (response.status) {
+        const {code, _id, userId, name, email} = response.data.result;
+        const tournamentresponse = {
+          code: code,
+          tournamentid: _id,
+          userId: userId,
+          name: name,
+          email: email,
+        };
+        dispatch(setTournamentData(tournamentresponse));
+        navigation.navigate('CreateTournamentSuccess');
+      }
+    } else {
+      console.log('All fields are required');
+    }
+  };
+  const getData = data => {
+    setTournamentType(data);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
-      <ImageBackground
-        source={require('../../assets/images/IndiaTeam.png')}
-        resizeMode="cover"
-        style={styles.backgroundImage}>
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={styles.profileDetailsContainer}>
-              <View style={styles.header}>
-                <TouchableOpacity style={styles.closeButton}>
-                  <Image
-                    source={require('../../assets/images/goback.png')}
-                    style={styles.gobackbutton}
-                  />
-                </TouchableOpacity>
-                <Text style={styles.createTournament}>Create Tournament</Text>
-              </View>
-              {/* <View style={styles.teamlogoview}>
+        <ImageBackground
+          source={require('../../assets/images/IndiaTeam.png')}
+          resizeMode="cover"
+          style={styles.backgroundImage}>
+          <View style={styles.backgroundBeyondSafeArea}>
+            <SafeAreaView>
+              <View style={styles.profileDetailsContainer}>
+                <View style={styles.header}>
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={() => navigation.goBack()}>
+                    <Image
+                      source={require('../../assets/images/goback.png')}
+                      style={styles.gobackbutton}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.createTournament}>Create Tournament</Text>
+                </View>
+                {/* <View style={styles.teamlogoview}>
                 <Image
                   source={require('../../assets/images/team3.png')}
                   style={styles.teamlogo}
                 />
               </View> */}
-              <ProfileImagePicker getImageUri={getDetails}/>
-              <View style={styles.textInput}>
-              <TextField
-                label="Tournament Name"
-                formatText={this.formatText}
-                onSubmitEditing={this.onSubmit}
-                ref={this.fieldRef}
-                textColor="#FFFFFF"
-                tintColor="rgba(224, 224, 224, 0.7)"
-                baseColor="#E0E0E0"
-                lineWidth={1}
-                onChangeText={text => setTournamentName(text)}
-                autoCapitalize="none"
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  letterSpacing: 0.57,
-                  lineHeight: 19,
-                }}
-              /></View>
-            </View>
-          </SafeAreaView>
+                <ProfileImagePicker getImageUri={getDetails} />
+                <View style={styles.textInput}>
+                  <TextField
+                    label="Tournament Name"
+                    formatText={this.formatText}
+                    onSubmitEditing={this.onSubmit}
+                    ref={this.fieldRef}
+                    textColor="#FFFFFF"
+                    tintColor="rgba(224, 224, 224, 0.7)"
+                    baseColor="#E0E0E0"
+                    lineWidth={1}
+                    onChangeText={text => setTournamentName(text)}
+                    autoCapitalize="none"
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      letterSpacing: 0.57,
+                      lineHeight: 19,
+                    }}
+                  />
+                </View>
+              </View>
+            </SafeAreaView>
+          </View>
+        </ImageBackground>
+        <View style={styles.tournamentTypeView}>
+          <Text style={styles.tournamentTypeText}>Tournament Type</Text>
+          <RadioButton
+            radio_props={radio_props}
+            formHorizontal={false}
+            style={{marginBottom: 20}}
+            onPress={getData}
+          />
         </View>
-      </ImageBackground>
-      <View style={styles.tournamentTypeView}>
-        <Text style={styles.tournamentTypeText}>Tournament Type</Text>
-        <RadioButton
-          radio_props={radio_props}
-          formHorizontal={false}
-          style={{marginBottom: 20}}
-          onPress={getData}
-        />
-      </View> 
       </ScrollView>
       <View style={styles.gradientButton}>
         <GradientButton
@@ -115,7 +136,7 @@ console.log(reduxdata)
           end={{x: 2, y: 0}}
           colors={['#FFBA8C', '#FE5C6A']}
           text="CREATE TOURNAMENT"
-          style={{width: '100%', marginTop: 0,height:48}}
+          style={{width: '100%', marginTop: 0, height: 48}}
           textstyle={{
             height: 16,
             fontWeight: '500',
@@ -134,11 +155,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    backgroundColor:'#FFFFFF',
+    backgroundColor: '#FFFFFF',
   },
   profileDetailsContainer: {
     height: 297,
-
   },
   header: {
     flexDirection: 'row',
@@ -205,11 +225,11 @@ const styles = StyleSheet.create({
   },
   gradientButton: {
     alignItems: 'flex-end',
-    marginBottom:Platform.OS === 'ios' ? 20:0
+    marginBottom: Platform.OS === 'ios' ? 20 : 0,
   },
-  textInput:{
-    alignSelf:'center',
-    width:260,
+  textInput: {
+    alignSelf: 'center',
+    width: 260,
   },
 });
 
