@@ -34,8 +34,9 @@ const ProfileImagePicker = ({
       height: 104,
       cropping: true,
     }).then(image => {
-      setImageUri(image.path);
-      getImageUri(image.path);
+      setImageUri(`file://${image.path}`);
+      const {path, filename, mime} = image;
+      getImageUri({path, filename, mime});
       // console.log(image.path);
     });
   };

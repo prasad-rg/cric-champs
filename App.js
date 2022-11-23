@@ -14,6 +14,7 @@ import {Button, RadioButton} from 'react-native-paper';
 import ReadMeExampleSingle from './test';
 import DateScreen from './src/screens/DateScreen';
 import TimeScreen from './src/screens/TimeScreen';
+import RootNavigator from './src/navigation/RootNavigator'
 
 let persistor = persistStore(store);
 
@@ -22,7 +23,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <AppStack />
+        <RootNavigator />
+        {/* <TimeScreen /> */}
       </PersistGate>
     </Provider>
     // <ProfileImagePicker/>
