@@ -20,8 +20,9 @@ import * as yup from 'yup';
 import ProfileImagePicker from '../components/ProfileImagePicker';
 import {createFormData} from '../utils/createFormData';
 import {createTeam} from '../services/manageTournament';
-import { setTeamId } from '../redux/manageTournamentSlice';
-import { useDispatch } from 'react-redux';
+import {setTeamId} from '../redux/manageTournamentSlice';
+import {useDispatch} from 'react-redux';
+import {addParticipant} from '../services/manageTournament';
 
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -34,10 +35,8 @@ const AddTeam = ({navigation}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const teamId = useSelector(state => state.tournamentdata.teamId)
 
-  console.log(participantdata);
-
+  // console.log(playerData)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
@@ -63,18 +62,55 @@ const AddTeam = ({navigation}) => {
               image: profilePictureUri,
               tournamentId: tournamentId,
             });
-            // const participantFormData = createFormData({
-
-            // })
             const response = await createTeam(formData);
-            dispatch(setTeamId(response.data._id))
-            
             if (response.status) {
+              dispatch(setTeamId(response.data._id));
               console.log('HIIIIIIIIIIIII', response);
-              navigation.goBack();
+              var result =  await Promise.all(participantdata.map(async (el) => {
+                var object = Object.assign({}, el);
+                object.name = el.name;
+                object.city = el.city;
+                object.phoneNo = el.phoneNo;
+                object.batting = el.batting;
+                object.bowling  = el.bowling;
+                object.bowlingtype = el.bowlingtype;
+                object.designation = el.designation;
+                object.expertise = el.expertise;
+                object.image = el.image;
+                object.tournamentId = tournamentId;
+                object.teamId = response.data._id;
+                object.role = 'player';
+
+                Object.keys(object).forEach(key => {
+                  if (object[key] === '') {
+                    delete object[key];
+                  }
+                });
+                
+                console.log(object);
+                const participantFormData = createFormData(object);
+                const createparticipantresponse =await addParticipant(
+                  participantFormData,
+                );
+                console.log("heeeeeeeeee",createparticipantresponse)
+                return createparticipantresponse;
+              }));
+
+              const status = result.map((stat)=>{
+                console.log(stat)
+              })
+              // const participantFormData = createFormData(result);
+              // console.log('I am form data after map', participantFormData);
+              // const createparticipantresponse = await addParticipant(
+              //   participantFormData,
+              // );
+              // console.log('final responseeeeeeeee', createparticipantresponse);
+              // navigation.goBack();
+            } else {
+              console.log('Please refresh the token');
             }
           } else {
-            Alert.alert('Please Add profile picture');
+            console.log('Please Add profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (

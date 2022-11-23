@@ -1,4 +1,5 @@
 import {BASE_URL} from '../api/baseURL';
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyMDc2NDMsImV4cCI6MTY2OTIxMTI0M30.1rDwkAot2S8I6OTaORJjfejOvRjzJdQfaFU2_f8NFsE';
 
 export const createTournament = async formData => {
   let res = await fetch(`${BASE_URL}/api/tournament`, {
@@ -6,7 +7,7 @@ export const createTournament = async formData => {
     body: formData,
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkxMjU2MjAsImV4cCI6MTY2OTEyOTIyMH0.fsjSpbhsVcANg4OYURGhjGGeM4-aUefwiD0rvA3-Q7s',
+        `Bearer ${token}`,
     },
   });
   const jsonResponse = await res.json();
@@ -19,7 +20,8 @@ export const createTeam = async formData => {
     body: formData,
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkxMjU2MjAsImV4cCI6MTY2OTEyOTIyMH0.fsjSpbhsVcANg4OYURGhjGGeM4-aUefwiD0rvA3-Q7s',
+      `Bearer ${token}`,
+
     },
   });
   const jsonResponse = await res.json();
@@ -32,7 +34,8 @@ export const addParticipant = async formData => {
     body: formData,
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkxMjU2MjAsImV4cCI6MTY2OTEyOTIyMH0.fsjSpbhsVcANg4OYURGhjGGeM4-aUefwiD0rvA3-Q7s',
+      `Bearer ${token}`,
+
     },
   });
   const jsonResponse = await res.json();

@@ -67,24 +67,24 @@ const AddPlayer = ({navigation}) => {
 
   const Designation = [
     {label: 'Captain', value: 'Captain', id: 0},
-    {label: 'Vice Captain', value: 'V C', id: 1},
+    {label: 'Vice Captain', value: 'Vice Captain', id: 1},
   ];
 
   const Expertise = [
     {label: 'Batting', value: 'Batting', id: 0},
     {label: 'Bowling', value: 'Bowling', id: 1},
     {label: 'All Rounder', value: 'All Rounder', id: 2},
-    {label: 'Wicket Keeper', value: 'W K', id: 3},
+    {label: 'Wicket Keeper', value: 'Wicket Keeper', id: 3},
   ];
 
   const Batting = [
-    {label: 'Right Handed', value: 'Right Hand Batsman', id: 0},
-    {label: 'Left Handed', value: 'Left Hand Batsman', id: 1},
+    {label: 'Right Handed', value: 'Right Handed', id: 0},
+    {label: 'Left Handed', value: 'Left Handed', id: 1},
   ];
 
   const Bowling = [
-    {label: 'Right Handed', value: 'Right Hand Bowler', id: 0},
-    {label: 'Left Handed', value: 'Left Hand Bowler ', id: 1},
+    {label: 'Right Handed', value: 'Right Handed', id: 0},
+    {label: 'Left Handed', value: 'Left Handed', id: 1},
   ];
   const BowlingType = [
     {label: 'Fast', value: 'Fast', id: 0},

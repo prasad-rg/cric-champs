@@ -31,7 +31,7 @@ const CreateTournament = ({navigation}) => {
   const [tournamentName, setTournamentName] = useState('');
   const [tournamenttype, setTournamentType] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
- 
+
   const dispatch = useDispatch();
 
   const getDetails = data => {
@@ -46,16 +46,16 @@ const CreateTournament = ({navigation}) => {
         image: profilePictureUri,
       });
       const response = await createTournament(formData);
-      const {code, _id, userId, name, email} = response.data.result;
-      const tournamentresponse = {
-        code: code,
-        tournamentid: _id,
-        userId: userId,
-        name: name,
-        email: email,
-      };
-     
+      console.log("I am create tournament responseeee",response)
       if (response.status) {
+        const {code, _id, userId, name, email} = response.data.result;
+        const tournamentresponse = {
+          code: code,
+          tournamentid: _id,
+          userId: userId,
+          name: name,
+          email: email,
+        };
         dispatch(setTournamentData(tournamentresponse));
         navigation.navigate('CreateTournamentSuccess');
       }
