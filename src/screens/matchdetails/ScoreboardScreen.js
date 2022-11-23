@@ -8,7 +8,6 @@ import {
   Col,
 } from 'react-native-table-component';
 
-
 const ScoreboardScreen = () => {
   const [tableHead, setTableHead] = useState([
     'Batsman',
@@ -19,53 +18,86 @@ const ScoreboardScreen = () => {
     'SR',
   ]);
   const [tableData, setTableData] = useState([
-    ['Anupam K\c Mohan b Nilesh', '0', '0', '0', '0', '0'],
-    // ['Sripathi J', '0', '0', '0', '0', '0'],
-    // ['Anupam K', '0', '0', '0', '0', '0'],
-    // ['Sripathi J', '0', '0', '0', '0', '0'],
-    // ['Anupam K', '0', '0', '0', '0', '0'],
-  
+    ['Anupam K \nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
+    ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
+    ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
+    ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
+    ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
 
+    // ['Anupam K', '0', '0', '0', '0', '0'],
   ]);
+  const [tableHeader, setTableHeader] = useState([
+    'Bowler',
+    'O',
+    'M',
+    'R',
+    'W',
+    'ER',
+  ]);
+  const [data, setData] = useState([['Sashikant D', '0', '0', '0', '0', '0'],['Sashikant D', '0', '0', '0', '0', '0']]);
+
   return (
     <View style={styles.container}>
       <ScrollView>
-      <View style={styles.mainView}>
-        <Text style={styles.header}>UDL Strikers Innings</Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.number1}>67/3</Text>
-          <Text style={styles.secondNumber}>(8.3)</Text>
+        <View style={styles.mainView}>
+          <Text style={styles.header}>UDL Strikers Innings</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.number1}>67/3</Text>
+            <Text style={styles.secondNumber}>(8.3)</Text>
+          </View>
         </View>
-      </View>
-  
-          <Table style={{marginTop:10}}>
+
+        <Table style={{marginTop: 10}}>
+          <Row
+            data={tableHead}
+            flexArr={[3, 1, 1, 1, 1, 1]}
+            style={styles.table_header}
+            textStyle={styles.header_text}
+          />
+          <TableWrapper>
+            <Rows
+              data={tableData}
+              heightArr={[50, 50, 50, 50, 50, 50]}
+              flexArr={[3, 1, 1, 1, 1, 1]}
+              textStyle={styles.row_text}
+            />
+          </TableWrapper>
+        </Table>
+
+        <View style={styles.extraView}>
+          <Text style={styles.extra}> Extras</Text>
+          <View style={{flexDirection: 'row', marginHorizontal: '10%',marginLeft:"27%"}}>
+            <Text style={styles.extraNumber}>3</Text>
+            <Text style={styles.extraInfo}> (b 2, lb 0, w1, nb 0, p 0)</Text>
+          </View>
+        </View>
+        <View style={{height: 50, alignItems: 'center', flexDirection: 'row'}}>
+          <Text style={styles.totalText}>Total</Text>
+          <Text style={styles.totalNumber}>67</Text>
+        </View>
+        <View>
+          <Text style={styles.fallText}>Fall of Wickets</Text>
+          <Text style={styles.fallView}>
+            2/1 (Naveen F, 0.5), 6/2 (Prayag G, 1.4),{'\n'} 8/3 (Nithin R, 2.1)
+          </Text>
+        </View>
+        <Table>
             <Row
-              data={tableHead}
+              data={tableHeader}
               flexArr={[3, 1, 1, 1, 1, 1]}
               style={styles.table_header}
               textStyle={styles.header_text}
             />
             <TableWrapper>
               <Rows
-                data={tableData}
-                heightArr={[50, 50, 50, 50, 50, 50]}
+                data={data}
+                heightArr={[40, 40, 40, 40, 40, 40]}
                 flexArr={[3, 1, 1, 1, 1, 1]}
                 textStyle={styles.row_text}
               />
             </TableWrapper>
           </Table>
-  
-        <View style={{flexDirection:"row",paddingHorizontal:10,justifyContent:"space-between",marginRight:"13%"}}>
-          <Text style={styles.fallText}> Extras</Text>
-          <Text>3  (b 2, lb 0, w1, nb 0, p 0)</Text>
-        </View>
-        {/* <View style={{borderWidth:1}}>
-          <Text style={styles.fallText}>Fall of Wickets</Text>
-        </View>
-        <View style={{borderWidth:1}}>
-          <Text style={styles.fallText}>Fall of Wickets</Text>
-        </View> */}
-        </ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -136,7 +168,94 @@ const styles = StyleSheet.create({
   row_text: {
     paddingHorizontal: 15,
   },
-  fallText:{
-    height:50
+  fallText: {
+    height: 50,
+  },
+  extraView: {
+    height: 50,
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.1)',
+    borderTopColor: 'rgba(0,0,0,0.1)',
+  },
+  extra: {
+    height: 19,
+    // width: 40,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    letterSpacing: 0,
+    lineHeight: 16,
+    paddingHorizontal: 3,
+  },
+  extraNumber: {
+    height: 19,
+    // width: 40,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+
+    // paddingLeft: 66,
+  },
+  extraInfo: {
+    height: 19,
+    // width: 40,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    letterSpacing: 0,
+    lineHeight: 16,
+  },
+  totalText: {
+    height: 19,
+    // width: 32,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  totalNumber: {
+    height: 19,
+    // width: 32,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+   marginLeft:"25%"
+  },
+  fallText: {
+    height: 50,
+    // width: 32,
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: 'rgba(217,226,233,0.5)',
+  },
+  fallView:{
+
+    color: 'rgba(0,0,0,0.87)',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    letterSpacing: 0,
+    lineHeight: 28,
+    padding:15,
   }
 });

@@ -8,13 +8,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import React from 'react';
+import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import OutlinedButton from '../components/OutlinedButton';
 import RecentActivityCard from '../components/RecentActivityCard';
 import {ScrollView} from 'react-native-gesture-handler';
+import {getTournamentByCode} from '../services/viewTournament';
+import {useDispatch} from 'react-redux';
+import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 
 const HomeScreen = ({navigation}) => {
+  const [code, setCode] = useState('');
+  const [inputTextError, setInputTextError] = useState('');
+  const dispatch = useDispatch();
+
+  const handelTextChange = text => {
+    setCode(text);
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
@@ -36,9 +47,36 @@ const HomeScreen = ({navigation}) => {
               Enter tournament code to view / manage
             </Text>
             <View style={styles.middleView}>
-              <TextInput style={styles.textInput} />
-              <OutlinedButton text="ENTER" />
+              <TextInput
+                style={styles.textInput}
+                onChangeText={text => handelTextChange(text)}
+                value={code}
+              />
+              <OutlinedButton
+                text="ENTER"
+                onPress={async () => {
+                  setInputTextError('');
+                  if (code !== '') {
+                    const res = await getTournamentByCode(code);
+                    if (res?.status === false) {
+                      setInputTextError(res.message.toUpperCase());
+                    } else {
+                      setInputTextError('');
+                      setCode('');
+                      dispatch(storeTournamentDetails(res));
+                      navigation.navigate('ViewScreen');
+                    }
+                  } else {
+                    setInputTextError(
+                      'Pleas Enter a Tournament Code to Proceed',
+                    );
+                  }
+                }}
+              />
             </View>
+            {inputTextError && (
+              <Text style={styles.errorText}>{inputTextError}</Text>
+            )}
             <Text style={styles.codeAcquired}>
               Code can be acquired from the admin.
             </Text>
@@ -174,5 +212,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 16,
     marginBottom: 16,
+  },
+  errorText: {
+    fontSize: 10,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });

@@ -27,6 +27,7 @@ const Fixture = () => {
             <Text style={styles.tryText}>TRY AGAIN</Text>
           </TouchableOpacity>
         </CustomModal>
+        
         <Button title="Open Modal" onPress={() => setVisible(true)} />
       </View>
     </SafeAreaView>
