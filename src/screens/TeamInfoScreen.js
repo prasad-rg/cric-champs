@@ -9,9 +9,8 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
-import TeamInfoTab from '../components/TeamInfoTab';
 import ProfileImagePicker from '../components/ProfileImagePicker';
-
+import TeamInfoTab from '../navigation/TeamInfoTab';
 const TeamInfoScreen = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
 

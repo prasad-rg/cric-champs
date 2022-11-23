@@ -32,7 +32,13 @@ const GroundsScreen = ({navigation}) => {
   }, []);
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigation.navigate('StadiumInformation')}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('StadiumInformation', {
+          groundId: item._id,
+          groundName: item.name,
+        })
+      }>
       <StadiumList
         text={item.name}
         source={{uri: item.groundPic.url}}
