@@ -6,6 +6,7 @@ import authReducer from './authSlice';
 import MatchReducer from './MatchSlice';
 import viewTournamentReducer from './viewTournamentSlice';
 import ParticipantReducer from './ParticipantSlice';
+import manageTournamentReducer from './manageTournamentSlice';
 
 const persistConfig = {
   key: 'root',
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   auth: authReducer,
   matchdata: MatchReducer,
   tournamentDetails: viewTournamentReducer,
+  tournamentdata: manageTournamentReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 

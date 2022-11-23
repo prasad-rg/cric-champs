@@ -47,9 +47,9 @@ const TimeScreen = ({navigation}) => {
           </View>
         </SafeAreaView>
       </View>
-      <ScrollView contentContainerStyle={{flex: 1}}>
+  
         <TimeTab />
-      </ScrollView>
+   
     </View>
   );
 };

@@ -86,7 +86,7 @@ const HomeScreen = ({navigation}) => {
               end={{x: 2, y: 0}}
               colors={['#FFBA8C', '#FE5C6A']}
               text="CREATE TOURNAMENT"
-              onPress={() => navigation.navigate('AuthStack')}
+              onPress={() => navigation.navigate('AppStack')}
               //  style={{width:'100%'}}
             />
             <View style={styles.recentActivityView}>

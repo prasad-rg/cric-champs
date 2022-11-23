@@ -18,17 +18,25 @@ import {useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import ProfileImagePicker from '../components/ProfileImagePicker';
+import {createFormData} from '../utils/createFormData';
+import {createTeam} from '../services/manageTournament';
+import {setTeamId} from '../redux/manageTournamentSlice';
+import {useDispatch} from 'react-redux';
+import {addParticipant} from '../services/manageTournament';
 
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
-
+  const dispatch = useDispatch();
   const getDetails = data => {
     setProfilePictureUri(data);
   };
 
   const participantdata = useSelector(state => state.participantdata.value);
-  console.log(participantdata)
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
 
+  // console.log(playerData)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
@@ -47,23 +55,63 @@ const AddTeam = ({navigation}) => {
           name: '',
           city: '',
         }}
-        onSubmit={values => {
-          let teamDetails = {
-            ...values,
-            image: profilePictureUri,
-          };
-          console.log(teamDetails);
-          navigation.goBack();
-          // if (profilePictureUri !== '') {
-          //   let data = {
-          //     ...values,
-          //     image: profilePictureUri,
-          //   };
-          //   console.log(data)
-          //   // dispatch(addTeam(data));
-          // } else {
-          //   Alert.alert('Please Add profile picture');
-          // }
+        onSubmit={async values => {
+          if (profilePictureUri !== '') {
+            const formData = createFormData({
+              ...values,
+              image: profilePictureUri,
+              tournamentId: tournamentId,
+            });
+            const response = await createTeam(formData);
+            if (response.status) {
+              dispatch(setTeamId(response.data._id));
+              console.log('HIIIIIIIIIIIII', response);
+              var result =  await Promise.all(participantdata.map(async (el) => {
+                var object = Object.assign({}, el);
+                object.name = el.name;
+                object.city = el.city;
+                object.phoneNo = el.phoneNo;
+                object.batting = el.batting;
+                object.bowling  = el.bowling;
+                object.bowlingtype = el.bowlingtype;
+                object.designation = el.designation;
+                object.expertise = el.expertise;
+                object.image = el.image;
+                object.tournamentId = tournamentId;
+                object.teamId = response.data._id;
+                object.role = 'player';
+
+                Object.keys(object).forEach(key => {
+                  if (object[key] === '') {
+                    delete object[key];
+                  }
+                });
+                
+                console.log(object);
+                const participantFormData = createFormData(object);
+                const createparticipantresponse =await addParticipant(
+                  participantFormData,
+                );
+                console.log("heeeeeeeeee",createparticipantresponse)
+                return createparticipantresponse;
+              }));
+
+              const status = result.map((stat)=>{
+                console.log(stat)
+              })
+              // const participantFormData = createFormData(result);
+              // console.log('I am form data after map', participantFormData);
+              // const createparticipantresponse = await addParticipant(
+              //   participantFormData,
+              // );
+              // console.log('final responseeeeeeeee', createparticipantresponse);
+              // navigation.goBack();
+            } else {
+              console.log('Please refresh the token');
+            }
+          } else {
+            console.log('Please Add profile picture');
+          }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>
