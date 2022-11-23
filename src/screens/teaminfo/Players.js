@@ -31,11 +31,21 @@ const Players = ({navigation, route}) => {
     }
   };
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PlayerProfile')}>
-      <TeamListName source={item.profilePic.url} text={item.name} />
-    </TouchableOpacity>
-  );
+  const renderItem = ({item}) => {
+    // console.warn(item._id);
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('PlayerProfile', {
+            teamId: route.params.teamId,
+            tournamentId: tournamentDetails._id,
+            playerId: item._id,
+          })
+        }>
+        <TeamListName source={item.profilePic.url} text={item.name} />
+      </TouchableOpacity>
+    );
+  };
   useEffect(() => {
     loadPlayers();
   }, []);

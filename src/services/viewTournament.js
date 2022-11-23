@@ -120,3 +120,36 @@ export const getTeamInfoByTeamIdAndTournamentId = async (
     return error.response.data;
   }
 };
+
+export const getPlayerDetailsByTeamIdAndTournamentIdAndPlayerId = async (
+  playerId,
+  teamId,
+  tournamentId,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/participant/player/${playerId}?tournamentId=${tournamentId}&teamId=${teamId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getGroundDetailByGroundIdAndTournamentId = async (
+  groundId,
+  tournamentId,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/tournament/ground-details/${groundId}?tournamentId=${tournamentId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

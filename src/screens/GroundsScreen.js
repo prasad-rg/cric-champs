@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -31,11 +32,13 @@ const GroundsScreen = ({navigation}) => {
   }, []);
 
   const renderItem = ({item}) => (
-    <StadiumList
-      text={item.name}
-      source={{uri: item.groundPic.url}}
-      place={item.city}
-    />
+    <TouchableOpacity onPress={() => navigation.navigate('StadiumInformation')}>
+      <StadiumList
+        text={item.name}
+        source={{uri: item.groundPic.url}}
+        place={item.city}
+      />
+    </TouchableOpacity>
   );
 
   return (
