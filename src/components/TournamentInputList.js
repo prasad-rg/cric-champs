@@ -1,22 +1,27 @@
-import {SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 
-const TournamentInputList = ({text,number}) => {
+const TournamentInputList = ({text, number, onPress, navigation}) => {
   return (
-
-      <View style={styles.card}>
-        <Text style={styles.teams}>{text}</Text>
-        <View style={styles.arrowView}>
-          <Text style={styles.number}>{number}</Text>
-          <TouchableOpacity>
+    <View style={styles.card}>
+      <Text style={styles.teams}>{text}</Text>
+      <View style={styles.arrowView}>
+        <Text style={styles.number}>{number}</Text>
+        <TouchableOpacity onPress={onPress}>
           <Image
             source={require('../../assets/images/forward_arrow.png')}
             style={styles.image}
           />
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
-
+    </View>
   );
 };
 

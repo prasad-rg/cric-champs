@@ -6,6 +6,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import OnBoardingStack from './OnBoardingStack';
 import AuthStack from './AuthStack';
+import AppStack from './AppStack';
 import HomeStack from './HomeStack';
 import ViewTournamentTab from './ViewTournamentTab';
 import ViewScreen from '../screens/ViewScreen';
@@ -13,8 +14,7 @@ import {useSelector} from 'react-redux';
 import TeamInfoScreen from '../screens/TeamInfoScreen';
 import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
-import AppStack from '../navigation/AppStack';
-
+import ManageScreen from '../screens/ManageScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,11 +34,6 @@ const RootNavigator = () => {
         <Stack.Screen
           name="HomeStack"
           component={HomeStack}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AppStack"
-          component={AppStack}
           options={{headerShown: false}}
         />
 
@@ -69,6 +64,16 @@ const RootNavigator = () => {
         <Stack.Screen
           name="StadiumInformation"
           component={StadiumInformation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ManageScreen"
+          component={ManageScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AppStack"
+          component={AppStack}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

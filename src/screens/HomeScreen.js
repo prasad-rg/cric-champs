@@ -35,6 +35,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     const getRecentDetails = async tournamentIds => {
       const recents = await getRecentActivities({tournamentIds});
+      // console.log(recents);
       if (recents.status) {
         setRecentsData(recents.data.data);
       } else {

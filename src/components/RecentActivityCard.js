@@ -49,9 +49,18 @@ const RecentActivityCard = ({
           <Text style={styles.badgeText}>{status}</Text>
         </View>
         {isAdmin && (
-          <Pressable>
+          <TouchableOpacity
+            onPress={async () => {
+              const res = await getTournamentByCode(matchCode);
+              if (res?.status === false) {
+                Alert.alert(res.message.toUpperCase());
+              } else {
+                dispatch(storeTournamentDetails(res));
+                navigation.navigate('ManageScreen');
+              }
+            }}>
             <Text style={styles.actionText}>MANAGE</Text>
-          </Pressable>
+          </TouchableOpacity>
         )}
         <TouchableOpacity
           onPress={async () => {

@@ -32,7 +32,6 @@ const Players = ({navigation, route}) => {
   };
 
   const renderItem = ({item}) => {
-    // console.warn(item._id);
     return (
       <TouchableOpacity
         onPress={() =>

@@ -1,20 +1,81 @@
-import {ScrollView, StyleSheet, Text, View, Platform} from 'react-native';
-import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
+import {useSelector} from 'react-redux';
+import {tournamentOverview} from '../../services/tournamentManagement';
+
 const Tournament = ({navigation}) => {
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const [currentOverview, setCurrentOverview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadTournamentOverView = async () => {
+    setIsLoading(true);
+    const response = await tournamentOverview(tournamentDetails._id);
+    setIsLoading(false);
+    console.log(response.data.data);
+    if (response.status) {
+      setCurrentOverview(response.data.data);
+    }
+  };
+
+  useEffect(() => {
+    loadTournamentOverView();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <ScrollView>
         <View style={styles.mainView}>
-          <TournamentInputList text="Teams" number="6" />
-          <TournamentInputList text="Overs" number="5" />
-          <TournamentInputList text="Grounds" number="4" />
-          <TournamentInputList text="Umpires" number="4" />
-          <TournamentInputList text="Start Date" number="Sat, Oct 15 2017" />
-          <TournamentInputList text="End Date" number="Sun, Oct 16 2017" />
-          <TournamentInputList text="Start of Play" number="9:00 AM" />
-          <TournamentInputList text="End of Play" number="6:00 PM" />
+          <TournamentInputList
+            text="Teams"
+            number={currentOverview !== null && currentOverview?.teams}
+            onPress={() =>
+              navigation.navigate('AppStack', {screen: 'TeamsList'})
+            }
+          />
+          <TournamentInputList
+            text="Overs"
+            number={currentOverview !== null && currentOverview?.overs}
+          />
+          <TournamentInputList
+            text="Grounds"
+            number={currentOverview !== null && currentOverview?.grounds}
+          />
+          <TournamentInputList
+            text="Umpires"
+            number={currentOverview !== null && currentOverview?.umpires}
+          />
+          <TournamentInputList
+            text="Start Date"
+            number={
+              currentOverview !== null && currentOverview?.startDateEnglish
+            }
+          />
+          <TournamentInputList
+            text="End Date"
+            number={currentOverview !== null && currentOverview?.endDateEnglish}
+          />
+          <TournamentInputList
+            text="Start of Play"
+            number={
+              currentOverview !== null && currentOverview?.startTimeNormalFormat
+            }
+          />
+          <TournamentInputList
+            text="End of Play"
+            number={
+              currentOverview !== null && currentOverview?.endTimeNormalFormat
+            }
+          />
         </View>
         <View style={styles.card}>
           <Text style={styles.cancelText}>Cancel Tournament</Text>
