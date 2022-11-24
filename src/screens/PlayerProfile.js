@@ -1,4 +1,11 @@
-import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Alert,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {TextField} from 'rn-material-ui-textfield';
@@ -105,7 +112,13 @@ const PlayerProfile = ({navigation, route}) => {
   }, []);
   return (
     <View style={styles.primaryContainer}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={loadPlayerDetails}
+          />
+        }>
         <AddProfileDetails
           navigation={navigation}
           title={currentPlayerDetails?.name}

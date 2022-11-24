@@ -6,6 +6,7 @@ import MatchReducer from './MatchSlice';
 import viewTournamentReducer from './viewTournamentSlice';
 import ParticipantReducer from './ParticipantSlice';
 import manageTournamentReducer from './manageTournamentSlice';
+import recentActivitiesReducer from './recentActivitiesSlice';
 import GroundReducer from './GroundSlice';
 import UmpireReducer from './umpireSlice';
 
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   matchdata: MatchReducer,
   tournamentDetails: viewTournamentReducer,
   tournamentdata: manageTournamentReducer,
+  recentActivities: recentActivitiesReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 
