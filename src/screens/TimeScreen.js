@@ -47,9 +47,8 @@ const TimeScreen = ({navigation}) => {
           </View>
         </SafeAreaView>
       </View>
-  
-        <TimeTab />
-   
+
+      <TimeTab />
     </View>
   );
 };
@@ -150,11 +149,11 @@ const styles = StyleSheet.create({
   datecontainer: {
     flexDirection: 'row',
     // justifyContent:'center',
-    alignItems:'center',
-    marginLeft:62,
-    marginTop:15,
+    alignItems: 'center',
+    marginLeft: 62,
+    marginTop: 15,
   },
-  timeinhour:{
+  timeinhour: {
     height: 71,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Regular',
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     lineHeight: 71,
     textAlign: 'right',
   },
-  timeinmin:{
+  timeinmin: {
     height: 71,
     color: 'rgba(255,255,255,0.7)',
     fontFamily: 'Roboto-Regular',
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     lineHeight: 71,
     textAlign: 'right',
   },
-  timeformatinam:{
+  timeformatinam: {
     height: 19,
     width: 25,
     color: '#FFFFFF',
@@ -181,10 +180,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-    marginLeft:13,
-
+    marginLeft: 13,
   },
-  timeformatinpm:{
+  timeformatinpm: {
     height: 19,
     width: 25,
     color: 'rgba(255,255,255,0.7)',
@@ -193,6 +191,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-    marginLeft:13,
-  }
+    marginLeft: 13,
+  },
 });

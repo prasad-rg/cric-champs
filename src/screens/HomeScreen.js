@@ -6,25 +6,43 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import OutlinedButton from '../components/OutlinedButton';
 import RecentActivityCard from '../components/RecentActivityCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getTournamentByCode} from '../services/viewTournament';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
+import {storeRecentActivities} from '../redux/recentActivitiesSlice';
+import axios from 'axios';
+import {getRecentActivities} from '../services/recentActivities';
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
   const [inputTextError, setInputTextError] = useState('');
   const dispatch = useDispatch();
+  const {recentActivities} = useSelector(state => state.recentActivities);
+  const [recentsData, setRecentsData] = useState([]);
 
   const handelTextChange = text => {
     setCode(text);
   };
+
+  useEffect(() => {
+    const getRecentDetails = async tournamentIds => {
+      const recents = await getRecentActivities({tournamentIds});
+      if (recents.status) {
+        setRecentsData(recents.data.data);
+      } else {
+        Alert.alert('Recents Fetch Failed');
+      }
+    };
+    getRecentDetails(recentActivities);
+  }, [recentActivities]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -51,6 +69,7 @@ const HomeScreen = ({navigation}) => {
                 style={styles.textInput}
                 onChangeText={text => handelTextChange(text)}
                 value={code}
+                autoCapitalize="none"
               />
               <OutlinedButton
                 text="ENTER"
@@ -64,6 +83,7 @@ const HomeScreen = ({navigation}) => {
                       setInputTextError('');
                       setCode('');
                       dispatch(storeTournamentDetails(res));
+                      dispatch(storeRecentActivities(res._id));
                       navigation.navigate('ViewScreen');
                     }
                   } else {
@@ -91,10 +111,16 @@ const HomeScreen = ({navigation}) => {
             />
             <View style={styles.recentActivityView}>
               <Text style={styles.recentActivityText}>Recent Activities</Text>
-              <RecentActivityCard />
-              <RecentActivityCard />
-              <RecentActivityCard />
-              <RecentActivityCard />
+              {recentsData.map(tournament => (
+                <RecentActivityCard
+                  key={tournament._id}
+                  title={tournament.name}
+                  matchCode={tournament.code}
+                  isAdmin={tournament.isAdmin}
+                  navigation={navigation}
+                  id={tournament._id}
+                />
+              ))}
             </View>
           </View>
         </View>

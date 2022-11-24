@@ -57,7 +57,7 @@ const UmpiresList = ({navigation}) => {
           ) : (
             <View>
               {umpiredata.map(value => (
-                <View key={value?._id}>
+                <View key={value._id}>
                   <TeamListName
                     source={value?.groundPic.url}
                     text={value.name}

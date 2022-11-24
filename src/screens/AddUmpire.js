@@ -46,15 +46,16 @@ const AddUmpire = ({navigation}) => {
             let data = {
               ...values,
               image: profilePictureUri,
-              tournamentId: '637dbe83d4609e8e64d63b32',
+              tournamentId: '637efbd16b9ce8028082cb9d',
               teamId: '637dc46a4fd8760b8d0da1cc',
               role: 'umpire',
               tempId: uuid.v4(),
             };
             const umpireData = createFormData(data);
             const response = await addUmpires(umpireData);
+            console.log("response umpire",umpireData)
             if (response.status) {
-              dispatch(addUmpire(response.data.grounds));
+              dispatch(addUmpire(response.data));
               navigation.navigate('UmpiresList');
             }
           } else {
