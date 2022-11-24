@@ -22,9 +22,9 @@ const PlayersList = ({
           <Text style={styles.playerName}>{name}</Text>
           <Text style={styles.playerData}>
             {batting
-              ? batting
+              ? `${batting} Batsman`
               : bowling
-              ? bowling
+              ? `${bowling} Bowler`
               : expertise
               ? expertise
               : designation

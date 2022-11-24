@@ -12,9 +12,8 @@ export const participantSlice = createSlice({
         state.value.push(action.payload);
       },
     deletePlayers:  (state, action) => {
-      console.log('before deleting',state.value)
       state.value =[]
-      console.log('after deleting',state.value)
+      
 
     }
   },
