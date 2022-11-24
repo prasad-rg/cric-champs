@@ -15,8 +15,6 @@ import TeamInfoScreen from '../screens/TeamInfoScreen';
 import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
-import AppStack from '../navigation/AppStack';
-
 
 const Stack = createStackNavigator();
 
@@ -36,21 +34,6 @@ const RootNavigator = () => {
         <Stack.Screen
           name="HomeStack"
           component={HomeStack}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="AuthStack"
-          component={AuthStack}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-          }}
-        />
-
-        <Stack.Screen
-          name="AppStack"
-          component={AppStack}
           options={{headerShown: false}}
         />
 
