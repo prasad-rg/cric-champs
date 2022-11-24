@@ -9,7 +9,7 @@ const MatchCard = ({matchDetails}) => {
         <View style={styles.cardHeader}>
           <View>
             <Text style={styles.matchText}>
-              Match {matchDetails.matchNumber}
+              Match {matchDetails?.matchNumber}
             </Text>
             <Text style={styles.LeagueText}>League Play at Ground 1</Text>
           </View>
@@ -18,19 +18,19 @@ const MatchCard = ({matchDetails}) => {
               styles.statusContainer,
               {
                 backgroundColor:
-                  matchDetails.status.toUpperCase() == 'ABONDONED'
+                  matchDetails?.status.toUpperCase() == 'ABONDONED'
                     ? '#E05140'
-                    : matchDetails.status.toUpperCase() == 'PAST'
+                    : matchDetails?.status.toUpperCase() == 'PAST'
                     ? '#0075E1'
-                    : matchDetails.status.toUpperCase() == 'LIVE'
+                    : matchDetails?.status.toUpperCase() == 'LIVE'
                     ? '#23C05C'
-                    : matchDetails.status.toUpperCase() == 'UPCOMING'
+                    : matchDetails?.status.toUpperCase() == 'UPCOMING'
                     ? '#FCA900'
                     : '#FFFFFF',
               },
             ]}>
             <Text style={styles.statusText}>
-              {matchDetails.status.toUpperCase()}
+              {matchDetails?.status.toUpperCase()}
             </Text>
           </View>
         </View>
@@ -43,18 +43,18 @@ const MatchCard = ({matchDetails}) => {
             paddingTop: 20,
           }}>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>{matchDetails.team1Name}</Text>
-            {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+            <Text style={styles.name}>{matchDetails?.team1Name}</Text>
+            {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
               </>
-            ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+            ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
               </>
-            ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+            ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
@@ -67,18 +67,18 @@ const MatchCard = ({matchDetails}) => {
             )}
           </View>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>{matchDetails.team2Name}</Text>
-            {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+            <Text style={styles.name}>{matchDetails?.team2Name}</Text>
+            {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
               </>
-            ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+            ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
               </>
-            ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+            ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
               <>
                 <Text style={styles.number}>-</Text>
                 <Text style={styles.overs}>-</Text>
@@ -92,14 +92,14 @@ const MatchCard = ({matchDetails}) => {
           </View>
         </View>
         <View style={styles.messageView}>
-          {matchDetails.status.toUpperCase() === 'UPCOMING' ? (
+          {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
             <Text style={styles.message}>
-              {matchDetails.matchDateInEnglish},{' '}
-              {matchDetails.matchStartTimingInNormal} IST
+              {matchDetails?.matchDateInEnglish},{' '}
+              {matchDetails?.matchStartTimingInNormal} IST
             </Text>
-          ) : matchDetails.status.toUpperCase() === 'ABONDONED' ? (
+          ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
             <Text style={styles.message}>{matchDetails?.statusName}</Text>
-          ) : matchDetails.status.toUpperCase() === 'LIVE' ? (
+          ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
             <Text style={styles.message}>{matchDetails?.statusName}</Text>
           ) : (
             <Text style={styles.message}>{matchDetails?.statusName}</Text>
