@@ -2,7 +2,7 @@ import axios from 'axios';
 import {BASE_URL} from '../api/baseURL';
 
 const token =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyNjkwNTcsImV4cCI6MTY2OTI3MjY1N30.AEyAsXp-gTTV_0qDaoHG7xYUxGQVJg-0SWZE7XHQaYs';
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyNzIxMjksImV4cCI6MTY2OTI3NTcyOX0.nG0AXFpAl-vrbsW79XbC9sfyfncj1KMUH7Ztpv1Upfg';
 
 export const addOvers = async oversData => {
   try {
