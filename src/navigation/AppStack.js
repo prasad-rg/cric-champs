@@ -90,7 +90,7 @@ const AppStack = () => {
         options={{headerShown: false}}
       />
       </Stack.Navigator>
-</NavigationContainer>
+   </NavigationContainer>
   );
 };
 

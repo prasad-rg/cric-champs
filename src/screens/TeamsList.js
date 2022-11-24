@@ -9,21 +9,44 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useLayoutEffect, useState} from 'react';
+import {useIsFocused} from '@react-navigation/native';
 
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
+import {getTeamsByTournamentId} from '../services/viewTournament';
+
+import {useSelector} from 'react-redux';
 const TeamsList = ({navigation}) => {
+  const [currentTeams, setCurrentTeams] = useState([]);
+
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+
+  const loadTeams = async () => {
+    const response = await getTeamsByTournamentId(tournamentId);
+    if (response.status) {
+      setCurrentTeams(response.data);
+    }
+  };
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadTeams();
+    }
+  }, [focus]);
+
   const [team, setTeam] = useState(true);
-  const handleBack =()=>{
-    navigation.goBack()
-  }
-  const handlePress=()=>{
-    navigation.navigate('OversScreen')
-  }
-  const handleTeam =()=>{
-    navigation.navigate('AddTeam')
-  }
+  const handleBack = () => {
+    navigation.goBack();
+  };
+  const handlePress = () => {
+    navigation.navigate('OversScreen');
+  };
+  const handleTeam = () => {
+    navigation.navigate('AddTeam');
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -59,38 +82,11 @@ const TeamsList = ({navigation}) => {
             </View>
           ) : (
             <View style={styles.teamsView}>
-              <TeamListName
-                // source={require('../../assets/images/team1.png')}
-                text="Udupi Design Labs"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team2.png')}
-                text="Paras XI"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team3.png')}
-                text="Team Lions"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team4.png')}
-                text="Parra Warriors"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team5.png')}
-                text="Team Dabangg"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team3.png')}
-                text="Team Lions"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team4.png')}
-                text="Parra Warriors"
-              />
-              <TeamListName
-                // source={require('../../assets/images/team5.png')}
-                text="Team Dabangg"
-              />
+              {currentTeams.map(team => (
+                <View key={team._id}>
+                  <TeamListName source={team.logo.url} text={team.name} />
+                </View>
+              ))}
             </View>
           )}
         </View>
@@ -141,7 +137,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 100,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     height: 14,
     width: 60,
     color: '#FFFFFF',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 12,
     fontWeight: '900',
     letterSpacing: 0,
@@ -178,7 +174,7 @@ const styles = StyleSheet.create({
   teams: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 15,
     fontWeight: '500',
     letterSpacing: 0,
