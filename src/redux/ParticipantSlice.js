@@ -11,7 +11,13 @@ export const participantSlice = createSlice({
     addTeam: (state, action) => {
         state.value.push(action.payload);
       },
+    deletePlayers:  (state, action) => {
+      console.log('before deleting',state.value)
+      state.value =[]
+      console.log('after deleting',state.value)
+
+    }
   },
 });
-export const {addTeam} = participantSlice.actions;
+export const {addTeam,deletePlayers} = participantSlice.actions;
 export default participantSlice.reducer;

@@ -24,6 +24,7 @@ import {createTeam} from '../services/manageTournament';
 import {setTeamId} from '../redux/manageTournamentSlice';
 import {useDispatch} from 'react-redux';
 import {addParticipant} from '../services/manageTournament';
+import { deletePlayers } from '../redux/ParticipantSlice';
 
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -93,7 +94,6 @@ const AddTeam = ({navigation}) => {
                 const createparticipantresponse =await addParticipant(
                   participantFormData,
                 );
-                console.log("heeeeeeeeee",createparticipantresponse)
                 return createparticipantresponse;
               }));
 
@@ -102,6 +102,7 @@ const AddTeam = ({navigation}) => {
               })
               if (status){
                 navigation.goBack()
+                dispatch(deletePlayers())
               }else{
                 Alert.alert("Something went wrong. Please try again")
               }
