@@ -24,6 +24,7 @@ const App = () => {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <RootNavigator />
+        {/* <AppStack/> */}
         {/* <TimeScreen /> */}
       </PersistGate>
     </Provider>

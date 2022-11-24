@@ -10,6 +10,7 @@ const PlayersList = ({
   bowling,
 }) => {
   return (
+    // <TouchableOpacity>
     <View style={styles.card}>
       <View
         style={{
@@ -76,6 +77,7 @@ const PlayersList = ({
         </TouchableOpacity>
       </View>
     </View>
+    // </TouchableOpacity>
   );
 };
 

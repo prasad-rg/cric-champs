@@ -83,8 +83,8 @@ const TeamsList = ({navigation}) => {
           ) : (
             <View style={styles.teamsView}>
               {currentTeams.map(team => (
-                <View key={team._id}>
-                  <TeamListName source={team.logo.url} text={team.name} />
+                <View key={team?._id}>
+                  <TeamListName source={team?.logo.url} text={team?.name} />
                 </View>
               ))}
             </View>

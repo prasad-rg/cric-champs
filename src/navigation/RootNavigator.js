@@ -13,6 +13,8 @@ import {useSelector} from 'react-redux';
 import TeamInfoScreen from '../screens/TeamInfoScreen';
 import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
+import AppStack from '../navigation/AppStack';
+
 
 const Stack = createStackNavigator();
 
@@ -34,16 +36,21 @@ const RootNavigator = () => {
           component={HomeStack}
           options={{headerShown: false}}
         />
-       
-          <Stack.Screen
-            name="AuthStack"
-            component={AuthStack}
-            options={{
-              headerShown: false,
-              cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-            }}
-          />
-        
+        <Stack.Screen
+          name="AppStack"
+          component={AppStack}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="AuthStack"
+          component={AuthStack}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+          }}
+        />
+
         <Stack.Screen
           name="ViewScreen"
           component={ViewScreen}
