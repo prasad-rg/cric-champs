@@ -13,10 +13,15 @@ import React, {useState} from 'react';
 import StadiumList from '../components/StadiumList';
 import GradientButton from '../components/GradientButton';
 import {useSelector} from 'react-redux';
+import { deleteGround } from '../redux/GroundSlice';
+import { useDispatch } from 'react-redux';
 
 const Ground = ({navigation}) => {
+  const dispatch=useDispatch();
   const handlePress = () => {
+
     navigation.navigate('UmpiresList');
+    dispatch(deleteGround());
   };
   const grounddata = useSelector(state => state.grounddata.value);
 
