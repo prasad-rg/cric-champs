@@ -35,7 +35,7 @@ export const addGrounds = async formData => {
 };
 
 export const addUmpires = async formData => {
-  let res = await fetch(`${BASE_URL}/api/tournament/ground`, {
+  let res = await fetch(`${BASE_URL}/api/participant`, {
     method: 'post',
     body: formData,
     headers: {

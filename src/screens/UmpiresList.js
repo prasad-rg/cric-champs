@@ -9,17 +9,45 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import TeamListName from '../components/TeamListName';
 import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+
+import {getUmpiresByTournamentId} from '../services/viewTournament';
 
 const UmpiresList = ({navigation}) => {
+  const [currentUmpires, setCurrentUmpires] = useState([]);
+  // console.log("current umpires",currentUmpires)
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  
+  const loadUmpires = async () => {
+    const response = await getUmpiresByTournamentId('637efbd16b9ce8028082cb9d');
+    console.log('resp', response);
+
+    if (response.status) {
+      setCurrentUmpires(response.data);
+    }
+  };
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadUmpires();
+    }
+  }, [focus]);
+
+  // useEffect(() => {
+  //   loadUmpires();
+  // }, []);
+
   const handlePress = () => {
     navigation.navigate('DateScreen');
   };
 
-  const umpiredata = useSelector(state => state.umpiredata.value);
+ 
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -50,17 +78,17 @@ const UmpiresList = ({navigation}) => {
         </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.umpire}>Umpires</Text>
-          {umpiredata.length === 0 ? (
+          {currentUmpires.length === 0 ? (
             <View style={styles.nogroundview}>
               <Text style={styles.nogrounds}>No Umpires Added Yet!</Text>
             </View>
           ) : (
             <View>
-              {umpiredata.map(value => (
-                <View key={value._id}>
+              {currentUmpires.map(value => (
+                <View key={value?._id}>
                   <TeamListName
-                    source={value?.groundPic.url}
-                    text={value.name}
+                    source={value?.profilePic.url}
+                    text={value?.name}
                   />
                 </View>
               ))}
@@ -73,7 +101,7 @@ const UmpiresList = ({navigation}) => {
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={
-            umpiredata.length === 0
+            currentUmpires.length === 0
               ? ['#999999', '#999999']
               : ['#FFBA8C', '#FE5C6A']
           }

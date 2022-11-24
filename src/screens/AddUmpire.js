@@ -56,13 +56,11 @@ const AddUmpire = ({navigation}) => {
             };
             const umpireData = createFormData(data);
             const response = await addUmpires(umpireData);
-            console.log("response umpire",umpireData)
+            console.log("response umpire",response)
             if (response.status) {
-              dispatch(addUmpire(response.data));
-              navigation.navigate('UmpiresList');
+              // dispatch(addUmpire(response.data));
+              navigation.goBack();
             }
-          } else {
-            Alert.alert('Please Add profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
