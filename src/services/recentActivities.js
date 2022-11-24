@@ -11,7 +11,7 @@ export const getRecentActivities = async tournamentIds => {
       {
         headers: {
           Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyNzIxMjksImV4cCI6MTY2OTI3NTcyOX0.nG0AXFpAl-vrbsW79XbC9sfyfncj1KMUH7Ztpv1Upfg',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyODg4ODgsImV4cCI6MTY2OTI5MjQ4OH0.iwalM2BrOhVSfJ-9z1gQJEPVIgy4IWzuhQW93Z5ADnE',
         },
       },
     );

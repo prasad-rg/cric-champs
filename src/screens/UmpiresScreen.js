@@ -18,6 +18,7 @@ const UmpiresScreen = () => {
   const loadUmpires = async () => {
     setIsLoading(true);
     const response = await getUmpiresByTournamentId(tournamentDetails._id);
+    // console.log(response);
     setIsLoading(false);
     if (response.status) {
       setCurrentUmpires(response.data);
