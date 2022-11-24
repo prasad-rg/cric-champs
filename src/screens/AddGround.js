@@ -4,7 +4,7 @@ import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
-import {addGround} from '../redux/GroundSlice';
+import {addGround, deleteGround} from '../redux/GroundSlice';
 import {useDispatch} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
 import uuid from 'react-native-uuid';
@@ -44,9 +44,11 @@ const AddGround = ({navigation}) => {
             };
             const groundData = createFormData(data);
             const response = await addGrounds(groundData);
+            // console.log("ground details",response.data.grounds)
             if (response.status) {
               dispatch(addGround(response.data.grounds));
-              navigation.navigate('Ground');
+              navigation.goBack();
+              
             }
 
             Alert.alert('Please Add profile picture');
