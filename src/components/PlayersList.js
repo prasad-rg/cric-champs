@@ -41,9 +41,9 @@ const PlayersList = ({
           backgroundColor:
             designation == 'Captain'
               ? '#B8E986'
-              : designation == 'V C'
+              : designation == 'Vice Captain'
               ? '#FFBA7F'
-              : expertise == 'W K'
+              : expertise == 'Wicket Keeper'
               ? '#7FC2FF'
               : '#FFFFFF',
           alignItems: 'center',
@@ -65,10 +65,12 @@ const PlayersList = ({
               letterSpacing: 0,
               textAlign: 'center',
             }}>
-            {designation
-              ? designation.toUpperCase()
-              : expertise == 'W K'
-              ? expertise.toUpperCase()
+            {designation == 'Captain'
+              ? 'CAPTAIN'
+              :designation == 'Vice Captain'
+              ? 'V C'
+              : expertise == 'Wicket Keeper'
+              ? 'W C'
               : ' '}
           </Text>
         </TouchableOpacity>

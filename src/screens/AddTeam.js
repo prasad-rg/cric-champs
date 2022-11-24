@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   Dimensions,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
@@ -99,6 +100,11 @@ const AddTeam = ({navigation}) => {
               const status = result.map((stat)=>{
                 console.log(stat)
               })
+              if (status){
+                navigation.goBack()
+              }else{
+                Alert.alert("Something went wrong. Please try again")
+              }
               // const participantFormData = createFormData(result);
               // console.log('I am form data after map', participantFormData);
               // const createparticipantresponse = await addParticipant(
