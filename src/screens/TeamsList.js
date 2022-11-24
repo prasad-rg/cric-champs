@@ -26,6 +26,7 @@ const TeamsList = ({navigation}) => {
 
   const loadTeams = async () => {
     const response = await getTeamsByTournamentId(tournamentId);
+    console.log("I am team response",response)
     if (response.status) {
       setCurrentTeams(response.data);
     }
@@ -36,6 +37,16 @@ const TeamsList = ({navigation}) => {
       loadTeams();
     }
   }, [focus]);
+
+  const handleTeamList = (team) =>{
+
+    navigation.navigate('TeamInfoScreen',{
+      teamId:team?._id,
+      teamName:team?.name,
+      teamLogo:team?.logo.url,
+    })
+    
+  }
 
   const [team, setTeam] = useState(true);
   const handleBack = () => {
@@ -84,7 +95,9 @@ const TeamsList = ({navigation}) => {
             <View style={styles.teamsView}>
               {currentTeams.map(team => (
                 <View key={team?._id}>
-                  <TeamListName source={team?.logo.url} text={team?.name} />
+                  <TouchableOpacity onPress={()=>handleTeamList(team)}>
+                    <TeamListName source={team?.logo.url} text={team?.name} />
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>
