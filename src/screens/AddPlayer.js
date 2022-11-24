@@ -12,6 +12,7 @@ import uuid from 'react-native-uuid';
 import {addTeam} from '../redux/ParticipantSlice';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import { Alert } from 'react-native';
 
 const AddPlayer = ({navigation}) => {
   const [designation, setDesignation] = useState('');

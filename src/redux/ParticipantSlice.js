@@ -14,7 +14,6 @@ export const participantSlice = createSlice({
     deletePlayers:  (state, action) => {
       state.value =[]
       
-
     }
   },
 });
