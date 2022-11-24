@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Platform, View} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {useSelector} from 'react-redux';
 import {setStartDate} from '../../redux/MatchSlice';
@@ -7,6 +7,7 @@ import {setEndDate} from '../../redux/MatchSlice';
 import {useDispatch} from 'react-redux';
 import { setStart } from '../../redux/MatchSlice';
 import { setEnd } from '../../redux/MatchSlice';
+import GradientButton from '../../components/GradientButton';
 
 
 const StartDate = ({navigation}) => {
@@ -14,7 +15,7 @@ const StartDate = ({navigation}) => {
 
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
-  console.log(startDate, endDate);
+  console.log("startdate",startDate);
 
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
@@ -33,6 +34,23 @@ const StartDate = ({navigation}) => {
     });
     return unsubscribe;
   }, [navigation]);
+
+  const handlePress =async () =>{
+    // navigation.navigate('Ground')
+    // if(overs!==''){
+      // const response= await addOvers(oversData);
+      // console.log("hiiiiiiiiiiiiiii",response)
+      // if(response.status){
+      //   navigation.navigate('Ground')
+      // }
+    // }
+    // else{
+    //   console.log("overs is required")
+    // }
+    console.log("entered")
+  }
+
+
 
   return (
     <View style={styles.container}>
@@ -126,6 +144,7 @@ const StartDate = ({navigation}) => {
           };
         }}
       />
+      
     </View>
   );
 };
@@ -137,6 +156,7 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     backgroundColor: '#ffffff',
     padding: 16,
+   
   },
   selectedTextStyle: {
     color: 'green',

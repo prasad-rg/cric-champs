@@ -1,18 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from '@reduxjs/toolkit';
 
-const initialValues=[];
+const initialValues = [];
 
-export const GroundSlice=createSlice({
-    name:"grounddata",
-    initialState:{
-        value:initialValues,
+export const GroundSlice = createSlice({
+  name: 'grounddata',
+  initialState: {
+    value: initialValues,
+  },
+  reducers: {
+    // addGround:(state,action)=>{
+    // //    console.log("inside slice",action.payload)
+    //     state.value.push(action.payload)
+    // },
+    addGround: (state, action) => {
+    //   console.error('inside slice', action.payload);
+      state.value = action.payload;
     },
-    reducers:{
-        addGround:(state,action)=>{
-           
-            state.value.push(action.payload)
-        }
-    }
-})
-export const {addGround}=GroundSlice.actions;
-export default GroundSlice.reducer
+  },
+});
+export const {addGround} = GroundSlice.actions;
+export default GroundSlice.reducer;

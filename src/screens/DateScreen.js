@@ -11,6 +11,8 @@ import React, {useState} from 'react';
 import DateTab from '../navigation/DateTab';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import GradientButton from '../components/GradientButton';
+import { addDates } from '../services/manageTournament2';
 
 const DateScreen = ({navigation}) => {
   const handleBack = () => {
@@ -18,6 +20,33 @@ const DateScreen = ({navigation}) => {
   };
   const start = useSelector(state => state.matchdata.start);
   const end = useSelector(state => state.matchdata.end);
+  const sDate = useSelector(state => state.matchdata.startDate);
+  const eDate = useSelector(state => state.matchdata.endDate);
+  console.log(sDate, eDate);
+
+  console.log(sDate, eDate);
+  let date1 = new Date(sDate);
+  let date2 = new Date(eDate);
+
+  let total = date2.getUTCDate() - date1.getUTCDate() + 1;
+  console.log('total days', total);
+
+  const dateData ={
+    sDate:sDate,
+    eDate:eDate,
+    tournamentId:'637efbd16b9ce8028082cb9d',
+    total:total
+  }
+   
+  const handlePress= async ()=>{
+    const response= await addDates(dateData);
+    console.log("I am response for date",response.data)
+    if(response.data.status){
+      navigation.navigate('TimeScreen')
+    }
+  }
+
+
 
   const startDateSelector = useSelector(state => state.matchdata.startDate);
   const endDateSelector = useSelector(state => state.matchdata.endDate);
@@ -48,28 +77,62 @@ const DateScreen = ({navigation}) => {
                 <Text style={styles.viewText}>Dates</Text>
               </View>
             </View>
-            <Text style={styles.year}>{start ? startYear : end && endYear != 'Invalid date' ? endYear : " "}</Text>
+            <Text style={styles.year}>
+              {start
+                ? startYear
+                : end && endYear != 'Invalid date'
+                ? endYear
+                : ' '}
+            </Text>
             <Text style={styles.date}>
-              {start ? startDay : end && endDay != 'Invalid date' ? endDay : ' '}{' '}
-              {start ? startMonth : end && endMonth != 'Invalid date' ? endMonth : ' '}{' '}
-              {start ? startDate : end && endDate != 'Invalid date' ? endDate : ' '}
+              {start
+                ? startDay
+                : end && endDay != 'Invalid date'
+                ? endDay
+                : ' '}{' '}
+              {start
+                ? startMonth
+                : end && endMonth != 'Invalid date'
+                ? endMonth
+                : ' '}{' '}
+              {start
+                ? startDate
+                : end && endDate != 'Invalid date'
+                ? endDate
+                : ' '}
             </Text>
           </View>
         </SafeAreaView>
       </View>
-     
-        <DateTab />
-    
+
+      <DateTab />
+
+      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          // colors={['#FFBA8C', '#FE5C6A']}
+          colors={total > 0 ? ['#FFBA8C', '#FE5C6A'] : ['#999999', '#999999']}
+          text="PROCEED"
+          onPress={handlePress}
+          style={{height: 50, width: '100%', marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
+      </View>
     </View>
   );
 };
-
 export default DateScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-
+    flex: 1,
   },
   profileDetailsContainer: {
     height: 150,

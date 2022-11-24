@@ -17,6 +17,14 @@ const StartDate = ({navigation}) => {
   const endDate = useSelector(state => state.matchdata.endDate);
   console.log(startDate, endDate);
 
+  let date1=new Date(startDate)
+  let date2=new Date(endDate)
+
+  let total=(date2.getUTCDate()- date1.getUTCDate())+1;
+  console.log("total days",total)
+
+
+
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));

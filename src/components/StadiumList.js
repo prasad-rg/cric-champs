@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 
 
 const StadiumList = ({source,text,place}) => {
   return (
     <View>
+      <TouchableOpacity>
        <View style={styles.card}>
         <Image source={source} style={styles.ground} />
         <View style={{justifyContent:"center"}}>
@@ -14,6 +15,7 @@ const StadiumList = ({source,text,place}) => {
         
         
        </View>
+        </TouchableOpacity>
     </View>
   )
 }

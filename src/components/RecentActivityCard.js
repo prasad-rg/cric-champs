@@ -1,5 +1,17 @@
-import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
+import {useDispatch} from 'react-redux';
+import {getTournamentByCode} from '../services/viewTournament';
+import {storeTournamentDetails} from '../redux/viewTournamentSlice';
+import {removeRecentActivities} from '../redux/recentActivitiesSlice';
 
 const RecentActivityCard = ({
   title = 'Robosoft Premiere League',
@@ -7,7 +19,12 @@ const RecentActivityCard = ({
   status = 'IN PROGRESS',
   isAdmin = true,
   onPress,
+  tournamentId,
+  navigation,
+  id,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -15,12 +32,12 @@ const RecentActivityCard = ({
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.machCodeText}>{matchCode}</Text>
         </View>
-        <Pressable>
+        <TouchableOpacity onPress={() => dispatch(removeRecentActivities(id))}>
           <Image
             source={require('../../assets/images/icon-vertical-dots.png')}
             style={styles.verticalDots}
           />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <View
@@ -36,9 +53,18 @@ const RecentActivityCard = ({
             <Text style={styles.actionText}>MANAGE</Text>
           </Pressable>
         )}
-        <Pressable>
+        <TouchableOpacity
+          onPress={async () => {
+            const res = await getTournamentByCode(matchCode);
+            if (res?.status === false) {
+              Alert.alert(res.message.toUpperCase());
+            } else {
+              dispatch(storeTournamentDetails(res));
+              navigation.navigate('ViewScreen');
+            }
+          }}>
           <Text style={[styles.actionText, styles.textMarginRight]}>VIEW</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

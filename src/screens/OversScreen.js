@@ -19,7 +19,7 @@ const OversScreen = ({navigation}) => {
 
   const oversData ={
     overs:overs,
-    tournamentId:'637da64ecd970c7863a0d13e',
+    tournamentId:'637efbd16b9ce8028082cb9d',
   }
 
   const radio_props = [
@@ -36,7 +36,7 @@ const OversScreen = ({navigation}) => {
     // navigation.navigate('Ground')
     if(overs!==''){
       const response= await addOvers(oversData);
-      console.log("hiiiiiiiiiiiiiii",response.data)
+      console.log("hiiiiiiiiiiiiiii",response)
       if(response.status){
         navigation.navigate('Ground')
       }
