@@ -9,11 +9,14 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import GradientButton from '../components/GradientButton';
 import TournamentInputList from '../components/TournamentInputList';
+import CustomModal from '../components/CustomModal';
 
 const Overview = () => {
+  const [visible, setVisible] = useState(false);
+  const [modal,setModal] =useState(true)
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -74,8 +77,38 @@ const Overview = () => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
+          onPress={() => setVisible(true)}
         />
       </View>
+
+
+        { modal ? ( <CustomModal visible={visible}>
+           <View style={{alignItems: 'center', marginBottom: 30}}>
+             <Image
+               source={require('../../assets/images/AwesomeBall.png')}
+               style={styles.image}
+             />
+             <Text style={styles.textView}>Your Fixture has been{'\n'}generated!</Text>
+           </View>
+           <TouchableOpacity onPress={() => setVisible(false)}>
+             <Text style={styles.matchText}>VIEW MATCHES</Text>
+           </TouchableOpacity>
+         </CustomModal>):(
+           <CustomModal visible={visible}>
+           <View style={{alignItems: 'center', marginBottom: 30}}>
+             <Image
+               source={require('../../assets/images/Oopsball.png')}
+               style={styles.image}
+             />
+             <Text style={styles.textView}>Oops! Something {'\n'} went wrong.</Text>
+           </View>
+           <TouchableOpacity onPress={() => setVisible(false)}>
+             <Text style={styles.tryText}>TRY AGAIN</Text>
+           </TouchableOpacity>
+         </CustomModal>
+          
+        )}
+       
     </View>
 
     // </ScrollView>
@@ -165,4 +198,45 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     margin: 20,
   },
+  image: {
+    height: 200,
+    width: 200,
+
+    alignItems: 'center',
+    justifyContent:"center"
+  },
+  textView: {
+    height: 42,
+    // width: 138,
+    color: '#4A4A4A',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 18,
+    letterSpacing: 0,
+    lineHeight: 21,
+    textAlign: 'center',
+    // alignItems:"center"
+    justifyContent:"center"
+  },
+  tryText:{
+    height: 16,
+    width: 77,
+    color: '#F5112D',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    lineHeight: 16,
+    textAlign: 'center',
+  },
+  matchText:{
+    height: 16,
+    // width: 77,
+    color: '#4A90E2',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    lineHeight: 16,
+    textAlign: 'center',
+  }
 });

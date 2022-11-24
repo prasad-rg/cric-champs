@@ -32,7 +32,8 @@ const OnBoardingScreenThree = ({navigation}) => {
             viewing live scores and updates of {'\n'} a tournament.
           </Text>
         </View>
-        <View style={styles.bottomView}>
+      </ScrollView>
+        <View style={{marginBottom: Platform.OS === 'ios' ? -10 : 0}}>
           <GradientButton
             start={{x: 0, y: 0}}
             end={{x: 2, y: 0}}
@@ -49,7 +50,6 @@ const OnBoardingScreenThree = ({navigation}) => {
             }}
           />
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 };

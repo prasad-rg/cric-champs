@@ -10,7 +10,9 @@ import HomeStack from './HomeStack';
 import ViewTournamentTab from './ViewTournamentTab';
 import ViewScreen from '../screens/ViewScreen';
 import {useSelector} from 'react-redux';
-import AppStack from './AppStack';
+import TeamInfoScreen from '../screens/TeamInfoScreen';
+import PlayerProfile from '../screens/PlayerProfile';
+import StadiumInformation from '../screens/StadiumInformation';
 
 const Stack = createStackNavigator();
 
@@ -48,8 +50,18 @@ const RootNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="AppStack"
-          component={AppStack}
+          name="TeamInfoScreen"
+          component={TeamInfoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PlayerProfile"
+          component={PlayerProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="StadiumInformation"
+          component={StadiumInformation}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

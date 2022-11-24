@@ -1,11 +1,17 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const DotBall = () => {
+const DotBall = ({style={}}) => {
   return (
     <SafeAreaView>
     <View>
-      <View style={styles.dot}></View>
+      <View style={[{
+          height:4,
+          width:4,
+          backgroundColor:"#000000",
+          borderRadius:2
+      },
+      {...style}]}></View>
     </View>
     </SafeAreaView>
   )

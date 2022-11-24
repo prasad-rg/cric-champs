@@ -1,5 +1,5 @@
-import axios from 'axios';
 import {BASE_URL} from '../api/baseURL';
+import axios from 'axios';
 
 export const 
 loginUser = async userData => {
@@ -19,5 +19,12 @@ export const registerUser = async formData => {
     //   'Content-Type': 'multipart/form-data;',
     // },
   });
-  console.log(res);
+  // console.log(res);
+  return res;
 };
+
+// export const logoutUser = async userDetails => {
+//   let res = await axios.delete(`${BASE_URL}/api/user/login`,)
+// }
+
+
