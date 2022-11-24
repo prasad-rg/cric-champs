@@ -40,7 +40,7 @@ const AddGround = ({navigation}) => {
             let data = {
               ...values,
               image: profilePictureUri,
-              tournamentId: '637da64ecd970c7863a0d13e',
+              tournamentId: '637efbd16b9ce8028082cb9d',
             };
             const groundData = createFormData(data);
             const response = await addGrounds(groundData);
