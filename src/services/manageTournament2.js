@@ -2,7 +2,7 @@ import axios from 'axios';
 import {BASE_URL} from '../api/baseURL';
 
 const token =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyMTE1ODMsImV4cCI6MTY2OTIxNTE4M30.mepbGgbOjI9nmqBaOvuWaQRSz-qayNj7OnezUZu7SgA';
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyNjkwNTcsImV4cCI6MTY2OTI3MjY1N30.AEyAsXp-gTTV_0qDaoHG7xYUxGQVJg-0SWZE7XHQaYs';
 
 export const addOvers = async oversData => {
   try {
@@ -44,4 +44,22 @@ export const addUmpires = async formData => {
   });
   const jsonResponse = await res.json();
   return jsonResponse;
+};
+
+export const addDates = async dateData => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/tournament/over`,
+      dateData,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
 };

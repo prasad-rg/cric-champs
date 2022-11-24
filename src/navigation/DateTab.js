@@ -8,7 +8,7 @@ import EndDate from '../screens/dates/EndDate';
 const DateTab = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: 'white',
@@ -35,7 +35,7 @@ const DateTab = () => {
         <Tab.Screen name="START DATE" component={StartDate} />
         <Tab.Screen name="END DATE" component={EndDate} />
       </Tab.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 };
 

@@ -14,6 +14,7 @@ import UmpiresList from '../screens/UmpiresList';
 import AddGround from '../screens/AddGround';
 import AddUmpire from '../screens/AddUmpire';
 import DateScreen from '../screens/DateScreen';
+import TimeScreen from '../screens/TimeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +81,12 @@ const AppStack = () => {
          <Stack.Screen
         name="DateScreen"
         component={DateScreen}
+        options={{headerShown: false}}
+      />
+
+<Stack.Screen
+        name="TimeScreen"
+        component={TimeScreen}
         options={{headerShown: false}}
       />
       </Stack.Navigator>
