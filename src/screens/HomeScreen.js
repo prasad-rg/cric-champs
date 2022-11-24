@@ -45,9 +45,12 @@ const HomeScreen = ({navigation}) => {
   }, [recentActivities]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    // <SafeAreaView style={{flex: 1}}>
+       <View style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
+      <View style={styles.backgroundBeyondSafeArea}>
+        <SafeAreaView>
+          <View style={{flexDirection:"row",alignItems:"center"}}>
           <TouchableOpacity onPress={() => navigation.navigate('UserControls')}>
             <Image
               source={require('../../assets/images/burgermenu.png')}
@@ -55,6 +58,8 @@ const HomeScreen = ({navigation}) => {
             />
           </TouchableOpacity>
           <Text style={styles.cricket}>Cricket</Text>
+          </View>
+          </SafeAreaView>
         </View>
         <View>
           <View style={styles.subheader}>
@@ -125,12 +130,21 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }, 
+   backgroundBeyondSafeArea: {
+    backgroundColor: 'rgba(0, 102, 226, 1)',
+    paddingRight: 20,
+    paddingBottom:15,
+
+  },
   textInput: {
     boxSizing: 'border-box',
     height: 41,

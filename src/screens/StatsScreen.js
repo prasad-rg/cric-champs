@@ -57,6 +57,18 @@ const StatsScreen = ({navigation}) => {
       id: uuid.v4(),
       title: 'Most 5 Wickets Hauls',
     },
+    {
+      id: uuid.v4(),
+      title: 'Best Economy',
+    },
+    {
+      id: uuid.v4(),
+      title: 'Best Bowling Strike Rate',
+    },
+    {
+      id: uuid.v4(),
+      title: 'Best Bowling',
+    },
   ];
   return (
     <ScrollView>
