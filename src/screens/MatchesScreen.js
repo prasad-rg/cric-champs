@@ -1,38 +1,68 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import MatchCard from '../components/MatchCard';
+import {useSelector} from 'react-redux';
+import {getMatchesByTournamentId} from '../services/viewTournament';
 
 const MatchesScreen = ({navigation}) => {
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const [currentMatches, setCurrentMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  let prevDate = null;
+  const loadMatches = async () => {
+    setIsLoading(true);
+    const response = await getMatchesByTournamentId(tournamentDetails._id);
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentMatches(response.data.matches);
+    }
+  };
+
+  useEffect(() => {
+    loadMatches();
+  }, []);
+
+  const renderItem = ({item}) => {
+    let currentDate = item.matchDateInEnglish;
+    if (currentDate === prevDate) {
+      prevDate = currentDate;
+      return <MatchCard matchDetails={item} />;
+    } else {
+      prevDate = currentDate;
+      return (
+        <>
+          <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
+          <MatchCard matchDetails={item} />
+        </>
+      );
+    }
+  };
+
   return (
-    <ScrollView>
     <View style={styles.container}>
-      <Text>MatchesScreen</Text>
-      <Text>
-        Perviously when I wanted to make some actions when screen is opened I
-        put them inside componentDidMount. For example I can fetch some data
-      </Text>
-      <Text>MatchesScreen</Text>
-      <Text>
-        Perviously when I wanted to make some actions when screen is opened I
-        put them inside componentDidMount. For example I can fetch some data
-      </Text>
-      <Text>MatchesScreen</Text>
-      <Text>
-        Perviously when I wanted to make some actions when screen is opened I
-        put them inside componentDidMount. For example I can fetch some data
-      </Text>
-      <Text>MatchesScreen</Text>
-      <Text>
-        Perviously when I wanted to make some actions when screen is opened I
-        put them inside componentDidMount. For example I can fetch some data
-      </Text>
-      <Text>MatchesScreen</Text>
-      <Text>
-        Perviously when I wanted to make some actions when screen is opened I
-        put them inside componentDidMount. For example I can fetch some data
-      </Text>
+      {isLoading ? (
+        <View>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <FlatList
+          data={currentMatches}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={loadMatches} />
+          }
+        />
+      )}
     </View>
-    </ScrollView>
   );
 };
 
@@ -40,6 +70,22 @@ export default MatchesScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
+  },
+  dayText: {
+    height: 19,
+    width: 248,
+    color: '#8E9BA8',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 16,
+    padding: 20,
+  },
+  loadingScreen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

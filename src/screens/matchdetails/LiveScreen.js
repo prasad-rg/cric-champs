@@ -481,7 +481,6 @@ const styles = StyleSheet.create({
   },
   endView: {
     height: 51,
-    borderWidth: 1,
     marginTop: 20,
     width: '100%',
     borderTopWidth: 1,

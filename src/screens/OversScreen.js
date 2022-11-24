@@ -13,12 +13,13 @@ import React, { useState } from 'react';
 
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
+import { addOvers } from '../services/manageTournament2';
 const OversScreen = ({navigation}) => {
   const [overs, setOvers] = useState('');
 
   const oversData ={
     overs:overs,
-    tournamentId:'',
+    tournamentId:'637da64ecd970c7863a0d13e',
   }
 
   const radio_props = [
@@ -31,11 +32,31 @@ const OversScreen = ({navigation}) => {
     {label: '40', value: '40', id: 6},
     {label: '50', value: '50', id: 7},
   ];
-  const handlePress = () =>{
-    navigation.navigate('Ground')
+  const handlePress =async () =>{
+    // navigation.navigate('Ground')
+    if(overs!==''){
+      const response= await addOvers(oversData);
+      console.log("hiiiiiiiiiiiiiii",response.data)
+      if(response.status){
+        navigation.navigate('Ground')
+      }
+    }
+    else{
+      console.log("overs is required")
+    }
+  
+    // const result=response.data()
+    // if (result.status){
+    //   console.log(response)
+    // }else{
+    //   console.log("Something went wrong")
+    // }
+    
+
   }
   const getData= data =>{
     setOvers(data)
+    console.log(data)
   }
   return (
     <View style={styles.container}>
@@ -47,7 +68,7 @@ const OversScreen = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}

@@ -55,6 +55,31 @@ export const userRegister = createAsyncThunk(
   },
 );
 
+// export const userLogout = createAsyncThunk('user/logout', async userData => {
+//   try {
+//     const response = await registerUser(userData);
+//     // console.log(response);
+//     if (response.status === 200) {
+//       const headers = response.headers;
+//       let stringifiedToken = JSON.stringify({
+//         accessToken: headers.authorization,
+//         refreshToken: headers['refresh-token'],
+//       });
+//       const isSecurelyStored = await setToken(stringifiedToken);
+//       if (isSecurelyStored) {
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     } else {
+//       return {error: response};
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return error;
+//   }
+// });
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {

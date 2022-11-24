@@ -11,12 +11,18 @@ import {
 import React, {useState} from 'react';
 import StadiumList from '../components/StadiumList';
 import GradientButton from '../components/GradientButton';
+import {useSelector} from 'react-redux';
 
 const Ground = ({navigation}) => {
 
   const handlePress=()=>{
     navigation.navigate('UmpiresList')
   }
+  const grounddata = useSelector(state => state.grounddata.value);
+  console.log("Inside ground screen",grounddata)
+
+  
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -27,7 +33,7 @@ const Ground = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -36,7 +42,7 @@ const Ground = ({navigation}) => {
                   <Text style={styles.groundText}>Grounds</Text>
                 </View>
 
-                <TouchableOpacity style={styles.groundButton}>
+                <TouchableOpacity style={styles.groundButton} onPress={()=>navigation.navigate('AddGround')}>
                   <Text style={styles.addGroundText}>ADD GROUND</Text>
                 </TouchableOpacity>
               </View>
@@ -45,8 +51,36 @@ const Ground = ({navigation}) => {
         </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.ground}>Grounds</Text>
+                {grounddata.length === 0 ? (
+                  <View style={styles.nogroundview}>
+                    <Text style={styles.nogrounds}>No Grounds Added Yet!</Text>
+                  </View>
+                ) : (
+                  <View>
+                    {grounddata.map(value => (
+                      // console.log(value.image.path)
+                      <View key={value.tempId}>
+                        {/* <PlayersList
+                          source={value.image.path}
+                          name={value.name}
+                          designation={value.designation}
+                          expertise={value.expertise}
+                          batting={value.batting}
+                          bowling={value.bowling}
+                          bowlingtype={value.bowlingtype}
+                        /> */}
+                        <StadiumList
+              source={value.image.path}
+              text="Santhekatte Stadium"
+              place="Santhekatte"
+            />
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
 
-          <View style={styles.groundView}>
+          {/* <View style={styles.groundView}>
             <StadiumList
               source={require('../../assets/images/ground1.png')}
               text="Santhekatte Stadium"
@@ -62,9 +96,10 @@ const Ground = ({navigation}) => {
               text="Surathkal Sports Academy"
               place="Surathkal"
             />
-          </View>
-        </View>
+          </View> */}
+
       </ScrollView>
+  
       <View>
         <GradientButton
           start={{x: 0, y: 0}}
@@ -82,9 +117,11 @@ const Ground = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
-    </View>
+      </View>
+ 
   );
 };
+
 
 export default Ground;
 
@@ -169,5 +206,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
     marginTop: 15,
+  },
+  nogroundview: {
+    alignItems: 'center',
+  },
+  nogrounds: {
+    height: 24,
+    width: 200,
+    color: '#A3A3A3',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 20,
+    fontWeight: '500',
+    letterSpacing: 0,
+    lineHeight: 24,
+    marginTop: 18,
+    textAlign: 'center',
   },
 });
