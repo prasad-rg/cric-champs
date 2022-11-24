@@ -1,5 +1,5 @@
 import {BASE_URL} from '../api/baseURL';
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyODI1MTIsImV4cCI6MTY2OTI4NjExMn0.RhevoNmXr12HwxTOgTBpCytgg72oA3bq5gF3FAXvpaM';
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzdjOTg2NjViZDk4YTJmOThiZTA3M2UiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2NjkyODcxMDMsImV4cCI6MTY2OTI5MDcwM30.U4Onr0KVqTnTYNiOoOkli2If1CBd4gEFXAGSCgHO6T8';
 
 export const createTournament = async formData => {
   let res = await fetch(`${BASE_URL}/api/tournament`, {

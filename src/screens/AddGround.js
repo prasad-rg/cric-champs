@@ -5,7 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {addGround, deleteGround} from '../redux/GroundSlice';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
 import uuid from 'react-native-uuid';
 import {addGrounds} from '../services/manageTournament2';
@@ -15,6 +15,10 @@ import * as yup from 'yup';
 import {cleanSingle} from 'react-native-image-crop-picker';
 
 const AddGround = ({navigation}) => {
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const dispatch = useDispatch();
   const getDetails = data => {
@@ -40,7 +44,7 @@ const AddGround = ({navigation}) => {
             let data = {
               ...values,
               image: profilePictureUri,
-              tournamentId: '637efbd16b9ce8028082cb9d',
+              tournamentId: tournamentId,
             };
             const groundData = createFormData(data);
             const response = await addGrounds(groundData);

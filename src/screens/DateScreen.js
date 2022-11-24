@@ -22,6 +22,9 @@ const DateScreen = ({navigation}) => {
   const end = useSelector(state => state.matchdata.end);
   const sDate = useSelector(state => state.matchdata.startDate);
   const eDate = useSelector(state => state.matchdata.endDate);
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
   console.log(sDate, eDate);
 
   console.log(sDate, eDate);
@@ -34,7 +37,7 @@ const DateScreen = ({navigation}) => {
   const dateData ={
     sDate:sDate,
     eDate:eDate,
-    tournamentId:'637efbd16b9ce8028082cb9d',
+    tournamentId:tournamentId,
     total:total
   }
    

@@ -14,12 +14,16 @@ import React, { useState } from 'react';
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import { addOvers } from '../services/manageTournament2';
+import { useSelector } from 'react-redux';
 const OversScreen = ({navigation}) => {
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
   const [overs, setOvers] = useState('');
 
   const oversData ={
     overs:overs,
-    tournamentId:'637efbd16b9ce8028082cb9d',
+    tournamentId:tournamentId,
   }
 
   const radio_props = [

@@ -20,77 +20,75 @@ const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen
+    <Stack.Navigator>
+      {/* <Stack.Screen
           name="UserControls"
           component={UserControls}
           options={{headerShown: false}}
         /> */}
-        <Stack.Screen
-          name="CreateTournament"
-          component={CreateTournament}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="CreateTournamentSuccess"
-          component={CreateTournamentSuccess}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="TeamsList"
-          component={TeamsList}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddTeam"
-          component={AddTeam}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddPlayer"
-          component={AddPlayer}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="OversScreen"
-          component={OversScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Ground"
-          component={Ground}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="UmpiresList"
-          component={UmpiresList}
-          options={{headerShown: false}}
-        />
-          <Stack.Screen
-          name="AddGround"
-          component={AddGround}
-          options={{headerShown: false}}
-        />
-          <Stack.Screen
-          name="AddUmpire"
-          component={AddUmpire}
-          options={{headerShown: false}}
-        />
-     
-         <Stack.Screen
+      <Stack.Screen
+        name="CreateTournament"
+        component={CreateTournament}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CreateTournamentSuccess"
+        component={CreateTournamentSuccess}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TeamsList"
+        component={TeamsList}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddTeam"
+        component={AddTeam}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddPlayer"
+        component={AddPlayer}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="OversScreen"
+        component={OversScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Ground"
+        component={Ground}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UmpiresList"
+        component={UmpiresList}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddGround"
+        component={AddGround}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddUmpire"
+        component={AddUmpire}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
         name="DateScreen"
         component={DateScreen}
         options={{headerShown: false}}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="TimeScreen"
         component={TimeScreen}
         options={{headerShown: false}}
       />
-      </Stack.Navigator>
-   </NavigationContainer>
+    </Stack.Navigator>
   );
 };
 

@@ -14,7 +14,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
 import uuid from 'react-native-uuid';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
 
 import {Formik} from 'formik';
@@ -23,6 +23,9 @@ import {addUmpire} from '../redux/umpireSlice';
 import {addUmpires} from '../services/manageTournament2';
 
 const AddUmpire = ({navigation}) => {
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const dispatch = useDispatch();
   const getDetails = data => {
@@ -46,7 +49,7 @@ const AddUmpire = ({navigation}) => {
             let data = {
               ...values,
               image: profilePictureUri,
-              tournamentId: '637efbd16b9ce8028082cb9d',
+              tournamentId: tournamentId,
               teamId: '637dc46a4fd8760b8d0da1cc',
               role: 'umpire',
               tempId: uuid.v4(),

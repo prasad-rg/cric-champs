@@ -26,6 +26,7 @@ import {useDispatch} from 'react-redux';
 import {addParticipant} from '../services/manageTournament';
 import { deletePlayers } from '../redux/ParticipantSlice';
 
+
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const dispatch = useDispatch();
@@ -37,8 +38,11 @@ const AddTeam = ({navigation}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
+  const teamId = useSelector(
+    state => state.tournamentdata.tournamentdata.teamId,
+  );
 
-  // console.log(playerData)
+  console.log("TeamId",teamId)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
@@ -49,6 +53,14 @@ const AddTeam = ({navigation}) => {
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
   });
+
+const handlePlayerList=()=>{
+  navigation.navigate('PlayerProfile', {
+    teamId: teamId,
+    tournamentId: tournamentId,
+    // playerId: item._id,
+  })
+}
   return (
     <View style={styles.container}>
       <Formik
@@ -225,6 +237,7 @@ const AddTeam = ({navigation}) => {
                     {participantdata.map(value => (
                       // console.log(value.image.path)
                       <View key={value.tempId}>
+                        <TouchableOpacity onPress={(tempId)=>handlePlayerList(tempId)}>
                         <PlayersList
                           source={value.image.path}
                           name={value.name}
@@ -234,6 +247,7 @@ const AddTeam = ({navigation}) => {
                           bowling={value.bowling}
                           bowlingtype={value.bowlingtype}
                         />
+                        </TouchableOpacity>
                       </View>
                     ))}
                   </View>
