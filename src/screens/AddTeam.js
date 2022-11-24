@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   Dimensions,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
@@ -105,6 +106,8 @@ const AddTeam = ({navigation}) => {
 
               if (status){
                 navigation.goBack();
+              }else{
+                Alert.alert('Something went wrong, Try')
               }
 
               // const response=status.every(element => element === true);
