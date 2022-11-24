@@ -76,7 +76,7 @@ const TeamsList = ({navigation}) => {
         <View style={styles.secondView}>
           <Text style={styles.teams}>Teams</Text>
 
-          {!team ? (
+          {currentTeams.length === 0 ? (
             <View>
               <Text style={styles.noteam}>No Teams Added Yet!</Text>
             </View>
