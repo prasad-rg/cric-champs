@@ -97,22 +97,14 @@ const AddTeam = ({navigation}) => {
                 return createparticipantresponse;
               }));
 
-
               const status = result.map((stat)=>{
-                if(stat.status){
-                  return true
-                }
-              }).every(element => element === true);
-
+                console.log(stat)
+              })
               if (status){
-                navigation.goBack();
+                navigation.goBack()
               }else{
-                Alert.alert('Something went wrong, Try')
+                Alert.alert("Something went wrong. Please try again")
               }
-
-              // const response=status.every(element => element === true);
-
-          
               // const participantFormData = createFormData(result);
               // console.log('I am form data after map', participantFormData);
               // const createparticipantresponse = await addParticipant(
