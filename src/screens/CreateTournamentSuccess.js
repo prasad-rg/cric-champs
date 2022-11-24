@@ -11,9 +11,12 @@ import {
 import React, {useState} from 'react';
 import OutlinedButton from '../components/OutlinedButton';
 import GradientButton from '../components/GradientButton';
+import { useSelector } from 'react-redux';
 
 const CreateTournamentSuccess = ({navigation}) => {
-  const [tournamentcode, setTournamentCode] = useState('85b68e');
+  const code = useSelector(state => state.tournamentdata.tournamentdata.code);
+  const [tournamentcode, setTournamentCode] = useState(code);
+
 
   const handleBack = () => {
     navigation.navigate('CreateTournament');
@@ -24,7 +27,7 @@ const CreateTournamentSuccess = ({navigation}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${tournamentcode}, Share the tournament code to invite your friends`,
+        message: `${code}, Share the tournament code to invite your friends`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

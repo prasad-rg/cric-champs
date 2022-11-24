@@ -34,7 +34,7 @@ const RootNavigator = () => {
           component={HomeStack}
           options={{headerShown: false}}
         />
-        {!isLoggedIn && (
+       
           <Stack.Screen
             name="AuthStack"
             component={AuthStack}
@@ -43,7 +43,7 @@ const RootNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
             }}
           />
-        )}
+        
         <Stack.Screen
           name="ViewScreen"
           component={ViewScreen}
