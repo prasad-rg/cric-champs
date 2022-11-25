@@ -1,6 +1,11 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {loginUser, registerUser} from '../services/auth';
-import {setToken} from '../utils/token';
+import {
+  getNewAccessToken,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from '../services/auth';
+import {setToken, getToken, deleteToken} from '../utils/token';
 
 export const userLogin = createAsyncThunk('user/login', async userData => {
   try {
@@ -57,31 +62,6 @@ export const userRegister = createAsyncThunk(
   },
 );
 
-// export const userLogout = createAsyncThunk('user/logout', async userData => {
-//   try {
-//     const response = await registerUser(userData);
-//     // console.log(response);
-//     if (response.status === 200) {
-//       const headers = response.headers;
-//       let stringifiedToken = JSON.stringify({
-//         accessToken: headers.authorization,
-//         refreshToken: headers['refresh-token'],
-//       });
-//       const isSecurelyStored = await setToken(stringifiedToken);
-//       if (isSecurelyStored) {
-//         return true;
-//       } else {
-//         return false;
-//       }
-//     } else {
-//       return {error: response};
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return error;
-//   }
-// });
-
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -92,9 +72,9 @@ export const userSlice = createSlice({
   },
   reducers: {
     logout: (state, action) => {
-      state.user = [];
-      state.accessToken = null;
+      state.isLoggedIn = false;
       state.isLoading = false;
+      state.error = 'Error In Logging Out';
     },
     changeInitialLaunchStatus: state => {
       state.isInitialAppLaunch = false;

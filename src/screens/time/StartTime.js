@@ -1,12 +1,19 @@
-import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Button,
+  ScrollView,
+} from 'react-native';
 import React, {useState} from 'react';
 import TimePickerPage from '../../components/TimePicker';
 const StartTime = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.text}>When do you want start for the day?</Text>
       <TimePickerPage />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -28,6 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 11,
     flex: 1,
-    borderWidth: 1,
+    // borderWidth: 1,
   },
 });

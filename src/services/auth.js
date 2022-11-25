@@ -1,6 +1,6 @@
 import {BASE_URL} from '../api/baseURL';
 import axios from 'axios';
-import {getToken, setToken} from '../utils/token';
+import {deleteToken, getToken, setToken} from '../utils/token';
 import jwt_decode from 'jwt-decode';
 
 export const loginUser = async userData => {
@@ -24,9 +24,19 @@ export const registerUser = async formData => {
   return res;
 };
 
-// export const logoutUser = async userDetails => {
-//   let res = await axios.delete(`${BASE_URL}/api/user/login`,)
-// }
+export const logoutUser = async () => {
+  try {
+    const token = await getToken();
+    const jsonToken = JSON.parse(token);
+    // return jsonToken.refreshToken;
+    const res = await axios.delete(`${BASE_URL}/api/user/login`, {
+      headers: {'Refresh-Token': jsonToken.refreshToken},
+    });
+    return res.data;
+  } catch (error) {
+    return error.data.message;
+  }
+};
 
 export const getNewAccessToken = async (oldAcccessToken, refreshToken) => {
   try {
@@ -74,6 +84,26 @@ export const refreshTokenIfExpired = async () => {
       return newToken;
     } else {
       return jsonToken.accessToken;
+    }
+  } else {
+    return null;
+  }
+};
+
+export const getUserDetails = async () => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  // console.log(validateAndGetToken);
+  if (validateAndGetToken !== null) {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/user`, {
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      // console.log("response from api",response)
+      return response.data.data[0];
+    } catch (error) {
+      return error.response.data.message;
     }
   } else {
     return null;

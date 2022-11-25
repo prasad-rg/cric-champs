@@ -35,7 +35,7 @@ const RecentActivityCard = ({
         </View>
         <TouchableOpacity onPress={() => dispatch(removeRecentActivities(id))}>
           <Image
-            source={require('../../assets/images/icon-vertical-dots.png')}
+            source={require('../../assets/images/trash.png')}
             style={styles.verticalDots}
           />
         </TouchableOpacity>
@@ -152,6 +152,8 @@ const styles = StyleSheet.create({
   verticalDots: {
     width: 12,
     height: 24,
+    tintColor: 'rgba(112, 112, 112, 0.5)',
+    marginRight: 5,
   },
   statusCompleted: {
     backgroundColor: '#FFBA7F',

@@ -15,6 +15,7 @@ import TeamInfoScreen from '../screens/TeamInfoScreen';
 import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
+import UmpireProfile from '../screens/UmpireProfile';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="PlayerProfile"
           component={PlayerProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="UmpireProfile"
+          component={UmpireProfile}
           options={{headerShown: false}}
         />
         <Stack.Screen
