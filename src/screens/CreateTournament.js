@@ -21,6 +21,7 @@ import {createTournament} from '../services/manageTournament';
 import {useDispatch} from 'react-redux';
 import {setCode} from '../redux/manageTournamentSlice';
 import {setTournamentData} from '../redux/manageTournamentSlice';
+import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
   {label: 'Knockout', value: 'Knockout', id: 1},
@@ -57,6 +58,7 @@ const CreateTournament = ({navigation}) => {
           email: email,
         };
         dispatch(setTournamentData(tournamentresponse));
+        dispatch(storeTournamentDetails(response.data.result));
         navigation.navigate('CreateTournamentSuccess');
       }
     } else {
