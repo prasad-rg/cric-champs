@@ -15,15 +15,25 @@ import RadioForm, {
     flexWrap = {},
     onPress,
   }) => {
-    const [value, setValue] = useState({value: 0});
-    const [index, setIndex] = useState({index: 0});
-  
+    const [value, setValue] = useState(0);
+    const [index, setIndex] = useState(0);
     const setData = (value, index) => {
-      setValue({value: value});
+      setValue(value);
       setIndex(index);
       onPress(value,index);
+    console.log("value",value,index)
+    if(index==0)
+    {
+      
+    }
+
+      // if(value ){
+      //   console.log("I amzero")
+      // }
     };
-  
+  // console.log("radioprops")
+
+ 
     return (
       <RadioForm
         animation={true}
@@ -33,7 +43,7 @@ import RadioForm, {
           <RadioButton
             key={i}
             isSelected={index === i}
-            onPress={(value, i) => setData(value, i)}
+          
 
             style={[
               {
@@ -50,34 +60,22 @@ import RadioForm, {
               },
               {...style},
             ]}>
-            {/* <RadioButtonInput
-              obj={obj}
-              index={i}
-              isSelected={index === i}
-              onPress={(value, i) => setData(value, i)}
-              borderWidth={1}
-              buttonInnerColor={index === i ? '#FA7171' : '#4A90E2'}
-              buttonOuterColor={index === i ? '#FA7171' : '#4A90E2'}
-              buttonSize={0}
-              buttonOuterSize={0}
-              buttonStyle={{}}
-              buttonWrapStyle={{marginLeft: 10}}
-            /> */}
             <RadioButtonLabel
               obj={obj}
               index={i}
               isSelected={index === i}
               labelHorizontal={true}
-              onPress={setData}
+              onPress={(value, i) => setData(value, i)}
               labelColor={index === i ? '#FFFFFF' : '#C44343'}
               labelStyle={[{
-                height: 19,
+                height:42,
                 width:"auto",
                 fontFamily: 'Roboto-Regular',
                 fontSize: 16,
                 letterSpacing: -0.34,
                 lineHeight: 19, 
-                paddingHorizontal:10
+                paddingHorizontal:10,
+                paddingTop:10
 
               },{...labelStyle}]}
               labelWrapStyle={{}}

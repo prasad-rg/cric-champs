@@ -23,8 +23,7 @@ const ScoreboardScreen = () => {
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
-
-    // ['Anupam K', '0', '0', '0', '0', '0'],
+ 
   ]);
   const [tableHeader, setTableHeader] = useState([
     'Bowler',
