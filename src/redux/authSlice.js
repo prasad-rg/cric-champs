@@ -34,11 +34,13 @@ export const userRegister = createAsyncThunk(
       const response = await registerUser(userData);
       console.log(response);
       if (response.status === 200) {
-        const headers = response.headers;
+        const headers = response.headers.map;
         let stringifiedToken = JSON.stringify({
           accessToken: headers.authorization,
           refreshToken: headers['refresh-token'],
         });
+        console.log(headers);
+        console.warn(stringifiedToken);
         const isSecurelyStored = await setToken(stringifiedToken);
         if (isSecurelyStored) {
           return true;

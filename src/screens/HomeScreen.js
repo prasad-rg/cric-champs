@@ -117,19 +117,21 @@ const HomeScreen = ({navigation}) => {
               onPress={() => navigation.navigate('AppStack')}
               //  style={{width:'100%'}}
             />
-            <View style={styles.recentActivityView}>
-              <Text style={styles.recentActivityText}>Recent Activities</Text>
-              {recentsData.map(tournament => (
-                <RecentActivityCard
-                  key={tournament._id}
-                  title={tournament.name}
-                  matchCode={tournament.code}
-                  isAdmin={tournament.isAdmin}
-                  navigation={navigation}
-                  id={tournament._id}
-                />
-              ))}
-            </View>
+            {recentsData.length > 0 && (
+              <View style={styles.recentActivityView}>
+                <Text style={styles.recentActivityText}>Recent Activities</Text>
+                {recentsData.map(tournament => (
+                  <RecentActivityCard
+                    key={tournament._id}
+                    title={tournament.name}
+                    matchCode={tournament.code}
+                    isAdmin={tournament.isAdmin}
+                    navigation={navigation}
+                    id={tournament._id}
+                  />
+                ))}
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
