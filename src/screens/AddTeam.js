@@ -41,8 +41,8 @@ const AddTeam = ({navigation}) => {
   const teamId = useSelector(
     state => state.tournamentdata.tournamentdata.teamId,
   );
-
-  console.log("TeamId",teamId)
+  // const teamId='vhwrt3782456qywdhb'
+  // console.log("TeamId",teamId)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
@@ -55,11 +55,12 @@ const AddTeam = ({navigation}) => {
   });
 
 const handlePlayerList=()=>{
-  navigation.navigate('PlayerProfile', {
-    teamId: teamId,
-    tournamentId: tournamentId,
-    // playerId: item._id,
-  })
+  if(teamId){
+    navigation.navigate('PlayerProfile', {
+      tournamentId: tournamentId,
+    })
+  }
+
 }
   return (
     <View style={styles.container}>
@@ -237,7 +238,7 @@ const handlePlayerList=()=>{
                     {participantdata.map(value => (
                       // console.log(value.image.path)
                       <View key={value.tempId}>
-                        <TouchableOpacity onPress={(tempId)=>handlePlayerList(tempId)}>
+                        <TouchableOpacity onPress={handlePlayerList}>
                         <PlayersList
                           source={value.image.path}
                           name={value.name}
