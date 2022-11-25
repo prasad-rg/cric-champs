@@ -11,12 +11,12 @@ import {
 import React, {useState} from 'react';
 import OutlinedButton from '../components/OutlinedButton';
 import GradientButton from '../components/GradientButton';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const CreateTournamentSuccess = ({navigation}) => {
-  const code = useSelector(state => state.tournamentdata.tournamentdata.code);
-  const [tournamentcode, setTournamentCode] = useState(code);
-
+  const tournamentdata = useSelector(
+    state => state.tournamentdata.tournamentdata,
+  );
 
   const handleBack = () => {
     navigation.navigate('CreateTournament');
@@ -27,7 +27,7 @@ const CreateTournamentSuccess = ({navigation}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${code}, Share the tournament code to invite your friends`,
+        message: `${tournamentdata.code}, Share the tournament code to invite your friends`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -53,8 +53,8 @@ const CreateTournamentSuccess = ({navigation}) => {
             source={require('../../assets/images/trophy.png')}
             style={styles.trophy}
           />
-          <Text style={styles.tournamentId}>{tournamentcode}</Text>
-          <Text style={styles.leagueName}>Robosoft Premiere League</Text>
+          <Text style={styles.tournamentId}>{tournamentdata.code}</Text>
+          <Text style={styles.leagueName}>{tournamentdata.name}</Text>
           <Text style={styles.successMessage}>Successfully Created!</Text>
         </View>
         <OutlinedButton

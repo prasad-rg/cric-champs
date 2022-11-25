@@ -21,6 +21,7 @@ const AddPlayer = ({navigation}) => {
   const [bowling, setBowling] = useState('');
   const [bowlingtype, setBowlingType] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
+  const [name,setName]=useState('')
   const dispatch = useDispatch();
 
   const [whiteList, setWhiteList] = useState({
@@ -106,6 +107,7 @@ const AddPlayer = ({navigation}) => {
         phoneNo: '',
       }}
       onSubmit={values => {
+        setName(values.name)
         if (profilePictureUri !== '') {
           let data = {
             ...values,
@@ -156,6 +158,7 @@ const AddPlayer = ({navigation}) => {
                 onChangeText={handleChange('name')}
                 onBlur={handleBlur('name')}
                 value={values.name}
+                
                 style={{
                   fontFamily: 'Roboto-Medium',
                   fontSize: 16,
@@ -455,7 +458,7 @@ const AddPlayer = ({navigation}) => {
             <GradientButton
               start={{x: 0, y: 0}}
               end={{x: 2, y: 0}}
-              colors={['#FFBA8C', '#FE5C6A']}
+              colors={values.name === '' ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
               text="SAVE PLAYER"
               onPress={handleSubmit}
               style={{height: 50, width: '100%', marginTop: 0}}
