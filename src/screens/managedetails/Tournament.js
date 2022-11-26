@@ -16,7 +16,7 @@ import {
   tournamentOverview,
 } from '../../services/tournamentManagement';
 
-const Tournament = ({navigation}) => {
+const Tournament = ({navigation, disableRegenerateFixture=true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [currentOverview, setCurrentOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -128,22 +128,24 @@ const Tournament = ({navigation}) => {
           <Text style={styles.cancelText}>Cancel Tournament</Text>
         </TouchableOpacity>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="RE-GENERATE FIXTURE"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-        />
-      </View>
+      {disableRegenerateFixture && (
+        <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="RE-GENERATE FIXTURE"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };

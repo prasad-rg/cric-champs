@@ -8,9 +8,10 @@ import EndTime from '../screens/time/EndTime';
 const TimeTab = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
+          swipeEnabled: false,
           tabBarActiveTintColor: 'white',
           tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
           tabBarStyle: {
@@ -35,7 +36,7 @@ const TimeTab = () => {
         <Tab.Screen name="START OF PLAY" component={StartTime} />
         <Tab.Screen name="END OF PLAY" component={EndTime} />
       </Tab.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 };
 
