@@ -39,6 +39,7 @@ const HomeScreen = ({navigation}) => {
       if (recents.status) {
         setRecentsData(recents.data.data);
       } else {
+        console.log(recents);
         Alert.alert('Recents Fetch Failed');
       }
     };
@@ -47,19 +48,20 @@ const HomeScreen = ({navigation}) => {
 
   return (
     // <SafeAreaView style={{flex: 1}}>
-       <View style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
-      <View style={styles.backgroundBeyondSafeArea}>
-        <SafeAreaView>
-          <View style={{flexDirection:"row",alignItems:"center"}}>
-          <TouchableOpacity onPress={() => navigation.navigate('UserControls')}>
-            <Image
-              source={require('../../assets/images/burgermenu.png')}
-              style={styles.burgermenu}
-            />
-          </TouchableOpacity>
-          <Text style={styles.cricket}>Cricket</Text>
-          </View>
+        <View style={styles.backgroundBeyondSafeArea}>
+          <SafeAreaView>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('UserControls')}>
+                <Image
+                  source={require('../../assets/images/burgermenu.png')}
+                  style={styles.burgermenu}
+                />
+              </TouchableOpacity>
+              <Text style={styles.cricket}>Cricket</Text>
+            </View>
           </SafeAreaView>
         </View>
         <View>
@@ -115,19 +117,21 @@ const HomeScreen = ({navigation}) => {
               onPress={() => navigation.navigate('AppStack')}
               //  style={{width:'100%'}}
             />
-            <View style={styles.recentActivityView}>
-              <Text style={styles.recentActivityText}>Recent Activities</Text>
-              {recentsData.map(tournament => (
-                <RecentActivityCard
-                  key={tournament._id}
-                  title={tournament.name}
-                  matchCode={tournament.code}
-                  isAdmin={tournament.isAdmin}
-                  navigation={navigation}
-                  id={tournament._id}
-                />
-              ))}
-            </View>
+            {recentsData.length > 0 && (
+              <View style={styles.recentActivityView}>
+                <Text style={styles.recentActivityText}>Recent Activities</Text>
+                {recentsData.map(tournament => (
+                  <RecentActivityCard
+                    key={tournament._id}
+                    title={tournament.name}
+                    matchCode={tournament.code}
+                    isAdmin={tournament.isAdmin}
+                    navigation={navigation}
+                    id={tournament._id}
+                  />
+                ))}
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -139,12 +143,11 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }, 
-   backgroundBeyondSafeArea: {
+  },
+  backgroundBeyondSafeArea: {
     backgroundColor: 'rgba(0, 102, 226, 1)',
     paddingRight: 20,
-    paddingBottom:15,
-
+    paddingBottom: 15,
   },
   textInput: {
     boxSizing: 'border-box',

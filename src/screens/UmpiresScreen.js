@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
@@ -11,7 +12,7 @@ import TeamListName from '../components/TeamListName';
 import {useSelector} from 'react-redux';
 import {getUmpiresByTournamentId} from '../services/viewTournament';
 
-const UmpiresScreen = () => {
+const UmpiresScreen = ({navigation}) => {
   const [currentUmpires, setCurrentUmpires] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -29,7 +30,9 @@ const UmpiresScreen = () => {
   }, []);
 
   const renderItem = ({item}) => (
-    <TeamListName source={item.profilePic.url} text={item.name} />
+    <TouchableOpacity onPress={() => navigation.navigate('UmpireProfile')}>
+      <TeamListName source={item.profilePic.url} text={item.name} />
+    </TouchableOpacity>
   );
 
   return (
