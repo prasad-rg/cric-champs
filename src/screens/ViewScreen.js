@@ -17,7 +17,6 @@ const ViewScreen = ({navigation, route}) => {
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
-        {/* <ScrollView> */}
         <ImageBackground
           source={require('../../assets/images/stadium3.png')}
           resizeMode="cover">
@@ -59,14 +58,10 @@ const ViewScreen = ({navigation, route}) => {
             </SafeAreaView>
           </View>
         </ImageBackground>
-
-        {/* </ScrollView> */}
       </View>
-      {/* <ScrollView contentContainerStyle={{flex: 1}}> */}
       <View
         style={{
           flex: 1,
-          // borderWidth: 2,
           borderColor: 'red',
           justifyContent: 'center',
           alignItems: 'center',
@@ -74,7 +69,6 @@ const ViewScreen = ({navigation, route}) => {
         }}>
         <ViewTournamentTab />
       </View>
-      {/* </ScrollView> */}
     </View>
   );
 };
