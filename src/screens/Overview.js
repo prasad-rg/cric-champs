@@ -15,6 +15,7 @@ import TournamentInputList from '../components/TournamentInputList';
 import CustomModal from '../components/CustomModal';
 import Tournament from './managedetails/Tournament';
 import { useSelector } from 'react-redux';
+import { generateFixture } from '../services/manageTournament2';
 
 const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -24,9 +25,23 @@ const Overview = ({navigation}) => {
   );
   console.log(tournamentdata)
 
-  const handlePress=()=>{
-    setVisible(true)
+  const tournamentId =useSelector(state=> state.tournamentdata.tournamentdata.tournamentid)
+  console.log(tournamentId)
+
+
+  const handlePress= async ()=>{
+    const response= await generateFixture(tournamentId);
+    if(response.data.statusCode !== 200){
+       setModal(false)
+      // navigation.navigate('TimeScreen')
+    }else{
+      setModal(true)
+    }
+  
+  
+   setVisible(true)
   }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -93,7 +108,8 @@ const Overview = ({navigation}) => {
              />
              <Text style={styles.textView}>Your Fixture has been{'\n'}generated!</Text>
            </View>
-           <TouchableOpacity onPress={() => setVisible(false)}>
+           <TouchableOpacity onPress={() =>{navigation.navigate('ViewScreen')
+          setVisible(false)}}>
              <Text style={styles.matchText}>VIEW MATCHES</Text>
            </TouchableOpacity>
          </CustomModal>):(
