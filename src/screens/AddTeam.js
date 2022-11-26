@@ -47,7 +47,7 @@ const AddTeam = ({navigation}) => {
     navigation.navigate('AddPlayer');
   };
   const handleBack = () => {
-    navigation.navigate('TeamsList');
+    navigation.goBack();
   };
 
   const addPlayerValidationSchema = yup.object().shape({
@@ -259,7 +259,7 @@ const handlePlayerList=()=>{
               <GradientButton
                 start={{x: 0, y: 0}}
                 end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
+                colors={participantdata.length === 0 ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
                 text="SAVE TEAM"
                 style={{width: '100%', marginTop: 0, height: 48}}
                 textstyle={{

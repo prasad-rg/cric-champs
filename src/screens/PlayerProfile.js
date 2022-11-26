@@ -125,7 +125,9 @@ const PlayerProfile = ({navigation, route}) => {
           getImageUri={getDetails}
           profilePictureUri={{
             uri: currentPlayerDetails?.profilePic?.url,
-          }}></AddProfileDetails>
+          }}>
+           
+          </AddProfileDetails>
         <View>
           {Details.map(item => (
             <View key={item.id} style={styles.listview}>
