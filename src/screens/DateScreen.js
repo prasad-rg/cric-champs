@@ -35,10 +35,10 @@ const DateScreen = ({navigation}) => {
   console.log('total days', total);
 
   const dateData ={
-    sDate:sDate,
-    eDate:eDate,
+    startDateInISO:sDate,
+    endDateInISO:eDate,
     tournamentId:tournamentId,
-    total:total
+    tournamentDays:total
   }
    
   const handlePress= async ()=>{

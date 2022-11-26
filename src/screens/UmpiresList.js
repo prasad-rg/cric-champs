@@ -25,7 +25,7 @@ const UmpiresList = ({navigation}) => {
   );
   
   const loadUmpires = async () => {
-    const response = await getUmpiresByTournamentId('637efbd16b9ce8028082cb9d');
+    const response = await getUmpiresByTournamentId(tournamentId);
     console.log('resp', response);
 
     if (response.status) {

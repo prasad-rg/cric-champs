@@ -65,6 +65,9 @@ const StadiumInformation = ({navigation, route}) => {
     }
   };
 
+  const handleBack =()=>{
+    navigation.goBack();
+  }
   const stadiumDetails = [
     {
       id: 1,
@@ -113,7 +116,7 @@ const StadiumInformation = ({navigation, route}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleBack}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                     />

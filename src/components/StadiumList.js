@@ -4,16 +4,20 @@ import React from 'react';
 const StadiumList = ({source, text, place}) => {
   return (
     <View>
-      <View style={styles.card}>
+    
+       <View style={styles.card}>
         <Image source={source} style={styles.ground} />
         <View style={{justifyContent: 'center'}}>
           <Text style={styles.groundName}>{text}</Text>
           <Text style={styles.place}>{place}</Text>
         </View>
-      </View>
+        
+        
+       </View>
+  
     </View>
-  );
-};
+  )
+}
 
 export default StadiumList;
 

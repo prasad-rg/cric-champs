@@ -51,8 +51,43 @@ export const addUmpires = async formData => {
 export const addDates = async dateData => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/api/tournament/over`,
+      `${BASE_URL}/api/tournament/date`,
       dateData,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const addTime = async dateData => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/tournament/time`,
+      dateData,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const generateFixture = async data => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/generate-fixture?tournamentId=${data}`,
 
       {
         headers: {

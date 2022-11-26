@@ -97,7 +97,7 @@ const OversScreen = ({navigation}) => {
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
+          colors={overs === ''  ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{

@@ -13,10 +13,35 @@ import React, { useState } from 'react';
 import GradientButton from '../components/GradientButton';
 import TournamentInputList from '../components/TournamentInputList';
 import CustomModal from '../components/CustomModal';
+import Tournament from './managedetails/Tournament';
+import { useSelector } from 'react-redux';
+import { generateFixture } from '../services/manageTournament2';
 
-const Overview = () => {
+const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [modal,setModal] =useState(true)
+  const tournamentdata = useSelector(
+    state => state.tournamentdata.tournamentdata,
+  );
+  console.log(tournamentdata)
+
+  const tournamentId =useSelector(state=> state.tournamentdata.tournamentdata.tournamentid)
+  console.log(tournamentId)
+
+
+  const handlePress= async ()=>{
+    const response= await generateFixture(tournamentId);
+    if(response.data.statusCode !== 200){
+       setModal(false)
+      // navigation.navigate('TimeScreen')
+    }else{
+      setModal(true)
+    }
+  
+  
+   setVisible(true)
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -27,7 +52,7 @@ const Overview = () => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -37,10 +62,10 @@ const Overview = () => {
                 </View>
               </View>
               <View>
-                <Text style={styles.heading}>Robosoft Premiere League</Text>
+                <Text style={styles.heading}>{tournamentdata.name}</Text>
                 <View style={{alignSelf: 'center', marginTop: 7}}>
                   <TouchableOpacity style={styles.tourButton}>
-                    <Text style={styles.tourText}>Tournament Code:897546</Text>
+                    <Text style={styles.tourText}>{`Tournament Code:${tournamentdata.code}`}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -52,14 +77,7 @@ const Overview = () => {
       <View style={styles.secondView}>
         <Text style={styles.overs}>Tournament Inputs</Text>
         <ScrollView>
-          <TournamentInputList text="Teams" number="6" />
-          <TournamentInputList text="Overs" number="5" />
-          <TournamentInputList text="Grounds" number="4" />
-          <TournamentInputList text="Umpires" number="4" />
-          <TournamentInputList text="Start Date" number="Sat, Oct 15 2017" />
-          <TournamentInputList text="End Date" number="Sun, Oct 16 2017" />
-          <TournamentInputList text="Start of Play" number="9:00 AM" />
-          <TournamentInputList text="End of Play" number="6:00 PM" />
+          <Tournament disableRegenerateFixture = {false}/>
         </ScrollView>
       </View>
 
@@ -77,7 +95,7 @@ const Overview = () => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-          onPress={() => setVisible(true)}
+          onPress={handlePress}
         />
       </View>
 
@@ -90,7 +108,8 @@ const Overview = () => {
              />
              <Text style={styles.textView}>Your Fixture has been{'\n'}generated!</Text>
            </View>
-           <TouchableOpacity onPress={() => setVisible(false)}>
+           <TouchableOpacity onPress={() =>{navigation.navigate('ViewScreen')
+          setVisible(false)}}>
              <Text style={styles.matchText}>VIEW MATCHES</Text>
            </TouchableOpacity>
          </CustomModal>):(
