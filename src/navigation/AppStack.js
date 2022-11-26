@@ -16,6 +16,11 @@ import AddUmpire from '../screens/AddUmpire';
 import DateScreen from '../screens/DateScreen';
 import TimeScreen from '../screens/TimeScreen';
 import Overview from '../screens/Overview';
+import TeamInfoScreen from '../screens/TeamInfoScreen';
+import PlayerProfile from '../screens/PlayerProfile';
+import UmpireProfile from '../screens/UmpireProfile';
+import StadiumInformation from '../screens/StadiumInformation';
+import ManageScreen from '../screens/ManageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -95,6 +100,31 @@ const AppStack = () => {
         component={Overview}
         options={{headerShown: false}}
       />
+       <Stack.Screen
+          name="TeamInfoScreen"
+          component={TeamInfoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PlayerProfile"
+          component={PlayerProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="UmpireProfile"
+          component={UmpireProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="StadiumInformation"
+          component={StadiumInformation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ManageScreen"
+          component={ManageScreen}
+          options={{headerShown: false}}
+        />
     </Stack.Navigator>
     //  </NavigationContainer>
   );
