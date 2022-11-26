@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Platform, View} from 'react-native';
+import {Image, StyleSheet, Platform, View, Button} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {useSelector} from 'react-redux';
 import {setStartDate} from '../../redux/MatchSlice';
@@ -15,9 +15,11 @@ const StartDate = ({navigation}) => {
 
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
+  const [disabled,setDisabled] = useState(false)
   console.log("startdate",startDate);
 
   const onDateChange = (date, type) => {
+    setDisabled(true)
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));
     } else {
@@ -47,12 +49,14 @@ const StartDate = ({navigation}) => {
     // else{
     //   console.log("overs is required")
     // }
+    navigation.navigate('END DATE')
     console.log("entered")
   }
 
 
 
   return (
+    <View style={styles.maincontainer}>
     <View style={styles.container}>
       <CalendarPicker
         previousComponent={
@@ -144,19 +148,39 @@ const StartDate = ({navigation}) => {
           };
         }}
       />
-      
+ 
+    </View>
+    <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          // colors={['#FFBA8C', '#FE5C6A']}
+          colors={ disabled ? ['#FFBA8C', '#FE5C6A']  : ['#999999', '#999999']}
+          text="PROCEED"
+          onPress={handlePress}
+          style={{height: 50, width: '100%', marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
     </View>
   );
 };
 export default StartDate;
 
 const styles = StyleSheet.create({
+  maincontainer:{
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingTop: 25,
     backgroundColor: '#ffffff',
     padding: 16,
-   
+
   },
   selectedTextStyle: {
     color: 'green',

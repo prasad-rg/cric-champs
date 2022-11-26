@@ -24,6 +24,9 @@ const Overview = ({navigation}) => {
   );
   console.log(tournamentdata)
 
+  const handlePress=()=>{
+    setVisible(true)
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -77,7 +80,7 @@ const Overview = ({navigation}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-          onPress={() => setVisible(true)}
+          onPress={handlePress}
         />
       </View>
 

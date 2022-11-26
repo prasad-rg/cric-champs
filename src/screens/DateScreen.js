@@ -20,34 +20,34 @@ const DateScreen = ({navigation}) => {
   };
   const start = useSelector(state => state.matchdata.start);
   const end = useSelector(state => state.matchdata.end);
-  const sDate = useSelector(state => state.matchdata.startDate);
-  const eDate = useSelector(state => state.matchdata.endDate);
-  const tournamentId = useSelector(
-    state => state.tournamentdata.tournamentdata.tournamentid,
-  );
-  console.log(sDate, eDate);
+  // const sDate = useSelector(state => state.matchdata.startDate);
+  // const eDate = useSelector(state => state.matchdata.endDate);
+  // const tournamentId = useSelector(
+  //   state => state.tournamentdata.tournamentdata.tournamentid,
+  // );
+  // console.log(sDate, eDate);
 
-  console.log(sDate, eDate);
-  let date1 = new Date(sDate);
-  let date2 = new Date(eDate);
+  // console.log(sDate, eDate);
+  // let date1 = new Date(sDate);
+  // let date2 = new Date(eDate);
 
-  let total = date2.getUTCDate() - date1.getUTCDate() + 1;
-  console.log('total days', total);
+  // let total = date2.getUTCDate() - date1.getUTCDate() + 1;
+  // console.log('total days', total);
 
-  const dateData ={
-    startDateInISO:sDate,
-    endDateInISO:eDate,
-    tournamentId:tournamentId,
-    tournamentDays:total
-  }
+  // const dateData ={
+  //   startDateInISO:sDate,
+  //   endDateInISO:eDate,
+  //   tournamentId:tournamentId,
+  //   tournamentDays:total
+  // }
    
-  const handlePress= async ()=>{
-    const response= await addDates(dateData);
-    console.log("I am response for date",response.data)
-    if(response.data.status){
-      navigation.navigate('TimeScreen')
-    }
-  }
+  // const handlePress= async ()=>{
+  //   const response= await addDates(dateData);
+  //   console.log("I am response for date",response.data)
+  //   if(response.data.status){
+  //     navigation.navigate('TimeScreen')
+  //   }
+  // }
 
 
 
@@ -111,7 +111,7 @@ const DateScreen = ({navigation}) => {
       <DateTab />
 
       <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton
+        {/* <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           // colors={['#FFBA8C', '#FE5C6A']}
@@ -126,7 +126,7 @@ const DateScreen = ({navigation}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-        />
+        /> */}
       </View>
     </View>
   );
