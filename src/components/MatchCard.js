@@ -11,7 +11,9 @@ const MatchCard = ({matchDetails}) => {
             <Text style={styles.matchText}>
               Match {matchDetails?.matchNumber}
             </Text>
-            <Text style={styles.LeagueText}>League Play at Ground 1</Text>
+            <Text style={styles.LeagueText}>
+              {`League Play at ${matchDetails?.groundName}  Ground`}
+            </Text>
           </View>
           <View
             style={[
@@ -51,18 +53,42 @@ const MatchCard = ({matchDetails}) => {
               </>
             ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[0]
+                    ? `${matchDetails.scores[0].runs}/${matchDetails.scores[0].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[0]
+                    ? `(${matchDetails.scores[0].over}.${matchDetails.scores[0].balls})`
+                    : '-'}
+                </Text>
               </>
             ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[0]
+                    ? `${matchDetails.scores[0].runs}/${matchDetails.scores[0].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[0]
+                    ? `(${matchDetails.scores[0].over}.${matchDetails.scores[0].balls})`
+                    : '-'}
+                </Text>
               </>
             ) : (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[0]
+                    ? `${matchDetails.scores[0].runs}/${matchDetails.scores[0].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[0]
+                    ? `(${matchDetails.scores[0].over}.${matchDetails.scores[0].balls})`
+                    : '-'}
+                </Text>
               </>
             )}
           </View>
@@ -75,18 +101,42 @@ const MatchCard = ({matchDetails}) => {
               </>
             ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[1]
+                    ? ` ${matchDetails.scores[1].runs}/${matchDetails.scores[1].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[1]
+                    ? `(${matchDetails.scores[1].over}.${matchDetails.scores[1].balls})`
+                    : '-'}
+                </Text>
               </>
             ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[1]
+                    ? ` ${matchDetails.scores[1].runs}/${matchDetails.scores[1].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[1]
+                    ? `(${matchDetails.scores[1].over}.${matchDetails.scores[1].balls})`
+                    : '-'}
+                </Text>
               </>
             ) : (
               <>
-                <Text style={styles.number}>-</Text>
-                <Text style={styles.overs}>-</Text>
+                <Text style={styles.number}>
+                  {matchDetails?.scores[1]
+                    ? ` ${matchDetails.scores[1].runs}/${matchDetails.scores[1].wickets}`
+                    : '-'}
+                </Text>
+                <Text style={styles.overs}>
+                  {matchDetails?.scores[1]
+                    ? `(${matchDetails.scores[1].over}.${matchDetails.scores[1].balls})`
+                    : '-'}
+                </Text>
               </>
             )}
           </View>
@@ -98,11 +148,11 @@ const MatchCard = ({matchDetails}) => {
               {matchDetails?.matchStartTimingInNormal} IST
             </Text>
           ) : matchDetails?.status.toUpperCase() === 'ABONDONED' ? (
-            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+            <Text style={styles.message}>{matchDetails?.statusMessage}</Text>
           ) : matchDetails?.status.toUpperCase() === 'LIVE' ? (
-            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+            <Text style={styles.message}>{matchDetails?.statusMessage}</Text>
           ) : (
-            <Text style={styles.message}>{matchDetails?.statusName}</Text>
+            <Text style={styles.message}>{matchDetails?.statusMessage}</Text>
           )}
         </View>
       </View>
@@ -164,7 +214,7 @@ const styles = StyleSheet.create({
   },
   number: {
     height: 28,
-    width: 51,
+    // width: 51,
     color: '#000000',
     fontFamily: 'Roboto-Regular',
     fontSize: 24,
@@ -184,6 +234,8 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     marginTop: 5,
     textAlign: 'center',
+    // borderWidth: 1,
+    // width: 33,
   },
   messageView: {
     height: 24,

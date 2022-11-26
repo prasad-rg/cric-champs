@@ -92,7 +92,6 @@ export const refreshTokenIfExpired = async () => {
 
 export const getUserDetails = async () => {
   const validateAndGetToken = await refreshTokenIfExpired();
-  // console.log(validateAndGetToken);
   if (validateAndGetToken !== null) {
     try {
       const response = await axios.get(`${BASE_URL}/api/user`, {
