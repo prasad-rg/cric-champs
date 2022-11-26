@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 export const manageTournamentSlice = createSlice({
   name: 'tournamentdata',
   initialState: {
-    isedit: false,
+   
     teamId: [],
     tournamentdata: {
       code: [],
@@ -27,13 +27,9 @@ export const manageTournamentSlice = createSlice({
     setTeamId: (state, action) => {
       state.teamId = action.payload;
     },
-    setEdit: (state, action) => {
-      state.isedit = action.payload;
-    
-
-    },
+  
   },
 });
-export const {setTournamentData, setTeamId, setEdit} =
+export const {setTournamentData, setTeamId, } =
   manageTournamentSlice.actions;
 export default manageTournamentSlice.reducer;

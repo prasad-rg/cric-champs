@@ -19,7 +19,6 @@ import ProfileImagePicker from '../components/ProfileImagePicker';
 import {createFormData} from '../utils/createFormData';
 import {createTournament} from '../services/manageTournament';
 import {useDispatch} from 'react-redux';
-import {setCode, setEdit} from '../redux/manageTournamentSlice';
 import {setTournamentData} from '../redux/manageTournamentSlice';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 const radio_props = [
@@ -59,7 +58,7 @@ const CreateTournament = ({navigation}) => {
         };
         dispatch(setTournamentData(tournamentresponse));
         dispatch(storeTournamentDetails(response.data.result));
-        dispatch(setEdit(false));
+   
         navigation.navigate('CreateTournamentSuccess');
       }
     } else {

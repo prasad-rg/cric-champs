@@ -19,7 +19,6 @@ import {createFormData} from '../utils/createFormData';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {addUmpire} from '../redux/umpireSlice';
 import {addUmpires} from '../services/manageTournament2';
 
 const AddUmpire = ({navigation}) => {

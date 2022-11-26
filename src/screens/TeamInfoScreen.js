@@ -11,38 +11,11 @@ import {
 import React, {useState} from 'react';
 import ProfileImagePicker from '../components/ProfileImagePicker';
 import TeamInfoTab from '../navigation/TeamInfoTab';
-import {useDispatch, useSelector} from 'react-redux';
-import {setEdit} from '../redux/manageTournamentSlice';
-import {CommonActions} from '@react-navigation/native';
-
 const TeamInfoScreen = ({navigation, route}) => {
-  // console.warn(route.params);
-  const dispatch = useDispatch();
   const [profilePictureUri, setProfilePictureUri] = useState('');
-  const edit = useSelector(state => state.tournamentdata.isedit);
-  // console.log(edit)
 
   const getDetails = data => {
     setProfilePictureUri(data);
-  };
-
-  const handleEdit = () => {
-   
-
-    navigation.navigate('AddTeam', {
-      title: 'Edit Team',
-      teamId: route.params?.teamId,
-      teamName: route.params?.teamName,
-      teamLogo: route.params?.teamLogo,
-    });
-    dispatch(setEdit(true));
-    // const pushAction = StackActions.push('AddTeam');
-    // navigation.dispatch(pushAction);
-
-    // navigation.navigate('')
-  };
-  const handleDelete = () => {
-    // navigation.navigate('')
   };
 
   return (
@@ -55,7 +28,7 @@ const TeamInfoScreen = ({navigation, route}) => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={() => navigation.pop(1)}>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -72,7 +45,7 @@ const TeamInfoScreen = ({navigation, route}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                   }}>
-                  <TouchableOpacity onPress={handleEdit}>
+                  <TouchableOpacity>
                     <Image
                       source={require('../../assets/images/pencil.png')}
                       style={{
@@ -83,7 +56,7 @@ const TeamInfoScreen = ({navigation, route}) => {
                       }}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={handleDelete}>
+                  <TouchableOpacity>
                     <Image
                       source={require('../../assets/images/trash.png')}
                       style={{

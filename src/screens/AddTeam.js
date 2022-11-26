@@ -24,14 +24,11 @@ import {createTeam} from '../services/manageTournament';
 import {setTeamId} from '../redux/manageTournamentSlice';
 import {useDispatch} from 'react-redux';
 import {addParticipant} from '../services/manageTournament';
-import {deletePlayers} from '../redux/ParticipantSlice';
-import {setEdit} from '../redux/manageTournamentSlice';
-import TeamListName from '../components/TeamListName';
-import {CommonActions} from '@react-navigation/native';
+import { deletePlayers } from '../redux/ParticipantSlice';
 
-const AddTeam = ({navigation, route}) => {
+
+const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
-  console.log(route.params);
   const dispatch = useDispatch();
   const getDetails = data => {
     setProfilePictureUri(data);
@@ -44,37 +41,27 @@ const AddTeam = ({navigation, route}) => {
   const teamId = useSelector(
     state => state.tournamentdata.tournamentdata.teamId,
   );
-  const edit = useSelector(state => state.tournamentdata.isedit);
-
   // const teamId='vhwrt3782456qywdhb'
-
+  // console.log("TeamId",teamId)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
   const handleBack = () => {
-    if (edit) {
-      navigation.navigate({
-        name: 'TeamInfoScreen',
-        params: route.params,
-        merge: true,
-      });
-      dispatch(setEdit(false));
-    } else {
-      navigation.pop(1);
-    }
+    navigation.goBack();
   };
 
   const addPlayerValidationSchema = yup.object().shape({
     name: yup.string().required(),
   });
 
-  const handlePlayerList = () => {
-    if (teamId) {
-      navigation.navigate('PlayerProfile', {
-        tournamentId: tournamentId,
-      });
-    }
-  };
+const handlePlayerList=()=>{
+  if(teamId){
+    navigation.navigate('PlayerProfile', {
+      tournamentId: tournamentId,
+    })
+  }
+
+}
   return (
     <View style={styles.container}>
       <Formik
@@ -94,45 +81,43 @@ const AddTeam = ({navigation, route}) => {
             if (response.status) {
               dispatch(setTeamId(response.data._id));
               console.log('HIIIIIIIIIIIII', response);
-              var result = await Promise.all(
-                participantdata.map(async el => {
-                  var object = Object.assign({}, el);
-                  object.name = el.name;
-                  object.city = el.city;
-                  object.phoneNo = el.phoneNo;
-                  object.batting = el.batting;
-                  object.bowling = el.bowling;
-                  object.bowlingtype = el.bowlingtype;
-                  object.designation = el.designation;
-                  object.expertise = el.expertise;
-                  object.image = el.image;
-                  object.tournamentId = tournamentId;
-                  object.teamId = response.data._id;
-                  object.role = 'player';
+              var result =  await Promise.all(participantdata.map(async (el) => {
+                var object = Object.assign({}, el);
+                object.name = el.name;
+                object.city = el.city;
+                object.phoneNo = el.phoneNo;
+                object.batting = el.batting;
+                object.bowling  = el.bowling;
+                object.bowlingtype = el.bowlingtype;
+                object.designation = el.designation;
+                object.expertise = el.expertise;
+                object.image = el.image;
+                object.tournamentId = tournamentId;
+                object.teamId = response.data._id;
+                object.role = 'player';
 
-                  Object.keys(object).forEach(key => {
-                    if (object[key] === '') {
-                      delete object[key];
-                    }
-                  });
+                Object.keys(object).forEach(key => {
+                  if (object[key] === '') {
+                    delete object[key];
+                  }
+                });
+                
+                console.log(object);
+                const participantFormData = createFormData(object);
+                const createparticipantresponse =await addParticipant(
+                  participantFormData,
+                );
+                return createparticipantresponse;
+              }));
 
-                  console.log(object);
-                  const participantFormData = createFormData(object);
-                  const createparticipantresponse = await addParticipant(
-                    participantFormData,
-                  );
-                  return createparticipantresponse;
-                }),
-              );
-
-              const status = result.map(stat => {
-                console.log(stat);
-              });
-              if (status) {
-                navigation.goBack();
-                dispatch(deletePlayers());
-              } else {
-                Alert.alert('Something went wrong. Please try again');
+              const status = result.map((stat)=>{
+                console.log(stat)
+              })
+              if (status){
+                navigation.goBack()
+                dispatch(deletePlayers())
+              }else{
+                Alert.alert("Something went wrong. Please try again")
               }
               // const participantFormData = createFormData(result);
               // console.log('I am form data after map', participantFormData);
@@ -167,19 +152,10 @@ const AddTeam = ({navigation, route}) => {
                             style={styles.gobackbutton}
                           />
                         </TouchableOpacity>
-                        <Text style={styles.createTournament}>
-                          {edit ? route?.params?.title : 'Add Team'}
-                        </Text>
+                        <Text style={styles.createTournament}>Add Team</Text>
                       </View>
 
-                      {edit ? (
-                        <ProfileImagePicker
-                          getImageUri={getDetails}
-                          profilePictureUri={{uri: route.params.teamLogo}}
-                        />
-                      ) : (
-                        <ProfileImagePicker getImageUri={getDetails} />
-                      )}
+                      <ProfileImagePicker getImageUri={getDetails} />
 
                       <View>
                         <TextField
@@ -253,89 +229,48 @@ const AddTeam = ({navigation, route}) => {
               </View>
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
-                {edit ? (
-                  <TouchableOpacity
-                  //  onPress={() =>
-                  //    navigation.navigate('PlayerProfile', {
-                  //      teamId: route.params.teamId,
-                  //      tournamentId: tournamentDetails._id,
-                  //      playerId: item._id,
-                  //    })
-                  //  }
-                  >
-                    {/* <TeamListName source={item.profilePic.url} text={item.name} /> */}
-                    <Text>hiiiii</Text>
-                  </TouchableOpacity>
+                {participantdata.length === 0 ? (
+                  <View style={styles.noplayerView}>
+                    <Text style={styles.noplayers}>No Players Added Yet!</Text>
+                  </View>
                 ) : (
-                  <>
-                    {participantdata.length === 0 ? (
-                      <View style={styles.noplayerView}>
-                        <Text style={styles.noplayers}>
-                          No Players Added Yet!
-                        </Text>
+                  <View style={styles.teamsView}>
+                    {participantdata.map(value => (
+                      // console.log(value.image.path)
+                      <View key={value.tempId}>
+                        <TouchableOpacity onPress={handlePlayerList}>
+                        <PlayersList
+                          source={value.image.path}
+                          name={value.name}
+                          designation={value.designation}
+                          expertise={value.expertise}
+                          batting={value.batting}
+                          bowling={value.bowling}
+                          bowlingtype={value.bowlingtype}
+                        />
+                        </TouchableOpacity>
                       </View>
-                    ) : (
-                      <View style={styles.teamsView}>
-                        {participantdata.map(value => (
-                          // console.log(value.image.path)
-                          <View key={value.tempId}>
-                            <TouchableOpacity onPress={handlePlayerList}>
-                              <PlayersList
-                                source={value.image.path}
-                                name={value.name}
-                                designation={value.designation}
-                                expertise={value.expertise}
-                                batting={value.batting}
-                                bowling={value.bowling}
-                                bowlingtype={value.bowlingtype}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        ))}
-                      </View>
-                    )}
-                  </>
+                    ))}
+                  </View>
                 )}
               </View>
             </ScrollView>
             <View style={styles.gradientButton}>
-              {edit ? (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={['#FFBA8C', '#FE5C6A']}
-                  text="UPDATE TEAM"
-                  style={{width: '100%', marginTop: 0, height: 48}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                  onPress={handleSubmit}
-                />
-              ) : (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    participantdata.length === 0
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="SAVE TEAM"
-                  style={{width: '100%', marginTop: 0, height: 48}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                  onPress={handleSubmit}
-                />
-              )}
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={participantdata.length === 0 ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+                text="SAVE TEAM"
+                style={{width: '100%', marginTop: 0, height: 48}}
+                textstyle={{
+                  height: 16,
+                  fontWeight: '500',
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  lineHeight: 19,
+                }}
+                onPress={handleSubmit}
+              />
             </View>
           </>
         )}
