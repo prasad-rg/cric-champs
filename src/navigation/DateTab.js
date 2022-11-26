@@ -36,7 +36,7 @@ const DateTab = () => {
       <Tab.Screen name="START DATE" component={StartDate} />
       <Tab.Screen name="END DATE" component={EndDate} />
     </Tab.Navigator>
-    // </NavigationContainer>
+    //  </NavigationContainer>
   );
 };
 

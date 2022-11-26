@@ -7,7 +7,8 @@ import {setEndDate} from '../../redux/MatchSlice';
 import {useDispatch} from 'react-redux';
 import { setEnd } from '../../redux/MatchSlice';
 import { setStart } from '../../redux/MatchSlice';
-
+import GradientButton from '../../components/GradientButton';
+import { addDates } from '../../services/manageTournament2';
 
 
 const StartDate = ({navigation}) => {
@@ -15,6 +16,8 @@ const StartDate = ({navigation}) => {
 
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
+  const [disabled,setDisabled] = useState(false)
+
   console.log(startDate, endDate);
 
   let date1=new Date(startDate)
@@ -23,16 +26,40 @@ const StartDate = ({navigation}) => {
   let total=(date2.getUTCDate()- date1.getUTCDate())+1;
   console.log("total days",total)
 
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
 
+
+  const dateData ={
+    startDateInISO:startDate,
+    endDateInISO:endDate,
+    tournamentId:tournamentId,
+    tournamentDays:total
+  }
+   
+  const handlePress= async ()=>{
+    const response= await addDates(dateData);
+    console.log("I am response for date",response.data)
+    if(response.data.status){
+      navigation.navigate('TimeScreen')
+    }else{
+      console.log("Something Went Wrong")
+    }
+  }
 
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));
+      setDisabled(true)
     } else {
       dispatch(setEndDate(endDate));
       dispatch(setStartDate(startDate));
     }
   };
+
+
+  
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', e => {
@@ -44,6 +71,7 @@ const StartDate = ({navigation}) => {
 
 
   return (
+    <View style={styles.mainContainer}>
     <View style={styles.container}>
       <CalendarPicker
         previousComponent={
@@ -139,6 +167,23 @@ const StartDate = ({navigation}) => {
         }}
       />
     </View>
+    <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          // colors={['#FFBA8C', '#FE5C6A']}
+          colors={ disabled ? ['#FFBA8C', '#FE5C6A']  : ['#999999', '#999999']}
+          text="PROCEED"
+          onPress={handlePress}
+          style={{height: 50, width: '100%', marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
+    </View>
   );
 };
 export default StartDate;
@@ -149,5 +194,8 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     backgroundColor: '#ffffff',
     padding: 16,
+  },
+  mainContainer:{
+    flex: 1,
   },
 });
