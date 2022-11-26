@@ -5,7 +5,7 @@ import React from 'react'
 const StadiumList = ({source,text,place}) => {
   return (
     <View>
-      <TouchableOpacity>
+    
        <View style={styles.card}>
         <Image source={source} style={styles.ground} />
         <View style={{justifyContent:"center"}}>
@@ -15,7 +15,7 @@ const StadiumList = ({source,text,place}) => {
         
         
        </View>
-        </TouchableOpacity>
+  
     </View>
   )
 }

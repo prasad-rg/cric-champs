@@ -19,7 +19,6 @@ import ProfileImagePicker from '../components/ProfileImagePicker';
 import {createFormData} from '../utils/createFormData';
 import {createTournament} from '../services/manageTournament';
 import {useDispatch} from 'react-redux';
-import {setCode} from '../redux/manageTournamentSlice';
 import {setTournamentData} from '../redux/manageTournamentSlice';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 const radio_props = [
@@ -47,7 +46,7 @@ const CreateTournament = ({navigation}) => {
         image: profilePictureUri,
       });
       const response = await createTournament(formData);
-      console.log("I am create tournament responseeee",response)
+      console.log('I am create tournament responseeee', response);
       if (response.status) {
         const {code, _id, userId, name, email} = response.data.result;
         const tournamentresponse = {
@@ -59,6 +58,7 @@ const CreateTournament = ({navigation}) => {
         };
         dispatch(setTournamentData(tournamentresponse));
         dispatch(storeTournamentDetails(response.data.result));
+   
         navigation.navigate('CreateTournamentSuccess');
       }
     } else {
@@ -136,7 +136,11 @@ const CreateTournament = ({navigation}) => {
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
+          colors={
+            tournamentName === ''
+              ? ['#999999', '#999999']
+              : ['#FFBA8C', '#FE5C6A']
+          }
           text="CREATE TOURNAMENT"
           style={{width: '100%', marginTop: 0, height: 48}}
           textstyle={{
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
   teamlogo: {
     height: 104,
     width: 104,
-    borderRadius:52,
+    borderRadius: 52,
   },
   teamlogoview: {
     width: 120,
