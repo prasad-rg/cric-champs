@@ -83,3 +83,20 @@ export const addTime = async dateData => {
     return error.response.data.message;
   }
 };
+
+export const generateFixture = async data => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/generate-fixture?tournamentId=${data}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};

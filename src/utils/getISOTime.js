@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export const getISOTime = time => {
-  let [hours, minutes] = time.split(':');
+  let [hours, minutes] = time?.split(':');
   let currentDate = moment().format('YYYY-MM-DD');
   let modifiedDate;
   if (Number(hours) < 10) {
