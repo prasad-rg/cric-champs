@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
   headerText: {
     flexDirection: 'row',
     alignItems: 'center',
-    // borderWidth:1,
     justifyContent: 'space-between',
   },
   heading: {
@@ -186,7 +185,6 @@ const styles = StyleSheet.create({
   },
   tourText: {
     height: 14,
-    // width: 143,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 12,
@@ -226,14 +224,12 @@ const styles = StyleSheet.create({
   },
   textView: {
     height: 42,
-    // width: 138,
     color: '#4A4A4A',
     fontFamily: 'Roboto-Regular',
     fontSize: 18,
     letterSpacing: 0,
     lineHeight: 21,
     textAlign: 'center',
-    // alignItems:"center"
     justifyContent:"center"
   },
   tryText:{
@@ -249,7 +245,6 @@ const styles = StyleSheet.create({
   },
   matchText:{
     height: 16,
-    // width: 77,
     color: '#4A90E2',
     fontFamily: 'Roboto-Bold',
     fontSize: 14,

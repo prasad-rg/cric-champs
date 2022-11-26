@@ -5,7 +5,6 @@ import {
   TableWrapper,
   Row,
   Rows,
-  Col,
 } from 'react-native-table-component';
 
 const ScoreboardScreen = () => {
@@ -23,8 +22,7 @@ const ScoreboardScreen = () => {
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
-
-    // ['Anupam K', '0', '0', '0', '0', '0'],
+ 
   ]);
   const [tableHeader, setTableHeader] = useState([
     'Bowler',
@@ -202,11 +200,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 16,
 
-    // paddingLeft: 66,
   },
   extraInfo: {
     height: 19,
-    // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Regular',
     fontSize: 14,
@@ -215,7 +211,6 @@ const styles = StyleSheet.create({
   },
   totalText: {
     height: 19,
-    // width: 32,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
@@ -227,7 +222,6 @@ const styles = StyleSheet.create({
   },
   totalNumber: {
     height: 19,
-    // width: 32,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
@@ -238,7 +232,6 @@ const styles = StyleSheet.create({
   },
   fallText: {
     height: 50,
-    // width: 32,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,

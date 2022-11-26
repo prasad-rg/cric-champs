@@ -35,7 +35,9 @@ const RootNavigator = () => {
         <Stack.Screen
           name="HomeStack"
           component={HomeStack}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+          }}
         />
 
         <Stack.Screen
@@ -50,27 +52,42 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ViewScreen"
           component={ViewScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="TeamInfoScreen"
           component={TeamInfoScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="PlayerProfile"
           component={PlayerProfile}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="UmpireProfile"
           component={UmpireProfile}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="StadiumInformation"
           component={StadiumInformation}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="ManageScreen"
