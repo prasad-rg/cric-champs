@@ -1,0 +1,243 @@
+diff --git a/node_modules/react-native-paper-dates/.DS_Store b/node_modules/react-native-paper-dates/.DS_Store
+new file mode 100644
+index 0000000..5172429
+Binary files /dev/null and b/node_modules/react-native-paper-dates/.DS_Store differ
+diff --git a/node_modules/react-native-paper-dates/src/Time/AmPmSwitcher.tsx b/node_modules/react-native-paper-dates/src/Time/AmPmSwitcher.tsx
+index d9279b7..dd28b5e 100644
+--- a/node_modules/react-native-paper-dates/src/Time/AmPmSwitcher.tsx
++++ b/node_modules/react-native-paper-dates/src/Time/AmPmSwitcher.tsx
+@@ -28,7 +28,7 @@ export default function AmPmSwitcher({
+       style={[
+         styles.root,
+         {
+-          borderColor: backgroundColor,
++          borderColor: 'rgba(255,255,255,0.7)',
+           borderRadius: theme.roundness,
+         },
+       ]}
+@@ -44,7 +44,7 @@ export default function AmPmSwitcher({
+         selected={isAM}
+         disabled={isAM}
+       />
+-      <View style={[styles.switchSeparator, { backgroundColor }]} />
++      <View style={[styles.switchSeparator, { backgroundColor:'rgba(255,255,255,0.7)' }]} />
+       <SwitchButton
+         label="PM"
+         onPress={() => {
+@@ -93,7 +93,7 @@ function SwitchButton({
+           style={[
+             {
+               ...theme.fonts.medium,
+-              color: color,
++              color: '#696969',
+             },
+           ]}
+         >
+diff --git a/node_modules/react-native-paper-dates/src/Time/AnalogClock.tsx b/node_modules/react-native-paper-dates/src/Time/AnalogClock.tsx
+index cf54a48..cc6e16c 100644
+--- a/node_modules/react-native-paper-dates/src/Time/AnalogClock.tsx
++++ b/node_modules/react-native-paper-dates/src/Time/AnalogClock.tsx
+@@ -127,9 +127,7 @@ function AnalogClock({
+       style={[
+         styles.clock,
+         {
+-          backgroundColor: theme.dark
+-            ? Color(theme.colors.surface).lighten(1.2).hex()
+-            : Color(theme.colors.surface).darken(0.1).hex(),
++          backgroundColor: 'rgba(255,255,255,0.7)'
+         },
+       ]}
+       // @ts-ignore -> https://github.com/necolas/react-native-web/issues/506
+@@ -139,7 +137,7 @@ function AnalogClock({
+         style={[
+           styles.line,
+           {
+-            backgroundColor: theme.colors.primary,
++            backgroundColor: '#F5A623',
+             transform: [
+               { rotate: -90 + pointerNumber * degreesPerNumber + 'deg' },
+               {
+@@ -152,7 +150,7 @@ function AnalogClock({
+         pointerEvents="none"
+       >
+         <View
+-          style={[styles.endPoint, { backgroundColor: theme.colors.primary }]}
++          style={[styles.endPoint, { backgroundColor: '#F5A623' }]}
+         />
+       </View>
+       <View
+@@ -163,7 +161,7 @@ function AnalogClock({
+           style={[
+             styles.middlePoint,
+             {
+-              backgroundColor: theme.colors.primary,
++              backgroundColor: '#F5A623',
+             },
+           ]}
+         />
+diff --git a/node_modules/react-native-paper-dates/src/Time/TimeInput.tsx b/node_modules/react-native-paper-dates/src/Time/TimeInput.tsx
+index 25f8a81..dad90bd 100644
+--- a/node_modules/react-native-paper-dates/src/Time/TimeInput.tsx
++++ b/node_modules/react-native-paper-dates/src/Time/TimeInput.tsx
+@@ -69,8 +69,8 @@ function TimeInput(
+         style={[
+           styles.input,
+           {
+-            color,
+-            backgroundColor,
++            color:'#696969',
++            backgroundColor : 'rgba(255,255,255,0.7)',
+             borderRadius: theme.roundness,
+           },
+         ]}
+@@ -93,7 +93,7 @@ function TimeInput(
+               borderRadius: theme.roundness,
+             },
+           ]}
+-          rippleColor={Color(theme.colors.primary).fade(0.7).hex()}
++          rippleColor={'rgba(245, 166, 35, 0.3)'}
+           onPress={() => onPress(clockType)}
+           borderless={true}
+         >
+diff --git a/node_modules/react-native-paper-dates/src/Time/TimePicker.tsx b/node_modules/react-native-paper-dates/src/Time/TimePicker.tsx
+index 434992c..6740748 100644
+--- a/node_modules/react-native-paper-dates/src/Time/TimePicker.tsx
++++ b/node_modules/react-native-paper-dates/src/Time/TimePicker.tsx
+@@ -116,9 +116,10 @@ const styles = StyleSheet.create({
+     alignItems: 'center',
+     justifyContent: 'center',
+     width: 24 * 3 + 96 * 2 + 52 + circleSize,
++    marginTop:100
+   },
+   rootPortrait: {},
+-  clockContainer: { paddingTop: 36, paddingLeft: 12, paddingRight: 12 },
++  clockContainer: { paddingTop: 36, paddingLeft: 20, paddingRight: 12 },
+ })
+ 
+ export default React.memo(TimePicker)
+diff --git a/node_modules/react-native-paper-dates/src/Time/TimePickerModal.tsx b/node_modules/react-native-paper-dates/src/Time/TimePickerModal.tsx
+index 2870eea..4e97758 100644
+--- a/node_modules/react-native-paper-dates/src/Time/TimePickerModal.tsx
++++ b/node_modules/react-native-paper-dates/src/Time/TimePickerModal.tsx
+@@ -98,52 +98,46 @@ export function TimePickerModal({
+     [setFocused, setLocalHours, setLocalMinutes]
+   )
+   return (
+-    <Modal
+-      animationType={animationType}
+-      transparent={true}
+-      visible={visible}
+-      onRequestClose={onDismiss}
+-      presentationStyle="overFullScreen"
+-      supportedOrientations={supportedOrientations}
+-      //@ts-ignore
+-      statusBarTranslucent={true}
+-    >
+-      <>
++    <>
++      <View style={{ justifyContent:'center', alignItems:'center', borderWidth:0}}>
++      
+         <TouchableWithoutFeedback onPress={onDismiss}>
+           <View
+             style={[
+-              StyleSheet.absoluteFill,
++              // StyleSheet.absoluteFill,
+               styles.modalBackground,
+-              { backgroundColor: theme.colors.backdrop },
++              styles.modalRoot
++              // { backgroundColor: theme.colors.backdrop },
+             ]}
+           />
+         </TouchableWithoutFeedback>
+ 
+         <View
+-          style={[StyleSheet.absoluteFill, styles.modalRoot]}
++          style={[styles.modalRoot]}
+           pointerEvents="box-none"
+         >
+           <KeyboardAvoidingView
+             style={styles.keyboardView}
+             behavior={'padding'}
+           >
+-            <Animated.View
++            <View
+               style={[
+                 styles.modalContent,
+-                {
+-                  backgroundColor: theme.dark
+-                    ? overlay(10, theme.colors.surface)
+-                    : theme.colors.surface,
+-                  borderRadius: theme.roundness,
+-                },
++                // {
++                //   backgroundColor: theme.dark
++                //     ? overlay(10, theme.colors.surface)
++                //     : theme.colors.surface,
++                //   borderRadius: theme.roundness,
++                // },
+               ]}
+             >
+-              <View style={styles.labelContainer}>
++              {/* <View style={styles.labelContainer}>
+                 <Text style={[styles.label, { color: theme.colors.text }]}>
+                   {uppercase ? label.toUpperCase() : label}
+                 </Text>
+-              </View>
+-              <View style={styles.timePickerContainer}>
++              </View> */}
++              <View>
++              
+                 <TimePicker
+                   locale={locale}
+                   inputType={inputType}
+@@ -166,23 +160,23 @@ export function TimePickerModal({
+                   accessibilityLabel="toggle keyboard"
+                 />
+                 <View style={styles.fill} />
+-                <Button onPress={onDismiss} uppercase={uppercase}>
++                {/* <Button onPress={onDismiss} uppercase={uppercase}>
+                   {cancelLabel}
+-                </Button>
++                </Button> */}
+                 <Button
+                   onPress={() =>
+                     onConfirm({ hours: localHours, minutes: localMinutes })
+                   }
+                   uppercase={uppercase}
+                 >
+-                  {confirmLabel}
++                  <Text style={{color:'#696969'}}>{confirmLabel}</Text>
+                 </Button>
+               </View>
+-            </Animated.View>
++            </View>
+           </KeyboardAvoidingView>
+         </View>
+-      </>
+-    </Modal>
++      </View>
++    </>
+   )
+ }
+ 
+@@ -199,15 +193,17 @@ const styles = StyleSheet.create({
+   modalRoot: {
+     justifyContent: 'center',
+     alignItems: 'center',
+-    flex: 1,
++    // flex: 1,
++    // borderWidth:1,
+   },
+   keyboardView: {
+     justifyContent: 'center',
+     alignItems: 'center',
+-    flex: 1,
++    // flex: 1,
+   },
+   modalBackground: {
+-    flex: 1,
++    // flex: 1,
++    // height:'35%',
+   },
+   modalContent: {
+     shadowColor: '#000',

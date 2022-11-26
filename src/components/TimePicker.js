@@ -18,8 +18,7 @@ export default function TimePickerPage() {
   );
 
   return (
-    <View style={{flex: 1, borderWidth: 1}}>
-      <Text>HEllo</Text>
+    <View style={{flex: 1, marginTop: 30}}>
       <TimePickerModal
         visible={true}
         onDismiss={onDismiss}
@@ -29,7 +28,7 @@ export default function TimePickerPage() {
         label="Select time" // optional, default 'Select time'
         uppercase={false} // optional, default is true
         cancelLabel="Cancel" // optional, default: 'Cancel'
-        confirmLabel="Ok" // optional, default: 'Ok'
+        confirmLabel="OK" // optional, default: 'Ok'
         animationType="fade" // optional, default is 'none'
         locale="en" // optional, default is automically detected by your system
         // keyboardIcon="keyboard-outline" // optional, default is "keyboard-outline"

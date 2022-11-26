@@ -11,6 +11,7 @@ const TimeTab = () => {
     // <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
+          swipeEnabled: false,
           tabBarActiveTintColor: 'white',
           tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
           tabBarStyle: {

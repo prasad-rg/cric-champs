@@ -19,9 +19,7 @@ const StandingsScreen = ({navigation}) => {
   const [tableData, setTableData] = useState([]);
   const loadStandings = async () => {
     setIsLoading(true);
-    const response = await getStandingsByTournamentId(
-      '637b13e768749af12254602f',
-    );
+    const response = await getStandingsByTournamentId(tournamentDetails._id);
     setIsLoading(false);
     console.log(response);
     if (response.status) {
@@ -31,8 +29,8 @@ const StandingsScreen = ({navigation}) => {
         team.matchesPlayed,
         team.wins,
         team.losses,
+        Math.round(team.netRunRate * 100) / 100,
         team.points,
-        team.netRunRate,
       ]);
       // console.log(arrayResponse);
       // setCurrentTeams(arrayResponse);
@@ -59,7 +57,7 @@ const StandingsScreen = ({navigation}) => {
         <Table>
           <Row
             data={tableHead}
-            flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.8]}
+            flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.6]}
             style={styles.table_header}
             textStyle={styles.header_text}
           />
@@ -67,7 +65,7 @@ const StandingsScreen = ({navigation}) => {
             <Rows
               data={tableData}
               heightArr={[50, 50, 50, 50, 50, 50]}
-              flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.8]}
+              flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.6]}
               style={styles.row}
               textStyle={styles.row_text}
             />
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.2,
   },
   row_text: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 12,
     fontFamily: 'Roboto-Regular',
     textAlign: 'center',
   },

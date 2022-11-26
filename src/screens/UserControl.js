@@ -7,12 +7,36 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import UserActions from '../components/UserActions';
+import {getUserDetails, logoutUser} from '../services/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {addUser} from '../redux/userSlice';
+import {logout, userLogout} from '../redux/authSlice';
 
 const UserControl = ({navigation}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoading, setIsLodaing] = useState(false);
+  const dispatch = useDispatch();
+  const {userData} = useSelector(state => state.userData);
+  const {isLoggedIn} = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      setIsLodaing(true);
+      const userInfo = await getUserDetails();
+      if (userInfo._id) {
+        setIsLodaing(false);
+        // setUserData(userInfo);
+        dispatch(addUser(userInfo));
+      }
+      console.log(userInfo);
+    };
+    getUserInfo();
+  }, [isLoggedIn]);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -32,18 +56,30 @@ const UserControl = ({navigation}) => {
               </TouchableOpacity>
               <View style={styles.profileView}>
                 {isLoggedIn ? (
-                  <>
-                    <Image
-                      source={require('../../assets/images/profile4.png')}
-                      style={styles.avatar}
-                    />
-                    <View style={styles.textContainer}>
-                      <Text style={styles.nameText}>Natash Aston</Text>
-                      <Text style={styles.emailText}>
-                        natashaston@gmail.com
-                      </Text>
+                  isLoading ? (
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}>
+                      <ActivityIndicator
+                        size={'small'}
+                        color="rgba(255, 255, 255, 0.4)"
+                      />
                     </View>
-                  </>
+                  ) : (
+                    <>
+                      <Image
+                        source={{uri: userData?.profilePic?.url}}
+                        style={styles.avatar}
+                      />
+                      <View style={styles.textContainer}>
+                        <Text style={styles.nameText}>{userData?.name}</Text>
+                        <Text style={styles.emailText}>{userData?.email}</Text>
+                      </View>
+                    </>
+                  )
                 ) : (
                   <>
                     <Image
@@ -107,12 +143,22 @@ const UserControl = ({navigation}) => {
         </TouchableOpacity>
       </ScrollView>
       <SafeAreaView>
-        {false ? (
-          <TouchableOpacity style={styles.logout}>
+        {isLoggedIn ? (
+          <TouchableOpacity
+            style={styles.logout}
+            onPress={async () => {
+              const res = await logoutUser();
+              if (res.status) {
+                dispatch(logout());
+              }
+              dispatch(logout());
+            }}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.logout} onPress={()=>navigation.navigate('AuthStack')}>
+          <TouchableOpacity
+            style={styles.logout}
+            onPress={() => navigation.navigate('AuthStack')}>
             <Text style={styles.logoutText}>Login</Text>
           </TouchableOpacity>
         )}

@@ -12,6 +12,7 @@ import {useDispatch} from 'react-redux';
 import {getTournamentByCode} from '../services/viewTournament';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {removeRecentActivities} from '../redux/recentActivitiesSlice';
+import {setTournamentData} from '../redux/manageTournamentSlice';
 
 const RecentActivityCard = ({
   title = 'Robosoft Premiere League',
@@ -34,7 +35,7 @@ const RecentActivityCard = ({
         </View>
         <TouchableOpacity onPress={() => dispatch(removeRecentActivities(id))}>
           <Image
-            source={require('../../assets/images/icon-vertical-dots.png')}
+            source={require('../../assets/images/trash.png')}
             style={styles.verticalDots}
           />
         </TouchableOpacity>
@@ -56,6 +57,16 @@ const RecentActivityCard = ({
                 Alert.alert(res.message.toUpperCase());
               } else {
                 dispatch(storeTournamentDetails(res));
+                const {code, _id, userId, name, email} = res;
+                const tournamentresponse = {
+                  code: code,
+                  tournamentid: _id,
+                  userId: userId,
+                  name: name,
+                  email: email,
+                };
+                dispatch(setTournamentData(tournamentresponse));
+
                 navigation.navigate('ManageScreen');
               }
             }}>
@@ -141,6 +152,8 @@ const styles = StyleSheet.create({
   verticalDots: {
     width: 12,
     height: 24,
+    tintColor: 'rgba(112, 112, 112, 0.5)',
+    marginRight: 5,
   },
   statusCompleted: {
     backgroundColor: '#FFBA7F',
