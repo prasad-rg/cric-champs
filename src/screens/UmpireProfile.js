@@ -1,28 +1,60 @@
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
+import {useSelector} from 'react-redux';
+import {getUmpireDetailsByUmpireIdAndTournamentId} from '../services/viewTournament';
 
-const UmpireProfile = ({navigation}) => {
+const UmpireProfile = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const getDetails = data => {
     setProfilePictureUri(data);
   };
-
+  const [currentUmpire, setCurrentUmpire] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const getMatchString = matchArray => {
+    if (matchArray === undefined) {
+      return;
+    }
+    let matchString = '';
+    for (let match of matchArray) {
+      matchString += 'Match ' + match.matchNumber + ', ';
+    }
+    return matchString;
+  };
+  const loadUmpire = async () => {
+    setIsLoading(true);
+    const response = await getUmpireDetailsByUmpireIdAndTournamentId(
+      route.params.umpireId,
+      tournamentDetails._id,
+    );
+    // console.log(response);
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentUmpire(response.data);
+      // console.info(response.data);
+    }
+    console.log(response);
+  };
+  useEffect(() => {
+    loadUmpire();
+  }, []);
+  // console.warn(route.params, tournamentDetails._id);
   const Details = [
     {
       id: 1,
       title: 'Name',
-      value: 'Rajesh Gang',
+      value: currentUmpire !== null && currentUmpire?.name,
     },
     {
       id: 2,
       title: 'City',
-      value: 'Udupi',
+      value: currentUmpire !== null && currentUmpire?.city,
     },
     {
       id: 3,
       title: 'Matches',
-      value: 'Match 1, Match 3, Match 6',
+      value: currentUmpire !== null && getMatchString(currentUmpire?.match),
     },
   ];
   return (
@@ -30,9 +62,12 @@ const UmpireProfile = ({navigation}) => {
       <ScrollView>
         <AddProfileDetails
           navigation={navigation}
-          title="Umpire - Rajesh"
+          title={route.params.umpireName}
           backroundImageUri={require('../../assets/images/umpire.png')}
-          getImageUri={getDetails}></AddProfileDetails>
+          getImageUri={getDetails}
+          profilePictureUri={{
+            uri: route.params.umpirePicture,
+          }}></AddProfileDetails>
         <View>
           {Details.map(item => (
             <View key={item.id} style={styles.listview}>

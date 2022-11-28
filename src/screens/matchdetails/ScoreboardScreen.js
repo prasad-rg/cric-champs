@@ -1,13 +1,18 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Table,
   TableWrapper,
   Row,
   Rows,
 } from 'react-native-table-component';
+import {getScoreBoardByMatchIdAndBothTeamId} from '../../services/viewTournament';
 
-const ScoreboardScreen = () => {
+const ScoreboardScreen = ({navigation, route}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [scoreBoard, setScoreBoard] = useState();
+  // console.info(route.params);
+
   const [tableHead, setTableHead] = useState([
     'Batsman',
     'R',
@@ -32,7 +37,67 @@ const ScoreboardScreen = () => {
     'W',
     'ER',
   ]);
-  const [data, setData] = useState([['Sashikant D', '0', '0', '0', '0', '0'],['Sashikant D', '0', '0', '0', '0', '0']]);
+  const [data, setData] = useState([
+    ['Sashikant D', '0', '0', '0', '0', '0'],
+    ['Sashikant D', '0', '0', '0', '0', '0'],
+  ]);
+
+  const loadScoreBoard = async () => {
+    setIsLoading(true);
+    const response = await getScoreBoardByMatchIdAndBothTeamId(
+      route.params.matchId,
+      route.params.team1Id,
+      route.params.team2Id,
+    );
+    setIsLoading(false);
+    // console.log(response);
+    if (response.status) {
+      // console.info(response.data);
+      setScoreBoard(response.data);
+      let arrayResponse = response.data?.playersOfTeam1?.map(player => {
+        let tempArr = [
+          `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+          player?.runsScored,
+          `${player?.overFaced}.${player?.ballsFaced}`,
+          `${player?.fours}`,
+          `${player?.sixes}`,
+          `${Math.round(player?.strikeRate * 100) / 100}`,
+        ];
+        if (player?.wicket === undefined) {
+          if (player?.currentlyBatting) {
+            tempArr[0] = `${player?.playerName}*\nNot Out`;
+          } else {
+            tempArr[0] = `${player?.playerName}\nNot Out`;
+          }
+        }
+
+        return tempArr;
+      });
+      setTableData(arrayResponse);
+      let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
+        let bowlerArray = [
+          bowler?.playerName,
+          bowler?.overBowled,
+          bowler?.maiden,
+          bowler?.runsConceded,
+          bowler?.wicketsTaken,
+          bowler?.economyRate,
+        ];
+        if (bowler?.currentlyBatting) {
+          bowlerArray[0] = `${bowler?.playerName}*`;
+        }
+        return bowlerArray;
+      });
+      setData(bowlerData);
+      // console.log(arrayResponse);
+      // setCurrentTeams(arrayResponse);
+      // setTableData(arrayResponse);
+    }
+  };
+
+  useEffect(() => {
+    loadScoreBoard();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -40,15 +105,21 @@ const ScoreboardScreen = () => {
         <View style={styles.mainView}>
           <Text style={styles.header}>UDL Strikers Innings</Text>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.number1}>67/3</Text>
-            <Text style={styles.secondNumber}>(8.3)</Text>
+            <Text
+              style={
+                styles.number1
+              }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+            <Text
+              style={
+                styles.secondNumber
+              }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
           </View>
         </View>
 
         <Table style={{marginTop: 10}}>
           <Row
             data={tableHead}
-            flexArr={[3, 1, 1, 1, 1, 1]}
+            flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
             style={styles.table_header}
             textStyle={styles.header_text}
           />
@@ -56,7 +127,7 @@ const ScoreboardScreen = () => {
             <Rows
               data={tableData}
               heightArr={[50, 50, 50, 50, 50, 50]}
-              flexArr={[3, 1, 1, 1, 1, 1]}
+              flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
               textStyle={styles.row_text}
             />
           </TableWrapper>
@@ -64,37 +135,57 @@ const ScoreboardScreen = () => {
 
         <View style={styles.extraView}>
           <Text style={styles.extra}> Extras</Text>
-          <View style={{flexDirection: 'row', marginHorizontal: '10%',marginLeft:"27%"}}>
-            <Text style={styles.extraNumber}>3</Text>
-            <Text style={styles.extraInfo}> (b 2, lb 0, w1, nb 0, p 0)</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginHorizontal: '10%',
+              marginLeft: '27%',
+            }}>
+            {/* <Text style={styles.extraNumber}>3</Text> */}
+            <Text style={styles.extraNumber}>
+              {` ${
+                scoreBoard?.score?.bye +
+                scoreBoard?.score?.legBye +
+                scoreBoard?.score?.wide +
+                scoreBoard?.score?.noBall +
+                scoreBoard?.score?.penalty
+              }`}
+            </Text>
+            {/* <Text style={styles.extraInfo}> (b 2, lb 0, w1, nb 0, p 0)</Text> */}
+            <Text style={styles.extraInfo}>
+              {` (b ${scoreBoard?.score?.bye}, lb ${scoreBoard?.score?.legBye}, w ${scoreBoard?.score?.wide}, nb ${scoreBoard?.score?.noBall}, p ${scoreBoard?.score?.penalty})`}
+            </Text>
           </View>
         </View>
         <View style={{height: 50, alignItems: 'center', flexDirection: 'row'}}>
           <Text style={styles.totalText}>Total</Text>
-          <Text style={styles.totalNumber}>67</Text>
+          <Text style={styles.totalNumber}>{`${scoreBoard?.score?.runs}`}</Text>
         </View>
         <View>
           <Text style={styles.fallText}>Fall of Wickets</Text>
           <Text style={styles.fallView}>
-            2/1 (Naveen F, 0.5), 6/2 (Prayag G, 1.4),{'\n'} 8/3 (Nithin R, 2.1)
+            {scoreBoard?.score?.fallOfWicket?.map(
+              fall =>
+                `${fall?.runs}/${fall?.wickets} (${fall?.batsmanName}, ${fall?.over}.${fall?.balls}), `,
+            )}
           </Text>
         </View>
         <Table>
-            <Row
-              data={tableHeader}
+          <Row
+            data={tableHeader}
+            flexArr={[3, 1, 1, 1, 1, 1]}
+            style={styles.table_header}
+            textStyle={styles.header_text}
+          />
+          <TableWrapper>
+            <Rows
+              data={data}
+              heightArr={[40, 40, 40, 40, 40, 40]}
               flexArr={[3, 1, 1, 1, 1, 1]}
-              style={styles.table_header}
-              textStyle={styles.header_text}
+              textStyle={styles.row_text}
             />
-            <TableWrapper>
-              <Rows
-                data={data}
-                heightArr={[40, 40, 40, 40, 40, 40]}
-                flexArr={[3, 1, 1, 1, 1, 1]}
-                textStyle={styles.row_text}
-              />
-            </TableWrapper>
-          </Table>
+          </TableWrapper>
+        </Table>
       </ScrollView>
     </View>
   );
@@ -228,7 +319,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-   marginLeft:"25%"
+    marginLeft: '25%',
   },
   fallText: {
     height: 50,
@@ -242,13 +333,12 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: 'rgba(217,226,233,0.5)',
   },
-  fallView:{
-
+  fallView: {
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Regular',
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 28,
-    padding:15,
-  }
+    padding: 15,
+  },
 });

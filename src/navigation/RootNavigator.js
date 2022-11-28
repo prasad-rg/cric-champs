@@ -16,6 +16,7 @@ import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
 import UmpireProfile from '../screens/UmpireProfile';
+import MatchDetails from '../screens/MatchDetails';
 
 const Stack = createStackNavigator();
 
@@ -97,6 +98,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AppStack"
           component={AppStack}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MatchDetails"
+          component={MatchDetails}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

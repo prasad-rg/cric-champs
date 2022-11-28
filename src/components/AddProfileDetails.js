@@ -94,7 +94,11 @@ const AddProfileDetails = ({
     <View style={styles.container}>
       <ImageBackground
         style={[styles.img, {width: Dimensions.get('window').width}]}
-        source={require('../../assets/images/writing.png')}>
+        source={
+          backroundImageUri !== ''
+            ? backroundImageUri
+            : require('../../assets/images/writing.png')
+        }>
         <AppBar
           style={{backgroundColor: 'rgba(0, 102, 226, 0.85)'}}
           navigation={navigation}
