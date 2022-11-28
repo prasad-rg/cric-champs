@@ -58,13 +58,14 @@ import RadioForm, {
               onPress={setData}
               labelColor={index === i ? '#FFFFFF' : '#FF8713'}
               labelStyle={[{
-                height: 19,
+                height: 40,
                 width:"auto",
                 fontFamily: 'Roboto-Regular',
                 fontSize: 16,
                 letterSpacing: -0.34,
                 lineHeight: 19, 
-                paddingHorizontal:10
+                paddingHorizontal:10,
+                paddingTop:9
 
               },{...labelStyle}]}
               labelWrapStyle={{}}
