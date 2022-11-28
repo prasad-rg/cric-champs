@@ -57,6 +57,8 @@ const MatchesScreen = ({navigation}) => {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
               matchId: item._id,
+              matchNumber: item.matchNumber,
+              teams: {team1Name: item.team1Name, team2Name: item.team2Name},
             })
           }>
           <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>

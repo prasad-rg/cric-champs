@@ -40,8 +40,8 @@ export default function MatchTab(props) {
           // height:1,
         },
       }}>
-      <Tab.Screen name="INFO" component={InfoScreen} />
-      <Tab.Screen name="LIVE" component={LiveScreen} />
+      <Tab.Screen name="INFO">{() => <InfoScreen {...props} />}</Tab.Screen>
+      <Tab.Screen name="LIVE">{() => <LiveScreen {...props} />}</Tab.Screen>
       <Tab.Screen name="SCOREBOARD">
         {() => <ScoreboardScreen {...props} />}
       </Tab.Screen>

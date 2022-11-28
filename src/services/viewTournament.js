@@ -186,3 +186,20 @@ export const getScoreBoardByMatchIdAndBothTeamId = async (
     return error.response.data;
   }
 };
+
+export const getLiveScoresByMatchIdAndBothTeamId = async (
+  matchId,
+  team1Id,
+  team2Id,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/live-score?tournamentId&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

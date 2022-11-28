@@ -28,10 +28,14 @@ const MatchDetails = ({navigation, route}) => {
                     style={styles.backButtonImage}
                   />
                 </TouchableOpacity>
-                <Text style={styles.matchText}>Match 13</Text>
+                <Text style={styles.matchText}>
+                  Match {route.params?.matchNumber}
+                </Text>
               </View>
               <View>
-                <Text style={styles.vsText}>UDL Strikers vs Super Coders</Text>
+                <Text style={styles.vsText}>
+                  {`${route.params?.teams?.team1Name} vs ${route.params?.teams?.team2Name}`}
+                </Text>
               </View>
             </View>
           </SafeAreaView>
