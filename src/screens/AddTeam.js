@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   },
   gradientButton: {
     alignItems: 'flex-end',
-    marginBottom: Platform.OS === 'ios' ? 20 : 0,
+    marginBottom: Platform.OS === 'ios' ? 10 : 0,
   },
   textInput: {
     borderWidth: 1,

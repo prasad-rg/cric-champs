@@ -93,7 +93,7 @@ const OversScreen = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}

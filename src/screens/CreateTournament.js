@@ -31,7 +31,7 @@ const CreateTournament = ({navigation}) => {
   const [tournamentName, setTournamentName] = useState('');
   const [tournamenttype, setTournamentType] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
-
+  const {userData} = useSelector(state => state.userData);
   const dispatch = useDispatch();
 
   const getDetails = data => {
@@ -42,13 +42,13 @@ const CreateTournament = ({navigation}) => {
       const formData = createFormData({
         name: tournamentName,
         tournamentType: tournamenttype,
-        email: 'noor@gmail.com',
+        email: userData?.email,
         image: profilePictureUri,
       });
       const response = await createTournament(formData);
       console.log('I am create tournament responseeee', response);
       if (response.status) {
-        const {code, _id, userId, name, email} = response.data.result;
+        const {code, _id, userId, name, email} = response?.data.result;
         const tournamentresponse = {
           code: code,
           tournamentid: _id,
@@ -57,7 +57,7 @@ const CreateTournament = ({navigation}) => {
           email: email,
         };
         dispatch(setTournamentData(tournamentresponse));
-        dispatch(storeTournamentDetails(response.data.result));
+        dispatch(storeTournamentDetails(response?.data.result));
    
         navigation.navigate('CreateTournamentSuccess');
       }
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   gradientButton: {
     alignItems: 'flex-end',
-    marginBottom: Platform.OS === 'ios' ? 20 : 0,
+    marginBottom: Platform.OS === 'ios' ? 10 : 0,
   },
   textInput: {
     alignSelf: 'center',

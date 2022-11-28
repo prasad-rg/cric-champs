@@ -1,8 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
-// import UserControls from '../screens/UserControls';
-// import LoginScreen from '../screens/LoginScreen';
 import CreateTournament from '../screens/CreateTournament';
 import CreateTournamentSuccess from '../screens/CreateTournamentSuccess';
 import TeamsList from '../screens/TeamsList';
@@ -21,12 +19,11 @@ import PlayerProfile from '../screens/PlayerProfile';
 import UmpireProfile from '../screens/UmpireProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
-import TimeTab from './TimeTab';
-import DateTab from './DateTab';
+
 
 const Stack = createNativeStackNavigator();
 
-const AppStack = () => {
+const AppNavigator = () => {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
@@ -102,45 +99,34 @@ const AppStack = () => {
         component={Overview}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="TeamInfoScreen"
-        component={TeamInfoScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="PlayerProfile"
-        component={PlayerProfile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="UmpireProfile"
-        component={UmpireProfile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="StadiumInformation"
-        component={StadiumInformation}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="TimeTab"
-        component={TimeTab}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="DateTab"
-        component={DateTab}
-        options={{headerShown: false}}
-      />
-
-      {/* <Stack.Screen
-          name="ManageScreen"
-          component={ManageScreen}
+       <Stack.Screen
+          name="TeamInfoScreen"
+          component={TeamInfoScreen}
           options={{headerShown: false}}
-        /> */}
+        />
+        <Stack.Screen
+          name="PlayerProfile"
+          component={PlayerProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="UmpireProfile"
+          component={UmpireProfile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="StadiumInformation"
+          component={StadiumInformation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Overview"
+          component={Overview}
+          options={{headerShown: false}}
+        />
     </Stack.Navigator>
     //  </NavigationContainer>
   );
 };
 
-export default AppStack;
+export default AppNavigator;

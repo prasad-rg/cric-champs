@@ -12,7 +12,7 @@ import DateTab from '../navigation/DateTab';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 import GradientButton from '../components/GradientButton';
-import { addDates } from '../services/manageTournament2';
+import {addDates} from '../services/manageTournament2';
 
 const DateScreen = ({navigation}) => {
   const handleBack = () => {
@@ -40,7 +40,7 @@ const DateScreen = ({navigation}) => {
   //   tournamentId:tournamentId,
   //   tournamentDays:total
   // }
-   
+
   // const handlePress= async ()=>{
   //   const response= await addDates(dateData);
   //   console.log("I am response for date",response.data)
@@ -49,7 +49,7 @@ const DateScreen = ({navigation}) => {
   //   }
   // }
 
-
+  let current_date = moment();
 
   const startDateSelector = useSelector(state => state.matchdata.startDate);
   const endDateSelector = useSelector(state => state.matchdata.endDate);
@@ -85,24 +85,24 @@ const DateScreen = ({navigation}) => {
                 ? startYear
                 : end && endYear != 'Invalid date'
                 ? endYear
-                : ' '}
+                : current_date.format('YYYY')}
             </Text>
             <Text style={styles.date}>
               {start
                 ? startDay
                 : end && endDay != 'Invalid date'
                 ? endDay
-                : ' '}{' '}
+                : current_date.format('ddd,')}{' '}
               {start
                 ? startMonth
                 : end && endMonth != 'Invalid date'
                 ? endMonth
-                : ' '}{' '}
+                : current_date.format('MMM')}{' '}
               {start
                 ? startDate
                 : end && endDate != 'Invalid date'
                 ? endDate
-                : ' '}
+                : current_date.format('DD')}
             </Text>
           </View>
         </SafeAreaView>
@@ -110,7 +110,7 @@ const DateScreen = ({navigation}) => {
 
       <DateTab />
 
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
         {/* <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
