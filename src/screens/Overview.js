@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
-import TournamentInputList from '../components/TournamentInputList';
 import CustomModal from '../components/CustomModal';
 import Tournament from './managedetails/Tournament';
 import {useSelector} from 'react-redux';
@@ -25,7 +24,7 @@ import { deleteEndDate } from '../redux/MatchSlice';
 
 const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
-  const [modal, setModal] = useState(true);
+  const [modal,  setModal] =  useState(true);;
   const dispatch = useDispatch();
   const tournamentdata = useSelector(
    
@@ -118,7 +117,6 @@ const Overview = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
-
       {modal ? (
         <CustomModal visible={visible}>
           <View style={{alignItems: 'center', marginBottom: 30}}>
@@ -256,7 +254,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 21,
     textAlign: 'center',
-    justifyContent:"center"
+    justifyContent: 'center',
   },
   tryText: {
     height: 16,

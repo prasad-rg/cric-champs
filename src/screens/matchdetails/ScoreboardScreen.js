@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View,TouchableOpacity,Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Table,
@@ -7,11 +7,30 @@ import {
   Rows,
 } from 'react-native-table-component';
 import {getScoreBoardByMatchIdAndBothTeamId} from '../../services/viewTournament';
+import DropdownField from '../../components/DropdownField';
+
+let teams = [
+  {
+    id: 1,
+    name: 'RCB',
+  },
+  {
+    id: 2,
+    name: 'CSK',
+  },
+  {
+    id: 3,
+    name: 'UDL strikers',
+  },
+];
 
 const ScoreboardScreen = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [scoreBoard, setScoreBoard] = useState();
   // console.info(route.params);
+
+  const [visible, setVisible] = useState(false);
+  const sitesFolder = ['RCB', 'CSK', 'KKR'];
 
   const [tableHead, setTableHead] = useState([
     'Batsman',
@@ -50,9 +69,7 @@ const ScoreboardScreen = ({navigation, route}) => {
       route.params.team2Id,
     );
     setIsLoading(false);
-    // console.log(response);
     if (response.status) {
-      // console.info(response.data);
       setScoreBoard(response.data);
       let arrayResponse = response.data?.playersOfTeam1?.map(player => {
         let tempArr = [
@@ -99,11 +116,20 @@ const ScoreboardScreen = ({navigation, route}) => {
     loadScoreBoard();
   }, []);
 
+  const [selectedItem,setSelectedItem]=useState(null)
+  const onSelect=(item)=>{
+  setSelectedItem(item)
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.mainView}>
-          <Text style={styles.header}>UDL Strikers Innings</Text>
+          {/* <Text style={styles.header}>UDL Strikers Innings</Text>
+              <TouchableOpacity>
+          <Image source={require('../../../assets/images/downArrow.png')} style={{tintColor:"grey",height:15,width:18}} />
+          </TouchableOpacity> */}
+
+          <DropdownField data={teams} onSelect={onSelect} value={selectedItem}/>
           <View style={{flexDirection: 'row'}}>
             <Text
               style={
@@ -141,7 +167,7 @@ const ScoreboardScreen = ({navigation, route}) => {
               marginHorizontal: '10%',
               marginLeft: '27%',
             }}>
-            {/* <Text style={styles.extraNumber}>3</Text> */}
+      
             <Text style={styles.extraNumber}>
               {` ${
                 scoreBoard?.score?.bye +
@@ -151,7 +177,6 @@ const ScoreboardScreen = ({navigation, route}) => {
                 scoreBoard?.score?.penalty
               }`}
             </Text>
-            {/* <Text style={styles.extraInfo}> (b 2, lb 0, w1, nb 0, p 0)</Text> */}
             <Text style={styles.extraInfo}>
               {` (b ${scoreBoard?.score?.bye}, lb ${scoreBoard?.score?.legBye}, w ${scoreBoard?.score?.wide}, nb ${scoreBoard?.score?.noBall}, p ${scoreBoard?.score?.penalty})`}
             </Text>
@@ -207,7 +232,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 16,
-    //   width: 165,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
@@ -244,8 +268,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(217,226,233,0.5)',
   },
   header_text: {
-    // height: 24,
-    // width: 53,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Bold',
     fontSize: 13,
@@ -273,7 +295,6 @@ const styles = StyleSheet.create({
   },
   extra: {
     height: 19,
-    // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Regular',
     fontSize: 14,
@@ -283,7 +304,6 @@ const styles = StyleSheet.create({
   },
   extraNumber: {
     height: 19,
-    // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,

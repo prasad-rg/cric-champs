@@ -12,7 +12,6 @@ import {
 import React, {useState} from 'react';
 import AppBar from './AppBar';
 import ImagePicker from 'react-native-image-crop-picker';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const AddProfileDetails = ({
   navigation,
