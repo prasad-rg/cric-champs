@@ -9,38 +9,38 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
-import TournamentInputList from '../components/TournamentInputList';
 import CustomModal from '../components/CustomModal';
 import Tournament from './managedetails/Tournament';
-import { useSelector } from 'react-redux';
-import { generateFixture } from '../services/manageTournament2';
+import {useSelector} from 'react-redux';
+import {generateFixture} from '../services/manageTournament2';
 
 const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
-  const [modal,setModal] =useState(true)
+  const [modal, setModal] = useState(true);
   const tournamentdata = useSelector(
     state => state.tournamentdata.tournamentdata,
   );
-  console.log(tournamentdata)
+  console.log(tournamentdata);
 
-  const tournamentId =useSelector(state=> state.tournamentdata.tournamentdata.tournamentid)
-  console.log(tournamentId)
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  console.log(tournamentId);
 
-
-  const handlePress= async ()=>{
-    const response= await generateFixture(tournamentId);
-    if(response.data.statusCode !== 200){
-       setModal(false)
+  const handlePress = async () => {
+    const response = await generateFixture(tournamentId);
+    console.info('----', response)
+    if (response.data.statusCode !== 200) {
+      setModal(false);
       // navigation.navigate('TimeScreen')
-    }else{
-      setModal(true)
+    } else {
+      setModal(true);
     }
-  
-  
-   setVisible(true)
-  }
+
+    setVisible(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -52,7 +52,7 @@ const Overview = ({navigation}) => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={()=>navigation.goBack()}>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -65,7 +65,10 @@ const Overview = ({navigation}) => {
                 <Text style={styles.heading}>{tournamentdata.name}</Text>
                 <View style={{alignSelf: 'center', marginTop: 7}}>
                   <TouchableOpacity style={styles.tourButton}>
-                    <Text style={styles.tourText}>{`Tournament Code:${tournamentdata.code}`}</Text>
+                    <Text
+                      style={
+                        styles.tourText
+                      }>{`Tournament Code:${tournamentdata.code}`}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -77,7 +80,7 @@ const Overview = ({navigation}) => {
       <View style={styles.secondView}>
         <Text style={styles.overs}>Tournament Inputs</Text>
         <ScrollView>
-          <Tournament disableRegenerateFixture = {false}/>
+          <Tournament disableRegenerateFixture={false} />
         </ScrollView>
       </View>
 
@@ -98,36 +101,41 @@ const Overview = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
-
-
-        { modal ? ( <CustomModal visible={visible}>
-           <View style={{alignItems: 'center', marginBottom: 30}}>
-             <Image
-               source={require('../../assets/images/AwesomeBall.png')}
-               style={styles.image}
-             />
-             <Text style={styles.textView}>Your Fixture has been{'\n'}generated!</Text>
-           </View>
-           <TouchableOpacity onPress={() =>{navigation.navigate('ViewScreen')
-          setVisible(false)}}>
-             <Text style={styles.matchText}>VIEW MATCHES</Text>
-           </TouchableOpacity>
-         </CustomModal>):(
-           <CustomModal visible={visible}>
-           <View style={{alignItems: 'center', marginBottom: 30}}>
-             <Image
-               source={require('../../assets/images/Oopsball.png')}
-               style={styles.image}
-             />
-             <Text style={styles.textView}>Oops! Something {'\n'} went wrong.</Text>
-           </View>
-           <TouchableOpacity onPress={() => setVisible(false)}>
-             <Text style={styles.tryText}>TRY AGAIN</Text>
-           </TouchableOpacity>
-         </CustomModal>
-          
-        )}
-       
+      {modal ? (
+        <CustomModal visible={visible}>
+          <View style={{alignItems: 'center', marginBottom: 30}}>
+            <Image
+              source={require('../../assets/images/AwesomeBall.png')}
+              style={styles.image}
+            />
+            <Text style={styles.textView}>
+              Your Fixture has been{'\n'}generated!
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ViewScreen');
+              setVisible(false);
+            }}>
+            <Text style={styles.matchText}>VIEW MATCHES</Text>
+          </TouchableOpacity>
+        </CustomModal>
+      ) : (
+        <CustomModal visible={visible}>
+          <View style={{alignItems: 'center', marginBottom: 30}}>
+            <Image
+              source={require('../../assets/images/Oopsball.png')}
+              style={styles.image}
+            />
+            <Text style={styles.textView}>
+              Oops! Something {'\n'} went wrong.
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => setVisible(false)}>
+            <Text style={styles.tryText}>TRY AGAIN</Text>
+          </TouchableOpacity>
+        </CustomModal>
+      )}
     </View>
 
     // </ScrollView>
@@ -220,7 +228,7 @@ const styles = StyleSheet.create({
     width: 200,
 
     alignItems: 'center',
-    justifyContent:"center"
+    justifyContent: 'center',
   },
   textView: {
     height: 42,
@@ -230,9 +238,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 21,
     textAlign: 'center',
-    justifyContent:"center"
+    justifyContent: 'center',
   },
-  tryText:{
+  tryText: {
     height: 16,
     width: 77,
     color: '#F5112D',
@@ -243,7 +251,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     textAlign: 'center',
   },
-  matchText:{
+  matchText: {
     height: 16,
     color: '#4A90E2',
     fontFamily: 'Roboto-Bold',
@@ -252,5 +260,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     lineHeight: 16,
     textAlign: 'center',
-  }
+  },
 });
