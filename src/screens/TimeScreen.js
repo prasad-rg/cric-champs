@@ -10,8 +10,9 @@ import {
 import React from 'react';
 import TimeTab from '../navigation/TimeTab';
 import { useSelector } from 'react-redux';
-
+import moment from 'moment';
 const TimeScreen = ({navigation}) => {
+  let current_time = moment().format("HH:mm")
 
   const startTime = useSelector(state => state.matchdata.startTime);
   const endTime = useSelector(state => state.matchdata.endTime);
@@ -38,7 +39,7 @@ const TimeScreen = ({navigation}) => {
               </View>
             </View>
             <View style={styles.datecontainer}>
-              <Text style={styles.timeinhour}>{start ?startTime: end ? endTime:''}</Text>
+              <Text style={styles.timeinhour}>{start ?startTime: end ? endTime:current_time}</Text>
               
             </View>
           </View>

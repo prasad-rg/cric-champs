@@ -15,6 +15,7 @@ import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
+import { StackActions } from '@react-navigation/native';
 
 const Tournament = ({navigation, disableRegenerateFixture=true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -65,26 +66,26 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
             text="Teams"
             number={currentOverview !== null && currentOverview?.teams}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('TeamsList'))
             }
           />
           <TournamentInputList
             text="Overs"
             number={currentOverview !== null && currentOverview?.overs}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'OversScreen'})
+              navigation.dispatch(StackActions.push('OversScreen'))
             }
           />
           <TournamentInputList
             text="Grounds"
             number={currentOverview !== null && currentOverview?.grounds}
-            onPress={() => navigation.navigate('AppStack', {screen: 'Ground'})}
+            onPress={() => navigation.dispatch(StackActions.push('Ground'))}
           />
           <TournamentInputList
             text="Umpires"
             number={currentOverview !== null && currentOverview?.umpires}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'UmpiresList'})
+              navigation.dispatch(StackActions.push('UmpiresList'))
             }
           />
           <TournamentInputList
@@ -93,14 +94,14 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
               currentOverview !== null && currentOverview?.startDateEnglish
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'DateScreen'})
+              navigation.dispatch(StackActions.push('DateScreen'))
             }
           />
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'DateScreen'})
+              navigation.dispatch(StackActions.push('DateScreen'))
             }
           />
           <TournamentInputList
@@ -109,7 +110,7 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
               currentOverview !== null && currentOverview?.startTimeNormalFormat
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('START TIME'))
             }
           />
           <TournamentInputList
@@ -118,7 +119,7 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
               currentOverview !== null && currentOverview?.endTimeNormalFormat
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('END TIME'))
             }
           />
         </View>

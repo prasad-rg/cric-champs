@@ -14,11 +14,13 @@ import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
+import moment from 'moment';
 
 const StartTime = ({navigation}) => {
   const [disabled, setDisabled] = useState(true);
   const startTime = useSelector(state => state.matchdata.startTime);
-  console.log('Start Time.....', startTime);
+ 
+  let current_time = moment();
 
   const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
@@ -60,8 +62,8 @@ const StartTime = ({navigation}) => {
             visible={true}
             onDismiss={onDismiss}
             onConfirm={onConfirm}
-            hours={12} // default: current hours
-            minutes={14} // default: current minutes
+            hours={current_time.format("HH")} // default: current hours
+            minutes={current_time.format("mm")} // default: current minutes
             label="Select time" // optional, default 'Select time'
             uppercase={false} // optional, default is true
             cancelLabel="Cancel" // optional, default: 'Cancel'

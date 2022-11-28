@@ -103,7 +103,7 @@ const TeamsList = ({navigation}) => {
           )}
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
       {currentTeams.length === 0 ? (
         <GradientButton
         start={{x: 0, y: 0}}

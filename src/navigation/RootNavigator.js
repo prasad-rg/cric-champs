@@ -16,6 +16,7 @@ import PlayerProfile from '../screens/PlayerProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
 import UmpireProfile from '../screens/UmpireProfile';
+import AppNavigator from './AppNavigator';
 
 const Stack = createStackNavigator();
 
