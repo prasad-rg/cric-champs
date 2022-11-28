@@ -58,15 +58,15 @@ const EndTime = ({navigation}) => {
 
   // var sDate =
   // new Date(`${hours}:${minutes}`);
-  const timeData = {
-    tournamentId: tournamentId,
-    startTimeInISO: getISOTime(startTime),
-    endTimeInISO: getISOTime(endTime),
-  };
 
-  console.log(timeData);
 
   const handlePress = async () => {
+    const timeData = {
+      tournamentId: tournamentId,
+      startTimeInISO: getISOTime(startTime),
+      endTimeInISO: getISOTime(endTime),
+    };
+    console.log(timeData);
     const response = await addTime(timeData);
     console.log('I am response for time', response.data);
     if (response.data.status) {
