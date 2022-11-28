@@ -18,7 +18,8 @@ const HomeStack = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="UserControls"
