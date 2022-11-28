@@ -98,7 +98,9 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AppStack"
           component={AppStack}
-          options={{headerShown: false}}
+          options={{headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="MatchDetails"
