@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Share,
 } from 'react-native';
 import React from 'react';
 import ManageTab from '../navigation/ManageTab';
@@ -14,6 +15,26 @@ import {useSelector} from 'react-redux';
 
 const ManageScreen = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${tournamentDetails.code}, Share the tournament code to invite your friends`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+const handleEdit = () =>{
+  
+}
 
   return (
     <View style={styles.container}>
@@ -38,6 +59,7 @@ const ManageScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                   }}>
+                    <TouchableOpacity onPress={()=>handleEdit}>
                   <Image
                     source={require('../../assets/images/pencil.png')}
                     style={{
@@ -47,6 +69,8 @@ const ManageScreen = ({navigation}) => {
                       marginRight: 23,
                     }}
                   />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => onShare()}>
                   <Image
                     source={require('../../assets/images/share3.png')}
                     style={{
@@ -55,6 +79,7 @@ const ManageScreen = ({navigation}) => {
                       width: 25,
                     }}
                   />
+                  </TouchableOpacity>
                 </View>
               </View>
               <View>

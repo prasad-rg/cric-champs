@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useLayoutEffect} from 'react';
 import GradientButton from '../components/GradientButton';
 import OutlinedButton from '../components/OutlinedButton';
 import RecentActivityCard from '../components/RecentActivityCard';
@@ -20,6 +20,8 @@ import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {storeRecentActivities} from '../redux/recentActivitiesSlice';
 import axios from 'axios';
 import {getRecentActivities} from '../services/recentActivities';
+import {useIsFocused} from '@react-navigation/native';
+
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -31,8 +33,9 @@ const HomeScreen = ({navigation}) => {
   const handelTextChange = text => {
     setCode(text);
   };
+  const focus = useIsFocused();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getRecentDetails = async tournamentIds => {
       const recents = await getRecentActivities({tournamentIds});
       // console.log(recents);
@@ -44,7 +47,7 @@ const HomeScreen = ({navigation}) => {
       }
     };
     getRecentDetails(recentActivities);
-  }, [recentActivities]);
+  }, [focus]);
 
   return (
     // <SafeAreaView style={{flex: 1}}>

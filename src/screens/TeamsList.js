@@ -11,13 +11,15 @@ import {
 } from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-
+import { setTeamId } from '../redux/manageTournamentSlice';
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
 import {getTeamsByTournamentId} from '../services/viewTournament';
+import { useDispatch } from 'react-redux';
 
 import {useSelector} from 'react-redux';
 const TeamsList = ({navigation}) => {
+  dispatch = useDispatch ()
   const [currentTeams, setCurrentTeams] = useState([]);
 
   const tournamentId = useSelector(
@@ -38,7 +40,7 @@ const TeamsList = ({navigation}) => {
   }, [focus]);
 
   const handleTeamList = (team) =>{
-
+    dispatch(setTeamId(team._id))
     navigation.navigate('TeamInfoScreen',{
       teamId:team?._id,
       teamName:team?.name,

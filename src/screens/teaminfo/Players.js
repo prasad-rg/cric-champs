@@ -51,15 +51,16 @@ const Players = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1}}>
-      {isLoggedIn && (
+    
         <View style={styles.container}>
           <TouchableOpacity>
             <View style={styles.addButton}>
               <Text style={styles.addTeamText}>ADD PLAYER</Text>
             </View>
           </TouchableOpacity>
+
         </View>
-      )}
+   
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>
         <FlatList

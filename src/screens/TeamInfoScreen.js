@@ -11,12 +11,30 @@ import {
 import React, {useState} from 'react';
 import ProfileImagePicker from '../components/ProfileImagePicker';
 import TeamInfoTab from '../navigation/TeamInfoTab';
+import { setIsEdit } from '../redux/manageTournamentSlice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { StackActions } from '@react-navigation/native';
+
 const TeamInfoScreen = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
-
+  const dispatch = useDispatch ();
+  const tournamentdata = useSelector(
+    state => state.tournamentdata.tournamentdata,
+  );
   const getDetails = data => {
     setProfilePictureUri(data);
   };
+
+  const handleEdit = () =>{
+    dispatch(setIsEdit(true))
+    console.log("hiiiiiii",tournamentdata)
+    navigation.dispatch(StackActions.push('AddTeam',{
+      title:'Edit Team',
+      teamLogo: route?.params.teamLogo,
+      // teamName : route.params.teamName,
+    }))
+  }
 
   return (
     <View style={styles.container}>
@@ -45,7 +63,7 @@ const TeamInfoScreen = ({navigation, route}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                   }}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleEdit}>
                     <Image
                       source={require('../../assets/images/pencil.png')}
                       style={{
