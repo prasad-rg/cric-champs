@@ -40,7 +40,7 @@ const Overview = ({navigation}) => {
 
   const handlePress = async () => {
     const response = await generateFixture(tournamentId);
-    console.log('responseeeee', response);
+    console.log('responseeeee', response.data.statusCode);
     if (response.data.statusCode !== 200) {
       setModal(false);
       // navigation.navigate('TimeScreen')

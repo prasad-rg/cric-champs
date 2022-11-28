@@ -118,7 +118,8 @@ export const generateFixture = async data => {
 
       return response;
     } catch (error) {
-      return error.response.data.errorMessage;
+      // console.log("errorrrr", error.response.data)
+      return error.response;
     }
   }
 };
