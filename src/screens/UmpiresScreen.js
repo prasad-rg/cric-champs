@@ -30,7 +30,14 @@ const UmpiresScreen = ({navigation}) => {
   }, []);
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigation.navigate('UmpireProfile')}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('UmpireProfile', {
+          umpireId: item._id,
+          umpireName: item.name,
+          umpirePicture: item.profilePic.url,
+        })
+      }>
       <TeamListName source={item.profilePic.url} text={item.name} />
     </TouchableOpacity>
   );
