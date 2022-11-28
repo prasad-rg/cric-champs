@@ -25,12 +25,14 @@ const AuthStack = () => {
       <Stack.Screen
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="RegisterUserScreen"
         component={RegisterUserScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="SetPasswordScreen"
@@ -40,7 +42,8 @@ const AuthStack = () => {
       <Stack.Screen
         name="RegistrationSuccessScreen"
         component={RegistrationSuccessScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
     </Stack.Navigator>
   );

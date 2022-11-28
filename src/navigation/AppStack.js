@@ -1,6 +1,6 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { CardStyleInterpolators } from '@react-navigation/stack';
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createStackNavigator,CardStyleInterpolators } from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 // import UserControls from '../screens/UserControls';
 // import LoginScreen from '../screens/LoginScreen';
@@ -25,7 +25,7 @@ import ManageScreen from '../screens/ManageScreen';
 import TimeTab from './TimeTab';
 import DateTab from './DateTab';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const AppStack = () => {
   return (
@@ -160,7 +160,7 @@ const AppStack = () => {
           options={{headerShown: false}}
         /> */}
     </Stack.Navigator>
-    //  </NavigationContainer>
+//  </NavigationContainer> 
   );
 };
 

@@ -30,7 +30,8 @@ const RootNavigator = () => {
           <Stack.Screen
             name="OnBoardingStack"
             component={OnBoardingStack}
-            options={{headerShown: false}}
+            options={{headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
           />
         )}
         <Stack.Screen
@@ -38,6 +39,7 @@ const RootNavigator = () => {
           component={HomeStack}
           options={{
             headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
         />
 
@@ -100,6 +102,7 @@ const RootNavigator = () => {
           component={AppStack}
           options={{headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          
           }}
         />
         <Stack.Screen

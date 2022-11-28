@@ -1,5 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
 import OnBoardingScreenOne from '../screens/onboardingscreens/OnBoardingScreenOne';
@@ -17,17 +18,20 @@ const OnBoardingStack = () => {
       <Stack.Screen
         name="OnBoardingScreenOne"
         component={OnBoardingScreenOne}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="OnBoardingScreenTwo"
         component={OnBoardingScreenTwo}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="OnBoardingScreenThree"
         component={OnBoardingScreenThree}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
     </Stack.Navigator>
     // </NavigationContainer>
