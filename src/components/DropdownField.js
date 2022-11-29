@@ -1,11 +1,14 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 
-const DropdownField = ({data = [], value = {}, onSelect = () => {}}) => {
+const DropdownField = ({data = [], value = {}, onSelect = () => {},team1Name=''}) => {
+  // console.log("team1 id",data[0].id)
+  // console.log("team2 id",data[1].id)
   const [showOptions, setShowOptions] = useState(false);
   const onSelectedItem = val => {
     setShowOptions(false);
     onSelect(val);
+    console.log("I am value",val)
   };
   return (
     <View style={styles.container}>
@@ -14,7 +17,7 @@ const DropdownField = ({data = [], value = {}, onSelect = () => {}}) => {
         onPress={() => setShowOptions(!showOptions)}>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.teamName}>
-            {!!value ? value?.name : `UDL name`}
+            {!!value ? value?.name : team1Name !== '' ? team1Name : `Select`}
           </Text>
           <Image
             source={require('../../assets/images/downArrow.png')}
@@ -50,7 +53,7 @@ export default DropdownField;
 const styles = StyleSheet.create({
   teamName: {
     height: 16,
-    color: '#8E9BA8',
+    color: '#696969',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
   },
   textList: {
     height: 16,
-    color: '#8E9BA8',
+    color: '#696969',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',

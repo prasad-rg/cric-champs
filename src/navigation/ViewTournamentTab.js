@@ -13,7 +13,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const ViewTournamentTab = () => {
   return (
-    //<NavigationContainer>
+    // <NavigationContainer>
     <Tab.Navigator
       // swipeEnabled={false}
 
@@ -54,7 +54,7 @@ const ViewTournamentTab = () => {
       <Tab.Screen name="GROUNDS" component={GroundsScreen} />
       <Tab.Screen name="UMPIRES" component={UmpiresScreen} />
     </Tab.Navigator>
-    //</NavigationContainer>
+    // </NavigationContainer>
   );
 };
 

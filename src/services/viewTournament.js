@@ -203,3 +203,18 @@ export const getLiveScoresByMatchIdAndBothTeamId = async (
     return error.response.data;
   }
 };
+
+export const getInfoByMatchId = async (
+  matchId
+) =>{
+  try {
+    const response=await axios.get(
+      `${BASE_URL}/api/match/get-particular-match?matchId=${matchId}`
+    );
+    const data =response.data;
+    console.info("Info response",data);
+    return data;
+  } catch (error){
+    return error.response.data;
+  }
+}

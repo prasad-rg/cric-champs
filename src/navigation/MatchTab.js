@@ -34,8 +34,7 @@ export default function MatchTab(props) {
           borderBottomColor: '#FFB400',
           borderBottomWidth: 2.5,
           borderRadius: 3.5,
-          marginLeft: '5%',
-          width: '20%',
+          width: '33.33%',
 
           // height:1,
         },
@@ -46,6 +45,6 @@ export default function MatchTab(props) {
         {() => <ScoreboardScreen {...props} />}
       </Tab.Screen>
     </Tab.Navigator>
-    // </NavigationContainer>
+//  </NavigationContainer>
   );
 }

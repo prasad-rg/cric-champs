@@ -17,6 +17,8 @@ import {
 import Circle from '../../components/Circle';
 import DotBall from '../../components/DotBall';
 import {getLiveScoresByMatchIdAndBothTeamId} from '../../services/viewTournament';
+import DropdownField from '../../components/DropdownField';
+
 
 const LiveScreen = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +26,7 @@ const LiveScreen = ({navigation, route}) => {
   const [fallOfWicket, setFallOfWickets] = useState({});
   const [commentary, setCommentary] = useState([]);
   let previousOver = 1;
-
+ console.warn(route.params)
   const [tableHead, setTableHead] = useState([
     'Batsman',
     'R',
@@ -134,6 +136,21 @@ const LiveScreen = ({navigation, route}) => {
     loadScoreBoard();
   }, []);
 
+  let teams = [
+    {
+      id: route?.params?.team1Id,
+      name: route?.params?.teams.team1Name,
+    },
+    {
+      id: route?.params?.team2Id,
+      name: route?.params?.teams.team2Name,
+    },
+  ];
+  const [selectedItem,setSelectedItem]=useState(null)
+  const onSelect=(item)=>{
+  setSelectedItem(item)
+  }
+  
   return (
     <View style={styles.container}>
       <ScrollView
@@ -141,7 +158,10 @@ const LiveScreen = ({navigation, route}) => {
           <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
         }>
         <View style={styles.headerText}>
-          <Text style={styles.codetext}>Code Warriors</Text>
+          {/* <Text style={styles.codetext}>Code Warriors</Text> */}
+          <View>
+          <DropdownField data={teams} onSelect={onSelect} value={selectedItem} team1Name={teams[0].name}/>
+          </View>
           <Text
             style={
               styles.numberText
@@ -459,7 +479,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   headerText: {
-    height: 48,
+    height: 'auto',
     width: '100%',
     flexDirection: 'row',
     alignSelf: 'baseline',
