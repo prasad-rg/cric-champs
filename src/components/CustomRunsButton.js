@@ -19,11 +19,15 @@ const CustomRunsButton = ({
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
 
-  const setData = (value, index) => {
-    setValue(value);
-    setIndex(index);
-    onPress(value, index);
-    console.log('I am value, I am in', value, index);
+  const setData = (val, ind) => {
+    setValue(val);
+    setIndex(ind);
+    onPress(val, ind);
+    console.log('I am value, I am in', val, ind);
+    if (index === ind) {
+      setData(null);
+      setIndex();
+    }
   };
 
   return (
