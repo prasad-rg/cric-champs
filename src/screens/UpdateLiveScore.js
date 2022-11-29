@@ -20,13 +20,14 @@ import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
 
-const UpdateLiveScore = () => {
+const UpdateLiveScore = ({navigation, route}) => {
   const [tournamenttype, setTournamentType] = useState('');
 
+  console.info(route.params);
 
   const getData = (data, index) => {
+    console.log(data);
     setTournamentType(data);
-   
   };
   const Details = [
     {
@@ -58,11 +59,11 @@ const UpdateLiveScore = () => {
   const Reason = [
     {
       id: 1,
-      title: 'UDL Strikers didnt show Up',
+      title: `${route.params.teams.team1Name} didn't show Up`,
     },
     {
       id: 2,
-      title: 'Paras XI didnt show up',
+      title: `${route.params.teams.team2Name} didn't show up`,
     },
     {
       id: 3,
@@ -99,7 +100,7 @@ const UpdateLiveScore = () => {
   ];
   const [visible, setVisible] = useState({
     stopModal: false,
-     customChooseModal: false,
+    customChooseModal: false,
   });
 
   return (
@@ -119,7 +120,7 @@ const UpdateLiveScore = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/goback.png')}
                       style={{height: 20, width: 20}}
@@ -183,7 +184,7 @@ const UpdateLiveScore = () => {
         <View style={styles.mainView}>
           <View style={{width: '58%'}}>
             <Text style={styles.runs}>Runs</Text>
-            <CustomRunsButton   
+            <CustomRunsButton
               radio_props={run_props}
               formHorizontal={true}
               style={{
@@ -217,7 +218,7 @@ const UpdateLiveScore = () => {
             />
           </View>
         </View>
-        <View style={{marginTop:20}}>
+        <View style={{marginTop: 20}}>
           <Text style={styles.wickets}>Wickets</Text>
         </View>
         <View
@@ -352,8 +353,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-    paddingHorizontal:20,
-
+    paddingHorizontal: 20,
   },
 
   //   csd

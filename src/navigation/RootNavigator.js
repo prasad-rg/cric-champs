@@ -17,6 +17,7 @@ import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
 import UmpireProfile from '../screens/UmpireProfile';
 import MatchDetails from '../screens/MatchDetails';
+import UpdateLiveScore from '../screens/UpdateLiveScore';
 
 const Stack = createStackNavigator();
 
@@ -110,6 +111,12 @@ const RootNavigator = () => {
           component={MatchDetails}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="UpdateLiveScore"
+          component={UpdateLiveScore}
+          options={{headerShown: false}}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
