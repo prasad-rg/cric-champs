@@ -8,6 +8,7 @@ import {
   Button,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
@@ -19,16 +20,74 @@ import CustomExtrasButton from '../components/CustomExtrasButton';
 import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
+import {cancelLiveTournament} from '../services/updateLiveScore';
+import {useSelector} from 'react-redux';
 
 const UpdateLiveScore = ({navigation, route}) => {
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  let {matchId, team1Id, team2Id, teams} = route.params;
   const [tournamenttype, setTournamentType] = useState('');
-
-  console.info(route.params);
+  const [runs, setRuns] = useState(0);
+  const [extras, setExtras] = useState('');
+  const [wickets, setWickets] = useState('');
+  const [dataToSend, setDataToSend] = useState({
+    tournamentId: tournamentDetails._id,
+    matchId: matchId,
+    teamId: team1Id,
+    team2Id: team2Id,
+    matchStatus: 'start',
+    inningsStatus: 'start',
+    strike: '',
+    strikeName: '',
+    nonStrike: '',
+    nonStrikeName: '',
+    bowler: '',
+    bowlerName: '',
+    runs: 0,
+    extras: {
+      status: false,
+      bye: 0,
+      legBye: 0,
+      wide: 0,
+      noBall: 0,
+    },
+    wickets: {
+      status: false,
+      batsmanId: '',
+      batsman: '',
+      type: '',
+      fielderName: '',
+      new_batsmanId: '',
+      new_batsman: '',
+      bowlerName: '',
+    },
+    commentry: {
+      teamId: team1Id,
+      teamName: '',
+      over: 0,
+      balls: 0,
+      status: 'W',
+      message: 'he he',
+    },
+  });
 
   const getData = (data, index) => {
     console.log(data);
     setTournamentType(data);
   };
+
+  const getRuns = (data, index) => {
+    console.warn(data);
+    setRuns(data);
+  };
+
+  const getExtras = (data, index) => {
+    setExtras(data);
+  };
+  const getWickets = (data, index) => {
+    setWickets(data);
+  };
+
   const Details = [
     {
       id: 1,
@@ -109,17 +168,8 @@ const UpdateLiveScore = ({navigation, route}) => {
         <View style={styles.backgroundBeyondSafeArea}>
           <SafeAreaView>
             <View style={styles.profileDetailsContainer}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'baseline',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
+              <View style={styles.navBar}>
+                <View style={styles.navContainer}>
                   <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/goback.png')}
@@ -129,6 +179,7 @@ const UpdateLiveScore = ({navigation, route}) => {
                   <Text style={styles.headerName}>Update Live Score</Text>
                 </View>
                 <View
+                  // eslint-disable-next-line react-native/no-inline-styles
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -137,12 +188,7 @@ const UpdateLiveScore = ({navigation, route}) => {
                     onPress={() => setVisible({...visible, stopModal: true})}>
                     <Image
                       source={require('../../assets/images/icon-vertical-dots.png')}
-                      style={{
-                        marginHorizontal: '-1%',
-                        tintColor: '#FFFFFF',
-                        height: 25,
-                        width: 25,
-                      }}
+                      style={styles.verticalDots}
                     />
                   </TouchableOpacity>
                 </View>
@@ -171,9 +217,19 @@ const UpdateLiveScore = ({navigation, route}) => {
           {Reason.map(item => (
             <View key={item.id} style={styles.listview}>
               <TouchableOpacity
-                onPress={() =>
-                  setVisible({customChooseModal: false, stopModal: false})
-                }>
+                onPress={async () => {
+                  const response = await cancelLiveTournament(
+                    route.params?.matchId,
+                    item?.title,
+                  );
+                  // console.info('--------------', response);
+                  if (response.status) {
+                    setVisible({customChooseModal: false, stopModal: false});
+                    navigation.goBack();
+                  } else {
+                    Alert.alert('Error Occoured Please Try Again');
+                  }
+                }}>
                 <View style={{width: '100%'}}>
                   <Text style={styles.title}>{item.title}</Text>
                 </View>
@@ -187,16 +243,9 @@ const UpdateLiveScore = ({navigation, route}) => {
             <CustomRunsButton
               radio_props={run_props}
               formHorizontal={true}
-              style={{
-                marginRight: 15,
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                marginHorizontal: 2,
-                marginTop: 15,
-              }}
+              style={styles.runsRadioGroup}
               flexWrap={{flexWrap: 'wrap'}}
-              onPress={getData}
+              onPress={getRuns}
             />
           </View>
           <View style={{width: '42%'}}>
@@ -204,15 +253,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             <CustomExtrasButton
               radio_props={extra_props}
               formHorizontal={true}
-              style={{
-                marginRight: 7,
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                marginHorizontal: 15,
-                marginTop: 15,
-                borderColor: '#FF8713',
-              }}
+              style={styles.extrasRadioGroup}
               flexWrap={{flexWrap: 'wrap'}}
               onPress={getData}
             />
@@ -242,9 +283,9 @@ const UpdateLiveScore = ({navigation, route}) => {
       </ScrollView>
       <StopMatchModal visible={visible.stopModal}>
         <TouchableOpacity
-          onPress={() =>
-            setVisible({customChooseModal: true, stopModal: false})
-          }>
+          onPress={() => {
+            setVisible({customChooseModal: true, stopModal: false});
+          }}>
           <Text>Stop Match</Text>
         </TouchableOpacity>
       </StopMatchModal>
@@ -255,13 +296,8 @@ const UpdateLiveScore = ({navigation, route}) => {
           colors={['#FFBA8C', '#FE5C6A']}
           text="UPDATE"
           style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
+          textstyle={styles.buttonText}
+          onPress={() => Alert.alert(JSON.stringify(dataToSend))}
         />
       </View>
     </View>
@@ -402,5 +438,44 @@ const styles = StyleSheet.create({
     height: 13,
     width: 13,
     tintColor: '#000000',
+  },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  navContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  verticalDots: {
+    marginHorizontal: '-1%',
+    tintColor: '#FFFFFF',
+    height: 25,
+    width: 25,
+  },
+  runsRadioGroup: {
+    marginRight: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 2,
+    marginTop: 15,
+  },
+  extrasRadioGroup: {
+    marginRight: 7,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: '#FF8713',
+  },
+  buttonText: {
+    height: 16,
+    fontWeight: '500',
+    fontSize: 14,
+    letterSpacing: 0.5,
+    lineHeight: 19,
   },
 });

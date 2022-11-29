@@ -1,0 +1,42 @@
+const liveScoreDataStructure = {
+  tournamentId: '638090ddc3ab2708e617df5f',
+  matchId: '63809426d467c0529f3b6aff',
+  teamId: '638092c55ffb91e72f234071',
+  matchStatus: 'end',
+  inningsStatus: 'start',
+  strike: '638093b2d467c0529f3b6ae6',
+  strikeName: 'Keerthika',
+  nonStrike: '638093c0d467c0529f3b6aec',
+  nonStrikeName: 'vinith',
+  bowler: '6380936e5ffb91e72f234085',
+  bowlerName: 'Shravya',
+  team2Id: '638092b25ffb91e72f23406f',
+  runs: 6,
+  extras: {
+    status: false,
+    bye: 0,
+    legBye: 0,
+    wide: 0,
+    noBall: 0,
+  },
+  wickets: {
+    status: false,
+    batsmanId: '638093415ffb91e72f234078',
+    batsman: 'Sandesh',
+    type: 'out',
+    fielderName: 'ashlesh',
+    new_batsmanId: '6380938c5ffb91e72f23408a',
+    new_batsman: 'Dhamini',
+    bowlerName: 'vinith',
+  },
+  commentry: {
+    teamId: '637c559756844954d211a949',
+    teamName: '',
+    over: 0,
+    balls: 0,
+    status: 'W',
+    message: 'he he',
+  },
+};
+
+export const convertLiveScoreData = () => {};

@@ -22,7 +22,7 @@ const CustomExtrasButton = ({
     setValue(val);
     setIndex(ind);
     onPress(val, ind);
-    console.log('I am value, I am in', val, ind);
+    // console.log('I am value, I am in', val, ind);
     if (index === ind) {
       setData(null);
       setIndex();
