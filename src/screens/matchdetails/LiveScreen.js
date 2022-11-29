@@ -1,4 +1,11 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Table,
@@ -46,8 +53,9 @@ const LiveScreen = ({navigation, route}) => {
     setIsLoading(true);
     const response = await getLiveScoresByMatchIdAndBothTeamId(
       route.params.matchId,
-      route.params.team1Id,
       route.params.team2Id,
+      route.params.team1Id,
+      
     );
     setIsLoading(false);
     // console.log(response);
@@ -128,7 +136,10 @@ const LiveScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
+        }>
         <View style={styles.headerText}>
           <Text style={styles.codetext}>Code Warriors</Text>
           <Text
