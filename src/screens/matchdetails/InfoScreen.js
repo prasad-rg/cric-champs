@@ -33,7 +33,7 @@ const InfoScreen = ({route}) => {
   }, [focus]);
 
   return isLoading ? (
-    <ActivityIndicator size={'large'} color="blue" />
+    <ActivityIndicator size={'large'} color='rgba(0, 102, 226, 1)' />
   ) : (
     <>
       <View style={styles.container}>
