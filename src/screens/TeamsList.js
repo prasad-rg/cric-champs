@@ -26,7 +26,6 @@ const TeamsList = ({navigation}) => {
 
   const loadTeams = async () => {
     const response = await getTeamsByTournamentId(tournamentId);
-    console.log("I am team response",response)
     if (response.status) {
       setCurrentTeams(response.data);
     }
@@ -50,7 +49,7 @@ const TeamsList = ({navigation}) => {
 
   const [team, setTeam] = useState(true);
   const handleBack = () => {
-    navigation.goBack();
+    navigation.pop();
   };
   const handlePress = () => {
     navigation.navigate('OversScreen');
@@ -104,11 +103,28 @@ const TeamsList = ({navigation}) => {
           )}
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+      {currentTeams.length === 0 ? (
+        <GradientButton
+        start={{x: 0, y: 0}}
+        end={{x: 2, y: 0}}
+        colors={ ['#999999', '#999999'] }
+        text="PROCEED"
+        style={{height: 48, width: '100%', marginTop: 0}}
+        textstyle={{
+          height: 16,
+          fontWeight: '500',
+          fontSize: 14,
+          letterSpacing: 0.5,
+          lineHeight: 19,
+        }}
+      
+      />
+      ) : (
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={!team ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+          colors={['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
           style={{height: 48, width: '100%', marginTop: 0}}
           textstyle={{
@@ -120,6 +136,8 @@ const TeamsList = ({navigation}) => {
           }}
           onPress={handlePress}
         />
+      )}
+
       </View>
     </View>
   );

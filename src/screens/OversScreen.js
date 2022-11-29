@@ -37,7 +37,6 @@ const OversScreen = ({navigation}) => {
     {label: '50', value: '50', id: 7},
   ];
   const handlePress =async () =>{
-    // navigation.navigate('Ground')
     if(overs!==''){
       const response= await addOvers(oversData);
       console.log("hiiiiiiiiiiiiiii",response)
@@ -48,15 +47,6 @@ const OversScreen = ({navigation}) => {
     else{
       console.log("overs is required")
     }
-  
-    // const result=response.data()
-    // if (result.status){
-    //   console.log(response)
-    // }else{
-    //   console.log("Something went wrong")
-    // }
-    
-
   }
   const getData= data =>{
     setOvers(data)
@@ -103,11 +93,11 @@ const OversScreen = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
+          colors={overs === ''  ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
           text="PROCEED"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{

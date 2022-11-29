@@ -7,23 +7,52 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Platform
+  Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+
 import StadiumList from '../components/StadiumList';
 import GradientButton from '../components/GradientButton';
 import {useSelector} from 'react-redux';
-import { deleteGround } from '../redux/GroundSlice';
-import { useDispatch } from 'react-redux';
+import {deleteGround} from '../redux/GroundSlice';
+import {useDispatch} from 'react-redux';
+import {getGroundsByTournamentId} from '../services/viewTournament';
 
 const Ground = ({navigation}) => {
-  const dispatch=useDispatch();
-  const handlePress = () => {
+  const [currentTeams, setCurrentTeams] = useState([]);
 
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+
+  const loadTeams = async () => {
+    const response = await getGroundsByTournamentId(tournamentId);
+    console.log('current Teams', response.result.grounds);
+
+    if (response.status) {
+      setCurrentTeams(response.result.grounds);
+    }
+  };
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadTeams();
+    }
+  }, [focus]);
+
+  const dispatch = useDispatch();
+  const handlePress = () => {
     navigation.navigate('UmpiresList');
     dispatch(deleteGround());
   };
-  const grounddata = useSelector(state => state.grounddata.value);
+
+  const getGroundProfile = (value) => {
+    navigation.navigate('StadiumInformation',{
+      groundId:value._id,
+      groundName:value.name,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -55,19 +84,21 @@ const Ground = ({navigation}) => {
         </ImageBackground>
         <View style={styles.secondView}>
           <Text style={styles.ground}>Grounds</Text>
-          {grounddata.length === 0 ? (
+          {currentTeams.length === 0 ? (
             <View style={styles.nogroundview}>
               <Text style={styles.nogrounds}>No Grounds Added Yet!</Text>
             </View>
           ) : (
             <View>
-              {grounddata.map(value => (
+              {currentTeams.map(value => (
                 <View key={value?._id}>
-                  <StadiumList
-                    source={{uri: value?.groundPic?.url}}
-                    text={value?.name}
-                    place={value?.city}
-                  />
+                  <TouchableOpacity onPress={() => getGroundProfile(value)}>
+                    <StadiumList
+                      source={{uri: value?.groundPic?.url}}
+                      text={value?.name}
+                      place={value?.city}
+                    />
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>
@@ -75,12 +106,12 @@ const Ground = ({navigation}) => {
         </View>
       </ScrollView>
 
-      <View  style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton 
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+        <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
           colors={
-            grounddata.length === 0
+            currentTeams.length === 0
               ? ['#999999', '#999999']
               : ['#FFBA8C', '#FE5C6A']
           }

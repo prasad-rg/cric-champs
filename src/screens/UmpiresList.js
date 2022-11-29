@@ -25,7 +25,7 @@ const UmpiresList = ({navigation}) => {
   );
   
   const loadUmpires = async () => {
-    const response = await getUmpiresByTournamentId('637efbd16b9ce8028082cb9d');
+    const response = await getUmpiresByTournamentId(tournamentId);
     console.log('resp', response);
 
     if (response.status) {
@@ -96,7 +96,7 @@ const UmpiresList = ({navigation}) => {
           )}
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}

@@ -48,14 +48,14 @@ const AddGround = ({navigation}) => {
             };
             const groundData = createFormData(data);
             const response = await addGrounds(groundData);
-            // console.log("ground details",response.data.grounds)
+          
             if (response.status) {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
               
+            }else{
+              console.log('Something went wrong')
             }
-
-            Alert.alert('Please Add profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
@@ -159,11 +159,12 @@ const AddGround = ({navigation}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
               <GradientButton
                 start={{x: 0, y: 0}}
                 end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
+                colors={values.name === ''  ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+
                 text="SAVE GROUND"
                 onPress={handleSubmit}
                 style={{height: 50, width: '100%', marginTop: 0}}

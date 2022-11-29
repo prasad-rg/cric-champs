@@ -65,6 +65,9 @@ const StadiumInformation = ({navigation, route}) => {
     }
   };
 
+  const handleBack =()=>{
+    navigation.goBack();
+  }
   const stadiumDetails = [
     {
       id: 1,

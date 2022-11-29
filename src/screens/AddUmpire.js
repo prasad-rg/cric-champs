@@ -19,7 +19,6 @@ import {createFormData} from '../utils/createFormData';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {addUmpire} from '../redux/umpireSlice';
 import {addUmpires} from '../services/manageTournament2';
 
 const AddUmpire = ({navigation}) => {
@@ -142,7 +141,7 @@ const AddUmpire = ({navigation}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
               <GradientButton
                 start={{x: 0, y: 0}}
                 end={{x: 2, y: 0}}

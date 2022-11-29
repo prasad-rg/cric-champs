@@ -6,7 +6,7 @@ import Stats from '../screens/teaminfo/Stats';
 const Tab = createMaterialTopTabNavigator();
 
 export default function TeamInfoTab(props) {
-  console.error(props.route.params);
+  // console.error(props.route.params);
   return (
     // <NavigationContainer>
     <Tab.Navigator

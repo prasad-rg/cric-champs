@@ -23,7 +23,6 @@ const GroundsScreen = ({navigation}) => {
     setIsLoading(false);
     if (response.status) {
       setCurrentGrounds(response.result.grounds);
-      // console.log(response.result.grounds);
     }
   };
 
@@ -56,23 +55,6 @@ const GroundsScreen = ({navigation}) => {
         <RefreshControl refreshing={isLoading} onRefresh={loadGrounds} />
       }
     />
-    // <ScrollView>
-    //   <StadiumList
-    //     source={require('../../assets/images/ground1.png')}
-    //     text="Santhekatte Stadium"
-    //     place="Santhekatte"
-    //   />
-    //   <StadiumList
-    //     source={require('../../assets/images/ground2.png')}
-    //     text="Manjunath Stadium"
-    //     place="Udupi"
-    //   />
-    //   <StadiumList
-    //     source={require('../../assets/images/ground3.png')}
-    //     text="Surathkal Sports Academy"
-    //     place="Surathkal"
-    //   />
-    // </ScrollView>
   );
 };
 

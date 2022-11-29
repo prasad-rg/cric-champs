@@ -63,10 +63,10 @@ export const getGroundsByTournamentId = async tournamentId => {
   }
 };
 
-export const getStatsByTournamentId = async tournamentId => {
+export const getStatsByTournamentId = async (tournamentId, query) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/api/tournament/ground-details/all?tournamentId=${tournamentId}`,
+      `${BASE_URL}/api/tournament/stats/${tournamentId}?query=${query}`,
     );
     const data = response.data;
     // console.log(data);

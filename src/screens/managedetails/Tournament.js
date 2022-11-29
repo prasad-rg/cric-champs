@@ -15,8 +15,9 @@ import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
+import { StackActions } from '@react-navigation/native';
 
-const Tournament = ({navigation}) => {
+const Tournament = ({navigation, disableRegenerateFixture=true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [currentOverview, setCurrentOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,26 +66,26 @@ const Tournament = ({navigation}) => {
             text="Teams"
             number={currentOverview !== null && currentOverview?.teams}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('TeamsList'))
             }
           />
           <TournamentInputList
             text="Overs"
             number={currentOverview !== null && currentOverview?.overs}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'OversScreen'})
+              navigation.dispatch(StackActions.push('OversScreen'))
             }
           />
           <TournamentInputList
             text="Grounds"
             number={currentOverview !== null && currentOverview?.grounds}
-            onPress={() => navigation.navigate('AppStack', {screen: 'Ground'})}
+            onPress={() => navigation.dispatch(StackActions.push('Ground'))}
           />
           <TournamentInputList
             text="Umpires"
             number={currentOverview !== null && currentOverview?.umpires}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'UmpiresList'})
+              navigation.dispatch(StackActions.push('UmpiresList'))
             }
           />
           <TournamentInputList
@@ -93,14 +94,14 @@ const Tournament = ({navigation}) => {
               currentOverview !== null && currentOverview?.startDateEnglish
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'DateScreen'})
+              navigation.dispatch(StackActions.push('DateScreen'))
             }
           />
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'DateScreen'})
+              navigation.dispatch(StackActions.push('DateScreen'))
             }
           />
           <TournamentInputList
@@ -109,7 +110,7 @@ const Tournament = ({navigation}) => {
               currentOverview !== null && currentOverview?.startTimeNormalFormat
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('START TIME'))
             }
           />
           <TournamentInputList
@@ -118,7 +119,7 @@ const Tournament = ({navigation}) => {
               currentOverview !== null && currentOverview?.endTimeNormalFormat
             }
             onPress={() =>
-              navigation.navigate('AppStack', {screen: 'TeamsList'})
+              navigation.dispatch(StackActions.push('END TIME'))
             }
           />
         </View>
@@ -128,22 +129,24 @@ const Tournament = ({navigation}) => {
           <Text style={styles.cancelText}>Cancel Tournament</Text>
         </TouchableOpacity>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="RE-GENERATE FIXTURE"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-        />
-      </View>
+      {disableRegenerateFixture && (
+        <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="RE-GENERATE FIXTURE"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
