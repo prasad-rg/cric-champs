@@ -175,7 +175,7 @@ const LiveScreen = ({navigation, route}) => {
           <Table>
             <Row
               data={tableHead}
-              flexArr={[3, 1, 1, 0.8, 0.8, 1.4]}
+              flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
               style={styles.table_header}
               textStyle={styles.header_text}
             />
@@ -183,7 +183,7 @@ const LiveScreen = ({navigation, route}) => {
               <Rows
                 data={tableData}
                 heightArr={[50, 50, 50, 50, 50, 50]}
-                flexArr={[3, 1, 1, 0.8, 0.8, 1.4]}
+                flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
                 textStyle={styles.row_text}
               />
             </TableWrapper>
@@ -204,7 +204,7 @@ const LiveScreen = ({navigation, route}) => {
             <TableWrapper>
               <Rows
                 data={data}
-                heightArr={[80, 80, 80, 80, 80, 80]}
+                heightArr={[50, 50, 50, 50, 50, 50]}
                 flexArr={[3, 1, 1, 1, 1, 1]}
                 textStyle={styles.row_text}
               />
@@ -603,10 +603,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0,
     lineHeight: 24,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
+    padding: 8,
   },
   row_text: {
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
+    padding: 8,
   },
   pship: {
     height: 15,
@@ -661,7 +663,7 @@ const styles = StyleSheet.create({
   },
   commentaryView: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignContent: 'center',
     justifyContent: 'space-evenly',
     marginTop: 20,
   },

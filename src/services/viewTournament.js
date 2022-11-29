@@ -197,7 +197,7 @@ export const getLiveScoresByMatchIdAndBothTeamId = async (
       `${BASE_URL}/api/match/live-score?tournamentId&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
     );
     const data = response.data;
-    // console.log(data);
+    console.info('==========', data);
     return data;
   } catch (error) {
     return error.response.data;
