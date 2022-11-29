@@ -25,6 +25,7 @@ import DateScreen from '../screens/DateScreen';
 import TimeScreen from '../screens/TimeScreen';
 import AddTeam from '../screens/AddTeam';
 import AddPlayer from '../screens/AddPlayer';
+import MatchDetails from '../screens/MatchDetails';
 
 const Stack = createStackNavigator();
 

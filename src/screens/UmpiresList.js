@@ -23,7 +23,7 @@ const UmpiresList = ({navigation}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  
+
   const loadUmpires = async () => {
     const response = await getUmpiresByTournamentId(tournamentId);
     console.log('resp', response);
@@ -47,7 +47,6 @@ const UmpiresList = ({navigation}) => {
     navigation.navigate('DateScreen');
   };
 
- 
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -86,10 +85,19 @@ const UmpiresList = ({navigation}) => {
             <View>
               {currentUmpires.map(value => (
                 <View key={value?._id}>
-                  <TeamListName
-                    source={value?.profilePic.url}
-                    text={value?.name}
-                  />
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('UmpireProfile', {
+                        umpireId: value._id,
+                        umpireName: value.name,
+                        umpirePicture: value.profilePic.url,
+                      })
+                    }>
+                    <TeamListName
+                      source={value?.profilePic.url}
+                      text={value?.name}
+                    />
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>
