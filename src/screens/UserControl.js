@@ -32,7 +32,7 @@ const UserControl = ({navigation}) => {
         // setUserData(userInfo);
         dispatch(addUser(userInfo));
       }
-      console.log(userInfo);
+      console.warn(userInfo);
     };
     getUserInfo();
   }, [isLoggedIn]);

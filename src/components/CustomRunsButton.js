@@ -6,6 +6,7 @@ import RadioForm, {
   import {useState} from 'react';
   import {RadioButton} from 'react-native-simple-radio-button';
   import {StyleSheet} from 'react-native';
+import { combineReducers } from '@reduxjs/toolkit';
   
   const CustomRunsButton = ({
     radio_props,
@@ -15,13 +16,15 @@ import RadioForm, {
     flexWrap = {},
     onPress,
   }) => {
-    const [value, setValue] = useState({value: 0});
-    const [index, setIndex] = useState({index: 0});
+    const [value, setValue] = useState(0);
+    const [index, setIndex] = useState(0);
   
     const setData = (value, index) => {
-      setValue({value: value});
+      setValue(value);
       setIndex(index);
       onPress(value,index);
+      console.log("I am value, I am in",value,index)
+   
     };
   
     return (
@@ -30,11 +33,11 @@ import RadioForm, {
         formHorizontal={formHorizontal}
         style={flexWrap}>
         {radio_props.map((obj, i) => (
-      
+
           <RadioButton
             key={i}
             isSelected={index === i}
-            onPress={(value, i) => setData(value, i)}
+            
             style={[
               {
                 borderWidth: 1,
@@ -42,16 +45,15 @@ import RadioForm, {
                 height: 40,
                 width: 80,
                 borderWidth: 0.8,
-                backgroundColor: index === i ? '#FF8713' : '#FFFFFF',
-                // backgroundColor: value==0 ? "black":value===1 ? "blue":value===4 ? "green":"white",
-                // borderRadius: value===0 ? "grey":value===1 ? "blue":value===4 ? "green":"white",
-                borderColor:'#C44343',
+                backgroundColor: index === 0 ? '#989898' :index === 1 ? '#4A90E2':index === 2 ? '#4A90E2':index === 3 ? '#4A90E2': index === 4 ? '#5FB100': index === 5 ? '#5FB100':'#FFFFFF',
+                borderColor: index === 0 ? '#989898' :index === 1 ? '#4A90E2':index === 2 ? '#4A90E2':index === 3 ? '#4A90E2': index === 4 ? '#5FB100': index === 5 ? '#5FB100':'#FFFFFF',
                 borderRadius: 24,
                 alignItems:'center',
                 justifyContent:'center',
               },
               {...style},
             ]}>
+        
             <RadioButtonLabel
               obj={obj}
               index={i}

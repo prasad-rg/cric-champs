@@ -18,7 +18,6 @@ import {getTournamentByCode} from '../services/viewTournament';
 import {useDispatch, useSelector} from 'react-redux';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {storeRecentActivities} from '../redux/recentActivitiesSlice';
-import axios from 'axios';
 import {getRecentActivities} from '../services/recentActivities';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -29,7 +28,7 @@ const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {recentActivities} = useSelector(state => state.recentActivities);
   const [recentsData, setRecentsData] = useState([]);
-
+  
   const handelTextChange = text => {
     setCode(text);
   };
@@ -50,7 +49,6 @@ const HomeScreen = ({navigation}) => {
   }, [focus]);
 
   return (
-    // <SafeAreaView style={{flex: 1}}>
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.backgroundBeyondSafeArea}>
@@ -118,7 +116,6 @@ const HomeScreen = ({navigation}) => {
               colors={['#FFBA8C', '#FE5C6A']}
               text="CREATE TOURNAMENT"
               onPress={() => navigation.navigate('AppStack')}
-              //  style={{width:'100%'}}
             />
             {recentsData.length > 0 && (
               <View style={styles.recentActivityView}>
@@ -138,6 +135,7 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+ 
     </View>
   );
 };
@@ -150,7 +148,8 @@ const styles = StyleSheet.create({
   backgroundBeyondSafeArea: {
     backgroundColor: 'rgba(0, 102, 226, 1)',
     paddingRight: 20,
-    paddingBottom: 15,
+    paddingTop: 15,
+    paddingBottom:15,
   },
   textInput: {
     boxSizing: 'border-box',
@@ -243,7 +242,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   recentActivityView: {
-    // flex:1,
     padding: 20,
     backgroundColor: '#EEF1F4',
     marginTop: 20,

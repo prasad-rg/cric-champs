@@ -25,7 +25,7 @@ const CustomChooseModal = ({visible, children,onPress}) => {
         useNativeDriver: true,
       }).start();
     } else {
-      setTimeout(() => setShowModal(false), 200);
+      setTimeout(() => setShowModal(false), 0);
       Animated.timing(scaleValue, {
         toValue: 0,
         duration: 300,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   modalContainer: {
-    height: '42%',
+    height: '39%',
     width: '80%',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',

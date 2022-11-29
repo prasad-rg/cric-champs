@@ -18,14 +18,15 @@ import CustomRadioButton from '../components/CustomRadioButton';
 import CustomExtrasButton from '../components/CustomExtrasButton';
 import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
+import CustomRunsButton from '../components/CustomRunsButton';
 
 const UpdateLiveScore = () => {
   const [tournamenttype, setTournamentType] = useState('');
-  const [index, setIndex] = useState({index: 0});
+
 
   const getData = (data, index) => {
     setTournamentType(data);
-    setIndex(index);
+   
   };
   const Details = [
     {
@@ -86,7 +87,7 @@ const UpdateLiveScore = () => {
     {label: '0', value: '0', id: 0},
     {label: '1', value: '1', id: 1},
     {label: '2', value: '2', id: 2},
-    {label: '3', value: '4', id: 3},
+    {label: '3', value: '3', id: 3},
     {label: '4', value: '4', id: 4},
     {label: '6', value: '6', id: 5},
   ];
@@ -98,7 +99,7 @@ const UpdateLiveScore = () => {
   ];
   const [visible, setVisible] = useState({
     stopModal: false,
-    customChooseModal: false,
+     customChooseModal: false,
   });
 
   return (
@@ -182,7 +183,7 @@ const UpdateLiveScore = () => {
         <View style={styles.mainView}>
           <View style={{width: '58%'}}>
             <Text style={styles.runs}>Runs</Text>
-            <CustomRadioButton
+            <CustomRunsButton   
               radio_props={run_props}
               formHorizontal={true}
               style={{
@@ -193,7 +194,6 @@ const UpdateLiveScore = () => {
                 marginHorizontal: 2,
                 marginTop: 15,
               }}
-              // labelStyle={{width:"auto"}}
               flexWrap={{flexWrap: 'wrap'}}
               onPress={getData}
             />
@@ -212,20 +212,17 @@ const UpdateLiveScore = () => {
                 marginTop: 15,
                 borderColor: '#FF8713',
               }}
-              // labelStyle={{width:"auto"}}
               flexWrap={{flexWrap: 'wrap'}}
               onPress={getData}
             />
           </View>
         </View>
-        <View>
+        <View style={{marginTop:20}}>
           <Text style={styles.wickets}>Wickets</Text>
         </View>
         <View
           style={{
-            // width: '70%',
             marginHorizontal: 10,
-            // flexWrap: 'wrap',
             padding: 20,
           }}>
           <CustomRadioButton
@@ -237,7 +234,6 @@ const UpdateLiveScore = () => {
               borderWidth: 1,
               width: 'auto',
             }}
-            // labelStyle={{width:"auto"}}
             flexWrap={{flexWrap: 'wrap'}}
             onPress={getData}
           />
@@ -356,7 +352,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-    padding: 20,
+    paddingHorizontal:20,
+
   },
 
   //   csd

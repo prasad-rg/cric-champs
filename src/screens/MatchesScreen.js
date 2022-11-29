@@ -5,12 +5,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MatchCard from '../components/MatchCard';
 import {useSelector} from 'react-redux';
 import {getMatchesByTournamentId} from '../services/viewTournament';
+import {convertMatchesDataWithScores} from '../utils/convertMatchesDataWithScores';
 
 const MatchesScreen = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -22,7 +24,8 @@ const MatchesScreen = ({navigation}) => {
     const response = await getMatchesByTournamentId(tournamentDetails._id);
     setIsLoading(false);
     if (response.status) {
-      setCurrentMatches(response.data.matches);
+      setCurrentMatches(() => convertMatchesDataWithScores(response.data));
+      console.warn(convertMatchesDataWithScores(response.data));
     }
   };
 
@@ -34,14 +37,31 @@ const MatchesScreen = ({navigation}) => {
     let currentDate = item.matchDateInEnglish;
     if (currentDate === prevDate) {
       prevDate = currentDate;
-      return <MatchCard matchDetails={item} />;
+      return (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('MatchDetails', {
+              team1Id: item.team1Id,
+              team2Id: item.team2Id,
+            })
+          }>
+          <MatchCard matchDetails={item} />
+        </TouchableOpacity>
+      );
     } else {
       prevDate = currentDate;
       return (
-        <>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('MatchDetails', {
+              team1Id: item.team1Id,
+              team2Id: item.team2Id,
+              matchId: item._id,
+            })
+          }>
           <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
           <MatchCard matchDetails={item} />
-        </>
+        </TouchableOpacity>
       );
     }
   };
