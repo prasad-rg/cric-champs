@@ -80,7 +80,6 @@ export default Players;
 
 const styles = StyleSheet.create({
   container: {
-    // flex:1,
     height: 80,
     width: '100%',
     backgroundColor: '#FFFFFF',
@@ -114,7 +113,6 @@ const styles = StyleSheet.create({
   },
   players: {
     height: 16,
-    // width: 47,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,

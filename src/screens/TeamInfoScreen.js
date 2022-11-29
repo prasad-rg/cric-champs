@@ -7,34 +7,70 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ProfileImagePicker from '../components/ProfileImagePicker';
 import TeamInfoTab from '../navigation/TeamInfoTab';
-import { setIsEdit } from '../redux/manageTournamentSlice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { StackActions } from '@react-navigation/native';
+import {setIsEdit} from '../redux/manageTournamentSlice';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {StackActions} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import { deleteTeam } from '../services/manageTournament2';
 
 const TeamInfoScreen = ({navigation, route}) => {
+  ;
   const [profilePictureUri, setProfilePictureUri] = useState('');
-  const dispatch = useDispatch ();
-  const tournamentdata = useSelector(
-    state => state.tournamentdata.tournamentdata,
+  const dispatch = useDispatch();
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
   );
+  const teamId = useSelector(state => state.tournamentdata.teamId);
+
   const getDetails = data => {
     setProfilePictureUri(data);
   };
 
-  const handleEdit = () =>{
-    dispatch(setIsEdit(true))
-    console.log("hiiiiiii",tournamentdata)
-    navigation.dispatch(StackActions.push('AddTeam',{
-      title:'Edit Team',
-      teamLogo: route?.params.teamLogo,
-      // teamName : route.params.teamName,
-    }))
+  const handleEdit = () => {
+    dispatch(setIsEdit(true));
+    
+    navigation.dispatch(
+      StackActions.push('AddTeam', {
+        title: 'Edit Team',
+        teamLogo: route?.params.teamLogo,
+        teamName: route.params.teamName,
+      }),
+    );
+  };
+
+  const deletPlayers= async  () =>{
+    const data ={
+      tournamentId:tournamentId,
+      teamId:teamId,
+    }
+    const response =  await deleteTeam(data)
+    console.log(response)
   }
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Are your sure?',
+      'Are you sure you want to remove this team?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            deletPlayers();
+          },
+        },
+
+        {
+          text: 'No',
+        },
+      ],
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +110,7 @@ const TeamInfoScreen = ({navigation, route}) => {
                       }}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleDelete}>
                     <Image
                       source={require('../../assets/images/trash.png')}
                       style={{

@@ -122,3 +122,41 @@ export const generateFixture = async data => {
     }
   }
 };
+
+export const updateTeam = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/team`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const deleteTeam = async data => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/team?tournamentId=63770c915e66128088aa5765&teamId=63770d86db32d1583363ae5`, {
+        method: 'put',
+        body: data,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
