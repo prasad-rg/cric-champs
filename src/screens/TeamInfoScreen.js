@@ -17,10 +17,9 @@ import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {StackActions} from '@react-navigation/native';
 import {useIsFocused} from '@react-navigation/native';
-import { deleteTeam } from '../services/manageTournament2';
+import {deleteTeam} from '../services/manageTournament2';
 
 const TeamInfoScreen = ({navigation, route}) => {
-  ;
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const dispatch = useDispatch();
   const tournamentId = useSelector(
@@ -34,24 +33,29 @@ const TeamInfoScreen = ({navigation, route}) => {
 
   const handleEdit = () => {
     dispatch(setIsEdit(true));
-    
+
     navigation.dispatch(
       StackActions.push('AddTeam', {
         title: 'Edit Team',
         teamLogo: route?.params.teamLogo,
-        teamName: route.params.teamName,
+        teamName: route?.params.teamName,
       }),
     );
   };
 
-  const deletPlayers= async  () =>{
-    const data ={
-      tournamentId:tournamentId,
-      teamId:teamId,
+  const deletPlayers = async () => {
+    const data = {
+      tournamentId: tournamentId,
+      teamId: teamId,
+    };
+    const response = await deleteTeam(data);
+    console.log(response);
+    if (response.status) {
+      navigation.pop(1);
+    } else {
+      console.log('Cannot Delete, Something went wrong');
     }
-    const response =  await deleteTeam(data)
-    console.log(response)
-  }
+  };
 
   const handleDelete = () => {
     Alert.alert(
@@ -82,7 +86,11 @@ const TeamInfoScreen = ({navigation, route}) => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      dispatch(setIsEdit(false));
+                      navigation.goBack();
+                    }}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}

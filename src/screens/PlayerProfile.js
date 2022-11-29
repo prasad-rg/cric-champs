@@ -120,6 +120,7 @@ const PlayerProfile = ({navigation, route}) => {
           />
         }>
         <AddProfileDetails
+          playerId={route.params.playerId}
           navigation={navigation}
           title={currentPlayerDetails?.name}
           getImageUri={getDetails}

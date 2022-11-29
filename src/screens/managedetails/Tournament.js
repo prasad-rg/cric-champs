@@ -7,17 +7,19 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
 import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+
 import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
-import { StackActions } from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
 
-const Tournament = ({navigation, disableRegenerateFixture=true}) => {
+const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [currentOverview, setCurrentOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,9 +56,12 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
       },
     ]);
 
-  useEffect(() => {
-    loadTournamentOverView();
-  }, []);
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadTournamentOverView();
+    }
+  }, [focus]);
 
   return (
     <View style={{flex: 1}}>
@@ -65,9 +70,7 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
           <TournamentInputList
             text="Teams"
             number={currentOverview !== null && currentOverview?.teams}
-            onPress={() =>
-              navigation.dispatch(StackActions.push('TeamsList'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('TeamsList'))}
           />
           <TournamentInputList
             text="Overs"
@@ -93,34 +96,26 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
             number={
               currentOverview !== null && currentOverview?.startDateEnglish
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('DateScreen'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
           />
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
-            onPress={() =>
-              navigation.dispatch(StackActions.push('DateScreen'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
           />
           <TournamentInputList
             text="Start of Play"
             number={
               currentOverview !== null && currentOverview?.startTimeNormalFormat
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('START TIME'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('START TIME'))}
           />
           <TournamentInputList
             text="End of Play"
             number={
               currentOverview !== null && currentOverview?.endTimeNormalFormat
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('END TIME'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('END TIME'))}
           />
         </View>
         <TouchableOpacity

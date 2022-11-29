@@ -160,7 +160,7 @@ const StadiumInformation = ({navigation, route}) => {
               />
             ))}
           </ScrollView>
-          <View style={styles.dotWrap}>
+          {/* <View style={styles.dotWrap}>
             {images.map((item, index) => (
               <Text
                 key={item}
@@ -168,7 +168,7 @@ const StadiumInformation = ({navigation, route}) => {
                 ●
               </Text>
             ))}
-          </View>
+          </View> */}
         </View>
         {stadiumDetails.map(item => (
           <View key={item.id} style={styles.listview}>

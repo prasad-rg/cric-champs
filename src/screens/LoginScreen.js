@@ -180,7 +180,7 @@ const LoginScreen = ({navigation}) => {
                     jsonToken.accessToken,
                     jsonToken.refreshToken,
                   );
-                  console.log(newToken);
+                  console.log(jsonToken.refreshToken);
                 }
               }}
               // eslint-disable-next-line react-native/no-inline-styles

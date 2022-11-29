@@ -19,6 +19,7 @@ const AddProfileDetails = ({
   children,
   profilePictureUri = '',
   backroundImageUri = '',
+  playerId,
   title,
   getImageUri,
 }) => {
@@ -99,6 +100,8 @@ const AddProfileDetails = ({
           style={{backgroundColor: 'rgba(0, 102, 226, 0.85)'}}
           navigation={navigation}
           title={title}
+          profilePictureUri={profilePictureUri}
+          playerId={playerId}
         />
         <View
           style={[

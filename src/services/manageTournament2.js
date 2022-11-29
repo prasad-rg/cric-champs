@@ -143,11 +143,51 @@ export const updateTeam = async formData => {
 };
 
 export const deleteTeam = async data => {
+  // console.log("hEEEYYYYY",data)
   const validateAndGetToken = await refreshTokenIfExpired();
   if (validateAndGetToken !== null) {
     try {
-      let res = await fetch(`${BASE_URL}/api/team?tournamentId=63770c915e66128088aa5765&teamId=63770d86db32d1583363ae5`, {
+      let res = await fetch(`${BASE_URL}/api/team?tournamentId=${data.tournamentId}&teamId=${data.teamId}`, {
+        method: 'delete',
+        body: data,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const updatePlayer = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/participant`, {
         method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const deleteIndividualPlayer = async data => {
+  // console.log("hEEEYYYYY",data)
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/participant/delete-participant?participantId=${data.playerId}&tournamentId=${data.tournamentId}`, {
+        method: 'delete',
         body: data,
         headers: {
           Authorization: validateAndGetToken,
