@@ -34,7 +34,7 @@ export const logoutUser = async () => {
     });
     return res.data;
   } catch (error) {
-    return error.data.message;
+    return error;
   }
 };
 

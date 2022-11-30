@@ -1,17 +1,17 @@
-const liveScoreDataStructure = {
-  tournamentId: '638090ddc3ab2708e617df5f',
-  matchId: '63809426d467c0529f3b6aff',
-  teamId: '638092c55ffb91e72f234071',
-  matchStatus: 'end',
-  inningsStatus: 'start',
-  strike: '638093b2d467c0529f3b6ae6',
-  strikeName: 'Keerthika',
-  nonStrike: '638093c0d467c0529f3b6aec',
-  nonStrikeName: 'vinith',
-  bowler: '6380936e5ffb91e72f234085',
-  bowlerName: 'Shravya',
-  team2Id: '638092b25ffb91e72f23406f',
-  runs: 6,
+export const liveScoreDataStructure = {
+  tournamentId: '',
+  matchId: '',
+  teamId: '',
+  matchStatus: '',
+  inningsStatus: '',
+  strike: '',
+  strikeName: '',
+  nonStrike: '',
+  nonStrikeName: '',
+  bowler: '',
+  bowlerName: '',
+  team2Id: '',
+  runs: 0,
   extras: {
     status: false,
     bye: 0,
@@ -21,22 +21,63 @@ const liveScoreDataStructure = {
   },
   wickets: {
     status: false,
-    batsmanId: '638093415ffb91e72f234078',
-    batsman: 'Sandesh',
-    type: 'out',
-    fielderName: 'ashlesh',
-    new_batsmanId: '6380938c5ffb91e72f23408a',
-    new_batsman: 'Dhamini',
-    bowlerName: 'vinith',
+    batsmanId: '',
+    batsman: '',
+    type: '',
+    fielderName: '',
+    new_batsmanId: '',
+    new_batsman: '',
+    bowlerName: '',
   },
   commentry: {
-    teamId: '637c559756844954d211a949',
+    teamId: '',
     teamName: '',
     over: 0,
     balls: 0,
-    status: 'W',
-    message: 'he he',
+    status: '',
+    message: '',
   },
 };
 
-export const convertLiveScoreData = () => {};
+// export const convertLiveScoreData = () => {};
+
+export const converLiveScoreData = (runs, extras, wickets) => {
+  if (runs === null) {
+    runs = 0;
+  }
+  let batsmanRuns = runs;
+  let wideRuns = 0;
+  if ((runs === null || runs === 0) && extras === 'Wd') {
+    // console.warn('Got a hit');
+    wideRuns = 1;
+  } else {
+    if (extras === 'Wd') {
+      wideRuns = +runs;
+    }
+  }
+  let extrasObj = liveScoreDataStructure.extras;
+  if (runs !== null && extras !== null && extras === 'Wd') {
+    extrasObj = {
+      ...liveScoreDataStructure.extras,
+      status: true,
+      wide: wideRuns,
+    };
+  } else if (runs !== null && extras !== null && extras === 'Bye') {
+    batsmanRuns = 0;
+    extrasObj = {...liveScoreDataStructure.extras, status: true, bye: runs};
+  } else if (runs !== null && extras !== null && extras === 'Lb') {
+    batsmanRuns = 0;
+    extrasObj = {...liveScoreDataStructure.extras, status: true, legBye: runs};
+  } else {
+    if (extras !== null && extras === 'Nb') {
+      batsmanRuns = runs;
+      extrasObj = {...liveScoreDataStructure.extras, status: true, noBall: 1};
+    } else {
+      extrasObj = {...liveScoreDataStructure.extras};
+    }
+  }
+
+  console.log('-------Runs------', batsmanRuns);
+  console.log('--------Extras----', extrasObj);
+  console.log('--------Wickets--------', wickets);
+};

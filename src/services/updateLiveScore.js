@@ -58,3 +58,38 @@ export const getPlayingPlayersList = async (
     return error.response.data;
   }
 };
+
+export const getMatchStatus = async matchId => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/get-match-status?matchId=${matchId}`,
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getListOfAllPlayers = async (
+  tournamentId,
+  matchId,
+  team1Id,
+  team2Id,
+) => {
+  // console.log('----Response-----', tournamentId, matchId, team1Id, team2Id);
+
+  try {
+    console.log(
+      `${BASE_URL}/api/match/live-score-simplified?tournamentId=${tournamentId}&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
+    );
+    const response = await axios.get(
+      `${BASE_URL}/api/match/live-score-simplified?tournamentId=${tournamentId}&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data;
+  }
+};

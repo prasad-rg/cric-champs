@@ -10,7 +10,7 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
 import DotBall from '../components/DotBall';
 import GradientButton from '../components/GradientButton';
@@ -20,16 +20,26 @@ import CustomExtrasButton from '../components/CustomExtrasButton';
 import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
-import {cancelLiveTournament} from '../services/updateLiveScore';
+import {
+  cancelLiveTournament,
+  getListOfAllPlayers,
+  getMatchStatus,
+} from '../services/updateLiveScore';
 import {useSelector} from 'react-redux';
+import {
+  converLiveScoreData,
+  liveScoreDataStructure,
+} from '../utils/updateLiveScoreUtils';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   let {matchId, team1Id, team2Id, teams} = route.params;
+  // console.warn(matchId);
   const [tournamenttype, setTournamentType] = useState('');
-  const [runs, setRuns] = useState(0);
-  const [extras, setExtras] = useState('');
-  const [wickets, setWickets] = useState('');
+  const [runs, setRuns] = useState(liveScoreDataStructure.runs);
+  const [extras, setExtras] = useState(liveScoreDataStructure.extras);
+  const [wickets, setWickets] = useState(liveScoreDataStructure.wickets);
+  const [players, setPlayers] = useState({});
   const [dataToSend, setDataToSend] = useState({
     tournamentId: tournamentDetails._id,
     matchId: matchId,
@@ -77,15 +87,46 @@ const UpdateLiveScore = ({navigation, route}) => {
   };
 
   const getRuns = (data, index) => {
-    console.warn(data);
-    setRuns(data);
+    if (data === null) {
+      setRuns(null);
+    } else {
+      setRuns(data);
+    }
   };
 
   const getExtras = (data, index) => {
-    setExtras(data);
+    // console.warn(data);
+    if (data === null) {
+      setExtras(null);
+    } else {
+      setExtras(data);
+    }
   };
   const getWickets = (data, index) => {
-    setWickets(data);
+    // console.log(data);
+    if (data === null) {
+      setWickets({...liveScoreDataStructure.wickets});
+    } else {
+      if (data !== 'Run Out' && data !== 'Other') {
+        // TODO: Add the batsman batsmanId from the striker Id even bowler which is got from the PUT response
+        setWickets({
+          ...liveScoreDataStructure.wickets,
+          type: data,
+          status: true,
+        });
+      } else {
+        // TODO : Add the batsman batsmanId bowler filder from the Modal fetched from the remaining player list PUT response
+        setWickets({
+          ...liveScoreDataStructure.wickets,
+          type: data,
+          status: true,
+        });
+      }
+    }
+  };
+
+  const handelUpdate = () => {
+    converLiveScoreData(runs, extras, wickets);
   };
 
   const Details = [
@@ -161,6 +202,18 @@ const UpdateLiveScore = ({navigation, route}) => {
     stopModal: false,
     customChooseModal: false,
   });
+
+  useEffect(() => {
+    const getStatus = async () => {
+      const response = await getMatchStatus(matchId);
+      if (response?.status) {
+        if (response?.data?.result?.status === 'upcoming') {
+          console.log(response?.data?.team1Player);
+        }
+      }
+    };
+    getStatus();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -255,7 +308,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               formHorizontal={true}
               style={styles.extrasRadioGroup}
               flexWrap={{flexWrap: 'wrap'}}
-              onPress={getData}
+              onPress={getExtras}
             />
           </View>
         </View>
@@ -277,7 +330,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               width: 'auto',
             }}
             flexWrap={{flexWrap: 'wrap'}}
-            onPress={getData}
+            onPress={getWickets}
           />
         </View>
       </ScrollView>
@@ -297,7 +350,7 @@ const UpdateLiveScore = ({navigation, route}) => {
           text="UPDATE"
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={styles.buttonText}
-          onPress={() => Alert.alert(JSON.stringify(dataToSend))}
+          onPress={handelUpdate}
         />
       </View>
     </View>

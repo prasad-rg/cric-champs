@@ -148,10 +148,12 @@ const UserControl = ({navigation}) => {
             style={styles.logout}
             onPress={async () => {
               const res = await logoutUser();
-              if (res.status) {
+              console.log(res);
+              if (res?.status) {
+                dispatch(logout());
+              } else {
                 dispatch(logout());
               }
-              dispatch(logout());
             }}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
