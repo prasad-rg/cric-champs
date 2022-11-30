@@ -25,21 +25,53 @@ import {
   getListOfAllPlayers,
   getMatchStatus,
 } from '../services/updateLiveScore';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
-  converLiveScoreData,
+  convertLiveScoreData,
   liveScoreDataStructure,
 } from '../utils/updateLiveScoreUtils';
+import {
+  addInitialPlayerSelected,
+  addTeam1Players,
+  addTeam2Players,
+  addTeamId,
+} from '../redux/updateLiveScore';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const {
+    team1Players,
+    team2Players,
+    battingTeamId,
+    bowlingTeamId,
+    initalPlayerSelected,
+  } = useSelector(state => state.liveScoreData);
+
+  const dispatch = useDispatch();
+
+  // console.warn(team1Players, team2Players, battingTeamId, bowlingTeamId);
+
   let {matchId, team1Id, team2Id, teams} = route.params;
-  // console.warn(matchId);
-  const [tournamenttype, setTournamentType] = useState('');
+
   const [runs, setRuns] = useState(liveScoreDataStructure.runs);
   const [extras, setExtras] = useState(liveScoreDataStructure.extras);
   const [wickets, setWickets] = useState(liveScoreDataStructure.wickets);
   const [players, setPlayers] = useState({});
+  const [initialPlayersSelectionModal, setInitialPlayerSelectionModal] =
+    useState({strikeModal: false, nonStrikeModal: false, bowlerModal: false});
+  const [matchAndInningsStatus, setMatchAndInningsStatus] = useState({});
+  const [strike, setStrike] = useState({
+    strike: '',
+    strikeName: '',
+  });
+  const [nonStrike, setNonStrike] = useState({
+    nonStrike: '',
+    nonStrikeName: '',
+  });
+  const [bowler, setBowler] = useState({
+    bowler: '',
+    bowlerName: '',
+  });
   const [dataToSend, setDataToSend] = useState({
     tournamentId: tournamentDetails._id,
     matchId: matchId,
@@ -81,11 +113,6 @@ const UpdateLiveScore = ({navigation, route}) => {
     },
   });
 
-  const getData = (data, index) => {
-    console.log(data);
-    setTournamentType(data);
-  };
-
   const getRuns = (data, index) => {
     if (data === null) {
       setRuns(null);
@@ -126,7 +153,20 @@ const UpdateLiveScore = ({navigation, route}) => {
   };
 
   const handelUpdate = () => {
-    converLiveScoreData(runs, extras, wickets);
+    convertLiveScoreData(
+      runs,
+      extras,
+      wickets,
+      battingTeamId,
+      bowlingTeamId,
+      matchId,
+      tournamentDetails._id,
+      matchAndInningsStatus.matchStatus,
+      matchAndInningsStatus.inningsStatus,
+      bowler,
+      nonStrike,
+      strike,
+    );
   };
 
   const Details = [
@@ -208,13 +248,42 @@ const UpdateLiveScore = ({navigation, route}) => {
       const response = await getMatchStatus(matchId);
       if (response?.status) {
         if (response?.data?.result?.status === 'upcoming') {
-          console.log(response?.data?.team1Player);
+          setMatchAndInningsStatus({
+            matchStatus: 'start',
+            inningsStatus: 'start',
+          });
+          dispatch(addTeam1Players(response?.data?.team1Player));
+          dispatch(addTeam2Players(response?.data?.team2Player));
+          // console.log(response?.data?.team2Player);
+          dispatch(addTeamId({team1Id, team2Id}));
+          let openerSelectionCheck = initalPlayerSelected.filter(
+            item => item.matchId === matchId,
+          );
+          if (
+            openerSelectionCheck.length !== 0 &&
+            openerSelectionCheck[0].status === false
+          ) {
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              strikeModal: true,
+            });
+          } else if (!openerSelectionCheck.length) {
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              strikeModal: true,
+            });
+          } else {
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              strikeModal: false,
+            });
+          }
         }
       }
     };
     getStatus();
   }, []);
-
+  console.warn('====', nonStrike, '====', strike, '----', bowler);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -267,28 +336,123 @@ const UpdateLiveScore = ({navigation, route}) => {
             setVisible({customChooseModal: false, stopModal: false})
           }>
           <Text style={styles.textView}>Choose Reason</Text>
-          {Reason.map(item => (
-            <View key={item.id} style={styles.listview}>
-              <TouchableOpacity
-                onPress={async () => {
-                  const response = await cancelLiveTournament(
-                    route.params?.matchId,
-                    item?.title,
-                  );
-                  // console.info('--------------', response);
-                  if (response.status) {
-                    setVisible({customChooseModal: false, stopModal: false});
-                    navigation.goBack();
-                  } else {
-                    Alert.alert('Error Occoured Please Try Again');
-                  }
-                }}>
-                <View style={{width: '100%'}}>
-                  <Text style={styles.title}>{item.title}</Text>
+          <ScrollView>
+            {Reason.map(item => (
+              <View key={item.id} style={styles.listview}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    const response = await cancelLiveTournament(
+                      route.params?.matchId,
+                      item?.title,
+                    );
+                    // console.info('--------------', response);
+                    if (response.status) {
+                      setVisible({customChooseModal: false, stopModal: false});
+                      navigation.goBack();
+                    } else {
+                      Alert.alert('Error Occoured Please Try Again');
+                    }
+                  }}>
+                  <View style={{width: '100%'}}>
+                    <Text style={styles.title}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.strikeModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Strike</Text>
+          <ScrollView>
+            {team1Players.map(item => (
+              <View key={item._id} style={styles.listview}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setStrike({
+                      strike: item._id,
+                      strikeName: item.name,
+                    });
+                    // dispatch(
+                    //   addInitialPlayerSelected({
+                    //     matchId: matchId,
+                    //     status: true,
+                    //   }),
+                    // );
+                    setInitialPlayerSelectionModal({
+                      ...initialPlayersSelectionModal,
+                      nonStrikeModal: true,
+                      strikeModal: false,
+                    });
+                  }}>
+                  <View style={{width: '100%'}}>
+                    <Text style={styles.title}>{item.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.nonStrikeModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Non Strike</Text>
+          <ScrollView>
+            {team1Players.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setNonStrike({
+                        nonStrike: item._id,
+                        nonStrikeName: item.name,
+                      });
+                      setInitialPlayerSelectionModal({
+                        ...initialPlayersSelectionModal,
+                        nonStrikeModal: false,
+                        bowlerModal: true,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            </View>
-          ))}
+              );
+            })}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.bowlerModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Bowler</Text>
+          <ScrollView>
+            {team2Players.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setBowler({
+                        bowler: item._id,
+                        bowlerName: item.name,
+                      });
+                      setInitialPlayerSelectionModal({
+                        ...initialPlayersSelectionModal,
+                        bowlerModal: false,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
         </CustomChooseModal>
         <View style={styles.mainView}>
           <View style={{width: '58%'}}>

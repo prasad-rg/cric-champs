@@ -41,7 +41,36 @@ export const liveScoreDataStructure = {
 
 // export const convertLiveScoreData = () => {};
 
-export const converLiveScoreData = (runs, extras, wickets) => {
+export const convertLiveScoreData = (
+  runs,
+  extras,
+  wickets,
+  battingTeamId,
+  bowlingTeamId,
+  matchId,
+  tournamentId,
+  matchStatus,
+  inningsStatus,
+  bowler,
+  nonStrike,
+  strike,
+) => {
+  let modifieDataTosend = {
+    ...liveScoreDataStructure,
+    tournamentId,
+    matchId,
+    teamId: battingTeamId,
+    team2Id: bowlingTeamId,
+    matchStatus,
+    inningsStatus,
+    bowler: bowler.bowler,
+    bowlerName: bowler.bowlerName,
+    strike: strike.strike,
+    strikeName: strike.strikeName,
+    nonStrike: nonStrike.nonStrike,
+    nonStrikeName: nonStrike.nonStrikeName,
+  };
+
   if (runs === null) {
     runs = 0;
   }
@@ -55,29 +84,30 @@ export const converLiveScoreData = (runs, extras, wickets) => {
       wideRuns = +runs;
     }
   }
-  let extrasObj = liveScoreDataStructure.extras;
+  let extrasObj = modifieDataTosend.extras;
   if (runs !== null && extras !== null && extras === 'Wd') {
     extrasObj = {
-      ...liveScoreDataStructure.extras,
+      ...modifieDataTosend.extras,
       status: true,
       wide: wideRuns,
     };
   } else if (runs !== null && extras !== null && extras === 'Bye') {
     batsmanRuns = 0;
-    extrasObj = {...liveScoreDataStructure.extras, status: true, bye: runs};
+    extrasObj = {...modifieDataTosend.extras, status: true, bye: runs};
   } else if (runs !== null && extras !== null && extras === 'Lb') {
     batsmanRuns = 0;
-    extrasObj = {...liveScoreDataStructure.extras, status: true, legBye: runs};
+    extrasObj = {...modifieDataTosend.extras, status: true, legBye: runs};
   } else {
     if (extras !== null && extras === 'Nb') {
       batsmanRuns = runs;
-      extrasObj = {...liveScoreDataStructure.extras, status: true, noBall: 1};
+      extrasObj = {...modifieDataTosend.extras, status: true, noBall: 1};
     } else {
-      extrasObj = {...liveScoreDataStructure.extras};
+      extrasObj = {...modifieDataTosend.extras};
     }
   }
 
   console.log('-------Runs------', batsmanRuns);
   console.log('--------Extras----', extrasObj);
   console.log('--------Wickets--------', wickets);
+  console.log('--------data to send---', modifieDataTosend);
 };
