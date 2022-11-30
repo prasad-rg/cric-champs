@@ -26,6 +26,8 @@ import TimeScreen from '../screens/TimeScreen';
 import AddTeam from '../screens/AddTeam';
 import AddPlayer from '../screens/AddPlayer';
 import MatchDetails from '../screens/MatchDetails';
+import AddGround from '../screens/AddGround';
+import AddUmpire from '../screens/AddUmpire';
 
 const Stack = createStackNavigator();
 
@@ -152,8 +154,18 @@ const RootNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="AddGround"
+          component={AddGround}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="MatchDetails"
           component={MatchDetails}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddUmpire"
+          component={AddUmpire}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

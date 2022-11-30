@@ -13,6 +13,7 @@ import {getTournamentByCode} from '../services/viewTournament';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {removeRecentActivities} from '../redux/recentActivitiesSlice';
 import {setTournamentData} from '../redux/manageTournamentSlice';
+import { setIsView } from '../redux/manageTournamentSlice';
 
 const RecentActivityCard = ({
   title = 'Robosoft Premiere League',
@@ -23,6 +24,7 @@ const RecentActivityCard = ({
   tournamentId,
   navigation,
   id,
+  isView,
 }) => {
   const dispatch = useDispatch();
 
@@ -80,6 +82,7 @@ const RecentActivityCard = ({
               Alert.alert(res.message.toUpperCase());
             } else {
               dispatch(storeTournamentDetails(res));
+             
               navigation.navigate('ViewScreen');
             }
           }}>

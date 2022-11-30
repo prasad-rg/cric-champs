@@ -49,6 +49,7 @@ const AddTeam = ({navigation, route}) => {
   const isEdit = useSelector(state => state.tournamentdata.isEdit);
 
   const participantdata = useSelector(state => state.participantdata.value);
+
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
@@ -67,12 +68,20 @@ const AddTeam = ({navigation, route}) => {
     name: yup.string().required(),
   });
 
-  const handlePlayerList = () => {
-    if (teamId) {
+  const handlePlayerList = (value,inputValues) => {
+
       navigation.navigate('PlayerProfile', {
-        tournamentId: tournamentId,
+        image:value.image.path,
+        teamName:inputValues.name,
+        name:value.name,
+        city:inputValues.city,
+        batting:value.batting,
+        bowling:value.bowling,
+        bowlingtype:value.bowlingtype,
+        designation:value.designation,
+        expertise:value.expertise,
       });
-    }
+
   };
 
   const loadPlayers = async () => {
@@ -93,7 +102,7 @@ const AddTeam = ({navigation, route}) => {
         onPress={() =>
           navigation.navigate('PlayerProfile', {
             teamId: route.params.teamId,
-            tournamentId: tournamentDetails._id,
+            tournamentId: tournamentId,
             playerId: item._id,
           })
         }>
@@ -106,7 +115,7 @@ const AddTeam = ({navigation, route}) => {
   }, []);
 
   const handleEdit = async values => {
-    console.log(values);
+    // console.log(values);
     if (profilePictureUri !== '') {
       var formData = createFormData({
         name: values.name,
@@ -128,8 +137,7 @@ const AddTeam = ({navigation, route}) => {
     console.log('Response after Team Update', response.data.logo);
     if (response.status) {
       navigation.pop(2);
-    dispatch(setIsEdit(false));
-
+      dispatch(setIsEdit(false));
     }
   };
 
@@ -174,7 +182,7 @@ const AddTeam = ({navigation, route}) => {
                     }
                   });
 
-                  console.log(object);
+                  // console.log(object);
                   const participantFormData = createFormData(object);
                   const createparticipantresponse = await addParticipant(
                     participantFormData,
@@ -184,7 +192,7 @@ const AddTeam = ({navigation, route}) => {
               );
 
               const status = result.map(stat => {
-                console.log(stat);
+                // console.log(stat);
               });
               if (status) {
                 navigation.goBack();
@@ -269,7 +277,7 @@ const AddTeam = ({navigation, route}) => {
                           }}
                           // isDefaultVisible()
                           // defaultValue={'HELLO'}
-                          defaultValue={isEdit ? route?.params.teamName : ''}
+                          defaultValue={isEdit ? route?.params?.teamName : ''}
                         />
 
                         <TextField
@@ -299,7 +307,7 @@ const AddTeam = ({navigation, route}) => {
                             letterSpacing: 0.57,
                             lineHeight: 19,
                           }}
-                          defaultValue={isEdit ? route?.params.teamName : ''}
+                          defaultValue={isEdit ? route.params?.teamName : ''}
                         />
                       </View>
                     </View>
@@ -318,14 +326,13 @@ const AddTeam = ({navigation, route}) => {
 
                 {isEdit ? (
                   <TouchableOpacity
-                  // onPress={() =>
-                  //   navigation.navigate('PlayerProfile', {
-                  //     teamId: route.params.teamId,
-                  //     tournamentId: tournamentDetails._id,
-                  //     playerId: item._id,
-                  //   })
-                  // }
-                  >
+                    onPress={() =>
+                      navigation.navigate('PlayerProfile', {
+                        teamId: teamId,
+                        tournamentId: tournamentId,
+                        playerId: item._id,
+                      })
+                    }>
                     {/* <TeamListName source={item.profilePic.url} text={item.name} /> */}
 
                     <FlatList
@@ -354,7 +361,7 @@ const AddTeam = ({navigation, route}) => {
                         {participantdata.map(value => (
                           // console.log(value.image.path)
                           <View key={value.tempId}>
-                            <TouchableOpacity onPress={handlePlayerList}>
+                            <TouchableOpacity onPress={()=>handlePlayerList(value,values)}>
                               <PlayersList
                                 source={value.image.path}
                                 name={value.name}

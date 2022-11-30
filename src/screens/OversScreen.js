@@ -39,7 +39,7 @@ const OversScreen = ({navigation}) => {
   const handlePress =async () =>{
     if(overs!==''){
       const response= await addOvers(oversData);
-      console.log("hiiiiiiiiiiiiiii",response)
+      // console.log("hiiiiiiiiiiiiiii",response)
       if(response.status){
         navigation.navigate('Ground')
       }
@@ -50,7 +50,7 @@ const OversScreen = ({navigation}) => {
   }
   const getData= data =>{
     setOvers(data)
-    console.log(data)
+    // console.log(data)
   }
   return (
     <View style={styles.container}>

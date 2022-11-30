@@ -32,9 +32,7 @@ const ManageScreen = ({navigation}) => {
     }
   };
 
-const handleEdit = () =>{
-  
-}
+  const handleEdit = () => {};
 
   return (
     <View style={styles.container}>
@@ -59,26 +57,15 @@ const handleEdit = () =>{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                   }}>
-                    <TouchableOpacity onPress={()=>handleEdit}>
-                  <Image
-                    source={require('../../assets/images/pencil.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                      marginRight: 23,
-                    }}
-                  />
-                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => onShare()}>
-                  <Image
-                    source={require('../../assets/images/share3.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
+                    <Image
+                      source={require('../../assets/images/share3.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                      }}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>

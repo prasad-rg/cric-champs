@@ -18,13 +18,13 @@ const StartDate = ({navigation}) => {
   const endDate = useSelector(state => state.matchdata.endDate);
   const [disabled,setDisabled] = useState(false)
 
-  console.log(startDate, endDate);
+  // console.log(startDate, endDate);
 
   let date1=new Date(startDate)
   let date2=new Date(endDate)
 
   let total=(date2.getUTCDate()- date1.getUTCDate())+1;
-  console.log("total days",total)
+  // console.log("total days",total)
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
@@ -40,7 +40,7 @@ const StartDate = ({navigation}) => {
    
   const handlePress= async ()=>{
     const response= await addDates(dateData);
-    console.log("I am response for date",response.data)
+    // console.log("I am response for date",response.data)
     if(response.data.status){
       navigation.navigate('TimeScreen')
     }else{

@@ -13,6 +13,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 const ProfileImagePicker = ({
   profilePictureUri = '',
   getImageUri,
+  isView,
 }) => {
   const {width, height} = useWindowDimensions();
   const [imageUri, setImageUri] = useState('');
@@ -23,8 +24,10 @@ const ProfileImagePicker = ({
       height: 104,
       cropping: true,
     }).then(image => {
-      setImageUri(image.path);
-      console.log(image);
+      // console.log(image);
+      setImageUri(`file://${image.path}`);
+      const {path, filename, mime} = image;
+      getImageUri({path, filename, mime});
     });
   };
 
@@ -72,7 +75,7 @@ const ProfileImagePicker = ({
           style={styles.teamlogo}
         />
       </View>
-      <View
+      {isView ? null : <View
         style={
           height > width
             ? [
@@ -92,7 +95,7 @@ const ProfileImagePicker = ({
             source={require('../../assets/images/camera.png')}
           />
         </TouchableOpacity>
-      </View>
+      </View>}
     </View>
   );
 };

@@ -25,11 +25,15 @@ const AppBar = ({
   iconTint = {},
   profilePictureUri,
   playerId,
+  umpireId,
+  type,
+  isView,
 }) => {
   const dispatch = useDispatch();
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
+
   const teamId = useSelector(state => state.tournamentdata.teamId);
   const isEdit = useSelector(state => state.tournamentdata.isEdit);
   const editEntity = useSelector(state => state.tournamentdata.editEntity);
@@ -37,7 +41,7 @@ const AppBar = ({
   // const tournamentdata = useSelector(state => state.tournamentdata.tournamentdata);
   // console.log(profilePictureUri,title)
 
-  const handleEdit = () => {
+  const handleEditPlayer = () => {
     navigation.dispatch(
       StackActions.push('AddPlayer', {
         playerLogo: profilePictureUri,
@@ -58,14 +62,14 @@ const AppBar = ({
     };
     const response = await deleteIndividualPlayer(data);
     console.log(response);
-    if (response.status){
-      navigation.pop(1)
-    }else{
-      console.log("Cannot Delete, Something went wrong")
+    if (response.status) {
+      navigation.pop(1);
+    } else {
+      console.log('Cannot Delete, Something went wrong');
     }
   };
 
-  const handleDelete = () => {
+  const handleDeletePlayer = () => {
     Alert.alert(
       'Are your sure?',
       'Are you sure you want to remove this player?',
@@ -74,6 +78,53 @@ const AppBar = ({
           text: 'Yes',
           onPress: () => {
             deletePlayers();
+          },
+        },
+
+        {
+          text: 'No',
+        },
+      ],
+    );
+  };
+
+  const handleEditUmpire = () => {
+    navigation.dispatch(
+      StackActions.push('AddUmpire', {
+        umpireLogo: profilePictureUri,
+        umpireName: title,
+        umpireId: umpireId,
+        // teamLogo: route?.params.teamLogo,
+        // teamName: route?.params.teamName,
+      }),
+    );
+    dispatch(setIsEdit(false));
+    dispatch(setEditEntity(true));
+  };
+
+  const deleteUmpire = async () => {
+    const data = {
+      tournamentId: tournamentId,
+      playerId: umpireId,
+    };
+    const response = await deleteIndividualPlayer(data);
+    // console.log(response);
+    if (response.status) {
+      navigation.pop(1);
+    } else {
+      console.log('Cannot Delete, Something went wrong');
+    }
+  };
+
+  const handleDeleteUmpire = () => {
+    Alert.alert(
+      'Are your sure?',
+      'Are you sure you want to remove this umpire?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            deleteUmpire();
           },
         },
 
@@ -93,7 +144,7 @@ const AppBar = ({
               <TouchableOpacity
                 onPress={() => {
                   dispatch(setEditEntity(false));
-                  dispatch(setIsEdit(true));
+                  dispatch(setIsEdit(false));
                   navigation.goBack();
                 }}>
                 <Image
@@ -116,31 +167,57 @@ const AppBar = ({
             )}
             <Text style={styles.text}>{title}</Text>
           </View>
-          {isEdit ? (
-            <View style={styles.rightHeader}>
-              <TouchableOpacity onPress={handleEdit}>
-                <Image
-                  source={require('../../assets/images/pencil.png')}
-                  style={{
-                    tintColor: '#FFFFFF',
-                    height: 25,
-                    width: 25,
-                    marginRight: 23,
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete}>
-                <Image
-                  source={require('../../assets/images/trash.png')}
-                  style={{
-                    tintColor: '#FFFFFF',
-                    height: 25,
-                    width: 25,
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          ) : null}
+          {isView ? null : <View>
+            {isEdit && type == 'umpire' ? (
+              <View style={styles.rightHeader}>
+                <TouchableOpacity onPress={handleEditUmpire}>
+                  <Image
+                    source={require('../../assets/images/pencil.png')}
+                    style={{
+                      tintColor: '#FFFFFF',
+                      height: 25,
+                      width: 25,
+                      marginRight: 23,
+                    }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleDeleteUmpire}>
+                  <Image
+                    source={require('../../assets/images/trash.png')}
+                    style={{
+                      tintColor: '#FFFFFF',
+                      height: 25,
+                      width: 25,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : isEdit && type == 'player' ? (
+              <View style={styles.rightHeader}>
+                <TouchableOpacity onPress={handleEditPlayer}>
+                  <Image
+                    source={require('../../assets/images/pencil.png')}
+                    style={{
+                      tintColor: '#FFFFFF',
+                      height: 25,
+                      width: 25,
+                      marginRight: 23,
+                    }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleDeletePlayer}>
+                  <Image
+                    source={require('../../assets/images/trash.png')}
+                    style={{
+                      tintColor: '#FFFFFF',
+                      height: 25,
+                      width: 25,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>}
         </View>
       </SafeAreaView>
     </View>

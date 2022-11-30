@@ -28,7 +28,7 @@ const Ground = ({navigation}) => {
 
   const loadTeams = async () => {
     const response = await getGroundsByTournamentId(tournamentId);
-    console.log('current Teams', response.result.grounds);
+    // console.log('current Teams', response.result.grounds);
 
     if (response.status) {
       setCurrentTeams(response.result.grounds);

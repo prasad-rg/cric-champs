@@ -31,16 +31,16 @@ const Overview = ({navigation}) => {
    
     state => state.tournamentdata.tournamentdata,
   );
-  console.log(tournamentdata);
+  // console.log(tournamentdata);
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  console.log(tournamentId);
+
 
   const handlePress = async () => {
     const response = await generateFixture(tournamentId);
-    console.log('responseeeee', response);
+    // console.log('responseeeee', response);
     if (response.data.statusCode !== 200) {
       setModal(false);
       // navigation.navigate('TimeScreen')

@@ -18,17 +18,23 @@ import {
   tournamentOverview,
 } from '../../services/tournamentManagement';
 import {StackActions} from '@react-navigation/native';
+import { generateFixture } from '../../services/manageTournament2';
 
 const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [currentOverview, setCurrentOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState(true);
+  const [visible, setVisible] = useState(false);
 
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
   const loadTournamentOverView = async () => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
-    console.log(response.data.data);
+    // console.log(response.data.data);
     if (response.status) {
       setCurrentOverview(response.data.data);
     }
@@ -62,6 +68,24 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
       loadTournamentOverView();
     }
   }, [focus]);
+
+  const handlePress = async () => {
+    const response = await generateFixture(tournamentId);
+    // console.log('responseeeee', response.data);
+    // if (response.data.statusCode !== 200) {
+    //   setModal(false);
+    //   // navigation.navigate('TimeScreen')
+    // } else {
+    //   setModal(true);
+    //   // dispatch(deleteStartTime())
+    //   // dispatch(deleteEndTime())
+    //   // dispatch(deleteStartDate())
+    //   // dispatch(deleteEndDate())
+
+    // }
+
+    // setVisible(true);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -139,6 +163,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               letterSpacing: 0.5,
               lineHeight: 19,
             }}
+            onPress={handlePress}
           />
         </View>
       )}

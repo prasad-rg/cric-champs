@@ -20,8 +20,12 @@ const AddProfileDetails = ({
   profilePictureUri = '',
   backroundImageUri = '',
   playerId,
+  umpireId,
+  isEdit,
   title,
+  type,
   getImageUri,
+  isView,
 }) => {
   const {width, height} = useWindowDimensions();
   const [imageUri, setImageUri] = useState('');
@@ -32,8 +36,10 @@ const AddProfileDetails = ({
       height: 104,
       cropping: true,
     }).then(image => {
-      setImageUri(image.path);
-      console.log(image);
+      // console.log(image);
+      setImageUri(`file://${image.path}`);
+      const {path, filename, mime} = image;
+      getImageUri({path, filename, mime});
     });
   };
 
@@ -106,6 +112,9 @@ const AddProfileDetails = ({
           title={title}
           profilePictureUri={profilePictureUri}
           playerId={playerId}
+          umpireId={umpireId}
+          type={type}
+          isView={isView}
         />
         <View
           style={[
@@ -135,7 +144,7 @@ const AddProfileDetails = ({
                 style={styles.imageSize}
               />
             </View>
-            <View
+            {isView ? null : <View
               style={
                 height > width
                   ? [
@@ -156,7 +165,7 @@ const AddProfileDetails = ({
                   style={styles.gobackbutton}
                 />
               </TouchableOpacity>
-            </View>
+            </View>}
           </View>
         </View>
       </ImageBackground>

@@ -13,13 +13,14 @@ import {getPlayersByTeamIdAndTournamentId} from '../../services/viewTournament';
 import {useSelector} from 'react-redux';
 import { setIsEdit } from '../../redux/manageTournamentSlice';
 import {StackActions, useIsFocused} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 const Players = ({navigation, route}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPlayers, setCurrentPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
-
+  const dispatch = useDispatch();
   
   const loadPlayers = async () => {
     setIsLoading(true);
@@ -61,14 +62,14 @@ const Players = ({navigation, route}) => {
   return (
     <View style={{flex: 1}}>
     
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <TouchableOpacity onPress={()=> navigation.dispatch(StackActions.push('AddPlayer'))}>
             <View style={styles.addButton}>
               <Text style={styles.addTeamText}>ADD PLAYER</Text>
             </View>
           </TouchableOpacity>
 
-        </View>
+        </View> */}
    
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>

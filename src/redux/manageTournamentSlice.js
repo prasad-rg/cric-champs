@@ -4,6 +4,7 @@ export const manageTournamentSlice = createSlice({
   name: 'tournamentdata',
   initialState: {
     isEdit: false,
+    isView: false,
     editEntity: false,
     teamId: [],
     tournamentdata: {
@@ -32,8 +33,11 @@ export const manageTournamentSlice = createSlice({
     setEditEntity : (state, action) => {
       state.editEntity = action.payload;
     },
+    setIsView: (state, action) => {
+      state.isView = action.payload;
+    },
   },
 });
-export const {setTournamentData, setTeamId, setIsEdit,setEditEntity} =
+export const {setTournamentData, setTeamId, setIsEdit,setEditEntity,setIsView} =
   manageTournamentSlice.actions;
 export default manageTournamentSlice.reducer;
