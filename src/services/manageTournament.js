@@ -58,3 +58,21 @@ export const addParticipant = async formData => {
     }
   }
 };
+
+export const getUserCreatedTournament = async () => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/tournament/user-created-tournament`, {
+        method: 'get',
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};

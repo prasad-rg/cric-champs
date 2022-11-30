@@ -143,7 +143,7 @@ const AddProfileDetails = ({
                       {right: Dimensions.get('window').width / 2.33},
                     ]
               }>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   createThreeButtonAlert();
                 }}>
@@ -151,6 +151,21 @@ const AddProfileDetails = ({
                   source={require('../../assets/images/camera.png')}
                   style={styles.gobackbutton}
                 />
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={() => {
+                  createThreeButtonAlert();
+                }}
+                styles={{height: 34, width: 34}}>
+                <View
+                  style={{
+                    height: 34,
+                    width: 34,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image source={require('../../assets/images/camera.png')} />
+                </View>
               </TouchableOpacity>
             </View>
           </View>

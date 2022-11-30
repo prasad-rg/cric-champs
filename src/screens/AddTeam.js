@@ -10,6 +10,7 @@ import {
   Platform,
   Dimensions,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
@@ -28,6 +29,7 @@ import {deletePlayers} from '../redux/ParticipantSlice';
 
 const AddTeam = ({navigation}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const getDetails = data => {
     setProfilePictureUri(data);
@@ -75,7 +77,9 @@ const AddTeam = ({navigation}) => {
               image: profilePictureUri,
               tournamentId: tournamentId,
             });
+            setIsLoading(true);
             const response = await createTeam(formData);
+          
             if (response.status) {
               dispatch(setTeamId(response.data._id));
               console.log('HIIIIIIIIIIIII', response);
@@ -114,18 +118,13 @@ const AddTeam = ({navigation}) => {
                 console.log(stat);
               });
               if (status) {
+                setIsLoading(false);
                 navigation.goBack();
                 dispatch(deletePlayers());
               } else {
                 Alert.alert('Something went wrong. Please try again');
               }
-              // const participantFormData = createFormData(result);
-              // console.log('I am form data after map', participantFormData);
-              // const createparticipantresponse = await addParticipant(
-              //   participantFormData,
-              // );
-              // console.log('final responseeeeeeeee', createparticipantresponse);
-              // navigation.goBack();
+         
             } else {
               console.log('Please refresh the token');
             }
@@ -173,7 +172,7 @@ const AddTeam = ({navigation}) => {
                           value={values.name}
                           activeLineWidth={1}
                           style={{
-                            fontFamily: 'Roboto',
+                            fontFamily: 'Roboto-Medium',
                             fontSize: 16,
                             fontWeight: 'bold',
                             letterSpacing: 0.57,
@@ -255,7 +254,12 @@ const AddTeam = ({navigation}) => {
                 )}
               </View>
             </ScrollView>
-            <View style={styles.gradientButton}>
+            {isLoading ?(
+               <View style={{marginBottom: 20}}>
+               <ActivityIndicator size="large" color="#FFBA8C" />
+               </View>
+            ):(
+              <View style={styles.gradientButton}>
               <GradientButton
                 start={{x: 0, y: 0}}
                 end={{x: 2, y: 0}}
@@ -276,6 +280,8 @@ const AddTeam = ({navigation}) => {
                 onPress={handleSubmit}
               />
             </View>
+            )}
+           
           </>
         )}
       </Formik>
@@ -305,7 +311,7 @@ const styles = StyleSheet.create({
     height: 28,
     width: 174,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -348,7 +354,7 @@ const styles = StyleSheet.create({
   tournamentTypeText: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,
@@ -365,7 +371,7 @@ const styles = StyleSheet.create({
   addTeamText: {
     height: 14,
     color: '#0066E2',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 12,
     fontWeight: '900',
     letterSpacing: 0,
@@ -384,8 +390,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   showaddedplayer: {
-    height: '100%',
-    backgroundColor: 'rgba(217,226,233,0.5)',
+    // height: '100%',
+    // backgroundColor: 'rgba(217,226,233,0.5)',
   },
   players: {
     height: 16,
@@ -399,7 +405,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   noplayers: {
-    height: 24,
+    height:24 ,
     width: 200,
     color: '#A3A3A3',
     fontFamily: 'Roboto-Medium',
@@ -412,6 +418,7 @@ const styles = StyleSheet.create({
   },
   noplayerView: {
     alignItems: 'center',
+    // borderWidth:1
   },
   imagepicker: {
     height: 34,

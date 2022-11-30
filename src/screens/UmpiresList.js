@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   secondView: {
-    flex: 1,
+  height: '100%',
+    backgroundColor: 'rgba(217,226,233,0.5)',
   },
   umpireView: {
     marginTop: -15,

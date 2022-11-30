@@ -17,6 +17,7 @@ import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
 import UmpireProfile from '../screens/UmpireProfile';
 import MatchDetails from '../screens/MatchDetails';
+import ManageTournament from '../screens/ManageTournament';
 
 const Stack = createStackNavigator();
 
@@ -30,8 +31,10 @@ const RootNavigator = () => {
           <Stack.Screen
             name="OnBoardingStack"
             component={OnBoardingStack}
-            options={{headerShown: false,
-              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
           />
         )}
         <Stack.Screen
@@ -100,15 +103,22 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AppStack"
           component={AppStack}
-          options={{headerShown: false,
+          options={{
+            headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          
           }}
         />
         <Stack.Screen
           name="MatchDetails"
           component={MatchDetails}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ManageTournament"
+          component={ManageTournament}
+          options={{
+            headerShown: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

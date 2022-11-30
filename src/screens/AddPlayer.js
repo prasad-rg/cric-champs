@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
   designation: {
     height: 16,
     color: '#999999',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,

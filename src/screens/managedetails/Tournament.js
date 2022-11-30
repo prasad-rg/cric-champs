@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
+import { CommonActions } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {
   cancelTournament,
@@ -45,7 +46,14 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
           const res = await cancelTournament(tournamentDetails._id);
           if (res.status) {
             Alert.alert('Tournament Deleted Successsfully');
-            navigation.goBack();
+            navigation.dispatch(CommonActions.reset({
+          index:0,
+            routes:[
+                {
+                  name:"HomeStack"
+                }
+            ]
+            }))
           } else {
             Alert.alert('Please Try Again');
           }
@@ -122,12 +130,12 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
               navigation.dispatch(StackActions.push('END TIME'))
             }
           />
-        </View>
         <TouchableOpacity
           style={styles.card}
           onPress={() => createTwoButtonAlert()}>
           <Text style={styles.cancelText}>Cancel Tournament</Text>
         </TouchableOpacity>
+        </View>
       </ScrollView>
       {disableRegenerateFixture && (
         <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
@@ -168,10 +176,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom:20,
     justifyContent: 'space-between',
   },
   cancelText: {
-    height: 17,
+    // height: 17,
     // width: 141,
     color: '#F5112D',
     fontFamily: 'Roboto-Medium',

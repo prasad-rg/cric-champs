@@ -56,7 +56,7 @@ const RadioButtonDisabled = ({
             labelColor="#C0C0C0"
             labelStyle={{
               height: 16,
-              fontFamily: 'Roboto',
+              fontFamily: 'Roboto-Regular',
               fontSize: 14,
               letterSpacing: -0.34,
               lineHeight: 16,

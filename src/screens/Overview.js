@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import GradientButton from '../components/GradientButton';
@@ -16,18 +17,18 @@ import Tournament from './managedetails/Tournament';
 import {useSelector} from 'react-redux';
 import {generateFixture} from '../services/manageTournament2';
 import {StackActions} from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
-import { deleteStartTime } from '../redux/MatchSlice';
-import { deleteEndTime } from '../redux/MatchSlice';
-import { deleteStartDate } from '../redux/MatchSlice';
-import { deleteEndDate } from '../redux/MatchSlice';
+import {useDispatch} from 'react-redux';
+import {deleteStartTime} from '../redux/MatchSlice';
+import {deleteEndTime} from '../redux/MatchSlice';
+import {deleteStartDate} from '../redux/MatchSlice';
+import {deleteEndDate} from '../redux/MatchSlice';
 
 const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
-  const [modal,  setModal] =  useState(true);;
+  const [modal, setModal] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const tournamentdata = useSelector(
-   
     state => state.tournamentdata.tournamentdata,
   );
   console.log(tournamentdata);
@@ -38,18 +39,19 @@ const Overview = ({navigation}) => {
   console.log(tournamentId);
 
   const handlePress = async () => {
+    setIsLoading(true);
     const response = await generateFixture(tournamentId);
+    setIsLoading(false);
     console.log('responseeeee', response.data.statusCode);
     if (response.data.statusCode !== 200) {
       setModal(false);
       // navigation.navigate('TimeScreen')
     } else {
       setModal(true);
-      dispatch(deleteStartTime())
-      dispatch(deleteEndTime())
-      dispatch(deleteStartDate())
-      dispatch(deleteEndDate())
-
+      dispatch(deleteStartTime());
+      dispatch(deleteEndTime());
+      dispatch(deleteStartDate());
+      dispatch(deleteEndDate());
     }
 
     setVisible(true);
@@ -77,12 +79,12 @@ const Overview = ({navigation}) => {
               <View>
                 <Text style={styles.heading}>{tournamentdata.name}</Text>
                 <View style={{alignSelf: 'center', marginTop: 7}}>
-                  <TouchableOpacity style={styles.tourButton}>
+                  <View style={styles.tourButton}>
                     <Text
                       style={
                         styles.tourText
                       }>{`Tournament Code:${tournamentdata.code}`}</Text>
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
@@ -99,24 +101,30 @@ const Overview = ({navigation}) => {
           />
         </ScrollView>
       </View>
+      {isLoading ? (
+        <View style={{marginBottom: 20}}>
+          <ActivityIndicator size="large" color="#FFBA8C" />
+        </View>
+      ) : (
+        <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="GENERATE FIXTURE"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={handlePress}
+          />
+        </View>
+      )}
 
-      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="GENERATE FIXTURE"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={handlePress}
-        />
-      </View>
       {modal ? (
         <CustomModal visible={visible}>
           <View style={{alignItems: 'center', marginBottom: 30}}>
@@ -196,7 +204,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     height: 28,
-    width: 240,
+    // width: 240,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,

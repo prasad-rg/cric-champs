@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: 224,
     opacity: 0.5,
     color: '#666666',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 16,

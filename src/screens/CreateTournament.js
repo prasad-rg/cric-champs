@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 import React, {useState} from 'react';
 import RadioButton from '../components/RadioButton';
@@ -31,6 +32,8 @@ const CreateTournament = ({navigation}) => {
   const [tournamentName, setTournamentName] = useState('');
   const [tournamenttype, setTournamentType] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const {userData} = useSelector(state => state.userData);
   const dispatch = useDispatch();
 
@@ -45,7 +48,9 @@ const CreateTournament = ({navigation}) => {
         email: userData?.email,
         image: profilePictureUri,
       });
+      setIsLoading(true);
       const response = await createTournament(formData);
+      setIsLoading(false);
       console.log('I am create tournament responseeee', response);
       if (response.status) {
         const {code, _id, userId, name, email} = response?.data.result;
@@ -110,7 +115,7 @@ const CreateTournament = ({navigation}) => {
                     onChangeText={text => setTournamentName(text)}
                     autoCapitalize="none"
                     style={{
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Roboto-Medium',
                       fontSize: 16,
                       fontWeight: 'bold',
                       letterSpacing: 0.57,
@@ -132,7 +137,12 @@ const CreateTournament = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={styles.gradientButton}>
+      {isLoading ? (
+        <View style={{marginBottom: 20}}>
+        <ActivityIndicator size="large" color="#FFBA8C" />
+        </View>
+      ):(
+        <View style={styles.gradientButton}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
@@ -153,9 +163,38 @@ const CreateTournament = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
+      ) }
+    
     </View>
   );
 };
+
+
+// {isLoading ? (
+//   <View style={{marginTop: 20}}>
+//     <ActivityIndicator size="large" color="#FFBA8C" />
+//   </View>
+// ) : (
+//   <GradientButton
+//     start={{x: 0, y: 0}}
+//     end={{x: 2, y: 0}}
+//     colors={['#FFBA8C', '#FE5C6A']}
+//     text="LOGIN"
+//     onPress={handleSubmit}
+//     style={{width: '90%'}}
+//   />
+// )}
+
+
+
+
+
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -180,7 +219,7 @@ const styles = StyleSheet.create({
     height: 28,
     width: 174,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -223,7 +262,7 @@ const styles = StyleSheet.create({
   tournamentTypeText: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,

@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Platform,
+  Platform,ActivityIndicator
 } from 'react-native';
 import React, {useState} from 'react';
 import {TextField} from 'rn-material-ui-textfield';
@@ -22,6 +22,7 @@ import * as yup from 'yup';
 import {addUmpires} from '../services/manageTournament2';
 
 const AddUmpire = ({navigation}) => {
+  const[isLoading,setIsLoading]=useState(false)
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
@@ -54,7 +55,9 @@ const AddUmpire = ({navigation}) => {
               tempId: uuid.v4(),
             };
             const umpireData = createFormData(data);
+            setIsLoading(true);
             const response = await addUmpires(umpireData);
+            setIsLoading(false);
             console.log("response umpire",response)
             if (response.status) {
               // dispatch(addUmpire(response.data));
@@ -141,7 +144,12 @@ const AddUmpire = ({navigation}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+            {isLoading ? (
+               <View style={{marginBottom: 20}}>
+               <ActivityIndicator size="large" color="#FFBA8C" />
+               </View>
+            ):(
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
               <GradientButton
                 start={{x: 0, y: 0}}
                 end={{x: 2, y: 0}}
@@ -158,6 +166,7 @@ const AddUmpire = ({navigation}) => {
                 }}
               />
             </View>
+            )}
           </>
         )}
       </Formik>

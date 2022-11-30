@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 37,
     color: 'rgba(255,255,255,0.7)',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 16,
     fontWeight: '500',
     letterSpacing: 0,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   date: {
     height: 40,
     color: '#FFFFFF',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 34,
     fontWeight: '500',
     letterSpacing: 0,

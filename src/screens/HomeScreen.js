@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import React, {useEffect, useState} from 'react';
@@ -26,7 +27,8 @@ const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {recentActivities} = useSelector(state => state.recentActivities);
   const [recentsData, setRecentsData] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handelTextChange = text => {
     setCode(text);
   };
@@ -44,24 +46,48 @@ const HomeScreen = ({navigation}) => {
     };
     getRecentDetails(recentActivities);
   }, [recentActivities]);
+  const handlePress = async () => {
+    setIsLoading(true);
+    setInputTextError('');
+    setIsLoading(false);
+
+    if (code !== '') {
+      setIsLoading(true);
+      const res = await getTournamentByCode(code);
+      setIsLoading(false);
+      if (res?.status === false) {
+        setInputTextError(res.message.toUpperCase());
+      } else {
+        setInputTextError('');
+        setCode('');
+        dispatch(storeTournamentDetails(res));
+        dispatch(storeRecentActivities(res._id));
+        navigation.navigate('ViewScreen');
+      }
+    } else {
+      setInputTextError('Pleas Enter a Tournament Code to Proceed');
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('UserControls')}>
+      <View style={styles.backgroundBeyondSafeArea}>
+        <SafeAreaView>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('UserControls')}>
+              <View style={styles.burgerView}>
                 <Image
                   source={require('../../assets/images/burgermenu.png')}
                   style={styles.burgermenu}
                 />
-              </TouchableOpacity>
-              <Text style={styles.cricket}>Cricket</Text>
-            </View>
-          </SafeAreaView>
-        </View>
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.cricket}>Cricket</Text>
+          </View>
+        </SafeAreaView>
+      </View>
+      <ScrollView>
         <View>
           <View style={styles.subheader}>
             <Text style={styles.viewManage}>View or Manage Tournament</Text>
@@ -77,28 +103,13 @@ const HomeScreen = ({navigation}) => {
                 value={code}
                 autoCapitalize="none"
               />
-              <OutlinedButton
-                text="ENTER"
-                onPress={async () => {
-                  setInputTextError('');
-                  if (code !== '') {
-                    const res = await getTournamentByCode(code);
-                    if (res?.status === false) {
-                      setInputTextError(res.message.toUpperCase());
-                    } else {
-                      setInputTextError('');
-                      setCode('');
-                      dispatch(storeTournamentDetails(res));
-                      dispatch(storeRecentActivities(res._id));
-                      navigation.navigate('ViewScreen');
-                    }
-                  } else {
-                    setInputTextError(
-                      'Pleas Enter a Tournament Code to Proceed',
-                    );
-                  }
-                }}
-              />
+              {isLoading ? (
+                <View style={{marginHorizontal: 10}}>
+                  <ActivityIndicator size="large" color="#FFBA8C" />
+                </View>
+              ) : (
+                <OutlinedButton text="ENTER" onPress={handlePress} />
+              )}
             </View>
             {inputTextError && (
               <Text style={styles.errorText}>{inputTextError}</Text>
@@ -132,7 +143,6 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
- 
     </View>
   );
 };
@@ -145,8 +155,8 @@ const styles = StyleSheet.create({
   backgroundBeyondSafeArea: {
     backgroundColor: 'rgba(0, 102, 226, 1)',
     paddingRight: 20,
-    paddingTop: 15,
-    paddingBottom:15,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   textInput: {
     boxSizing: 'border-box',
@@ -160,7 +170,13 @@ const styles = StyleSheet.create({
     boxShadow: '0 8 30 0 rgba(223,223,223,0.37)',
     paddingHorizontal: 10,
   },
-
+  burgerView: {
+    width: 50,
+    height: 30,
+    marginLeft: -5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   header: {
     height: 56,
     width: '100%',
@@ -177,7 +193,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 64,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -193,7 +209,7 @@ const styles = StyleSheet.create({
   viewManage: {
     height: 19,
     color: '#8E9BA8',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,
@@ -203,7 +219,7 @@ const styles = StyleSheet.create({
   enterTournament: {
     height: 19,
     color: 'rgba(0,0,0,0.87)',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 16,
@@ -215,7 +231,7 @@ const styles = StyleSheet.create({
     height: 16,
     opacity: 0.5,
     color: '#9B9B9B',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 12,
     letteSpacing: 0,
     lineHeight: 14,
@@ -231,7 +247,7 @@ const styles = StyleSheet.create({
   or: {
     height: 19,
     color: '#000000',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 14,
     letterSpacing: 0,
     lineheight: 16,
@@ -248,7 +264,7 @@ const styles = StyleSheet.create({
     height: 19,
     width: 248,
     color: '#8E9BA8',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,

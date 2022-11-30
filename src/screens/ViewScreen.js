@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     height: 28,
-    width: 144,
+    // width: 144,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,
