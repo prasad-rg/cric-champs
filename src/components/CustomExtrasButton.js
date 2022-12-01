@@ -2,10 +2,11 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
+import { useSelector } from 'react-redux';
 
 const CustomExtrasButton = ({
   radio_props,
@@ -17,6 +18,9 @@ const CustomExtrasButton = ({
 }) => {
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
+  const {updateLiveScoreControls} = useSelector(
+    state => state.updateLiveScoreControls,
+  );
 
   const setData = (val, ind) => {
     setValue(val);
@@ -29,6 +33,12 @@ const CustomExtrasButton = ({
     }
   };
 
+  useEffect(() => {
+    if (updateLiveScoreControls === updateLiveScoreControls) {
+      setData(null);
+      setIndex(null);
+    }
+  }, [updateLiveScoreControls]);
   return (
     <RadioForm
       animation={true}

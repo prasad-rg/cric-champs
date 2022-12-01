@@ -2,10 +2,12 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
 
 const CustomRadioButton = ({
   radio_props,
@@ -17,6 +19,11 @@ const CustomRadioButton = ({
 }) => {
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
+  const {updateLiveScoreControls} = useSelector(
+    state => state.updateLiveScoreControls,
+  );
+  const dispatch = useDispatch();
+
   const setData = (val, ind) => {
     setValue(val);
     setIndex(ind);
@@ -27,6 +34,14 @@ const CustomRadioButton = ({
       setIndex();
     }
   };
+  useEffect(() => {
+    if (updateLiveScoreControls === updateLiveScoreControls) {
+      setData(null);
+      setIndex(null);
+    }
+  }, [updateLiveScoreControls]);
+
+  // console.log('cefefe', updateLiveScoreControls);
 
   return (
     <RadioForm

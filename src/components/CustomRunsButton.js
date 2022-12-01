@@ -2,11 +2,12 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
 import {combineReducers} from '@reduxjs/toolkit';
+import {useSelector} from 'react-redux';
 
 const CustomRunsButton = ({
   radio_props,
@@ -18,7 +19,9 @@ const CustomRunsButton = ({
 }) => {
   const [value, setValue] = useState({value: 0});
   const [index, setIndex] = useState({index: 0});
-
+  const {updateLiveScoreControls} = useSelector(
+    state => state.updateLiveScoreControls,
+  );
   const setData = (val, ind) => {
     setValue(val);
     setIndex(ind);
@@ -26,9 +29,16 @@ const CustomRunsButton = ({
     // console.log('I am value, I am in', val, ind);
     if (index === ind) {
       setData(null);
-      setIndex();
+      setIndex(null);
     }
   };
+
+  useEffect(() => {
+    if (updateLiveScoreControls === updateLiveScoreControls) {
+      setData(null);
+      setIndex(null);
+    }
+  }, [updateLiveScoreControls]);
 
   return (
     <RadioForm

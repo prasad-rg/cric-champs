@@ -37,6 +37,11 @@ export const updateLiveScore = createSlice({
     cleareInitialPlayerSelected: (state, action) => {
       state.initalPlayerSelected = [];
     },
+    swapTeamPlayers: (state, action) => {
+      let tempPlayers = state.team1Players;
+      state.team1Players = state.team2Players;
+      state.team2Players = tempPlayers;
+    },
   },
 });
 export const {
@@ -47,5 +52,6 @@ export const {
   clearAllPlayers,
   addInitialPlayerSelected,
   cleareInitialPlayerSelected,
+  swapTeamPlayers,
 } = updateLiveScore.actions;
 export default updateLiveScore.reducer;

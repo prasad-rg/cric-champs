@@ -160,6 +160,7 @@ export const convertLiveScoreData = (
   } else {
     if (extras === 'Wd') {
       wideRuns = +runs;
+      batsmanRuns = 0;
     }
   }
   let extrasObj = modifieDataTosend.extras;
@@ -198,7 +199,7 @@ export const convertLiveScoreData = (
     ...modifieDataTosend,
     commentry: setCommentary,
     extras: extrasObj,
-    runs: batsmanRuns,
+    runs: +batsmanRuns,
     wickets: wickets,
   };
 

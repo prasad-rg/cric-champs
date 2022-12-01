@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 0.5,
-    // width: '80%',
+    width: '80%',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     borderRadius: 20,

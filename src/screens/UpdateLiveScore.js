@@ -10,7 +10,7 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
 import DotBall from '../components/DotBall';
 import GradientButton from '../components/GradientButton';
@@ -20,6 +20,8 @@ import CustomExtrasButton from '../components/CustomExtrasButton';
 import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
+import {useIsFocused} from '@react-navigation/native';
+
 import {
   cancelLiveTournament,
   getListOfAllPlayers,
@@ -37,7 +39,11 @@ import {
   addTeam1Players,
   addTeam2Players,
   addTeamId,
+  swapTeamId,
+  swapTeamPlayers,
 } from '../redux/updateLiveScore';
+import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
+import {TIME_TO_FLIP} from '../api/constants';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -62,7 +68,10 @@ const UpdateLiveScore = ({navigation, route}) => {
   const [players, setPlayers] = useState({});
   const [initialPlayersSelectionModal, setInitialPlayerSelectionModal] =
     useState({strikeModal: false, nonStrikeModal: false, bowlerModal: false});
-  const [matchAndInningsStatus, setMatchAndInningsStatus] = useState({});
+  const [matchAndInningsStatus, setMatchAndInningsStatus] = useState({
+    matchStatus: 'start',
+    inningsStatus: 'start',
+  });
   const [strike, setStrike] = useState({
     strike: '',
     strikeName: '',
@@ -201,39 +210,50 @@ const UpdateLiveScore = ({navigation, route}) => {
 
     console.info(updateScores);
 
-    setRuns(liveScoreDataStructure.runs);
-    setWickets(liveScoreDataStructure.wickets);
-    setExtras(liveScoreDataStructure.extras);
-
     // TODO:---------------------------Think
 
-    // const update = await updateLiveScore(updateScores);
-    // if (update.status) {
-    //   const simplifiedResponse = await getPlayingPlayersList(
-    //     tournamentDetails._id,
-    //     matchId,
-    //     battingTeamId,
-    //     bowlingTeamId,
-    //   );
-    //   let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
-    //   setPresentScoreFromAPI({
-    //     ...presentScoreFromAPI,
-    //     runs: currentScores.runs,
-    //     overs: currentScores.over,
-    //     balls: currentScores.balls,
-    //     wickets: currentScores.wickets,
-    //   });
-    //   setRemainingPlayersToBat(simplifiedResponse?.data?.remainingBatsMan);
-    //   setOvers({overs: currentScores.over, balls: currentScores.balls});
-    //   setStrike({
-    //     strike: currentScores.strike,
-    //     strikeName: currentScores.strikeName,
-    //   });
-    //   setNonStrike({
-    //     nonStrike: currentScores.nonStrike,
-    //     nonStrikeName: currentScores.nonStrikeName,
-    //   });
-    // }
+    const update = await updateLiveScore(updateScores);
+    console.info('+++++++PUT Req Res+++++++', update.data);
+    if (update.status) {
+      if (update?.message === TIME_TO_FLIP) {
+        dispatch(swapTeamId());
+        dispatch(swapTeamPlayers());
+        setInitialPlayerSelectionModal({
+          ...initialPlayersSelectionModal,
+          strikeModal: true,
+        });
+      } else {
+        const simplifiedResponse = await getPlayingPlayersList(
+          tournamentDetails._id,
+          matchId,
+          battingTeamId,
+          bowlingTeamId,
+        );
+        console.info('=========================', simplifiedResponse?.data);
+        let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
+        setPresentScoreFromAPI({
+          ...presentScoreFromAPI,
+          runs: currentScores.runs,
+          overs: currentScores.over,
+          balls: currentScores.balls,
+          wickets: currentScores.wickets,
+        });
+        setRemainingPlayersToBat(simplifiedResponse?.data?.remainingBatsMan);
+        setOvers({overs: currentScores.over, balls: currentScores.balls});
+        setStrike({
+          strike: currentScores.strike,
+          strikeName: currentScores.strikeName,
+        });
+        setNonStrike({
+          nonStrike: currentScores.nonStrike,
+          nonStrikeName: currentScores.nonStrikeName,
+        });
+        dispatch(changeUpdatePressedState());
+        setRuns(liveScoreDataStructure.runs);
+        setWickets(liveScoreDataStructure.wickets);
+        setExtras(liveScoreDataStructure.extras);
+      }
+    }
   };
 
   const Details = [
@@ -309,47 +329,75 @@ const UpdateLiveScore = ({navigation, route}) => {
     stopModal: false,
     customChooseModal: false,
   });
+  console.info(
+    'Match Details -----',
+    team1Id,
+    team2Id,
+    tournamentDetails._id,
+    matchId,
+  );
 
-  useEffect(() => {
-    const getStatus = async () => {
-      const response = await getMatchStatus(matchId);
-      if (response?.status) {
-        if (response?.data?.result?.status === 'upcoming') {
-          setMatchAndInningsStatus({
-            matchStatus: 'start',
-            inningsStatus: 'start',
-          });
-          dispatch(addTeam1Players(response?.data?.team1Player));
-          dispatch(addTeam2Players(response?.data?.team2Player));
-          // console.log(response?.data?.team2Player);
-          dispatch(addTeamId({team1Id, team2Id}));
-          let openerSelectionCheck = initalPlayerSelected.filter(
-            item => item.matchId === matchId,
-          );
-          if (
-            openerSelectionCheck.length !== 0 &&
-            openerSelectionCheck[0].status === false
-          ) {
-            setInitialPlayerSelectionModal({
-              ...initialPlayersSelectionModal,
-              strikeModal: true,
+  const focus = useIsFocused(); // useIsFocused as shown
+
+  useLayoutEffect(() => {
+    if (focus == true) {
+      const getStatus = async () => {
+        const response = await getMatchStatus(matchId);
+        if (response?.status) {
+          if (response?.data?.result?.status === 'upcoming') {
+            setMatchAndInningsStatus({
+              matchStatus: 'start',
+              inningsStatus: 'start',
             });
-          } else if (!openerSelectionCheck.length) {
-            setInitialPlayerSelectionModal({
-              ...initialPlayersSelectionModal,
-              strikeModal: true,
-            });
+            dispatch(addTeam1Players(response?.data?.team1Player));
+            dispatch(addTeam2Players(response?.data?.team2Player));
+            // console.log(response?.data?.team2Player);
+            dispatch(addTeamId({team1Id, team2Id}));
+            let openerSelectionCheck = initalPlayerSelected.filter(
+              item => item.matchId === matchId,
+            );
+            if (
+              openerSelectionCheck.length !== 0 &&
+              openerSelectionCheck[0].status === false
+            ) {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: true,
+              });
+            } else if (!openerSelectionCheck.length) {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: true,
+              });
+            } else {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: false,
+              });
+            }
           } else {
-            setInitialPlayerSelectionModal({
-              ...initialPlayersSelectionModal,
-              strikeModal: false,
-            });
+            const result = await getPlayingPlayersList(
+              tournamentDetails._id,
+              matchId,
+              battingTeamId,
+              bowlingTeamId,
+            );
+            if (result?.data?.scoreOfTeam1?.inningsMessage === 'Innings Done') {
+              setStrike({
+                strike: result?.data?.scoreOfTeam1?.strike,
+                strikeName: result?.data?.scoreOfTeam1?.strikeName,
+              });
+              setNonStrike({
+                nonStrike: result?.data?.scoreOfTeam1?.nonStrike,
+                nonStrikeName: result?.data?.scoreOfTeam1?.nonStrikeName,
+              });
+            }
           }
         }
-      }
-    };
-    getStatus();
-  }, []);
+      };
+      getStatus();
+    }
+  }, [focus]);
   // console.warn('====', nonStrike, '====', strike, '----', bowler);
   return (
     <View style={styles.container}>
@@ -396,7 +444,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             <Text
               style={
                 styles.overText
-              }>{`${presentScoreFromAPI.overs}.${presentScoreFromAPI.balls} Overs`}</Text>
+              }>{`${presentScoreFromAPI?.overs}.${presentScoreFromAPI?.balls} Overs`}</Text>
             <Text
               style={
                 styles.overNumber
@@ -612,8 +660,9 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={wicketsModal.newBatsmanModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setWicketsModal({...wicketsModal, newBatsmanModal: false})
+          }>
           <Text style={styles.textView}>Select New Batsman</Text>
           <ScrollView>
             {remainingPlayersToBat.map(item => {
