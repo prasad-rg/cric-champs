@@ -38,7 +38,7 @@ const LoginScreen = ({navigation}) => {
   console.log(isLoading, isLoggedIn, error);
   // const [error, setError] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [secureTextEntry, setSecureTextEntry] = useState(false);
   const [icon, setIcon] = useState('eye');
   const handelLogin = async values => {
     dispatch(userLogin(values));
@@ -143,8 +143,8 @@ const LoginScreen = ({navigation}) => {
                 <TextInput
                   label="Password"
                   name="password"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
+                  // keyboardType="email-address"
+                  // autoCapitalize="none"
                   textColor="#666666"
                   activeUnderlineColor="rgba(153, 153, 153, 0.4)"
                   secureTextEntry={secureTextEntry}
