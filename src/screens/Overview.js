@@ -31,12 +31,12 @@ const Overview = ({navigation}) => {
   const tournamentdata = useSelector(
     state => state.tournamentdata.tournamentdata,
   );
-  console.log(tournamentdata);
+  // console.log(tournamentdata);
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  console.log(tournamentId);
+
 
   const handlePress = async () => {
     setIsLoading(true);

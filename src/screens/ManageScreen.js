@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Share,
 } from 'react-native';
 import React from 'react';
 import ManageTab from '../navigation/ManageTab';
@@ -14,6 +15,24 @@ import {useSelector} from 'react-redux';
 
 const ManageScreen = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${tournamentDetails.code}, Share the tournament code to invite your friends`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleEdit = () => {};
 
   return (
     <View style={styles.container}>
@@ -38,23 +57,16 @@ const ManageScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                   }}>
-                  <Image
-                    source={require('../../assets/images/pencil.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                      marginRight: 23,
-                    }}
-                  />
-                  <Image
-                    source={require('../../assets/images/share3.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
+                  <TouchableOpacity onPress={() => onShare()}>
+                    <Image
+                      source={require('../../assets/images/share3.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                      }}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
               <View>
@@ -130,7 +142,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     height: 28,
-    width: 144,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import GradientButton from '../components/GradientButton';
 import OutlinedButton from '../components/OutlinedButton';
 import RecentActivityCard from '../components/RecentActivityCard';
@@ -20,6 +20,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {storeRecentActivities} from '../redux/recentActivitiesSlice';
 import {getRecentActivities} from '../services/recentActivities';
+import {useIsFocused} from '@react-navigation/native';
+import {setIsView} from '../redux/manageTournamentSlice';
+import Toast from 'react-native-simple-toast';
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -27,20 +30,21 @@ const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {recentActivities} = useSelector(state => state.recentActivities);
   const [recentsData, setRecentsData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const {isLoggedIn} = useSelector(state => state.auth);
 
   const handelTextChange = text => {
     setCode(text);
   };
+  const focus = useIsFocused();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getRecentDetails = async tournamentIds => {
       const recents = await getRecentActivities({tournamentIds});
       // console.log(recents);
       if (recents.status) {
         setRecentsData(recents.data.data);
       } else {
-        console.log(recents);
+        // console.log(recents);
         Alert.alert('Recents Fetch Failed');
       }
     };
@@ -118,13 +122,23 @@ const HomeScreen = ({navigation}) => {
               Code can be acquired from the admin.
             </Text>
             <Text style={styles.or}>Or</Text>
-            <GradientButton
-              start={{x: 0, y: 0}}
-              end={{x: 2, y: 0}}
-              colors={['#FFBA8C', '#FE5C6A']}
-              text="CREATE TOURNAMENT"
-              onPress={() => navigation.navigate('AppStack')}
-            />
+            {isLoggedIn ? (
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={['#FFBA8C', '#FE5C6A']}
+                text="CREATE TOURNAMENT"
+                onPress={() => navigation.navigate('AppStack')}
+              />
+            ) : (
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={['#FFBA8C', '#FE5C6A']}
+                text="CREATE TOURNAMENT"
+                onPress={() => navigation.navigate('AuthStack')}
+              />
+            )}
             {recentsData.length > 0 && (
               <View style={styles.recentActivityView}>
                 <Text style={styles.recentActivityText}>Recent Activities</Text>

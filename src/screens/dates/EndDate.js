@@ -19,13 +19,13 @@ const StartDate = ({navigation}) => {
   const [isLoading,setIsLoading]=useState(false)
   const [disabled,setDisabled] = useState(false)
 
-  console.log(startDate, endDate);
+  // console.log(startDate, endDate);
 
   let date1=new Date(startDate)
   let date2=new Date(endDate)
 
   let total=(date2.getUTCDate()- date1.getUTCDate())+1;
-  console.log("total days",total)
+  // console.log("total days",total)
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,

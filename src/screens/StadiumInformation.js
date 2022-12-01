@@ -10,12 +10,16 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import {useSelector} from 'react-redux';
 import {getGroundDetailByGroundIdAndTournamentId} from '../services/viewTournament';
-
+import {setEditEntity, setIsEdit} from '../redux/manageTournamentSlice';
+import {useDispatch} from 'react-redux';
+import {StackActions} from '@react-navigation/native';
+import {deleteParticularGround} from '../services/manageTournament2';
 // const images = [
 //   'https://cdn.pixabay.com/photo/2016/11/29/02/05/audience-1866738_1280.jpg',
 //   'https://cdn.pixabay.com/photo/2016/11/29/07/06/bleachers-1867992_1280.jpg',
@@ -26,13 +30,15 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 const StadiumInformation = ({navigation, route}) => {
+  const isView = useSelector(state => state.tournamentdata.isView);
+
   const [imgActive, setimgActive] = useState(0);
   const [currentStadiumInformation, setCurrentStadiumInformation] =
     useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [images, setImages] = useState([]);
-
+  const dispatch = useDispatch();
   const loadStadiumInformation = async () => {
     setIsLoading(true);
     const response = await getGroundDetailByGroundIdAndTournamentId(
@@ -65,9 +71,52 @@ const StadiumInformation = ({navigation, route}) => {
     }
   };
 
-  const handleBack =()=>{
-    navigation.goBack();
-  }
+  const handleEdit = () => {
+    dispatch(setIsEdit(false));
+    dispatch(setEditEntity(true));
+    navigation.dispatch(
+      StackActions.push('AddGround', {
+        groundName: route.params.groundName,
+        groundImage: images,
+        groundId: route.params.groundId,
+      }),
+    );
+  };
+
+  const deleteGround = async () => {
+    const data = {
+      tournamentId: tournamentDetails._id,
+      groundId: route.params.groundId,
+    };
+    // console.log(data);
+    const response = await deleteParticularGround(data);
+    // console.log(response);
+    if (response.status) {
+      navigation.pop(1);
+    } else {
+      console.log('Cannot Delete, Something went wrong');
+    }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Are your sure?',
+      'Are you sure you want to remove this player?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            deleteGround();
+          },
+        },
+
+        {
+          text: 'No',
+        },
+      ],
+    );
+  };
+
   const stadiumDetails = [
     {
       id: 1,
@@ -125,21 +174,25 @@ const StadiumInformation = ({navigation, route}) => {
                     {route.params.groundName}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <TouchableOpacity>
-                    <Image source={require('../../assets/images/pencil.png')} />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('../../assets/images/trash.png')}
-                      style={{marginHorizontal: '5%'}}
-                    />
-                  </TouchableOpacity>
-                </View>
+                {isView ? null : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image
+                        source={require('../../assets/images/pencil.png')}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleDelete}>
+                      <Image
+                        source={require('../../assets/images/trash.png')}
+                        style={{marginHorizontal: '5%'}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             </View>
           </SafeAreaView>
@@ -160,7 +213,7 @@ const StadiumInformation = ({navigation, route}) => {
               />
             ))}
           </ScrollView>
-          <View style={styles.dotWrap}>
+          {/* <View style={styles.dotWrap}>
             {images.map((item, index) => (
               <Text
                 key={item}
@@ -168,7 +221,7 @@ const StadiumInformation = ({navigation, route}) => {
                 ●
               </Text>
             ))}
-          </View>
+          </View> */}
         </View>
         {stadiumDetails.map(item => (
           <View key={item.id} style={styles.listview}>
@@ -215,7 +268,6 @@ const styles = StyleSheet.create({
   },
   stadiumName: {
     height: 24,
-    width: 188,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,

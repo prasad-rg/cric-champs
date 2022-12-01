@@ -54,7 +54,7 @@ const OversScreen = ({navigation}) => {
   }
   const getData= data =>{
     setOvers(data)
-    console.log(data)
+    // console.log(data)
   }
   return (
     <View style={styles.container}>
