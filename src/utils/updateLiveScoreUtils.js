@@ -41,6 +41,48 @@ export const liveScoreDataStructure = {
 
 // export const convertLiveScoreData = () => {};
 
+const createCommentary = (teamId, over, balls, wickets, extras, runs) => {
+  let commentryObj = {...liveScoreDataStructure.commentry};
+  // console.warn('=============', extras);
+  if (extras.status) {
+    commentryObj = {
+      ...commentryObj,
+      status: extras.bye
+        ? 'Bye'
+        : extras.legBye
+        ? 'Lb'
+        : extras.noBall
+        ? 'Nb'
+        : 'Wd',
+      message: `Ohh... it's a ${
+        extras.bye ? 'Bye' : extras.legBye ? 'Lb' : extras.noBall ? 'Nb' : 'Wd'
+      }`,
+    };
+  } else if (wickets.status) {
+    commentryObj = {
+      ...commentryObj,
+      status: 'W',
+      message: `${wickets.batsman} needs to get back to the pavilion`,
+    };
+  } else if (runs === 0 || runs) {
+    if (runs !== '0') {
+      commentryObj = {
+        ...commentryObj,
+        status: `${runs}`,
+        message: 'What a hit by the batsman',
+      };
+    } else {
+      commentryObj = {
+        ...commentryObj,
+        status: '0',
+        message: "That's a dot ball!!",
+      };
+    }
+  }
+
+  return {...commentryObj, teamId};
+};
+
 export const convertLiveScoreData = (
   runs,
   extras,
@@ -106,8 +148,24 @@ export const convertLiveScoreData = (
     }
   }
 
-  console.log('-------Runs------', batsmanRuns);
-  console.log('--------Extras----', extrasObj);
-  console.log('--------Wickets--------', wickets);
-  console.log('--------data to send---', modifieDataTosend);
+  const setCommentary = createCommentary(
+    modifieDataTosend.teamId,
+    0,
+    0,
+    wickets,
+    extrasObj,
+    batsmanRuns,
+  );
+
+  let withCommentary = {
+    ...modifieDataTosend,
+    commentry: setCommentary,
+    extras: extrasObj,
+  };
+
+  // console.log('-------Runs------', batsmanRuns);
+  // console.log('--------Extras----', extrasObj);
+  // console.log('--------Wickets--------', wickets);
+  // console.log('--------data to send---', withCommentary);
+  return withCommentary;
 };

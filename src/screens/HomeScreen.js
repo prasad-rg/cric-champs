@@ -26,7 +26,8 @@ const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {recentActivities} = useSelector(state => state.recentActivities);
   const [recentsData, setRecentsData] = useState([]);
-  
+  const {isLoggedIn} = useSelector(state => state.auth);
+
   const handelTextChange = text => {
     setCode(text);
   };
@@ -42,7 +43,9 @@ const HomeScreen = ({navigation}) => {
         Alert.alert('Recents Fetch Failed');
       }
     };
-    getRecentDetails(recentActivities);
+    if (isLoggedIn) {
+      getRecentDetails(recentActivities);
+    }
   }, [recentActivities]);
 
   return (
@@ -132,7 +135,6 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
- 
     </View>
   );
 };
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 102, 226, 1)',
     paddingRight: 20,
     paddingTop: 15,
-    paddingBottom:15,
+    paddingBottom: 15,
   },
   textInput: {
     boxSizing: 'border-box',
