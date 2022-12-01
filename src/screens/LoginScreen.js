@@ -38,7 +38,7 @@ const LoginScreen = ({navigation}) => {
   console.log(isLoading, isLoggedIn, error);
   // const [error, setError] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
-  const [secureTextEntry, setSecureTextEntry] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [icon, setIcon] = useState('eye');
   const handelLogin = async values => {
     dispatch(userLogin(values));
