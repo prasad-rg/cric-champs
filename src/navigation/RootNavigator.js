@@ -29,6 +29,8 @@ import MatchDetails from '../screens/MatchDetails';
 import AddGround from '../screens/AddGround';
 import AddUmpire from '../screens/AddUmpire';
 import ManageTournament from '../screens/ManageTournament';
+import RNBootSplash from 'react-native-bootsplash';
+
 
 const Stack = createStackNavigator();
 
@@ -36,7 +38,7 @@ const RootNavigator = () => {
   const {isLoggedIn, isInitialAppLaunch} = useSelector(state => state.auth);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={() => RNBootSplash.hide()}>
       <Stack.Navigator>
         {isInitialAppLaunch && (
           <Stack.Screen
