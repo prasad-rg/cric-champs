@@ -205,7 +205,12 @@ const AddGround = ({navigation, route}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+            {isLoading ? (
+              <View style={{marginBottom: 20}}>
+                <ActivityIndicator size="large" color="#FFBA8C" />
+              </View>
+            ):(
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
               {editEntity ? (
                 <GradientButton
                   start={{x: 0, y: 0}}
@@ -248,6 +253,8 @@ const AddGround = ({navigation, route}) => {
                 />
               )}
             </View>
+            )}
+           
           </>
         )}
       </Formik>

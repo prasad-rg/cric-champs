@@ -31,6 +31,7 @@ const HomeScreen = ({navigation}) => {
   const {recentActivities} = useSelector(state => state.recentActivities);
   const [recentsData, setRecentsData] = useState([]);
   const {isLoggedIn} = useSelector(state => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handelTextChange = text => {
     setCode(text);

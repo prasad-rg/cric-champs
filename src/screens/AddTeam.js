@@ -12,7 +12,7 @@ import {
   RefreshControl,
   FlatList,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
@@ -69,20 +69,18 @@ const AddTeam = ({navigation, route}) => {
     name: yup.string().required(),
   });
 
-  const handlePlayerList = (value,inputValues) => {
-
-      navigation.navigate('PlayerProfile', {
-        image:value.image.path,
-        teamName:inputValues.name,
-        name:value.name,
-        city:inputValues.city,
-        batting:value.batting,
-        bowling:value.bowling,
-        bowlingtype:value.bowlingtype,
-        designation:value.designation,
-        expertise:value.expertise,
-      });
-
+  const handlePlayerList = (value, inputValues) => {
+    navigation.navigate('PlayerProfile', {
+      image: value.image.path,
+      teamName: inputValues.name,
+      name: value.name,
+      city: inputValues.city,
+      batting: value.batting,
+      bowling: value.bowling,
+      bowlingtype: value.bowlingtype,
+      designation: value.designation,
+      expertise: value.expertise,
+    });
   };
 
   const loadPlayers = async () => {
@@ -159,7 +157,7 @@ const AddTeam = ({navigation, route}) => {
             });
             setIsLoading(true);
             const response = await createTeam(formData);
-          
+
             if (response.status) {
               dispatch(setTeamId(response.data._id));
 
@@ -204,7 +202,6 @@ const AddTeam = ({navigation, route}) => {
               } else {
                 Alert.alert('Something went wrong. Please try again');
               }
-         
             } else {
               console.log('Please refresh the token');
             }
@@ -359,7 +356,8 @@ const AddTeam = ({navigation, route}) => {
                         {participantdata.map(value => (
                           // console.log(value.image.path)
                           <View key={value.tempId}>
-                            <TouchableOpacity onPress={()=>handlePlayerList(value,values)}>
+                            <TouchableOpacity
+                              onPress={() => handlePlayerList(value, values)}>
                               <PlayersList
                                 source={value.image.path}
                                 name={value.name}
@@ -378,47 +376,51 @@ const AddTeam = ({navigation, route}) => {
                 )}
               </View>
             </ScrollView>
-            <View style={styles.gradientButton}>
-              {isEdit ? (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={['#FFBA8C', '#FE5C6A']}
-                  text="UPDATE TEAM"
-                  style={{width: '100%', marginTop: 0, height: 48}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                  onPress={() => handleEdit(values)}
-                />
-              ) : (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    participantdata.length === 0
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="SAVE TEAM"
-                  style={{width: '100%', marginTop: 0, height: 48}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                  onPress={handleSubmit}
-                />
-              )}
-            </View>
+            {isLoading ? (
+              <View style={{marginBottom: 20}}>
+                <ActivityIndicator size="large" color="#FFBA8C" />
+              </View>
+            ) : (
+              <View style={styles.gradientButton}>
+                {isEdit ? (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={['#FFBA8C', '#FE5C6A']}
+                    text="UPDATE TEAM"
+                    style={{width: '100%', marginTop: 0, height: 48}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                    onPress={() => handleEdit(values)}
+                  />
+                ) : (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={
+                      participantdata.length === 0
+                        ? ['#999999', '#999999']
+                        : ['#FFBA8C', '#FE5C6A']
+                    }
+                    text="SAVE TEAM"
+                    style={{width: '100%', marginTop: 0, height: 48}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                    onPress={handleSubmit}
+                  />
+                )}
+              </View>
             )}
-           
           </>
         )}
       </Formik>
@@ -542,7 +544,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   noplayers: {
-    height:24 ,
+    height: 24,
     width: 200,
     color: '#A3A3A3',
     fontFamily: 'Roboto-Medium',
