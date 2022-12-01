@@ -15,8 +15,7 @@ export const createTournament = async formData => {
       const jsonResponse = await res.json();
       return jsonResponse;
     } catch (error) {
-      console.log("I am error",error)
-      return error;
+      return error.errorMessage;
     }
   }
 };
