@@ -13,7 +13,7 @@ import GradientButton from '../../components/GradientButton';
 import { CommonActions } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-
+import Toast from 'react-native-simple-toast';
 import {
   cancelTournament,
   tournamentOverview,
@@ -27,6 +27,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(true);
   const [visible, setVisible] = useState(false);
+
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
@@ -53,7 +54,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
         onPress: async () => {
           const res = await cancelTournament(tournamentDetails._id);
           if (res.status) {
-            Alert.alert('Tournament Deleted Successsfully');
+            Toast.show('Tournament Deleted Successsfully');
             navigation.dispatch(CommonActions.reset({
           index:0,
             routes:[
@@ -62,8 +63,8 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 }
             ]
             }))
-          } else {
-            Alert.alert('Please Try Again');
+          }else{
+            Toast.show("Something went wrong, Please try again 😭")
           }
         },
         style: 'destructive',

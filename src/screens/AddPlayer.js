@@ -16,6 +16,7 @@ import {Alert} from 'react-native';
 import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
 import {setEditEntity} from '../redux/manageTournamentSlice';
+import Toast from 'react-native-simple-toast';
 
 const AddPlayer = ({navigation, route}) => {
   const [designation, setDesignation] = useState('');
@@ -140,6 +141,8 @@ const AddPlayer = ({navigation, route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
@@ -168,7 +171,7 @@ const AddPlayer = ({navigation, route}) => {
             dispatch(addTeam(data));
             navigation.goBack();
           } else {
-            Alert.alert('Please Add profile picture');
+            Toast.show('Please Add profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (

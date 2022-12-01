@@ -20,6 +20,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {cleanSingle} from 'react-native-image-crop-picker';
 import { deleteParticularGround } from '../services/manageTournament2';
+import Toast from 'react-native-simple-toast';
 
 const AddGround = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +60,8 @@ const AddGround = ({navigation, route}) => {
     if(response.status){
       navigation.pop(2)
       dispatch(setEditEntity(false))
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
@@ -87,7 +90,7 @@ const AddGround = ({navigation, route}) => {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
             } else {
-              console.log('Something went wrong');
+              Toast.show('Something went wrong, Try again 😭');
             }
           }else{
             console.log("Profile Picture not uploaded")

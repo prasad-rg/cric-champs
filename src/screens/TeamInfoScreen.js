@@ -18,6 +18,7 @@ import {useSelector} from 'react-redux';
 import {StackActions} from '@react-navigation/native';
 import {useIsFocused} from '@react-navigation/native';
 import {deleteTeam} from '../services/manageTournament2';
+import Toast from 'react-native-simple-toast';
 
 const TeamInfoScreen = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -34,7 +35,6 @@ const TeamInfoScreen = ({navigation, route}) => {
 
   const handleEdit = () => {
     dispatch(setIsEdit(true));
-
     navigation.dispatch(
       StackActions.push('AddTeam', {
         title: 'Edit Team',
@@ -53,8 +53,8 @@ const TeamInfoScreen = ({navigation, route}) => {
     // console.log(response);
     if (response.status) {
       navigation.pop(1);
-    } else {
-      console.log('Cannot Delete, Something went wrong');
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 

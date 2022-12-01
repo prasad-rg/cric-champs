@@ -8,7 +8,6 @@ import {
   ImageBackground,
   Platform,
   Dimensions,
-  Alert,
   RefreshControl,
   FlatList,
   ScrollView,
@@ -31,10 +30,8 @@ import {deletePlayers} from '../redux/ParticipantSlice';
 import TeamListName from '../components/TeamListName';
 import {getPlayersByTeamIdAndTournamentId} from '../services/viewTournament';
 import {setIsEdit} from '../redux/manageTournamentSlice';
-import {logout} from '../redux/authSlice';
 import {updateTeam} from '../services/manageTournament2';
-import {StackActions} from '@react-navigation/native';
-// import { ScrollView } from 'react-native-virtualized-view';
+import Toast from 'react-native-simple-toast';
 
 const AddTeam = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -56,8 +53,8 @@ const AddTeam = ({navigation, route}) => {
   );
   const teamId = useSelector(state => state.tournamentdata.teamId);
 
-  // console.log("TeamId",teamId,tournamentId)
   const handlePlayer = () => {
+    dispatch(setIsEdit(false))
     navigation.navigate('AddPlayer');
   };
   const handleBack = () => {
@@ -114,7 +111,6 @@ const AddTeam = ({navigation, route}) => {
   }, []);
 
   const handleEdit = async values => {
-    // console.log(values);
     if (profilePictureUri !== '') {
       var formData = createFormData({
         name: values.name,
@@ -133,10 +129,11 @@ const AddTeam = ({navigation, route}) => {
     }
 
     const response = await updateTeam(formData);
-    console.log('Response after Team Update', response.data.logo);
     if (response.status) {
       navigation.pop(2);
       dispatch(setIsEdit(false));
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
@@ -200,13 +197,13 @@ const AddTeam = ({navigation, route}) => {
                 navigation.goBack();
                 dispatch(deletePlayers());
               } else {
-                Alert.alert('Something went wrong. Please try again');
+                Toast.show('Something went wrong. Please try again 😭');
               }
             } else {
               console.log('Please refresh the token');
             }
           } else {
-            console.log('Please Add profile picture');
+            Toast.show('Please add team profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
@@ -245,7 +242,6 @@ const AddTeam = ({navigation, route}) => {
                         <TextField
                           label="Team Name"
                           name="name"
-                          // formatText={this.formatText}
                           onSubmitEditing={this.onSubmit}
                           ref={this.fieldRef}
                           textColor="#FFFFFF"
@@ -416,7 +412,7 @@ const AddTeam = ({navigation, route}) => {
                       letterSpacing: 0.5,
                       lineHeight: 19,
                     }}
-                    onPress={handleSubmit}
+                    onPress={participantdata.length === 0 ? null : handleSubmit}
                   />
                 )}
               </View>

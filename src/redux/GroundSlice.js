@@ -19,7 +19,7 @@ export const GroundSlice = createSlice({
     },
     deleteGround:(state,action)=>{
       state.value=[]
-    }
+    },
   },
 });
 export const {addGround,deleteGround} = GroundSlice.actions;

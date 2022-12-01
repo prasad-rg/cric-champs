@@ -17,6 +17,7 @@ import {
 } from '../services/manageTournament2';
 import {StackActions} from '@react-navigation/native';
 import {setEditEntity} from '../redux/manageTournamentSlice';
+import Toast from 'react-native-simple-toast';
 
 const AppBar = ({
   navigation,
@@ -64,8 +65,8 @@ const AppBar = ({
     console.log(response);
     if (response.status) {
       navigation.pop(1);
-    } else {
-      console.log('Cannot Delete, Something went wrong');
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
@@ -111,8 +112,8 @@ const AppBar = ({
     // console.log(response);
     if (response.status) {
       navigation.pop(1);
-    } else {
-      console.log('Cannot Delete, Something went wrong');
+    } else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
