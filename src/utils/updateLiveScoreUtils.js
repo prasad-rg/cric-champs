@@ -41,7 +41,15 @@ export const liveScoreDataStructure = {
 
 // export const convertLiveScoreData = () => {};
 
-const createCommentary = (teamId, over, balls, wickets, extras, runs) => {
+const createCommentary = (
+  teamId,
+  over,
+  balls,
+  wickets,
+  extras,
+  runs,
+  presentScoreFromAPI,
+) => {
   let commentryObj = {...liveScoreDataStructure.commentry};
   // console.warn('=============', extras);
   if (extras.status) {
@@ -80,7 +88,34 @@ const createCommentary = (teamId, over, balls, wickets, extras, runs) => {
     }
   }
 
-  return {...commentryObj, teamId};
+  if (presentScoreFromAPI.balls > 5) {
+    if (commentryObj.status === 'Wd' || commentryObj.status === 'Nb') {
+      return {
+        ...commentryObj,
+        teamId,
+        balls: presentScoreFromAPI.overs,
+        over: presentScoreFromAPI.overs,
+      };
+    }
+    let tempOver = presentScoreFromAPI.overs + 1;
+    let tempBall = 0;
+    return {...commentryObj, teamId, balls: tempBall, over: tempOver};
+  } else {
+    if (commentryObj.status === 'Wd' || commentryObj.status === 'Nb') {
+      return {
+        ...commentryObj,
+        teamId,
+        balls: presentScoreFromAPI.overs,
+        over: presentScoreFromAPI.overs,
+      };
+    }
+    return {
+      ...commentryObj,
+      teamId,
+      balls: presentScoreFromAPI.balls + 1,
+      over: presentScoreFromAPI.overs,
+    };
+  }
 };
 
 export const convertLiveScoreData = (
@@ -96,6 +131,7 @@ export const convertLiveScoreData = (
   bowler,
   nonStrike,
   strike,
+  presentScoreFromAPI,
 ) => {
   let modifieDataTosend = {
     ...liveScoreDataStructure,
@@ -118,7 +154,7 @@ export const convertLiveScoreData = (
   }
   let batsmanRuns = runs;
   let wideRuns = 0;
-  if ((runs === null || runs === 0) && extras === 'Wd') {
+  if ((runs === null || runs === 0 || runs === '0') && extras === 'Wd') {
     // console.warn('Got a hit');
     wideRuns = 1;
   } else {
@@ -155,14 +191,20 @@ export const convertLiveScoreData = (
     wickets,
     extrasObj,
     batsmanRuns,
+    presentScoreFromAPI,
   );
 
   let withCommentary = {
     ...modifieDataTosend,
     commentry: setCommentary,
     extras: extrasObj,
+    runs: batsmanRuns,
+    wickets: wickets,
   };
 
+  if (withCommentary.commentry.balls > 1) {
+    withCommentary = {...withCommentary, matchStatus: 'on going'};
+  }
   // console.log('-------Runs------', batsmanRuns);
   // console.log('--------Extras----', extrasObj);
   // console.log('--------Wickets--------', wickets);

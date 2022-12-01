@@ -50,6 +50,7 @@ const UpdateLiveScore = ({navigation, route}) => {
   } = useSelector(state => state.liveScoreData);
 
   const dispatch = useDispatch();
+  const [isUpdatePressed, setIsUpdatePressed] = useState(false);
 
   // console.warn(team1Players, team2Players, battingTeamId, bowlingTeamId);
 
@@ -155,7 +156,7 @@ const UpdateLiveScore = ({navigation, route}) => {
       setWickets({...liveScoreDataStructure.wickets});
       setWicketsModal({...wicketsModal, newBatsmanModal: false});
     } else {
-      if (data !== 'Run Out' && data !== 'Other') {
+      if (data !== 'Run Out' && data !== 'Other' && data !== 'Caught') {
         // TODO: Add the batsman batsmanId from the striker Id even bowler which is got from the PUT response
         setWickets({
           ...liveScoreDataStructure.wickets,
@@ -195,9 +196,14 @@ const UpdateLiveScore = ({navigation, route}) => {
       bowler,
       nonStrike,
       strike,
+      presentScoreFromAPI,
     );
 
     console.info(updateScores);
+
+    setRuns(liveScoreDataStructure.runs);
+    setWickets(liveScoreDataStructure.wickets);
+    setExtras(liveScoreDataStructure.extras);
 
     // TODO:---------------------------Think
 
