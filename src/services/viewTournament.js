@@ -153,3 +153,36 @@ export const getGroundDetailByGroundIdAndTournamentId = async (
     return error.response.data;
   }
 };
+
+export const getUmpireDetailsByUmpireIdAndTournamentId = async (
+  umpireId,
+  tournamentId,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/participant/umpire?tournamentId=${tournamentId}&umpireId=${umpireId}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getScoreBoardByMatchIdAndBothTeamId = async (
+  matchId,
+  team1Id,
+  team2Id,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/get-scoreboard?matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
+    );
+    const data = response.data;
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

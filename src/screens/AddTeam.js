@@ -6,12 +6,14 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-  ScrollView,
   Platform,
   Dimensions,
   Alert,
+  RefreshControl,
+  FlatList,
+  ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import {TextField} from 'rn-material-ui-textfield';
 import PlayersList from '../components/PlayersList';
@@ -25,27 +27,40 @@ import {setTeamId} from '../redux/manageTournamentSlice';
 import {useDispatch} from 'react-redux';
 import {addParticipant} from '../services/manageTournament';
 import {deletePlayers} from '../redux/ParticipantSlice';
+import TeamListName from '../components/TeamListName';
+import {getPlayersByTeamIdAndTournamentId} from '../services/viewTournament';
+import {setIsEdit} from '../redux/manageTournamentSlice';
+import {logout} from '../redux/authSlice';
+import {updateTeam} from '../services/manageTournament2';
+import {StackActions} from '@react-navigation/native';
+// import { ScrollView } from 'react-native-virtualized-view';
 
-const AddTeam = ({navigation}) => {
+const AddTeam = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
+  const [currentPlayers, setCurrentPlayers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  console.log(profilePictureUri);
   const getDetails = data => {
+    console.info(data);
     setProfilePictureUri(data);
   };
 
+  const isEdit = useSelector(state => state.tournamentdata.isEdit);
+
   const participantdata = useSelector(state => state.participantdata.value);
+
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const teamId = useSelector(
-    state => state.tournamentdata.tournamentdata.teamId,
-  );
-  // const teamId='vhwrt3782456qywdhb'
-  // console.log("TeamId",teamId)
+  const teamId = useSelector(state => state.tournamentdata.teamId);
+
+  // console.log("TeamId",teamId,tournamentId)
   const handlePlayer = () => {
     navigation.navigate('AddPlayer');
   };
   const handleBack = () => {
+    dispatch(setIsEdit(false));
     navigation.goBack();
   };
 
@@ -53,19 +68,85 @@ const AddTeam = ({navigation}) => {
     name: yup.string().required(),
   });
 
-  const handlePlayerList = () => {
-    if (teamId) {
+  const handlePlayerList = (value,inputValues) => {
+
       navigation.navigate('PlayerProfile', {
-        tournamentId: tournamentId,
+        image:value.image.path,
+        teamName:inputValues.name,
+        name:value.name,
+        city:inputValues.city,
+        batting:value.batting,
+        bowling:value.bowling,
+        bowlingtype:value.bowlingtype,
+        designation:value.designation,
+        expertise:value.expertise,
       });
+
+  };
+
+  const loadPlayers = async () => {
+    setIsLoading(true);
+    const response = await getPlayersByTeamIdAndTournamentId(
+      teamId,
+      tournamentId,
+    );
+    setIsLoading(false);
+    if (response.status) {
+      setCurrentPlayers(response.data);
     }
   };
+
+  const renderItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('PlayerProfile', {
+            teamId: route.params.teamId,
+            tournamentId: tournamentId,
+            playerId: item._id,
+          })
+        }>
+        <TeamListName source={item.profilePic.url} text={item.name} />
+      </TouchableOpacity>
+    );
+  };
+  useEffect(() => {
+    loadPlayers();
+  }, []);
+
+  const handleEdit = async values => {
+    // console.log(values);
+    if (profilePictureUri !== '') {
+      var formData = createFormData({
+        name: values.name,
+        city: values.city,
+        image: profilePictureUri,
+        tournamentId: tournamentId,
+        teamId: teamId,
+      });
+    } else {
+      var formData = createFormData({
+        name: values.name,
+        city: values.city,
+        tournamentId: tournamentId,
+        teamId: teamId,
+      });
+    }
+
+    const response = await updateTeam(formData);
+    console.log('Response after Team Update', response.data.logo);
+    if (response.status) {
+      navigation.pop(2);
+      dispatch(setIsEdit(false));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Formik
         validationSchema={addPlayerValidationSchema}
         initialValues={{
-          name: '',
+          name: isEdit ? route?.params.teamName : '',
           city: '',
         }}
         onSubmit={async values => {
@@ -78,7 +159,7 @@ const AddTeam = ({navigation}) => {
             const response = await createTeam(formData);
             if (response.status) {
               dispatch(setTeamId(response.data._id));
-              console.log('HIIIIIIIIIIIII', response);
+
               var result = await Promise.all(
                 participantdata.map(async el => {
                   var object = Object.assign({}, el);
@@ -101,7 +182,7 @@ const AddTeam = ({navigation}) => {
                     }
                   });
 
-                  console.log(object);
+                  // console.log(object);
                   const participantFormData = createFormData(object);
                   const createparticipantresponse = await addParticipant(
                     participantFormData,
@@ -111,7 +192,7 @@ const AddTeam = ({navigation}) => {
               );
 
               const status = result.map(stat => {
-                console.log(stat);
+                // console.log(stat);
               });
               if (status) {
                 navigation.goBack();
@@ -152,15 +233,24 @@ const AddTeam = ({navigation}) => {
                             style={styles.gobackbutton}
                           />
                         </TouchableOpacity>
-                        <Text style={styles.createTournament}>Add Team</Text>
+                        <Text style={styles.createTournament}>
+                          {isEdit ? 'Edit Team' : 'Add Team'}
+                        </Text>
                       </View>
-
-                      <ProfileImagePicker getImageUri={getDetails} />
+                      {isEdit && profilePictureUri == '' ? (
+                        <ProfileImagePicker
+                          getImageUri={getDetails}
+                          profilePictureUri={{uri: route?.params.teamLogo}}
+                        />
+                      ) : (
+                        <ProfileImagePicker getImageUri={getDetails} />
+                      )}
 
                       <View>
                         <TextField
                           label="Team Name"
-                          formatText={this.formatText}
+                          name="name"
+                          // formatText={this.formatText}
                           onSubmitEditing={this.onSubmit}
                           ref={this.fieldRef}
                           textColor="#FFFFFF"
@@ -185,6 +275,9 @@ const AddTeam = ({navigation}) => {
                             marginTop: -6,
                             marginHorizontal: 30,
                           }}
+                          // isDefaultVisible()
+                          // defaultValue={'HELLO'}
+                          defaultValue={isEdit ? route?.params?.teamName : ''}
                         />
 
                         <TextField
@@ -214,6 +307,7 @@ const AddTeam = ({navigation}) => {
                             letterSpacing: 0.57,
                             lineHeight: 19,
                           }}
+                          defaultValue={isEdit ? route.params?.teamName : ''}
                         />
                       </View>
                     </View>
@@ -229,52 +323,101 @@ const AddTeam = ({navigation}) => {
               </View>
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
-                {participantdata.length === 0 ? (
-                  <View style={styles.noplayerView}>
-                    <Text style={styles.noplayers}>No Players Added Yet!</Text>
-                  </View>
+
+                {isEdit ? (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('PlayerProfile', {
+                        teamId: teamId,
+                        tournamentId: tournamentId,
+                        playerId: item._id,
+                      })
+                    }>
+                    {/* <TeamListName source={item.profilePic.url} text={item.name} /> */}
+
+                    <FlatList
+                      data={currentPlayers}
+                      renderItem={renderItem}
+                      keyExtractor={item => item._id}
+                      refreshControl={
+                        <RefreshControl
+                          refreshing={isLoading}
+                          onRefresh={loadPlayers}
+                        />
+                      }
+                    />
+                  </TouchableOpacity>
                 ) : (
-                  <View style={styles.teamsView}>
-                    {participantdata.map(value => (
-                      // console.log(value.image.path)
-                      <View key={value.tempId}>
-                        <TouchableOpacity onPress={handlePlayerList}>
-                          <PlayersList
-                            source={value.image.path}
-                            name={value.name}
-                            designation={value.designation}
-                            expertise={value.expertise}
-                            batting={value.batting}
-                            bowling={value.bowling}
-                            bowlingtype={value.bowlingtype}
-                          />
-                        </TouchableOpacity>
+                  // <Players/>
+                  <>
+                    {participantdata.length === 0 ? (
+                      <View style={styles.noplayerView}>
+                        <Text style={styles.noplayers}>
+                          No Players Added Yet!
+                        </Text>
                       </View>
-                    ))}
-                  </View>
+                    ) : (
+                      <View style={styles.teamsView}>
+                        {participantdata.map(value => (
+                          // console.log(value.image.path)
+                          <View key={value.tempId}>
+                            <TouchableOpacity onPress={()=>handlePlayerList(value,values)}>
+                              <PlayersList
+                                source={value.image.path}
+                                name={value.name}
+                                designation={value.designation}
+                                expertise={value.expertise}
+                                batting={value.batting}
+                                bowling={value.bowling}
+                                bowlingtype={value.bowlingtype}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                  </>
                 )}
               </View>
             </ScrollView>
             <View style={styles.gradientButton}>
-              <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={
-                  participantdata.length === 0
-                    ? ['#999999', '#999999']
-                    : ['#FFBA8C', '#FE5C6A']
-                }
-                text="SAVE TEAM"
-                style={{width: '100%', marginTop: 0, height: 48}}
-                textstyle={{
-                  height: 16,
-                  fontWeight: '500',
-                  fontSize: 14,
-                  letterSpacing: 0.5,
-                  lineHeight: 19,
-                }}
-                onPress={handleSubmit}
-              />
+              {isEdit ? (
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={['#FFBA8C', '#FE5C6A']}
+                  text="UPDATE TEAM"
+                  style={{width: '100%', marginTop: 0, height: 48}}
+                  textstyle={{
+                    height: 16,
+                    fontWeight: '500',
+                    fontSize: 14,
+                    letterSpacing: 0.5,
+                    lineHeight: 19,
+                  }}
+                  onPress={() => handleEdit(values)}
+                />
+              ) : (
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={
+                    participantdata.length === 0
+                      ? ['#999999', '#999999']
+                      : ['#FFBA8C', '#FE5C6A']
+                  }
+                  text="SAVE TEAM"
+                  style={{width: '100%', marginTop: 0, height: 48}}
+                  textstyle={{
+                    height: 16,
+                    fontWeight: '500',
+                    fontSize: 14,
+                    letterSpacing: 0.5,
+                    lineHeight: 19,
+                  }}
+                  onPress={handleSubmit}
+                />
+              )}
             </View>
           </>
         )}

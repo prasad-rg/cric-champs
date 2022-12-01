@@ -3,7 +3,9 @@ import {createSlice} from '@reduxjs/toolkit';
 export const manageTournamentSlice = createSlice({
   name: 'tournamentdata',
   initialState: {
-   
+    isEdit: false,
+    isView: false,
+    editEntity: false,
     teamId: [],
     tournamentdata: {
       code: [],
@@ -12,8 +14,6 @@ export const manageTournamentSlice = createSlice({
       name: [],
       email: [],
     },
-
-   
   },
 
   reducers: {
@@ -27,9 +27,17 @@ export const manageTournamentSlice = createSlice({
     setTeamId: (state, action) => {
       state.teamId = action.payload;
     },
-  
+    setIsEdit: (state, action) => {
+      state.isEdit = action.payload;
+    },
+    setEditEntity : (state, action) => {
+      state.editEntity = action.payload;
+    },
+    setIsView: (state, action) => {
+      state.isView = action.payload;
+    },
   },
 });
-export const {setTournamentData, setTeamId, } =
+export const {setTournamentData, setTeamId, setIsEdit,setEditEntity,setIsView} =
   manageTournamentSlice.actions;
 export default manageTournamentSlice.reducer;

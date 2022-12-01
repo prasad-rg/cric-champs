@@ -32,7 +32,7 @@ const UserControl = ({navigation}) => {
         // setUserData(userInfo);
         dispatch(addUser(userInfo));
       }
-      console.log(userInfo);
+      console.warn(userInfo);
     };
     getUserInfo();
   }, [isLoggedIn]);
@@ -148,6 +148,7 @@ const UserControl = ({navigation}) => {
             style={styles.logout}
             onPress={async () => {
               const res = await logoutUser();
+              // console.log(res)
               if (res.status) {
                 dispatch(logout());
               }

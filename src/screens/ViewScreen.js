@@ -6,18 +6,46 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Share,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 import ViewTournamentTab from '../navigation/ViewTournamentTab';
 import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {setIsView} from '../redux/manageTournamentSlice';
 
 const ViewScreen = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const dispatch = useDispatch();
+
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      dispatch(setIsView(true));
+    }
+  }, [focus]);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${tournamentDetails.code}, Share the tournament code to invite your friends`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
-        {/* <ScrollView> */}
         <ImageBackground
           source={require('../../assets/images/stadium3.png')}
           resizeMode="cover">
@@ -26,7 +54,11 @@ const ViewScreen = ({navigation, route}) => {
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
                   <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        dispatch(setIsView(false));
+                        navigation.goBack();
+                      }}>
                       <Image
                         source={require('../../assets/images/backicon.png')}
                         style={styles.backButtonImage}
@@ -35,14 +67,16 @@ const ViewScreen = ({navigation, route}) => {
                     <Text style={styles.viewText}>View</Text>
                   </View>
                   <View>
-                    <Image
-                      source={require('../../assets/images/share3.png')}
-                      style={{
-                        tintColor: '#FFFFFF',
-                        height: 25,
-                        width: 25,
-                      }}
-                    />
+                    <TouchableOpacity onPress={() => onShare()}>
+                      <Image
+                        source={require('../../assets/images/share3.png')}
+                        style={{
+                          tintColor: '#FFFFFF',
+                          height: 25,
+                          width: 25,
+                        }}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View>
@@ -59,14 +93,10 @@ const ViewScreen = ({navigation, route}) => {
             </SafeAreaView>
           </View>
         </ImageBackground>
-
-        {/* </ScrollView> */}
       </View>
-      {/* <ScrollView contentContainerStyle={{flex: 1}}> */}
       <View
         style={{
           flex: 1,
-          // borderWidth: 2,
           borderColor: 'red',
           justifyContent: 'center',
           alignItems: 'center',
@@ -74,7 +104,6 @@ const ViewScreen = ({navigation, route}) => {
         }}>
         <ViewTournamentTab />
       </View>
-      {/* </ScrollView> */}
     </View>
   );
 };
@@ -120,7 +149,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     height: 28,
-    width: 144,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,

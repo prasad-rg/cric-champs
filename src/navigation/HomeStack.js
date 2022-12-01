@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator,CardStyleInterpolators} from '@react-navigation/stack';
 
 import OnBoardingScreenOne from '../screens/onboardingscreens/OnBoardingScreenOne';
 import OnBoardingScreenTwo from '../screens/onboardingscreens/OnBoardingScreenTwo';
@@ -26,6 +26,7 @@ const HomeStack = () => {
         options={{
           headerShown: false,
           gestureDirection: 'horizontal-inverted',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
     </Stack.Navigator>

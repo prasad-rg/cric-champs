@@ -7,15 +7,74 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ProfileImagePicker from '../components/ProfileImagePicker';
 import TeamInfoTab from '../navigation/TeamInfoTab';
+import {setIsEdit} from '../redux/manageTournamentSlice';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {StackActions} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import {deleteTeam} from '../services/manageTournament2';
+
 const TeamInfoScreen = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
-
+  const dispatch = useDispatch();
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  const teamId = useSelector(state => state.tournamentdata.teamId);
+  const isView = useSelector(state => state.tournamentdata.isView);
+   
   const getDetails = data => {
     setProfilePictureUri(data);
+  };
+
+  const handleEdit = () => {
+    dispatch(setIsEdit(true));
+
+    navigation.dispatch(
+      StackActions.push('AddTeam', {
+        title: 'Edit Team',
+        teamLogo: route?.params.teamLogo,
+        teamName: route?.params.teamName,
+      }),
+    );
+  };
+
+  const deletPlayers = async () => {
+    const data = {
+      tournamentId: tournamentId,
+      teamId: teamId,
+    };
+    const response = await deleteTeam(data);
+    // console.log(response);
+    if (response.status) {
+      navigation.pop(1);
+    } else {
+      console.log('Cannot Delete, Something went wrong');
+    }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Are your sure?',
+      'Are you sure you want to remove this team?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            deletPlayers();
+          },
+        },
+
+        {
+          text: 'No',
+        },
+      ],
+    );
   };
 
   return (
@@ -28,7 +87,11 @@ const TeamInfoScreen = ({navigation, route}) => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      dispatch(setIsEdit(false));
+                      navigation.goBack();
+                    }}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -40,33 +103,37 @@ const TeamInfoScreen = ({navigation, route}) => {
                       : 'UDL Strikers'}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                  }}>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('../../assets/images/pencil.png')}
-                      style={{
-                        tintColor: '#FFFFFF',
-                        height: 25,
-                        width: 25,
-                        marginRight: 23,
-                      }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('../../assets/images/trash.png')}
-                      style={{
-                        tintColor: '#FFFFFF',
-                        height: 25,
-                        width: 25,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
+                {isView ? (
+                  <View></View>
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                    }}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image
+                        source={require('../../assets/images/pencil.png')}
+                        style={{
+                          tintColor: '#FFFFFF',
+                          height: 25,
+                          width: 25,
+                          marginRight: 23,
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleDelete}>
+                      <Image
+                        source={require('../../assets/images/trash.png')}
+                        style={{
+                          tintColor: '#FFFFFF',
+                          height: 25,
+                          width: 25,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
 
               {/* <View style={styles.teamlogoview}>
@@ -78,6 +145,7 @@ const TeamInfoScreen = ({navigation, route}) => {
               <ProfileImagePicker
                 getImageUri={getDetails}
                 profilePictureUri={{uri: route.params.teamLogo}}
+                isView={isView}
               />
             </View>
           </SafeAreaView>

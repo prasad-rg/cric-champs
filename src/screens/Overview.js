@@ -31,16 +31,16 @@ const Overview = ({navigation}) => {
    
     state => state.tournamentdata.tournamentdata,
   );
-  console.log(tournamentdata);
+  // console.log(tournamentdata);
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  console.log(tournamentId);
+
 
   const handlePress = async () => {
     const response = await generateFixture(tournamentId);
-    console.log('responseeeee', response);
+    // console.log('responseeeee', response);
     if (response.data.statusCode !== 200) {
       setModal(false);
       // navigation.navigate('TimeScreen')
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
   headerText: {
     flexDirection: 'row',
     alignItems: 'center',
-    // borderWidth:1,
     justifyContent: 'space-between',
   },
   heading: {
@@ -212,7 +211,6 @@ const styles = StyleSheet.create({
   },
   tourText: {
     height: 14,
-    // width: 143,
     color: '#FFFFFF',
     fontFamily: 'Roboto-Medium',
     fontSize: 12,
@@ -252,15 +250,13 @@ const styles = StyleSheet.create({
   },
   textView: {
     height: 42,
-    // width: 138,
     color: '#4A4A4A',
     fontFamily: 'Roboto-Regular',
     fontSize: 18,
     letterSpacing: 0,
     lineHeight: 21,
     textAlign: 'center',
-    // alignItems:"center"
-    justifyContent: 'center',
+    justifyContent:"center"
   },
   tryText: {
     height: 16,
@@ -275,7 +271,6 @@ const styles = StyleSheet.create({
   },
   matchText: {
     height: 16,
-    // width: 77,
     color: '#4A90E2',
     fontFamily: 'Roboto-Bold',
     fontSize: 14,

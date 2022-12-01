@@ -37,10 +37,9 @@ const OversScreen = ({navigation}) => {
     {label: '50', value: '50', id: 7},
   ];
   const handlePress =async () =>{
-    // navigation.navigate('Ground')
     if(overs!==''){
       const response= await addOvers(oversData);
-      console.log("hiiiiiiiiiiiiiii",response)
+      // console.log("hiiiiiiiiiiiiiii",response)
       if(response.status){
         navigation.navigate('Ground')
       }
@@ -48,19 +47,10 @@ const OversScreen = ({navigation}) => {
     else{
       console.log("overs is required")
     }
-  
-    // const result=response.data()
-    // if (result.status){
-    //   console.log(response)
-    // }else{
-    //   console.log("Something went wrong")
-    // }
-    
-
   }
   const getData= data =>{
     setOvers(data)
-    console.log(data)
+    // console.log(data)
   }
   return (
     <View style={styles.container}>
