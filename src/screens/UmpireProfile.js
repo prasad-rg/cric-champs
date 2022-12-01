@@ -1,14 +1,20 @@
+
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useLayoutEffect} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+
 import AddProfileDetails from '../components/AddProfileDetails';
 import {useSelector} from 'react-redux';
 import {getUmpireDetailsByUmpireIdAndTournamentId} from '../services/viewTournament';
 
 const UmpireProfile = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
+  const isView = useSelector(state => state.tournamentdata.isView);
+
   const getDetails = data => {
     setProfilePictureUri(data);
   };
+
   const [currentUmpire, setCurrentUmpire] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -34,11 +40,16 @@ const UmpireProfile = ({navigation, route}) => {
       setCurrentUmpire(response.data);
       // console.info(response.data);
     }
-    console.log(response);
+    // console.log(response);
   };
-  useEffect(() => {
-    loadUmpire();
-  }, []);
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadUmpire();
+    }
+  }, [focus]);
+
+
   // console.warn(route.params, tournamentDetails._id);
   const Details = [
     {
@@ -61,12 +72,17 @@ const UmpireProfile = ({navigation, route}) => {
     <View style={styles.primaryContainer}>
       <ScrollView>
         <AddProfileDetails
+          umpireId={route.params.umpireId}
           navigation={navigation}
           title={route.params.umpireName}
           backroundImageUri={require('../../assets/images/umpire.png')}
           getImageUri={getDetails}
+          isView={isView}
+          isEdit ={route.params.isEdit}
+          type="umpire"
           profilePictureUri={{
             uri: route.params.umpirePicture,
+         
           }}></AddProfileDetails>
         <View>
           {Details.map(item => (

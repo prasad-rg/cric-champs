@@ -13,20 +13,24 @@ import React, {useLayoutEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import TeamListName from '../components/TeamListName';
 import {useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
-
+import {StackActions, useIsFocused} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import {getUmpiresByTournamentId} from '../services/viewTournament';
+import {setIsEdit} from '../redux/manageTournamentSlice';
+import {setEditEntity} from '../redux/manageTournamentSlice';
 
 const UmpiresList = ({navigation}) => {
   const [currentUmpires, setCurrentUmpires] = useState([]);
+  const [selectedUmpire, setSelectedUmpire] = useState('');
+  const dispatch = useDispatch();
   // console.log("current umpires",currentUmpires)
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  
+
   const loadUmpires = async () => {
     const response = await getUmpiresByTournamentId(tournamentId);
-    console.log('resp', response);
+    // console.log('resp', response);
 
     if (response.status) {
       setCurrentUmpires(response.data);
@@ -47,7 +51,49 @@ const UmpiresList = ({navigation}) => {
     navigation.navigate('DateScreen');
   };
 
- 
+  const handleEdit = () => {
+    dispatch(setIsEdit(false));
+    dispatch(setEditEntity(true));
+    // console.log('Currrrrenttttt', selectedUmpire);
+    navigation.dispatch(
+      StackActions.push('AddUmpire'),
+    );
+  };
+
+  // const deleteUmpire = async () => {
+  //   const data = {
+  //     tournamentId: tournamentDetails._id,
+  //     groundId: route.params.groundId,
+  //   };
+  //   console.log(data);
+  //   const response = await deleteParticularUmpire(data);
+  //   console.log(response);
+  //   if (response.status){
+  //     navigation.pop(1)
+  //   }else{
+  //     console.log("Cannot Delete, Something went wrong")
+  //   }
+  // };
+
+  // const handleDelete = () => {
+  //   Alert.alert(
+  //     'Are your sure?',
+  //     'Are you sure you want to remove this umpire?',
+  //     [
+  //       {
+  //         text: 'Yes',
+  //         onPress: () => {
+  //           deleteUmpire();
+  //         },
+  //       },
+
+  //       {
+  //         text: 'No',
+  //       },
+  //     ],
+  //   );
+  // };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -58,13 +104,31 @@ const UmpiresList = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image
-                      source={require('../../assets/images/backicon.png')}
-                      style={styles.backButtonImage}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.umpireText}>Umpires</Text>
+                  <View style={styles.leftHeader}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Image
+                        source={require('../../assets/images/backicon.png')}
+                        style={styles.backButtonImage}
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.umpireText}>Umpires</Text>
+                  </View>
+
+                  {/* <View style={styles.rightHeader}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image
+                        source={require('../../assets/images/pencil.png')}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    // onPress={handleDelete}
+                    >
+                      <Image
+                        source={require('../../assets/images/trash.png')}
+                        style={{marginHorizontal: '5%'}}
+                      />
+                    </TouchableOpacity>
+                  </View> */}
                 </View>
 
                 <TouchableOpacity
@@ -84,14 +148,29 @@ const UmpiresList = ({navigation}) => {
             </View>
           ) : (
             <View>
-              {currentUmpires.map(value => (
-                <View key={value?._id}>
-                  <TeamListName
-                    source={value?.profilePic.url}
-                    text={value?.name}
-                  />
-                </View>
-              ))}
+              {currentUmpires.map(
+                value => (
+                
+                  (
+                    <View key={value?._id}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('UmpireProfile', {
+                            umpireId: value._id,
+                            umpireName: value.name,
+                            umpirePicture: value.profilePic.url,
+                            setIsEdit:dispatch(setIsEdit(true))
+                          })
+                        }>
+                        <TeamListName
+                          source={value?.profilePic.url}
+                          text={value?.name}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )
+                ),
+              )}
             </View>
           )}
         </View>
@@ -156,6 +235,7 @@ const styles = StyleSheet.create({
   headerText: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   addumpireText: {
     height: 14,
@@ -230,5 +310,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: 18,
     textAlign: 'center',
+  },
+  rightHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  leftHeader: {
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 });

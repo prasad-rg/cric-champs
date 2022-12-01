@@ -21,8 +21,15 @@ import RadioForm, {
       setValue(value);
       setIndex(index);
       onPress(value,index);
-    console.log("value",value,index)
-    
+    // console.log("value",value,index)
+    if(index==0)
+    {
+      
+    }
+
+      // if(value ){
+      //   console.log("I amzero")
+      // }
     };
 
     return (

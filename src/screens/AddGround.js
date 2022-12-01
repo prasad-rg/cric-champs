@@ -4,20 +4,22 @@ import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
 import AddProfileDetails from '../components/AddProfileDetails';
-import {addGround, deleteGround} from '../redux/GroundSlice';
+import {addGround} from '../redux/GroundSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
 import uuid from 'react-native-uuid';
-import {addGrounds} from '../services/manageTournament2';
-
+import {addGrounds, updateGround} from '../services/manageTournament2';
+import {setEditEntity} from '../redux/manageTournamentSlice';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {cleanSingle} from 'react-native-image-crop-picker';
+import { deleteParticularGround } from '../services/manageTournament2';
 
-const AddGround = ({navigation}) => {
+const AddGround = ({navigation, route}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
+  const editEntity = useSelector(state => state.tournamentdata.editEntity);
 
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const dispatch = useDispatch();
@@ -29,12 +31,36 @@ const AddGround = ({navigation}) => {
     city: yup.string().required(),
   });
 
+  const handleUpdate = async values => {
+    if (profilePictureUri !== '') {
+      var formData = createFormData({
+        ...values,
+        image: profilePictureUri,
+        tournamentId: tournamentId,
+        groundId: route.params.groundId,
+      });
+  
+    } else {
+      var formData = createFormData({
+        ...values,
+        tournamentId: tournamentId,
+        groundId: route.params.groundId,
+      });
+    }
+    
+    const response = await updateGround(formData)
+    if(response.status){
+      navigation.pop(2)
+      dispatch(setEditEntity(false))
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Formik
         validationSchema={addPlayerValidationSchema}
         initialValues={{
-          name: '',
+          name: editEntity ? route.params?.groundName : '',
           city: '',
           latitude: '',
           longitude: '',
@@ -48,25 +74,36 @@ const AddGround = ({navigation}) => {
             };
             const groundData = createFormData(data);
             const response = await addGrounds(groundData);
-          
+
             if (response.status) {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
-              
-            }else{
-              console.log('Something went wrong')
+            } else {
+              console.log('Something went wrong');
             }
+          }else{
+            console.log("Profile Picture not uploaded")
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>
             <KeyboardAwareScrollView>
-              <AddProfileDetails
-                backroundImageUri={require('../../assets/images/ground1.png')}
-                title="Add Ground"
-                navigation={navigation}
-                getImageUri={getDetails}
-              />
+              {editEntity && profilePictureUri == '' ? (
+                <AddProfileDetails
+                  backroundImageUri={require('../../assets/images/ground1.png')}
+                  title={editEntity ? 'Edit Ground' : 'Add Ground'}
+                  navigation={navigation}
+                  getImageUri={getDetails}
+                  profilePictureUri={route.params.groundImage}
+                />
+              ) : (
+                <AddProfileDetails
+                  backroundImageUri={require('../../assets/images/ground1.png')}
+                  title={editEntity ? 'Edit Ground' : 'Add Ground'}
+                  navigation={navigation}
+                  getImageUri={getDetails}
+                />
+              )}
               <View style={styles.form}>
                 <TextField
                   label="Ground Name"
@@ -90,6 +127,7 @@ const AddGround = ({navigation}) => {
                     letterSpacing: 0.57,
                     lineHeight: 19,
                   }}
+                  defaultValue={editEntity ? route.params.groundName : ''}
                 />
                 <TextField
                   label="City"
@@ -160,22 +198,47 @@ const AddGround = ({navigation}) => {
               </View>
             </KeyboardAwareScrollView>
             <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-              <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={values.name === ''  ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
-
-                text="SAVE GROUND"
-                onPress={handleSubmit}
-                style={{height: 50, width: '100%', marginTop: 0}}
-                textstyle={{
-                  height: 16,
-                  fontWeight: '500',
-                  fontSize: 14,
-                  letterSpacing: 0.5,
-                  lineHeight: 19,
-                }}
-              />
+              {editEntity ? (
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={
+                    values.name === ''
+                      ? ['#999999', '#999999']
+                      : ['#FFBA8C', '#FE5C6A']
+                  }
+                  text="UPDATE GROUND"
+                  onPress={() => handleUpdate(values)}
+                  style={{height: 50, width: '100%', marginTop: 0}}
+                  textstyle={{
+                    height: 16,
+                    fontWeight: '500',
+                    fontSize: 14,
+                    letterSpacing: 0.5,
+                    lineHeight: 19,
+                  }}
+                />
+              ) : (
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={
+                    values.name === ''
+                      ? ['#999999', '#999999']
+                      : ['#FFBA8C', '#FE5C6A']
+                  }
+                  text="SAVE GROUND"
+                  onPress={handleSubmit}
+                  style={{height: 50, width: '100%', marginTop: 0}}
+                  textstyle={{
+                    height: 16,
+                    fontWeight: '500',
+                    fontSize: 14,
+                    letterSpacing: 0.5,
+                    lineHeight: 19,
+                  }}
+                />
+              )}
             </View>
           </>
         )}
