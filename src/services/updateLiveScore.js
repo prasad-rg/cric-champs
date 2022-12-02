@@ -25,7 +25,7 @@ export const cancelLiveTournament = async (matchId, statusMessage) => {
 export const updateLiveScore = async liveScore => {
   const validateAndGetToken = await refreshTokenIfExpired();
   if (validateAndGetToken !== null) {
-    console.info('------Response------', liveScore);
+    // console.info('------Response------', liveScore);
     try {
       const response = await axios.put(
         `${BASE_URL}/api/match/live-score`,
@@ -50,11 +50,13 @@ export const getPlayingPlayersList = async (
   team1Id,
   team2Id,
 ) => {
+  // console.log('-----------------', tournamentId, matchId, team1Id, team2Id);
   try {
     const response = await axios.get(
       `${BASE_URL}/api/match/live-score-simplified?tournamentId=${tournamentId}&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
     );
     const data = response.data;
+    // console.log(data);
     return data;
   } catch (error) {
     return error.response.data;

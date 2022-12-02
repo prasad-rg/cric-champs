@@ -168,14 +168,14 @@ export const convertLiveScoreData = (
     extrasObj = {
       ...modifieDataTosend.extras,
       status: true,
-      wide: wideRuns,
+      wide: +wideRuns,
     };
   } else if (runs !== null && extras !== null && extras === 'Bye') {
     batsmanRuns = 0;
-    extrasObj = {...modifieDataTosend.extras, status: true, bye: runs};
+    extrasObj = {...modifieDataTosend.extras, status: true, bye: +runs};
   } else if (runs !== null && extras !== null && extras === 'Lb') {
     batsmanRuns = 0;
-    extrasObj = {...modifieDataTosend.extras, status: true, legBye: runs};
+    extrasObj = {...modifieDataTosend.extras, status: true, legBye: +runs};
   } else {
     if (extras !== null && extras === 'Nb') {
       batsmanRuns = runs;

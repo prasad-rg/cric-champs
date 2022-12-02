@@ -43,7 +43,7 @@ import {
   swapTeamPlayers,
 } from '../redux/updateLiveScore';
 import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
-import {TIME_TO_FLIP} from '../api/constants';
+import {TIME_TO_END_MATCH, TIME_TO_FLIP} from '../api/constants';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -162,7 +162,16 @@ const UpdateLiveScore = ({navigation, route}) => {
   const getWickets = (data, index) => {
     // console.log(data);
     if (data === null) {
-      setWickets({...liveScoreDataStructure.wickets});
+      setWickets({
+        status: false,
+        batsmanId: '',
+        batsman: '',
+        type: '',
+        fielderName: '',
+        new_batsmanId: '',
+        new_batsman: '',
+        bowlerName: '',
+      });
       setWicketsModal({...wicketsModal, newBatsmanModal: false});
     } else {
       if (data !== 'Run Out' && data !== 'Other' && data !== 'Caught') {
@@ -210,10 +219,25 @@ const UpdateLiveScore = ({navigation, route}) => {
 
     console.info(updateScores);
 
+    // console.info(updateScores);
+
     // TODO:---------------------------Think
 
+    console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
+    console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
+
     const update = await updateLiveScore(updateScores);
-    console.info('+++++++PUT Req Res+++++++', update.data);
+    if (
+      updateScores.commentry.balls + 1 === 7 &&
+      update?.tournamentEntitledOvers !== updateScores.commentry.over
+    ) {
+      setInitialPlayerSelectionModal({
+        ...initialPlayersSelectionModal,
+        bowlerModal: true,
+      });
+    }
+    console.log('000000', update);
+    let inningsTwoUpdate;
     if (update.status) {
       if (update?.message === TIME_TO_FLIP) {
         dispatch(swapTeamId());
@@ -222,36 +246,134 @@ const UpdateLiveScore = ({navigation, route}) => {
           ...initialPlayersSelectionModal,
           strikeModal: true,
         });
-      } else {
-        const simplifiedResponse = await getPlayingPlayersList(
-          tournamentDetails._id,
-          matchId,
-          battingTeamId,
-          bowlingTeamId,
+
+        console.info('.....BattingTeamId....AfterSwap', battingTeamId);
+        console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
+
+        inningsTwoUpdate = await updateLiveScore(
+          convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            bowlingTeamId,
+            battingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          ),
         );
-        console.info('=========================', simplifiedResponse?.data);
-        let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
-        setPresentScoreFromAPI({
-          ...presentScoreFromAPI,
-          runs: currentScores.runs,
-          overs: currentScores.over,
-          balls: currentScores.balls,
-          wickets: currentScores.wickets,
-        });
-        setRemainingPlayersToBat(simplifiedResponse?.data?.remainingBatsMan);
-        setOvers({overs: currentScores.over, balls: currentScores.balls});
-        setStrike({
-          strike: currentScores.strike,
-          strikeName: currentScores.strikeName,
-        });
-        setNonStrike({
-          nonStrike: currentScores.nonStrike,
-          nonStrikeName: currentScores.nonStrikeName,
-        });
-        dispatch(changeUpdatePressedState());
-        setRuns(liveScoreDataStructure.runs);
-        setWickets(liveScoreDataStructure.wickets);
-        setExtras(liveScoreDataStructure.extras);
+
+        // console.log(
+        //   '======Converted Data====',
+        //   convertLiveScoreData(
+        //     runs,
+        //     extras,
+        //     wickets,
+        //     bowlingTeamId,
+        //     battingTeamId,
+        //     matchId,
+        //     tournamentDetails._id,
+        //     matchAndInningsStatus.matchStatus,
+        //     matchAndInningsStatus.inningsStatus,
+        //     bowler,
+        //     nonStrike,
+        //     strike,
+        //     presentScoreFromAPI,
+        //   ),
+        // );
+
+        console.info('--------------', inningsTwoUpdate);
+        if (update?.message === TIME_TO_END_MATCH) {
+          console.log('Got a Hit');
+          let lastData = convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            battingTeamId,
+            bowlingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          );
+          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          const endMatchNow = await updateLiveScore({
+            ...lastData,
+            matchStatus: 'end',
+          });
+          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          if (endMatchNow?.matchDone?.statusMessage) {
+            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+          }
+        }
+      } else {
+        if (update?.message === TIME_TO_END_MATCH) {
+          console.log('Got a Hit');
+          let lastData = convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            battingTeamId,
+            bowlingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          );
+          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          const endMatchNow = await updateLiveScore({
+            ...lastData,
+            matchStatus: 'end',
+          });
+          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          if (endMatchNow?.matchDone?.statusMessage) {
+            console.log(endMatchNow?.matchDone);
+            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+          }
+        } else {
+          const simplifiedResponse = await getPlayingPlayersList(
+            tournamentDetails._id,
+            matchId,
+            battingTeamId,
+            bowlingTeamId,
+          );
+          // console.info('=========================', simplifiedResponse?.data);
+          let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
+          setPresentScoreFromAPI({
+            ...presentScoreFromAPI,
+            runs: currentScores.runs,
+            overs: currentScores.over,
+            balls: currentScores.balls,
+            wickets: currentScores.wickets,
+          });
+          setRemainingPlayersToBat(simplifiedResponse?.data?.remainingBatsMan);
+          setOvers({overs: currentScores.over, balls: currentScores.balls});
+          setStrike({
+            strike: currentScores.strike,
+            strikeName: currentScores.strikeName,
+          });
+          setNonStrike({
+            nonStrike: currentScores.nonStrike,
+            nonStrikeName: currentScores.nonStrikeName,
+          });
+          dispatch(changeUpdatePressedState());
+          setRuns(liveScoreDataStructure.runs);
+          setWickets(liveScoreDataStructure.wickets);
+          setExtras(liveScoreDataStructure.extras);
+        }
       }
     }
   };
@@ -329,18 +451,12 @@ const UpdateLiveScore = ({navigation, route}) => {
     stopModal: false,
     customChooseModal: false,
   });
-  console.info(
-    'Match Details -----',
-    team1Id,
-    team2Id,
-    tournamentDetails._id,
-    matchId,
-  );
 
   const focus = useIsFocused(); // useIsFocused as shown
 
-  useLayoutEffect(() => {
-    if (focus == true) {
+  useEffect(() => {
+    dispatch(addTeamId({team1Id, team2Id}));
+    if (focus === true) {
       const getStatus = async () => {
         const response = await getMatchStatus(matchId);
         if (response?.status) {
@@ -352,7 +468,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             dispatch(addTeam1Players(response?.data?.team1Player));
             dispatch(addTeam2Players(response?.data?.team2Player));
             // console.log(response?.data?.team2Player);
-            dispatch(addTeamId({team1Id, team2Id}));
+
             let openerSelectionCheck = initalPlayerSelected.filter(
               item => item.matchId === matchId,
             );
@@ -379,10 +495,19 @@ const UpdateLiveScore = ({navigation, route}) => {
             const result = await getPlayingPlayersList(
               tournamentDetails._id,
               matchId,
-              battingTeamId,
               bowlingTeamId,
+              battingTeamId,
             );
+            // console.info(
+            //   'Match Details -----',
+            //   team1Id,
+            //   team2Id,
+            //   tournamentDetails._id,
+            //   matchId,
+            // );
+            // console.warn('=============Got a Hit', result?.data?.scoreOfTeam1);
             if (result?.data?.scoreOfTeam1?.inningsMessage === 'Innings Done') {
+              // console.info(result?.data?.scoreOfTeam1?.inningsMessage);
               setStrike({
                 strike: result?.data?.scoreOfTeam1?.strike,
                 strikeName: result?.data?.scoreOfTeam1?.strikeName,
@@ -390,6 +515,40 @@ const UpdateLiveScore = ({navigation, route}) => {
               setNonStrike({
                 nonStrike: result?.data?.scoreOfTeam1?.nonStrike,
                 nonStrikeName: result?.data?.scoreOfTeam1?.nonStrikeName,
+              });
+
+              setPresentScoreFromAPI({
+                runs: result?.data?.scoreOfTeam1?.runs,
+                overs: result?.data?.scoreOfTeam1?.over,
+                wickets: result?.data?.scoreOfTeam1?.wickets,
+                balls: result?.data?.scoreOfTeam1?.balls,
+              });
+            } else {
+              setMatchAndInningsStatus({
+                matchStatus: 'start',
+                inningsStatus: 'start',
+              });
+              dispatch(addTeam1Players(response?.data?.team1Player));
+              dispatch(addTeam2Players(response?.data?.team2Player));
+              setStrike({
+                strike: result?.data?.scoreOfTeam1?.strike,
+                strikeName: result?.data?.scoreOfTeam1?.strikeName,
+              });
+              setNonStrike({
+                nonStrike: result?.data?.scoreOfTeam1?.nonStrike,
+                nonStrikeName: result?.data?.scoreOfTeam1?.nonStrikeName,
+              });
+
+              setPresentScoreFromAPI({
+                runs: result?.data?.scoreOfTeam1?.runs,
+                overs: result?.data?.scoreOfTeam1?.over,
+                wickets: result?.data?.scoreOfTeam1?.wickets,
+                balls: result?.data?.scoreOfTeam1?.balls,
+              });
+              //Tell him to add bowler
+              setBowler({
+                bowler: result?.data?.scoreOfTeam1?.bowler,
+                bowlerName: result?.data?.scoreOfTeam1?.bowlerName,
               });
             }
           }
@@ -607,7 +766,7 @@ const UpdateLiveScore = ({navigation, route}) => {
                 </View>
               </TouchableOpacity>
             </View>
-            <View key={strike.strike} style={styles.listview}>
+            <View key={nonStrike.nonStrike} style={styles.listview}>
               <TouchableOpacity
                 onPress={() => {
                   setWickets({
@@ -659,7 +818,11 @@ const UpdateLiveScore = ({navigation, route}) => {
           </ScrollView>
         </CustomChooseModal>
         <CustomChooseModal
-          visible={wicketsModal.newBatsmanModal}
+          visible={
+            remainingPlayersToBat.length === 0
+              ? false
+              : wicketsModal.newBatsmanModal
+          }
           onPress={() =>
             setWicketsModal({...wicketsModal, newBatsmanModal: false})
           }>
