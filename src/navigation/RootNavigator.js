@@ -29,6 +29,8 @@ import MatchDetails from '../screens/MatchDetails';
 import AddGround from '../screens/AddGround';
 import AddUmpire from '../screens/AddUmpire';
 import ManageTournament from '../screens/ManageTournament';
+import EditPlayers from '../screens/EditPlayers';
+import EditTeam from '../screens/EditTeam';
 
 const Stack = createStackNavigator();
 
@@ -159,6 +161,16 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AddPlayer"
           component={AddPlayer}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EditPlayers"
+          component={EditPlayers}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EditTeam"
+          component={EditTeam}
           options={{headerShown: false}}
         />
         <Stack.Screen

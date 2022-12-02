@@ -44,7 +44,7 @@ const AppBar = ({
 
   const handleEditPlayer = () => {
     navigation.dispatch(
-      StackActions.push('AddPlayer', {
+      StackActions.push('EditPlayers', {
         playerLogo: profilePictureUri,
         playerName: title,
         playerId: playerId,

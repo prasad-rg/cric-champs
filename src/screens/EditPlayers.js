@@ -15,10 +15,10 @@ import * as yup from 'yup';
 import {Alert} from 'react-native';
 import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
-import {setEditEntity} from '../redux/manageTournamentSlice';
+
 import Toast from 'react-native-simple-toast';
 
-const AddPlayer = ({navigation, route}) => {
+const EditPlayers = ({navigation, route}) => {
   const [designation, setDesignation] = useState('');
   const [expertise, setExpertise] = useState('');
   const [batting, setBatting] = useState('');
@@ -28,7 +28,6 @@ const AddPlayer = ({navigation, route}) => {
   const [name, setName] = useState('');
   const dispatch = useDispatch();
 
-  const editEntity = useSelector(state => state.tournamentdata.editEntity);
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
@@ -140,9 +139,8 @@ const AddPlayer = ({navigation, route}) => {
     if (response.status) {
       navigation.pop(2);
       dispatch(setIsEdit(false));
-      dispatch(setEditEntity(false));
-    }else{
-      Toast.show("Something went wrong, Please try again 😭")
+    } else {
+      Toast.show('Something went wrong, Please try again 😭');
     }
   };
 
@@ -151,36 +149,17 @@ const AddPlayer = ({navigation, route}) => {
       <Formik
         validationSchema={addPlayerValidationSchema}
         initialValues={{
-          name: editEntity ? route.params?.playerName : '',
+          name: route.params?.playerName,
           city: '',
           phoneNo: '',
-        }}
-        onSubmit={values => {
-          setName(values.name);
-          if (profilePictureUri !== '') {
-            let data = {
-              ...values,
-              tempId: uuid.v4(),
-              designation: designation,
-              expertise: expertise,
-              batting: batting,
-              bowling: bowling,
-              bowlingtype: bowlingtype,
-              image: profilePictureUri,
-            };
-            dispatch(addTeam(data));
-            navigation.pop();
-          } else {
-            Toast.show('Please Add profile picture');
-          }
         }}>
-        {({handleChange, handleBlur, handleSubmit, values}) => (
+        {({handleChange, handleBlur, values}) => (
           <>
             <KeyboardAwareScrollView>
-              {editEntity && profilePictureUri === '' ? (
+              {profilePictureUri === '' ? (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/dhoni.jpeg')}
-                  title={editEntity ? 'Update Player' : 'Add Player'}
+                  title="Update Player"
                   navigation={navigation}
                   getImageUri={getDetails}
                   profilePictureUri={route.params?.playerLogo}
@@ -188,11 +167,12 @@ const AddPlayer = ({navigation, route}) => {
               ) : (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/dhoni.jpeg')}
-                  title={editEntity ? 'Update Player' : 'Add Player'}
+                  title="Update Player"
                   navigation={navigation}
                   getImageUri={getDetails}
                 />
               )}
+
               <View style={styles.form}>
                 <TextField
                   label="Player Name"
@@ -216,7 +196,7 @@ const AddPlayer = ({navigation, route}) => {
                     letterSpacing: 0.57,
                     lineHeight: 19,
                   }}
-                  defaultValue={editEntity ? route.params?.playerName : ''}
+                    defaultValue={ route.params?.playerName }
                 />
                 <TextField
                   label="City / Town (Optional)"
@@ -506,47 +486,25 @@ const AddPlayer = ({navigation, route}) => {
               />
             </KeyboardAwareScrollView>
             <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-              {editEntity ? (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    values.name === ''
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="EDIT PLAYER"
-                  onPress={() => handleEdit(values)}
-                  style={{height: 50, width: '100%', marginTop: 0}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                />
-              ) : (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    values.name === ''
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="SAVE PLAYER"
-                  onPress={handleSubmit}
-                  style={{height: 50, width: '100%', marginTop: 0}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                />
-              )}
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={
+                  values.name === ''
+                    ? ['#999999', '#999999']
+                    : ['#FFBA8C', '#FE5C6A']
+                }
+                text="EDIT PLAYER"
+                onPress={() => handleEdit(values)}
+                style={{height: 50, width: '100%', marginTop: 0}}
+                textstyle={{
+                  height: 16,
+                  fontWeight: '500',
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  lineHeight: 19,
+                }}
+              />
             </View>
           </>
         )}
@@ -555,7 +513,7 @@ const AddPlayer = ({navigation, route}) => {
   );
 };
 
-export default AddPlayer;
+export default EditPlayers;
 
 const styles = StyleSheet.create({
   container: {
