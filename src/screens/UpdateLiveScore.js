@@ -43,7 +43,7 @@ import {
   swapTeamPlayers,
 } from '../redux/updateLiveScore';
 import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
-import {TIME_TO_END_MATCH, TIME_TO_FLIP} from '../api/constants';
+import {DECLARE_END, TIME_TO_END_MATCH, TIME_TO_FLIP} from '../api/constants';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -288,7 +288,10 @@ const UpdateLiveScore = ({navigation, route}) => {
         // );
 
         console.info('--------------', inningsTwoUpdate);
-        if (update?.message === TIME_TO_END_MATCH) {
+        if (
+          update?.message === TIME_TO_END_MATCH ||
+          update?.message === DECLARE_END
+        ) {
           console.log('Got a Hit');
           let lastData = convertLiveScoreData(
             runs,
@@ -316,7 +319,10 @@ const UpdateLiveScore = ({navigation, route}) => {
           }
         }
       } else {
-        if (update?.message === TIME_TO_END_MATCH) {
+        if (
+          update?.message === TIME_TO_END_MATCH ||
+          update?.message === DECLARE_END
+        ) {
           console.log('Got a Hit');
           let lastData = convertLiveScoreData(
             runs,
@@ -453,9 +459,9 @@ const UpdateLiveScore = ({navigation, route}) => {
   });
 
   const focus = useIsFocused(); // useIsFocused as shown
+  dispatch(addTeamId({team1Id, team2Id}));
 
   useEffect(() => {
-    dispatch(addTeamId({team1Id, team2Id}));
     if (focus === true) {
       const getStatus = async () => {
         const response = await getMatchStatus(matchId);
@@ -495,8 +501,8 @@ const UpdateLiveScore = ({navigation, route}) => {
             const result = await getPlayingPlayersList(
               tournamentDetails._id,
               matchId,
-              bowlingTeamId,
               battingTeamId,
+              bowlingTeamId,
             );
             // console.info(
             //   'Match Details -----',
@@ -507,6 +513,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             // );
             // console.warn('=============Got a Hit', result?.data?.scoreOfTeam1);
             if (result?.data?.scoreOfTeam1?.inningsMessage === 'Innings Done') {
+              // dispatch(swapTeamId());
               // console.info(result?.data?.scoreOfTeam1?.inningsMessage);
               setStrike({
                 strike: result?.data?.scoreOfTeam1?.strike,
