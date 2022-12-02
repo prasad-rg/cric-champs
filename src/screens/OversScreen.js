@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   Platform,
+  ActivityIndicator
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -16,6 +17,7 @@ import GradientButton from '../components/GradientButton';
 import { addOvers } from '../services/manageTournament2';
 import { useSelector } from 'react-redux';
 const OversScreen = ({navigation}) => {
+  const [isLoading,setIsLoading]=useState(false)
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
@@ -37,8 +39,11 @@ const OversScreen = ({navigation}) => {
     {label: '50', value: '50', id: 7},
   ];
   const handlePress =async () =>{
+    
     if(overs!==''){
+      setIsLoading(true)
       const response= await addOvers(oversData);
+      setIsLoading(false)
       console.log("hiiiiiiiiiiiiiii",response)
       if(response.status){
         navigation.navigate('Ground')
@@ -50,7 +55,7 @@ const OversScreen = ({navigation}) => {
   }
   const getData= data =>{
     setOvers(data)
-    console.log(data)
+    // console.log(data)
   }
   return (
     <View style={styles.container}>
@@ -93,7 +98,12 @@ const OversScreen = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+      {isLoading ? (
+         <View style={{marginBottom: 20}}>
+         <ActivityIndicator size="large" color="#FFBA8C" />
+         </View>
+      ):(
+        <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
@@ -110,6 +120,7 @@ const OversScreen = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
+      )}
     </View>
   );
 };

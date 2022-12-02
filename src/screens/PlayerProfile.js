@@ -6,7 +6,9 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+
 import AddProfileDetails from '../components/AddProfileDetails';
 import {TextField} from 'rn-material-ui-textfield';
 import GradientButton from '../components/GradientButton';
@@ -18,6 +20,7 @@ import {useSelector} from 'react-redux';
 import {getPlayerDetailsByTeamIdAndTournamentIdAndPlayerId} from '../services/viewTournament';
 
 const PlayerProfile = ({navigation, route}) => {
+
   const [gender, setGender] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const getDetails = data => {
@@ -28,6 +31,7 @@ const PlayerProfile = ({navigation, route}) => {
   const [currentPlayerDetails, setCurrentPlayerDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const isView = useSelector(state => state.tournamentdata.isView);
 
   const loadPlayerDetails = async () => {
     setIsLoading(true);
@@ -42,22 +46,42 @@ const PlayerProfile = ({navigation, route}) => {
     }
   };
 
+  // const data={
+  // teamName:inputValues.name,
+  // name:value.name,
+  // city:inputValues.city,
+  // batting:value.batting,
+  // bowling:value.bowling,
+  // bowlingtype:value.bowlingtype,
+  // designation:value.designation,
+  // expertise:value.expertise,
+  // }
+
   const Details = [
     {
       id: 1,
       title: 'City / Town',
-      value: currentPlayerDetails?.city,
+      value: currentPlayerDetails?.city
+        ? currentPlayerDetails?.city
+        : route.params.city
+        ? route.params.city
+        : 'NA',
     },
     {
       id: 2,
       title: 'Team',
-      value: currentPlayerDetails?.teamId?.name,
+      value: currentPlayerDetails?.teamId?.name
+        ? currentPlayerDetails?.teamId?.name
+        : route.params?.teamName
+        ? route.params?.teamName
+        : 'NA',
     },
     {
       id: 3,
       title: 'Captain',
       value:
-        currentPlayerDetails?.designation?.toLowerCase() === 'captain'
+        currentPlayerDetails?.designation?.toLowerCase() === 'captain' ||
+        route.params.designation?.toLowerCase() === 'captain'
           ? 'Yes'
           : 'No',
     },
@@ -66,24 +90,34 @@ const PlayerProfile = ({navigation, route}) => {
       title: 'Role',
       // value: 'batsman / Captain',
       value:
-        currentPlayerDetails?.expertise?.toLowerCase() === 'batting'
+        currentPlayerDetails?.expertise?.toLowerCase() === 'batting' ||
+        route.params?.expertise?.toLowerCase() === 'batting'
           ? 'Batsman / '
-          : currentPlayerDetails?.expertise?.toLowerCase() === 'bowling'
+          : currentPlayerDetails?.expertise?.toLowerCase() === 'bowling' ||
+            route.params?.expertise?.toLowerCase() === 'bowling'
           ? 'Bowler / '
-          : currentPlayerDetails?.expertise?.toLowerCase() === 'all rounder'
+          : currentPlayerDetails?.expertise?.toLowerCase() === 'all rounder' ||
+            route.params?.expertise?.toLowerCase() === 'all rounder'
           ? 'All Rounder /'
           : 'Player /',
     },
     {
       id: 5,
       title: 'Batting Style',
-      value: currentPlayerDetails?.batting,
+      value: currentPlayerDetails?.batting
+        ? currentPlayerDetails?.batting
+        : route.params?.batting
+        ? route.params?.batting
+        : 'NA',
     },
     {
       id: 6,
       title: 'Bowling Style',
-      value:
-        currentPlayerDetails?.bowling + ' ' + currentPlayerDetails?.bowlingType,
+      value: currentPlayerDetails?.bowlingType
+        ? currentPlayerDetails?.bowlingType
+        : route.params.bowlingType
+        ? route.params.bowlingType
+        : 'NA',
     },
     {
       id: 7,
@@ -106,10 +140,13 @@ const PlayerProfile = ({navigation, route}) => {
       value: 'Man of the Match (Match 5)',
     },
   ];
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadPlayerDetails();
+    }
+  }, [focus]);
 
-  useEffect(() => {
-    loadPlayerDetails();
-  }, []);
   return (
     <View style={styles.primaryContainer}>
       <ScrollView
@@ -120,14 +157,25 @@ const PlayerProfile = ({navigation, route}) => {
           />
         }>
         <AddProfileDetails
+          playerId={route.params.playerId}
           navigation={navigation}
-          title={currentPlayerDetails?.name}
+          isView={isView}
+          title={
+            currentPlayerDetails?.name
+              ? currentPlayerDetails?.name
+              : route.params.name
+              ? route.params.name
+              : ''
+          }
           getImageUri={getDetails}
+          type="player"
           profilePictureUri={{
-            uri: currentPlayerDetails?.profilePic?.url,
-          }}>
-           
-          </AddProfileDetails>
+            uri: currentPlayerDetails?.profilePic?.url
+              ? currentPlayerDetails?.profilePic?.url
+              : route.params.image
+              ? route.params.image
+              : null,
+          }}></AddProfileDetails>
         <View>
           {Details.map(item => (
             <View key={item.id} style={styles.listview}>

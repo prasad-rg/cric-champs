@@ -4,7 +4,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Button,
-  ScrollView,
+  ScrollView,ActivityIndicator
 } from 'react-native';
 import React, {useState} from 'react';
 import {TimePickerModal, TimePicker} from 'react-native-paper-dates';
@@ -30,6 +30,7 @@ const EndTime = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading,setIsLoading]=useState(false)
 
   const onDismiss = React.useCallback(() => {
     setVisible(false);
@@ -61,14 +62,16 @@ const EndTime = ({navigation}) => {
 
 
   const handlePress = async () => {
+    setIsLoading(true)
     const timeData = {
       tournamentId: tournamentId,
       startTimeInISO: getISOTime(startTime),
       endTimeInISO: getISOTime(endTime),
     };
-    console.log(timeData);
+    // console.log(timeData);
     const response = await addTime(timeData);
     console.log('I am response for time', response.data);
+    setIsLoading(false)
     if (response.data.status) {
       navigation.navigate('Overview');
     }
@@ -94,7 +97,12 @@ const EndTime = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={styles.gradientButton}>
+      {isLoading ? (
+         <View style={{marginBottom: 20}}>
+         <ActivityIndicator size="large" color="#FFBA8C" />
+         </View>
+      ):(
+        <View style={styles.gradientButton}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
@@ -111,6 +119,8 @@ const EndTime = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
+      )}
+    
     </View>
   );
 };
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
     width: 224,
     opacity: 0.5,
     color: '#666666',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 16,

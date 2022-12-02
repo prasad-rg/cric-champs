@@ -21,7 +21,7 @@ const StandingsScreen = ({navigation}) => {
     setIsLoading(true);
     const response = await getStandingsByTournamentId(tournamentDetails._id);
     setIsLoading(false);
-    console.log(response);
+    // console.log(response);
     if (response.status) {
       // console.log(response.data.team);
       let arrayResponse = response.data.team.map(team => [

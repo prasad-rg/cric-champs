@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {BASE_URL} from '../api/baseURL';
-import { refreshTokenIfExpired } from './auth';
+import {refreshTokenIfExpired} from './auth';
 
 export const addOvers = async oversData => {
   const validateAndGetToken = await refreshTokenIfExpired();
@@ -118,8 +118,152 @@ export const generateFixture = async data => {
 
       return response;
     } catch (error) {
-      // console.log("errorrrr", error.response.data)
       return error.response;
+    }
+  }
+};
+
+export const updateTeam = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/team`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const deleteTeam = async data => {
+  // console.log("hEEEYYYYY",data)
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(
+        `${BASE_URL}/api/team?tournamentId=${data.tournamentId}&teamId=${data.teamId}`,
+        {
+          method: 'delete',
+          body: data,
+          headers: {
+            Authorization: validateAndGetToken,
+          },
+        },
+      );
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const updatePlayer = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/participant`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const deleteIndividualPlayer = async data => {
+  // console.log("hEEEYYYYY",data)
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(
+        `${BASE_URL}/api/participant/delete-participant?participantId=${data.playerId}&tournamentId=${data.tournamentId}`,
+        {
+          method: 'delete',
+          body: data,
+          headers: {
+            Authorization: validateAndGetToken,
+          },
+        },
+      );
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const deleteParticularGround = async data => {
+  // console.log("hEEEYYYYY",data)
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(
+        `${BASE_URL}/api/tournament/ground?tournamentId=${data.tournamentId}&groundId=${data.groundId}`,
+        {
+          method: 'delete',
+          body: data,
+          headers: {
+            Authorization: validateAndGetToken,
+          },
+        },
+      );
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const updateGround = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/tournament/ground`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const updateUmpire = async formData => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/participant/update-umpire`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
     }
   }
 };

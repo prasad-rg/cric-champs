@@ -7,18 +7,21 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect,useLayoutEffect} from 'react';
 import TeamListName from '../../components/TeamListName';
 import {getPlayersByTeamIdAndTournamentId} from '../../services/viewTournament';
 import {useSelector} from 'react-redux';
+import { setIsEdit } from '../../redux/manageTournamentSlice';
+import {StackActions, useIsFocused} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 const Players = ({navigation, route}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPlayers, setCurrentPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
-  // console.log(tournamentDetails);
-
+  const dispatch = useDispatch();
+  
   const loadPlayers = async () => {
     setIsLoading(true);
     const response = await getPlayersByTeamIdAndTournamentId(
@@ -35,31 +38,39 @@ const Players = ({navigation, route}) => {
     return (
       <TouchableOpacity
         onPress={() =>
+        {  dispatch(setIsEdit(true))
+        
           navigation.navigate('PlayerProfile', {
             teamId: route.params.teamId,
             tournamentId: tournamentDetails._id,
             playerId: item._id,
-          })
+          })}
         }>
         <TeamListName source={item.profilePic.url} text={item.name} />
       </TouchableOpacity>
     );
   };
-  useEffect(() => {
-    loadPlayers();
-  }, []);
+
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadPlayers();
+    }
+  }, [focus]);
+
 
   return (
     <View style={{flex: 1}}>
-      {isLoggedIn && (
-        <View style={styles.container}>
-          <TouchableOpacity>
+    
+        {/* <View style={styles.container}>
+          <TouchableOpacity onPress={()=> navigation.dispatch(StackActions.push('AddPlayer'))}>
             <View style={styles.addButton}>
               <Text style={styles.addTeamText}>ADD PLAYER</Text>
             </View>
           </TouchableOpacity>
-        </View>
-      )}
+
+        </View> */}
+   
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>
         <FlatList
@@ -79,7 +90,6 @@ export default Players;
 
 const styles = StyleSheet.create({
   container: {
-    // flex:1,
     height: 80,
     width: '100%',
     backgroundColor: '#FFFFFF',
@@ -113,7 +123,6 @@ const styles = StyleSheet.create({
   },
   players: {
     height: 16,
-    // width: 47,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,

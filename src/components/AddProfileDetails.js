@@ -18,8 +18,13 @@ const AddProfileDetails = ({
   children,
   profilePictureUri = '',
   backroundImageUri = '',
+  playerId,
+  umpireId,
+  isEdit,
   title,
+  type,
   getImageUri,
+  isView,
 }) => {
   const {width, height} = useWindowDimensions();
   const [imageUri, setImageUri] = useState('');
@@ -30,8 +35,10 @@ const AddProfileDetails = ({
       height: 104,
       cropping: true,
     }).then(image => {
-      setImageUri(image.path);
-      console.log(image);
+      // console.log(image);
+      setImageUri(`file://${image.path}`);
+      const {path, filename, mime} = image;
+      getImageUri({path, filename, mime});
     });
   };
 
@@ -102,6 +109,11 @@ const AddProfileDetails = ({
           style={{backgroundColor: 'rgba(0, 102, 226, 0.85)'}}
           navigation={navigation}
           title={title}
+          profilePictureUri={profilePictureUri}
+          playerId={playerId}
+          umpireId={umpireId}
+          type={type}
+          isView={isView}
         />
         <View
           style={[
@@ -131,7 +143,7 @@ const AddProfileDetails = ({
                 style={styles.imageSize}
               />
             </View>
-            <View
+            {isView ? null : <View
               style={
                 height > width
                   ? [
@@ -143,7 +155,7 @@ const AddProfileDetails = ({
                       {right: Dimensions.get('window').width / 2.33},
                     ]
               }>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   createThreeButtonAlert();
                 }}>
@@ -151,8 +163,23 @@ const AddProfileDetails = ({
                   source={require('../../assets/images/camera.png')}
                   style={styles.gobackbutton}
                 />
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={() => {
+                  createThreeButtonAlert();
+                }}
+                styles={{height: 34, width: 34}}>
+                <View
+                  style={{
+                    height: 34,
+                    width: 34,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image source={require('../../assets/images/camera.png')} />
+                </View>
               </TouchableOpacity>
-            </View>
+            </View>}
           </View>
         </View>
       </ImageBackground>

@@ -1,36 +1,32 @@
-import {ScrollView, StyleSheet, Text, View,TouchableOpacity,Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-} from 'react-native-table-component';
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Table, TableWrapper, Row, Rows} from 'react-native-table-component';
 import {getScoreBoardByMatchIdAndBothTeamId} from '../../services/viewTournament';
 import DropdownField from '../../components/DropdownField';
 
-let teams = [
-  {
-    id: 1,
-    name: 'RCB',
-  },
-  {
-    id: 2,
-    name: 'CSK',
-  },
-  {
-    id: 3,
-    name: 'UDL strikers',
-  },
-];
-
 const ScoreboardScreen = ({navigation, route}) => {
+  let teams = [
+    {
+      id: route?.params?.team1Id,
+      name: route?.params?.teams.team1Name,
+    },
+    {
+      id: route?.params?.team2Id,
+      name: route?.params?.teams.team2Name,
+    },
+  ];
   const [isLoading, setIsLoading] = useState(false);
   const [scoreBoard, setScoreBoard] = useState();
-  // console.info(route.params);
+  console.info(route.params);
 
   const [visible, setVisible] = useState(false);
-  const sitesFolder = ['RCB', 'CSK', 'KKR'];
 
   const [tableHead, setTableHead] = useState([
     'Batsman',
@@ -46,7 +42,6 @@ const ScoreboardScreen = ({navigation, route}) => {
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
- 
   ]);
   const [tableHeader, setTableHeader] = useState([
     'Bowler',
@@ -61,12 +56,17 @@ const ScoreboardScreen = ({navigation, route}) => {
     ['Sashikant D', '0', '0', '0', '0', '0'],
   ]);
 
-  const loadScoreBoard = async () => {
+  const loadScoreBoard = async teamId => {
+    let team2Id =
+      teamId === route.params.team1Id
+        ? route.params.team2Id
+        : route.params.team1Id;
+
     setIsLoading(true);
     const response = await getScoreBoardByMatchIdAndBothTeamId(
       route.params.matchId,
-      route.params.team1Id,
-      route.params.team2Id,
+      teamId,
+      team2Id,
     );
     setIsLoading(false);
     if (response.status) {
@@ -111,15 +111,20 @@ const ScoreboardScreen = ({navigation, route}) => {
       // setTableData(arrayResponse);
     }
   };
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    loadScoreBoard();
-  }, []);
+    if (selectedItem === null) {
+      loadScoreBoard(route.params.team1Id);
+    } else {
+      loadScoreBoard(selectedItem.id);
+    }
+  }, [selectedItem]);
 
-  const [selectedItem,setSelectedItem]=useState(null)
-  const onSelect=(item)=>{
-  setSelectedItem(item)
-  }
+  const onSelect = item => {
+    setSelectedItem(item);
+  };
+  console.log(' i am selected Item', selectedItem?.id);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -129,7 +134,12 @@ const ScoreboardScreen = ({navigation, route}) => {
           <Image source={require('../../../assets/images/downArrow.png')} style={{tintColor:"grey",height:15,width:18}} />
           </TouchableOpacity> */}
 
-          <DropdownField data={teams} onSelect={onSelect} value={selectedItem}/>
+          <DropdownField
+            data={teams}
+            onSelect={onSelect}
+            value={selectedItem}
+            team1Name={teams[0].name}
+          />
           <View style={{flexDirection: 'row'}}>
             <Text
               style={
@@ -167,7 +177,6 @@ const ScoreboardScreen = ({navigation, route}) => {
               marginHorizontal: '10%',
               marginLeft: '27%',
             }}>
-      
             <Text style={styles.extraNumber}>
               {` ${
                 scoreBoard?.score?.bye +
@@ -310,7 +319,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-
   },
   extraInfo: {
     height: 19,

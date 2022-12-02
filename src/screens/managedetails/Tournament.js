@@ -7,26 +7,35 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
+import { CommonActions } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+
 import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
-import { StackActions } from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
+import { generateFixture } from '../../services/manageTournament2';
 
-const Tournament = ({navigation, disableRegenerateFixture=true}) => {
+const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const [currentOverview, setCurrentOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useState(true);
+  const [visible, setVisible] = useState(false);
 
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
   const loadTournamentOverView = async () => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
-    console.log(response.data.data);
+    // console.log(response.data.data);
     if (response.status) {
       setCurrentOverview(response.data.data);
     }
@@ -45,7 +54,14 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
           const res = await cancelTournament(tournamentDetails._id);
           if (res.status) {
             Alert.alert('Tournament Deleted Successsfully');
-            navigation.goBack();
+            navigation.dispatch(CommonActions.reset({
+          index:0,
+            routes:[
+                {
+                  name:"HomeStack"
+                }
+            ]
+            }))
           } else {
             Alert.alert('Please Try Again');
           }
@@ -54,9 +70,30 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
       },
     ]);
 
-  useEffect(() => {
-    loadTournamentOverView();
-  }, []);
+  const focus = useIsFocused();
+  useLayoutEffect(() => {
+    if (focus == true) {
+      loadTournamentOverView();
+    }
+  }, [focus]);
+
+  const handlePress = async () => {
+    const response = await generateFixture(tournamentId);
+    // console.log('responseeeee', response.data);
+    // if (response.data.statusCode !== 200) {
+    //   setModal(false);
+    //   // navigation.navigate('TimeScreen')
+    // } else {
+    //   setModal(true);
+    //   // dispatch(deleteStartTime())
+    //   // dispatch(deleteEndTime())
+    //   // dispatch(deleteStartDate())
+    //   // dispatch(deleteEndDate())
+
+    // }
+
+    // setVisible(true);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -65,9 +102,7 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
           <TournamentInputList
             text="Teams"
             number={currentOverview !== null && currentOverview?.teams}
-            onPress={() =>
-              navigation.dispatch(StackActions.push('TeamsList'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('TeamsList'))}
           />
           <TournamentInputList
             text="Overs"
@@ -93,41 +128,33 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
             number={
               currentOverview !== null && currentOverview?.startDateEnglish
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('DateScreen'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
           />
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
-            onPress={() =>
-              navigation.dispatch(StackActions.push('DateScreen'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
           />
           <TournamentInputList
             text="Start of Play"
             number={
               currentOverview !== null && currentOverview?.startTimeNormalFormat
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('START TIME'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('START TIME'))}
           />
           <TournamentInputList
             text="End of Play"
             number={
               currentOverview !== null && currentOverview?.endTimeNormalFormat
             }
-            onPress={() =>
-              navigation.dispatch(StackActions.push('END TIME'))
-            }
+            onPress={() => navigation.dispatch(StackActions.push('END TIME'))}
           />
-        </View>
         <TouchableOpacity
           style={styles.card}
           onPress={() => createTwoButtonAlert()}>
           <Text style={styles.cancelText}>Cancel Tournament</Text>
         </TouchableOpacity>
+        </View>
       </ScrollView>
       {disableRegenerateFixture && (
         <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
@@ -144,6 +171,7 @@ const Tournament = ({navigation, disableRegenerateFixture=true}) => {
               letterSpacing: 0.5,
               lineHeight: 19,
             }}
+            onPress={handlePress}
           />
         </View>
       )}
@@ -168,10 +196,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom:20,
     justifyContent: 'space-between',
   },
   cancelText: {
-    height: 17,
+    // height: 17,
     // width: 141,
     color: '#F5112D',
     fontFamily: 'Roboto-Medium',

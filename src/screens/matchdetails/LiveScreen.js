@@ -17,14 +17,26 @@ import {
 import Circle from '../../components/Circle';
 import DotBall from '../../components/DotBall';
 import {getLiveScoresByMatchIdAndBothTeamId} from '../../services/viewTournament';
+import DropdownField from '../../components/DropdownField';
+
 
 const LiveScreen = ({navigation, route}) => {
+  let teams = [
+    {
+      id: route?.params?.team1Id,
+      name: route?.params?.teams.team1Name,
+    },
+    {
+      id: route?.params?.team2Id,
+      name: route?.params?.teams.team2Name,
+    },
+  ];
   const [isLoading, setIsLoading] = useState(false);
   const [scoreBoard, setScoreBoard] = useState();
   const [fallOfWicket, setFallOfWickets] = useState({});
   const [commentary, setCommentary] = useState([]);
   let previousOver = 1;
-
+//  console.warn(route.params)
   const [tableHead, setTableHead] = useState([
     'Batsman',
     'R',
@@ -49,13 +61,25 @@ const LiveScreen = ({navigation, route}) => {
 
   const [over, setOver] = useState(['5.3', '5.2', '5.1']);
 
-  const loadScoreBoard = async () => {
+  // const loadScoreBoard = async () => {
+  //   setIsLoading(true);
+  //   const response = await getLiveScoresByMatchIdAndBothTeamId(
+  //     route.params.matchId,
+  //     route.params.team2Id,
+  //     route.params.team1Id,
+      
+  //   );
+  const loadScoreBoard = async teamId => {
+    let team2Id =
+      teamId === route.params.team1Id
+        ? route.params.team2Id
+        : route.params.team1Id;
+
     setIsLoading(true);
     const response = await getLiveScoresByMatchIdAndBothTeamId(
       route.params.matchId,
-      route.params.team2Id,
-      route.params.team1Id,
-      
+      teamId,
+      team2Id,
     );
     setIsLoading(false);
     // console.log(response);
@@ -130,10 +154,23 @@ const LiveScreen = ({navigation, route}) => {
     );
   };
 
-  useEffect(() => {
-    loadScoreBoard();
-  }, []);
+  // useEffect(() => {
+  //   loadScoreBoard();
+  // }, []);
+  const [selectedItem, setSelectedItem] = useState(null);
 
+  useEffect(() => {
+    if (selectedItem === null) {
+      loadScoreBoard(route.params.team1Id);
+    } else {
+      loadScoreBoard(selectedItem.id);
+    }
+  }, [selectedItem]);
+
+  const onSelect=(item)=>{
+  setSelectedItem(item)
+  }
+  
   return (
     <View style={styles.container}>
       <ScrollView
@@ -141,7 +178,10 @@ const LiveScreen = ({navigation, route}) => {
           <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
         }>
         <View style={styles.headerText}>
-          <Text style={styles.codetext}>Code Warriors</Text>
+          {/* <Text style={styles.codetext}>Code Warriors</Text> */}
+          <View>
+          <DropdownField data={teams} onSelect={onSelect} value={selectedItem} team1Name={teams[0].name}/>
+          </View>
           <Text
             style={
               styles.numberText
@@ -459,7 +499,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   headerText: {
-    height: 48,
+    height: 'auto',
     width: '100%',
     flexDirection: 'row',
     alignSelf: 'baseline',

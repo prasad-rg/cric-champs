@@ -19,6 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {userLogin} from '../redux/authSlice';
 import {getToken} from '../utils/token';
 import jwt_decode from 'jwt-decode';
+import {TextInput} from 'react-native-paper';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -37,6 +38,8 @@ const LoginScreen = ({navigation}) => {
   console.log(isLoading, isLoggedIn, error);
   // const [error, setError] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [icon, setIcon] = useState('eye');
   const handelLogin = async values => {
     dispatch(userLogin(values));
     // setError('');
@@ -89,7 +92,7 @@ const LoginScreen = ({navigation}) => {
               touched,
             }) => (
               <>
-                <TextField
+                {/* <TextField
                   label="Email"
                   name="email"
                   keyboardType="email-address"
@@ -105,11 +108,23 @@ const LoginScreen = ({navigation}) => {
                   onBlur={handleBlur('email')}
                   value={values.email}
                   autoCorrect={false}
+                /> */}
+                <TextInput
+                  label="Email"
+                  name="email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  textColor="#666666"
+                  activeUnderlineColor="rgba(153, 153, 153, 0.4)"
+                  style={{backgroundColor: 'rgba(255, 255, 255, 0.4)'}}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
                 />
                 {errors.email && touched.email && (
                   <Text style={styles.errorText}>{errors.email}</Text>
                 )}
-                <TextField
+                {/* <TextField
                   label="Password"
                   name="password"
                   keyboardType="email-address"
@@ -124,6 +139,29 @@ const LoginScreen = ({navigation}) => {
                   onBlur={handleBlur('password')}
                   value={values.password}
                   autoCapitalize="none"
+                /> */}
+                <TextInput
+                  label="Password"
+                  name="password"
+                  // keyboardType="email-address"
+                  // autoCapitalize="none"
+                  textColor="#666666"
+                  activeUnderlineColor="rgba(153, 153, 153, 0.4)"
+                  secureTextEntry={secureTextEntry}
+                  right={
+                    <TextInput.Icon
+                      icon={icon}
+                      iconColor="darkgrey"
+                      onPress={() => {
+                        setSecureTextEntry(!secureTextEntry),
+                          secureTextEntry ? setIcon('eye-off') : setIcon('eye');
+                      }}
+                    />
+                  }
+                  style={{backgroundColor: 'rgba(255, 255, 255, 0.4)'}}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
                 />
                 {errors.password && touched.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
@@ -180,7 +218,7 @@ const LoginScreen = ({navigation}) => {
                     jsonToken.accessToken,
                     jsonToken.refreshToken,
                   );
-                  console.log(newToken);
+                  console.log(jsonToken.refreshToken);
                 }
               }}
               // eslint-disable-next-line react-native/no-inline-styles

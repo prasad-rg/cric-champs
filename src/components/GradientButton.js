@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   createTournament: {
     height: 18,
     color: '#FFFFFF',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 13,
     fontWeight: '900',
     letterSpacing: 0.19,

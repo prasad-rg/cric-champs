@@ -16,7 +16,7 @@ const StartDate = ({navigation}) => {
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
   const [disabled,setDisabled] = useState(false)
-  console.log("startdate",startDate);
+  // console.log("startdate",startDate);
 
   const onDateChange = (date, type) => {
     setDisabled(true)
@@ -50,7 +50,7 @@ const StartDate = ({navigation}) => {
     //   console.log("overs is required")
     // }
     navigation.navigate('END DATE')
-    console.log("entered")
+    // console.log("entered")
   }
 
 
