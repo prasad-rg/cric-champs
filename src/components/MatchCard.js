@@ -11,9 +11,11 @@ const MatchCard = ({matchDetails}) => {
             <Text style={styles.matchText}>
               Match {matchDetails?.matchNumber}
             </Text>
-            <Text style={styles.LeagueText}>
-              {`League Play at ${matchDetails?.groundName}  Ground`}
-            </Text>
+            <View style={{width: 200}}>
+              <Text style={styles.LeagueText}>
+                {`League Play at ${matchDetails?.groundName}  Ground`}
+              </Text>
+            </View>
           </View>
           <View
             style={[
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
   },
   messageView: {
     height: 24,
-    width: 182,
+    width: 230,
     borderRadius: 4,
     backgroundColor: '#F1F1F1',
     alignItems: 'center',

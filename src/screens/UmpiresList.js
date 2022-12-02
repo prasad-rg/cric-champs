@@ -23,14 +23,13 @@ const UmpiresList = ({navigation}) => {
   const [currentUmpires, setCurrentUmpires] = useState([]);
   const [selectedUmpire, setSelectedUmpire] = useState('');
   const dispatch = useDispatch();
-  // console.log("current umpires",currentUmpires)
+
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
 
   const loadUmpires = async () => {
     const response = await getUmpiresByTournamentId(tournamentId);
-    // console.log('resp', response);
 
     if (response.status) {
       setCurrentUmpires(response.data);
@@ -43,10 +42,6 @@ const UmpiresList = ({navigation}) => {
     }
   }, [focus]);
 
-  // useEffect(() => {
-  //   loadUmpires();
-  // }, []);
-
   const handlePress = () => {
     navigation.navigate('DateScreen');
   };
@@ -55,9 +50,7 @@ const UmpiresList = ({navigation}) => {
     dispatch(setIsEdit(false));
     dispatch(setEditEntity(true));
     // console.log('Currrrrenttttt', selectedUmpire);
-    navigation.dispatch(
-      StackActions.push('AddUmpire'),
-    );
+    navigation.dispatch(StackActions.push('AddUmpire'));
   };
 
   // const deleteUmpire = async () => {
@@ -113,22 +106,6 @@ const UmpiresList = ({navigation}) => {
                     </TouchableOpacity>
                     <Text style={styles.umpireText}>Umpires</Text>
                   </View>
-
-                  {/* <View style={styles.rightHeader}>
-                    <TouchableOpacity onPress={handleEdit}>
-                      <Image
-                        source={require('../../assets/images/pencil.png')}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    // onPress={handleDelete}
-                    >
-                      <Image
-                        source={require('../../assets/images/trash.png')}
-                        style={{marginHorizontal: '5%'}}
-                      />
-                    </TouchableOpacity>
-                  </View> */}
                 </View>
 
                 <TouchableOpacity
@@ -148,29 +125,24 @@ const UmpiresList = ({navigation}) => {
             </View>
           ) : (
             <View>
-              {currentUmpires.map(
-                value => (
-                
-                  (
-                    <View key={value?._id}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('UmpireProfile', {
-                            umpireId: value._id,
-                            umpireName: value.name,
-                            umpirePicture: value.profilePic.url,
-                            setIsEdit:dispatch(setIsEdit(true))
-                          })
-                        }>
-                        <TeamListName
-                          source={value?.profilePic.url}
-                          text={value?.name}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )
-                ),
-              )}
+              {currentUmpires.map(value => (
+                <View key={value?._id}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('UmpireProfile', {
+                        umpireId: value._id,
+                        umpireName: value.name,
+                        umpirePicture: value.profilePic.url,
+                        setIsEdit: dispatch(setIsEdit(true)),
+                      })
+                    }>
+                    <TeamListName
+                      source={value?.profilePic.url}
+                      text={value?.name}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
           )}
         </View>
@@ -271,7 +243,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   secondView: {
-  height: '100%',
+    height: '100%',
     backgroundColor: 'rgba(217,226,233,0.5)',
   },
   umpireView: {

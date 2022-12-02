@@ -20,8 +20,6 @@ const Circle = ({text, style = {}, textStyle = {}}) => {
         <Text
           style={[
             {
-              //  height: 36,
-              //  width: 13,
               color: '#FFFFFF',
               fontFamily: 'Roboto-Regular',
               fontSize: 14,
@@ -37,19 +35,5 @@ const Circle = ({text, style = {}, textStyle = {}}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  // text:{
-  //     height: 24,
-  //     width: 13,
-  //     color: '#FFFFFF',
-  //    fontFamily:"Roboto-Regular",
-  //     fontSize: 14,
-  //     letterSpacing: 0,
-  //     lineHeight: 24,
-  //     // justifyContent:"center",
-  //     // alignItems:"center"
-  //     // alignContent:"center"
-  //     textAlign:"center"
-  // }
-});
+const styles = StyleSheet.create({});
 export default Circle;

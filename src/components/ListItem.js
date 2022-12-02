@@ -8,9 +8,11 @@ const ListItem = ({title, bodyText, styleDropText = {}, query, itemObject}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const getStatsByQuery = async query => {
     const response = await getStatsByTournamentId(
-      '638090ddc3ab2708e617df5f',
+   tournamentDetails._id,
       query,
     );
+    console.log("touranament Id", tournamentDetails._id)
+    console.log("response-response",response)
     return response;
   };
   const [showContent, setShowContent] = useState(false);

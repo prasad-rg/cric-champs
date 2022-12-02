@@ -24,11 +24,11 @@ const LiveScreen = ({navigation, route}) => {
   let teams = [
     {
       id: route?.params?.team1Id,
-      name: route?.params?.teams.team1Name,
+      name: route?.params?.teams?.team1Name,
     },
     {
       id: route?.params?.team2Id,
-      name: route?.params?.teams.team2Name,
+      name: route?.params?.teams?.team2Name,
     },
   ];
   const [isLoading, setIsLoading] = useState(false);

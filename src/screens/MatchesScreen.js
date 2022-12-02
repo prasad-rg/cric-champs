@@ -44,6 +44,10 @@ const MatchesScreen = ({navigation}) => {
             navigation.navigate('MatchDetails', {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
+              matchId: item._id,
+              matchNumber: item.matchNumber,
+              teams: {team1Name: item.team1Name, team2Name: item.team2Name},
+              tournamentName:tournamentDetails.name,
             })
           }>
           <MatchCard matchDetails={item} />

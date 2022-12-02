@@ -6,7 +6,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
-  ScrollView,
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -27,7 +26,7 @@ const TeamInfoScreen = ({navigation, route}) => {
   );
   const teamId = useSelector(state => state.tournamentdata.teamId);
   const isView = useSelector(state => state.tournamentdata.isView);
-   
+
   const getDetails = data => {
     setProfilePictureUri(data);
   };

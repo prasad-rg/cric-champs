@@ -1,10 +1,7 @@
 import {
   FlatList,
   RefreshControl,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';

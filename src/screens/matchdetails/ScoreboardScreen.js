@@ -15,11 +15,11 @@ const ScoreboardScreen = ({navigation, route}) => {
   let teams = [
     {
       id: route?.params?.team1Id,
-      name: route?.params?.teams.team1Name,
+      name: route?.params?.teams?.team1Name,
     },
     {
       id: route?.params?.team2Id,
-      name: route?.params?.teams.team2Name,
+      name: route?.params?.teams?.team2Name,
     },
   ];
   const [isLoading, setIsLoading] = useState(false);
@@ -58,9 +58,9 @@ const ScoreboardScreen = ({navigation, route}) => {
 
   const loadScoreBoard = async teamId => {
     let team2Id =
-      teamId === route.params.team1Id
-        ? route.params.team2Id
-        : route.params.team1Id;
+      teamId === route.params?.team1Id
+        ? route.params?.team2Id
+        : route.params?.team1Id;
 
     setIsLoading(true);
     const response = await getScoreBoardByMatchIdAndBothTeamId(
