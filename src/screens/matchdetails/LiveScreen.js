@@ -1,5 +1,12 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   Table,
   TableWrapper,
@@ -9,8 +16,27 @@ import {
 } from 'react-native-table-component';
 import Circle from '../../components/Circle';
 import DotBall from '../../components/DotBall';
+import {getLiveScoresByMatchIdAndBothTeamId} from '../../services/viewTournament';
+import DropdownField from '../../components/DropdownField';
 
-const LiveScreen = () => {
+
+const LiveScreen = ({navigation, route}) => {
+  let teams = [
+    {
+      id: route?.params?.team1Id,
+      name: route?.params?.teams.team1Name,
+    },
+    {
+      id: route?.params?.team2Id,
+      name: route?.params?.teams.team2Name,
+    },
+  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [scoreBoard, setScoreBoard] = useState();
+  const [fallOfWicket, setFallOfWickets] = useState({});
+  const [commentary, setCommentary] = useState([]);
+  let previousOver = 1;
+//  console.warn(route.params)
   const [tableHead, setTableHead] = useState([
     'Batsman',
     'R',
@@ -35,30 +61,162 @@ const LiveScreen = () => {
 
   const [over, setOver] = useState(['5.3', '5.2', '5.1']);
 
+  // const loadScoreBoard = async () => {
+  //   setIsLoading(true);
+  //   const response = await getLiveScoresByMatchIdAndBothTeamId(
+  //     route.params.matchId,
+  //     route.params.team2Id,
+  //     route.params.team1Id,
+      
+  //   );
+  const loadScoreBoard = async teamId => {
+    let team2Id =
+      teamId === route.params.team1Id
+        ? route.params.team2Id
+        : route.params.team1Id;
+
+    setIsLoading(true);
+    const response = await getLiveScoresByMatchIdAndBothTeamId(
+      route.params.matchId,
+      teamId,
+      team2Id,
+    );
+    setIsLoading(false);
+    // console.log(response);
+    if (response.status) {
+      // console.info(response.data);
+      setScoreBoard(response.data);
+      setFallOfWickets(response?.data?.score?.fallOfWicket?.pop());
+      setCommentary(response?.data?.commentry?.commentry?.reverse());
+      let arrayResponse = response.data?.playersOfTeam1?.map(player => {
+        let tempArr = [
+          `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+          player?.runsScored,
+          `${player?.ballsFaced}`,
+          `${player?.fours}`,
+          `${player?.sixes}`,
+          `${Math.round(player?.strikeRate * 100) / 100}`,
+        ];
+        if (player?.wicket === undefined) {
+          if (player?.currentlyBatting) {
+            tempArr[0] = `${player?.playerName}*\nNot Out`;
+          } else {
+            tempArr[0] = `${player?.playerName}\nNot Out`;
+          }
+        }
+
+        return tempArr;
+      });
+      setTableData(arrayResponse);
+      let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
+        let bowlerArray = [
+          bowler?.playerName,
+          bowler?.overBowled,
+          bowler?.maiden,
+          bowler?.runsConceded,
+          bowler?.wicketsTaken,
+          bowler?.economyRate,
+        ];
+        if (bowler?.currentlyBatting) {
+          bowlerArray[0] = `${bowler?.playerName}*`;
+        }
+        return bowlerArray;
+      });
+      setData(bowlerData);
+      // console.log(arrayResponse);
+      // setCurrentTeams(arrayResponse);
+      // setTableData(arrayResponse);
+    }
+  };
+
+  const commentaryView = ({item}) => {
+    return (
+      <View style={styles.commentaryView}>
+        <Text style={styles.recent}>{`${item?.over}.${item?.balls}`}</Text>
+        <Circle
+          style={
+            item?.status == 4 || item?.status == 6
+              ? {
+                  ...styles.circleStyling,
+                  backgroundColor: '#5FB100',
+                }
+              : item?.status == 1 || item?.status == 2 || item?.status == 3
+              ? {...styles.circleStyling, backgroundColor: '#4A90E2'}
+              : item?.status == 0
+              ? styles.circleStyling
+              : {...styles.circleStyling, backgroundColor: '#E05140'}
+          }
+          text={item?.status}
+          textStyle={item?.status == 0 && {color: 'black'}}
+        />
+        <Text style={{width: '50%'}}>{item?.message}</Text>
+      </View>
+    );
+  };
+
+  // useEffect(() => {
+  //   loadScoreBoard();
+  // }, []);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    if (selectedItem === null) {
+      loadScoreBoard(route.params.team1Id);
+    } else {
+      loadScoreBoard(selectedItem.id);
+    }
+  }, [selectedItem]);
+
+  const onSelect=(item)=>{
+  setSelectedItem(item)
+  }
+  
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
+        }>
         <View style={styles.headerText}>
-          <Text style={styles.codetext}>Code Warriors</Text>
-          <Text style={styles.numberText}>96/3</Text>
-          <Text style={styles.overText}>(10.0)</Text>
+          {/* <Text style={styles.codetext}>Code Warriors</Text> */}
+          <View>
+          <DropdownField data={teams} onSelect={onSelect} value={selectedItem} team1Name={teams[0].name}/>
+          </View>
+          <Text
+            style={
+              styles.numberText
+            }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+          <Text
+            style={
+              styles.overText
+            }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
         </View>
         <View style={styles.scoreView}>
           <View>
             <Text style={styles.heading1}>Coastal Riders</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={styles.number1}>67/3</Text>
-              <Text style={styles.secondNumber}>(8.3)</Text>
+              <Text
+                style={
+                  styles.number1
+                }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+              <Text
+                style={
+                  styles.secondNumber
+                }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
             </View>
           </View>
           <View style={{width: '20%', marginHorizontal: '30%'}}>
             <Text style={styles.heading2}>CRR</Text>
-            <Text style={styles.number2}>6.07</Text>
+            <Text style={styles.number2}>
+              {scoreBoard?.score?.currentRunRate}
+            </Text>
           </View>
 
           <View style={{width: '20%', marginLeft: '-30%'}}>
             <Text style={styles.heading2}>REQ</Text>
-            <Text style={styles.number2}>7.72</Text>
+            <Text style={styles.number2}>
+              {scoreBoard?.score?.requiredRunRate}
+            </Text>
           </View>
         </View>
 
@@ -68,7 +226,7 @@ const LiveScreen = () => {
           <Table>
             <Row
               data={tableHead}
-              flexArr={[3, 1, 1, 1, 1, 1]}
+              flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
               style={styles.table_header}
               textStyle={styles.header_text}
             />
@@ -76,7 +234,7 @@ const LiveScreen = () => {
               <Rows
                 data={tableData}
                 heightArr={[50, 50, 50, 50, 50, 50]}
-                flexArr={[3, 1, 1, 1, 1, 1]}
+                flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
                 textStyle={styles.row_text}
               />
             </TableWrapper>
@@ -97,7 +255,7 @@ const LiveScreen = () => {
             <TableWrapper>
               <Rows
                 data={data}
-                heightArr={[80, 80, 80, 80, 80, 80]}
+                heightArr={[50, 50, 50, 50, 50, 50]}
                 flexArr={[3, 1, 1, 1, 1, 1]}
                 textStyle={styles.row_text}
               />
@@ -108,13 +266,24 @@ const LiveScreen = () => {
           <View style={styles.pshipView}>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.pship}>P'ship:</Text>
-              <Text style={styles.runs}>{'   '}21 runs</Text>
-              <Text style={styles.pship}> (18 balls)</Text>
+              <Text style={styles.runs}>
+                {`  ${scoreBoard?.score?.partnershipRuns}`} runs
+              </Text>
+              <Text
+                style={
+                  styles.pship
+                }>{` (${scoreBoard?.score?.partnershipBalls} balls)`}</Text>
             </View>
             <View style={{flexDirection: 'row', alignSelf: 'baseline'}}>
               <Text style={styles.pship}>FoW:</Text>
-              <Text style={styles.runs}>{'   '}46/3</Text>
-              <Text style={styles.pship}> (5.3)</Text>
+              <Text style={styles.runs}>
+                {'   '}
+                {fallOfWicket?.runs / fallOfWicket?.wickets}
+              </Text>
+              <Text style={styles.pship}>
+                {' '}
+                {`(${fallOfWicket?.over}.${fallOfWicket?.wickets})`}
+              </Text>
             </View>
           </View>
         </View>
@@ -128,22 +297,70 @@ const LiveScreen = () => {
                 margin: 20,
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-evenly',
+                flex: 1,
+                // justifyContent: 'space-evenly',
               }}>
               <Text style={styles.recent}>Recent</Text>
-              <DotBall />
-              <Text style={styles.line}>|</Text>
-              <Circle style={{backgroundColor: '#E05140'}} text="W" />
-              <DotBall />
-              <DotBall />
-              <DotBall />
-              <Circle style={{backgroundColor: '#4A90E2'}} text="2" />
-              <DotBall />
-              <Text style={styles.line}>|</Text>
-              <Circle style={{backgroundColor: '#4A90E2'}} text="2" />
-              <Circle style={{backgroundColor: '#5FB100'}} text="4" />
-              <DotBall />
-              <DotBall />
+              {commentary?.map(liveScore => {
+                //let currentOver = liveScore?.over;
+                if (previousOver !== liveScore?.over) {
+                  previousOver = liveScore?.over;
+                  return (
+                    <>
+                      <Text style={styles.line}>|</Text>
+                      <View key={liveScore?._id}>
+                        {liveScore?.status?.toString().toLowerCase() === 'w' ? (
+                          <Circle
+                            style={{backgroundColor: '#E05140', margin: 4}}
+                            text="W"
+                          />
+                        ) : liveScore?.status?.toString().toLowerCase() ===
+                            '4' ||
+                          liveScore?.status?.toString().toLowerCase() ===
+                            '6' ? (
+                          <Circle
+                            style={{backgroundColor: '#5FB100', margin: 4}}
+                            text={liveScore?.status}
+                          />
+                        ) : liveScore?.status?.toString().toLowerCase() ==
+                          '0' ? (
+                          <DotBall />
+                        ) : (
+                          <Circle
+                            style={{backgroundColor: '#4A90E2', margin: 4}}
+                            text={liveScore?.status}
+                          />
+                        )}
+                      </View>
+                    </>
+                  );
+                } else {
+                  previousOver = liveScore?.over;
+                  return (
+                    <View key={liveScore?._id}>
+                      {liveScore?.status?.toString().toLowerCase() === 'w' ? (
+                        <Circle
+                          style={{backgroundColor: '#E05140', margin: 4}}
+                          text="W"
+                        />
+                      ) : liveScore?.status?.toString().toLowerCase() === '4' ||
+                        liveScore?.status?.toString().toLowerCase() === '6' ? (
+                        <Circle
+                          style={{backgroundColor: '#5FB100', margin: 4}}
+                          text={liveScore?.status}
+                        />
+                      ) : liveScore?.status?.toString().toLowerCase() == '0' ? (
+                        <DotBall />
+                      ) : (
+                        <Circle
+                          style={{backgroundColor: '#4A90E2', margin: 4}}
+                          text={liveScore?.status}
+                        />
+                      )}
+                    </View>
+                  );
+                }
+              })}
             </View>
           </View>
         </ScrollView>
@@ -151,22 +368,41 @@ const LiveScreen = () => {
           <Text style={styles.recent}>Commentary</Text>
         </View>
 
-        <View style={styles.commentaryView}>
-          <Text style={styles.recent}>5.3</Text>
-          <Circle
-            style={{
-              backgroundColor: '#D8D8D8',
-              height: 22,
-              width: 22,
-              borderRadius: 11,
-            }}
-            text="0"
-            textStyle={{color: 'black'}}
-          />
-          <Text style={{width: '50%'}}>Deepanjan to Sunder, no runs</Text>
-        </View>
+        <FlatList
+          data={commentary}
+          renderItem={commentaryView}
+          keyExtractor={item => item._id}
+        />
 
-        <View style={styles.commentaryView}>
+        {/* {commentary.map(item => {
+          return (
+            <View style={styles.commentaryView} key={item._id}>
+              <Text
+                style={styles.recent}>{`${item?.over}.${item?.balls}`}</Text>
+              <Circle
+                style={
+                  item?.status == 4 || item?.status == 6
+                    ? {
+                        ...styles.circleStyling,
+                        backgroundColor: '#5FB100',
+                      }
+                    : item?.status == 1 ||
+                      item?.status == 2 ||
+                      item?.status == 3
+                    ? {...styles.circleStyling, backgroundColor: '#4A90E2'}
+                    : item?.status == 0
+                    ? styles.circleStyling
+                    : {...styles.circleStyling, backgroundColor: '#E05140'}
+                }
+                text={item?.status}
+                textStyle={item?.status == 0 && {color: 'black'}}
+              />
+              <Text style={{width: '50%'}}>{item?.message}</Text>
+            </View>
+          );
+        })} */}
+
+        {/* <View style={styles.commentaryView}>
           <Text style={styles.recent}>5.2</Text>
           <Circle
             style={{
@@ -179,8 +415,8 @@ const LiveScreen = () => {
             textStyle={{color: 'black'}}
           />
           <Text style={{width: '50%'}}>Deepanjan to Ashley, 1 run</Text>
-        </View>
-
+        </View> */}
+        {/* 
         <View style={styles.commentaryView}>
           <Text style={styles.recent}>5.1</Text>
           <Circle
@@ -197,7 +433,7 @@ const LiveScreen = () => {
             Deepanjan to Ashley, 4 runs! Its a beautiful stroke straight through
             the covers!
           </Text>
-        </View>
+        </View> */}
         <View style={styles.endView}>
           <Text style={styles.end_of_over}>
             End of Over : 5 | 4 runs | 1 wt | 31/3 | RR : 6.6
@@ -263,7 +499,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   headerText: {
-    height: 48,
+    height: 'auto',
     width: '100%',
     flexDirection: 'row',
     alignSelf: 'baseline',
@@ -418,10 +654,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0,
     lineHeight: 24,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
+    padding: 8,
   },
   row_text: {
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
+    padding: 8,
   },
   pship: {
     height: 15,
@@ -464,12 +702,13 @@ const styles = StyleSheet.create({
   line: {
     height: 18,
     width: 1,
+    marginHorizontal: 10,
     backgroundColor: '#000000',
   },
   recent_view: {
     // borderWidth: 1,
     height: 54,
-    width: '100%',
+    // width: '100%',
     alignContent: 'center',
     justifyContent: 'center',
   },
@@ -497,5 +736,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 24,
     margin: 15,
+  },
+  circleStyling: {
+    backgroundColor: '#D8D8D8',
+    height: 22,
+    width: 22,
+    borderRadius: 11,
   },
 });

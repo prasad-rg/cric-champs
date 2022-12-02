@@ -4,7 +4,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Button,
-  ScrollView,
+  ScrollView,ActivityIndicator
 } from 'react-native';
 import React, {useState} from 'react';
 import {TimePickerModal, TimePicker} from 'react-native-paper-dates';
@@ -17,6 +17,7 @@ import GradientButton from '../../components/GradientButton';
 import {addTime} from '../../services/manageTournament2';
 import moment from 'moment';
 import {getISOTime} from '../../utils/getISOTime';
+import Toast from 'react-native-simple-toast';
 
 const EndTime = ({navigation}) => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const EndTime = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading,setIsLoading]=useState(false)
 
   const onDismiss = React.useCallback(() => {
     setVisible(false);
@@ -61,6 +63,7 @@ const EndTime = ({navigation}) => {
 
 
   const handlePress = async () => {
+    setIsLoading(true)
     const timeData = {
       tournamentId: tournamentId,
       startTimeInISO: getISOTime(startTime),
@@ -68,9 +71,12 @@ const EndTime = ({navigation}) => {
     };
     // console.log(timeData);
     const response = await addTime(timeData);
-    // console.log('I am response for time', response);
+    console.log('I am response for time', response.data);
+    setIsLoading(false)
     if (response.data.status) {
       navigation.navigate('Overview');
+    }else{
+      Toast.show("Something Went Wrong, Please try again 😭")
     }
   };
 
@@ -94,7 +100,12 @@ const EndTime = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      <View style={styles.gradientButton}>
+      {isLoading ? (
+         <View style={{marginBottom: 20}}>
+         <ActivityIndicator size="large" color="#FFBA8C" />
+         </View>
+      ):(
+        <View style={styles.gradientButton}>
         <GradientButton
           start={{x: 0, y: 0}}
           end={{x: 2, y: 0}}
@@ -111,6 +122,8 @@ const EndTime = ({navigation}) => {
           onPress={handlePress}
         />
       </View>
+      )}
+    
     </View>
   );
 };
@@ -122,7 +135,7 @@ const styles = StyleSheet.create({
     width: 224,
     opacity: 0.5,
     color: '#666666',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 14,
     letterSpacing: 0,
     lineHeight: 16,

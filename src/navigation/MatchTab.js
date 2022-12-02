@@ -6,12 +6,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import InfoScreen from '../screens/matchdetails/InfoScreen';
 import LiveScreen from '../screens/matchdetails/LiveScreen';
 import ScoreboardScreen from '../screens/matchdetails/ScoreboardScreen';
+import Graph from '../screens/matchdetails/Graph';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function MatchTab(props) {
   return (
-    // <NavigationContainer>
+     //<NavigationContainer>
     <Tab.Navigator
       screenOptions={{
         //   tabBarScrollEnabled: true,
@@ -23,7 +24,7 @@ export default function MatchTab(props) {
         tabBarLabelStyle: {
           fontSize: 14,
           height: 19,
-          // color: '#FFFFFF',
+          width:100,
           fontFamily: 'Roboto-Medium',
           fontWeight: '500',
           letterSpacing: 0.5,
@@ -34,18 +35,14 @@ export default function MatchTab(props) {
           borderBottomColor: '#FFB400',
           borderBottomWidth: 2.5,
           borderRadius: 3.5,
-          marginLeft: '5%',
-          width: '20%',
-
-          // height:1,
+          width: '25%',
         },
       }}>
-      <Tab.Screen name="INFO" component={InfoScreen} />
-      <Tab.Screen name="LIVE" component={LiveScreen} />
-      <Tab.Screen name="SCOREBOARD">
-        {() => <ScoreboardScreen {...props} />}
-      </Tab.Screen>
+      <Tab.Screen name="INFO">{() => <InfoScreen {...props} />}</Tab.Screen>
+      <Tab.Screen name="LIVE">{() => <LiveScreen {...props} />}</Tab.Screen>
+      <Tab.Screen name="SCOREBOARD">{() => <ScoreboardScreen {...props} />}</Tab.Screen>
+      <Tab.Screen name="GRAPH">{() => <Graph {...props} />}</Tab.Screen>
     </Tab.Navigator>
-    // </NavigationContainer>
+ //</NavigationContainer>
   );
 }

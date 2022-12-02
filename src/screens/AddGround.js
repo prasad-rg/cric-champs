@@ -1,4 +1,10 @@
-import {StyleSheet, View, Platform, Text, Alert} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Platform,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import {TextField} from 'rn-material-ui-textfield';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -14,8 +20,10 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {cleanSingle} from 'react-native-image-crop-picker';
 import { deleteParticularGround } from '../services/manageTournament2';
+import Toast from 'react-native-simple-toast';
 
 const AddGround = ({navigation, route}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
@@ -52,6 +60,8 @@ const AddGround = ({navigation, route}) => {
     if(response.status){
       navigation.pop(2)
       dispatch(setEditEntity(false))
+    }else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
 
@@ -73,13 +83,14 @@ const AddGround = ({navigation, route}) => {
               tournamentId: tournamentId,
             };
             const groundData = createFormData(data);
+            setIsLoading(true);
             const response = await addGrounds(groundData);
-
+            setIsLoading(false);
             if (response.status) {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
             } else {
-              console.log('Something went wrong');
+              Toast.show('Something went wrong, Try again 😭');
             }
           }else{
             console.log("Profile Picture not uploaded")
@@ -197,7 +208,12 @@ const AddGround = ({navigation, route}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+            {isLoading ? (
+              <View style={{marginBottom: 20}}>
+                <ActivityIndicator size="large" color="#FFBA8C" />
+              </View>
+            ):(
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
               {editEntity ? (
                 <GradientButton
                   start={{x: 0, y: 0}}
@@ -240,6 +256,8 @@ const AddGround = ({navigation, route}) => {
                 />
               )}
             </View>
+            )}
+           
           </>
         )}
       </Formik>
@@ -261,7 +279,7 @@ const styles = StyleSheet.create({
   designation: {
     height: 16,
     color: '#999999',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,

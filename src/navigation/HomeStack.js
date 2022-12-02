@@ -8,6 +8,7 @@ import OnBoardingScreenThree from '../screens/onboardingscreens/OnBoardingScreen
 import HomeScreen from '../screens/HomeScreen';
 import {Text, View} from 'react-native';
 import UserControl from '../screens/UserControl';
+import ManageTournament from '../screens/ManageTournament';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,8 @@ const HomeStack = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
       />
       <Stack.Screen
         name="UserControls"

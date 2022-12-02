@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   enter: {
     height: 16,
     color: '#F5A623',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 12,
     fontWeight: '900',
     letterSpacing: 0,

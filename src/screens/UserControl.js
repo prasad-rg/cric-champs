@@ -103,16 +103,19 @@ const UserControl = ({navigation}) => {
         </View>
       </ImageBackground>
       <ScrollView style={styles.listContainer}>
-        <UserActions />
+        <UserActions onPress={() => {navigation.navigate('HomeScreen')}} />
         <UserActions
           imageSource={require('../../assets/images/cricketTournament.png')}
           title="Create Tournament"
           tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
+          onPress={()=>isLoggedIn ? navigation.navigate('AppStack') : null}
+  
         />
         <UserActions
           title="Manage Tournament"
           imageSource={require('../../assets/images/cap.png')}
           tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
+          onPress={() => {navigation.navigate('ManageTournament')}}
         />
         <UserActions
           title="View Tournament"

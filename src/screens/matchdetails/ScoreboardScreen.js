@@ -1,17 +1,32 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-} from 'react-native-table-component';
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Table, TableWrapper, Row, Rows} from 'react-native-table-component';
 import {getScoreBoardByMatchIdAndBothTeamId} from '../../services/viewTournament';
+import DropdownField from '../../components/DropdownField';
 
 const ScoreboardScreen = ({navigation, route}) => {
+  let teams = [
+    {
+      id: route?.params?.team1Id,
+      name: route?.params?.teams.team1Name,
+    },
+    {
+      id: route?.params?.team2Id,
+      name: route?.params?.teams.team2Name,
+    },
+  ];
   const [isLoading, setIsLoading] = useState(false);
   const [scoreBoard, setScoreBoard] = useState();
-  // console.info(route.params);
+  console.info(route.params);
+
+  const [visible, setVisible] = useState(false);
 
   const [tableHead, setTableHead] = useState([
     'Batsman',
@@ -27,7 +42,6 @@ const ScoreboardScreen = ({navigation, route}) => {
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Sripathi J\nb Mohan b Nilesh', '0', '0', '0', '0', '0'],
     ['Anupam K\nc Mohan b Nilesh', '0', '0', '0', '0', '0'],
- 
   ]);
   const [tableHeader, setTableHeader] = useState([
     'Bowler',
@@ -42,17 +56,20 @@ const ScoreboardScreen = ({navigation, route}) => {
     ['Sashikant D', '0', '0', '0', '0', '0'],
   ]);
 
-  const loadScoreBoard = async () => {
+  const loadScoreBoard = async teamId => {
+    let team2Id =
+      teamId === route.params.team1Id
+        ? route.params.team2Id
+        : route.params.team1Id;
+
     setIsLoading(true);
     const response = await getScoreBoardByMatchIdAndBothTeamId(
       route.params.matchId,
-      route.params.team1Id,
-      route.params.team2Id,
+      teamId,
+      team2Id,
     );
     setIsLoading(false);
-    // console.log(response);
     if (response.status) {
-      // console.info(response.data);
       setScoreBoard(response.data);
       let arrayResponse = response.data?.playersOfTeam1?.map(player => {
         let tempArr = [
@@ -94,16 +111,35 @@ const ScoreboardScreen = ({navigation, route}) => {
       // setTableData(arrayResponse);
     }
   };
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    loadScoreBoard();
-  }, []);
+    if (selectedItem === null) {
+      loadScoreBoard(route.params.team1Id);
+    } else {
+      loadScoreBoard(selectedItem.id);
+    }
+  }, [selectedItem]);
 
+  const onSelect = item => {
+    setSelectedItem(item);
+  };
+  console.log(' i am selected Item', selectedItem?.id);
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.mainView}>
-          <Text style={styles.header}>UDL Strikers Innings</Text>
+          {/* <Text style={styles.header}>UDL Strikers Innings</Text>
+              <TouchableOpacity>
+          <Image source={require('../../../assets/images/downArrow.png')} style={{tintColor:"grey",height:15,width:18}} />
+          </TouchableOpacity> */}
+
+          <DropdownField
+            data={teams}
+            onSelect={onSelect}
+            value={selectedItem}
+            team1Name={teams[0].name}
+          />
           <View style={{flexDirection: 'row'}}>
             <Text
               style={
@@ -141,7 +177,6 @@ const ScoreboardScreen = ({navigation, route}) => {
               marginHorizontal: '10%',
               marginLeft: '27%',
             }}>
-            {/* <Text style={styles.extraNumber}>3</Text> */}
             <Text style={styles.extraNumber}>
               {` ${
                 scoreBoard?.score?.bye +
@@ -151,7 +186,6 @@ const ScoreboardScreen = ({navigation, route}) => {
                 scoreBoard?.score?.penalty
               }`}
             </Text>
-            {/* <Text style={styles.extraInfo}> (b 2, lb 0, w1, nb 0, p 0)</Text> */}
             <Text style={styles.extraInfo}>
               {` (b ${scoreBoard?.score?.bye}, lb ${scoreBoard?.score?.legBye}, w ${scoreBoard?.score?.wide}, nb ${scoreBoard?.score?.noBall}, p ${scoreBoard?.score?.penalty})`}
             </Text>
@@ -207,7 +241,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 16,
-    //   width: 165,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
@@ -244,8 +277,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(217,226,233,0.5)',
   },
   header_text: {
-    // height: 24,
-    // width: 53,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Bold',
     fontSize: 13,
@@ -273,7 +304,6 @@ const styles = StyleSheet.create({
   },
   extra: {
     height: 19,
-    // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Regular',
     fontSize: 14,
@@ -283,14 +313,12 @@ const styles = StyleSheet.create({
   },
   extraNumber: {
     height: 19,
-    // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-
   },
   extraInfo: {
     height: 19,

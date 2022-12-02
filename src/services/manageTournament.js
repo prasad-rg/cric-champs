@@ -15,7 +15,6 @@ export const createTournament = async formData => {
       const jsonResponse = await res.json();
       return jsonResponse;
     } catch (error) {
-      // console.log("I am error",error)
       return error;
     }
   }
@@ -47,6 +46,24 @@ export const addParticipant = async formData => {
       let res = await fetch(`${BASE_URL}/api/participant`, {
         method: 'post',
         body: formData,
+        headers: {
+          Authorization: validateAndGetToken,
+        },
+      });
+      const jsonResponse = await res.json();
+      return jsonResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+};
+
+export const getUserCreatedTournament = async () => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
+    try {
+      let res = await fetch(`${BASE_URL}/api/tournament/user-created-tournament`, {
+        method: 'get',
         headers: {
           Authorization: validateAndGetToken,
         },

@@ -12,7 +12,6 @@ import {
 import React, {useState} from 'react';
 import AppBar from './AppBar';
 import ImagePicker from 'react-native-image-crop-picker';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const AddProfileDetails = ({
   navigation,
@@ -156,7 +155,7 @@ const AddProfileDetails = ({
                       {right: Dimensions.get('window').width / 2.33},
                     ]
               }>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   createThreeButtonAlert();
                 }}>
@@ -164,6 +163,21 @@ const AddProfileDetails = ({
                   source={require('../../assets/images/camera.png')}
                   style={styles.gobackbutton}
                 />
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={() => {
+                  createThreeButtonAlert();
+                }}
+                styles={{height: 34, width: 34}}>
+                <View
+                  style={{
+                    height: 34,
+                    width: 34,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image source={require('../../assets/images/camera.png')} />
+                </View>
               </TouchableOpacity>
             </View>}
           </View>

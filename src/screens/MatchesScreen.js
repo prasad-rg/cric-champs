@@ -16,6 +16,7 @@ import {convertMatchesDataWithScores} from '../utils/convertMatchesDataWithScore
 
 const MatchesScreen = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  console.log("touurrrrrr",tournamentDetails)
   const [currentMatches, setCurrentMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let prevDate = null;
@@ -57,6 +58,9 @@ const MatchesScreen = ({navigation}) => {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
               matchId: item._id,
+              matchNumber: item.matchNumber,
+              teams: {team1Name: item.team1Name, team2Name: item.team2Name},
+              tournamentName:tournamentDetails.name,
             })
           }>
           <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>

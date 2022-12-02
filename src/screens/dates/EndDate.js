@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, ActivityIndicator, View} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {useSelector} from 'react-redux';
 import {setStartDate} from '../../redux/MatchSlice';
@@ -9,13 +9,14 @@ import { setEnd } from '../../redux/MatchSlice';
 import { setStart } from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import { addDates } from '../../services/manageTournament2';
-
+import Toast from 'react-native-simple-toast';
 
 const StartDate = ({navigation}) => {
   const dispatch = useDispatch();
 
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
+  const [isLoading,setIsLoading]=useState(false)
   const [disabled,setDisabled] = useState(false)
 
   // console.log(startDate, endDate);
@@ -39,12 +40,14 @@ const StartDate = ({navigation}) => {
   }
    
   const handlePress= async ()=>{
+    setIsLoading(true)
     const response= await addDates(dateData);
-    // console.log("I am response for date",response.data)
+    setIsLoading(false)
+    console.log("I am response for date",response.data)
     if(response.data.status){
       navigation.navigate('TimeScreen')
     }else{
-      console.log("Something Went Wrong")
+      Toast.show("Something Went Wrong, Please try again 😭")
     }
   }
 
@@ -167,22 +170,29 @@ const StartDate = ({navigation}) => {
         }}
       />
     </View>
-    <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          // colors={['#FFBA8C', '#FE5C6A']}
-          colors={ disabled ? ['#FFBA8C', '#FE5C6A']  : ['#999999', '#999999']}
-          text="PROCEED"
-          onPress={handlePress}
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-        />
+    {isLoading ? (
+        <View style={{marginBottom: 20}}>
+        <ActivityIndicator size="large" color="#FFBA8C" />
+        </View>
+    ):(
+      <GradientButton
+      start={{x: 0, y: 0}}
+      end={{x: 2, y: 0}}
+      // colors={['#FFBA8C', '#FE5C6A']}
+      colors={ disabled ? ['#FFBA8C', '#FE5C6A']  : ['#999999', '#999999']}
+      text="PROCEED"
+      onPress={handlePress}
+      style={{height: 50, width: '100%', marginTop: 0}}
+      textstyle={{
+        height: 16,
+        fontWeight: '500',
+        fontSize: 14,
+        letterSpacing: 0.5,
+        lineHeight: 19,
+      }}
+    />
+    )}
+    
     </View>
   );
 };

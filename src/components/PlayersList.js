@@ -54,7 +54,7 @@ const PlayersList = ({
           marginRight: 14,
           marginTop: 14,
         }}>
-        <TouchableOpacity>
+      
           <Text
             style={{
               height: 13,
@@ -74,7 +74,7 @@ const PlayersList = ({
               ? 'W C'
               : ' '}
           </Text>
-        </TouchableOpacity>
+    
       </View>
     </View>
     // </TouchableOpacity>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     height: 16,
     width: 144,
     color: '#999999',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Regular',
     fontSize: 12,
     fontWeight: '500',
     letterSpacing: 0,

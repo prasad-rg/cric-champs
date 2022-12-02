@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,7 +13,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const ViewTournamentTab = () => {
   return (
-    //<NavigationContainer>
+    // <NavigationContainer>
     <Tab.Navigator
       // swipeEnabled={false}
 
@@ -54,12 +54,9 @@ const ViewTournamentTab = () => {
       <Tab.Screen name="GROUNDS" component={GroundsScreen} />
       <Tab.Screen name="UMPIRES" component={UmpiresScreen} />
     </Tab.Navigator>
-    //</NavigationContainer>
+    // </NavigationContainer>
   );
 };
 
 export default ViewTournamentTab;
 
-const styles = StyleSheet.create({});
-
-//  options={{headerShown: false}}

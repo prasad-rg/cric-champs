@@ -10,9 +10,10 @@ import {
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
+import { CommonActions } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-
+import Toast from 'react-native-simple-toast';
 import {
   cancelTournament,
   tournamentOverview,
@@ -26,6 +27,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(true);
   const [visible, setVisible] = useState(false);
+
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
@@ -52,10 +54,17 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
         onPress: async () => {
           const res = await cancelTournament(tournamentDetails._id);
           if (res.status) {
-            Alert.alert('Tournament Deleted Successsfully');
-            navigation.goBack();
-          } else {
-            Alert.alert('Please Try Again');
+            Toast.show('Tournament Deleted Successsfully');
+            navigation.dispatch(CommonActions.reset({
+          index:0,
+            routes:[
+                {
+                  name:"HomeStack"
+                }
+            ]
+            }))
+          }else{
+            Toast.show("Something went wrong, Please try again 😭")
           }
         },
         style: 'destructive',
@@ -141,12 +150,12 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             }
             onPress={() => navigation.dispatch(StackActions.push('END TIME'))}
           />
-        </View>
         <TouchableOpacity
           style={styles.card}
           onPress={() => createTwoButtonAlert()}>
           <Text style={styles.cancelText}>Cancel Tournament</Text>
         </TouchableOpacity>
+        </View>
       </ScrollView>
       {disableRegenerateFixture && (
         <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
@@ -188,10 +197,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom:20,
     justifyContent: 'space-between',
   },
   cancelText: {
-    height: 17,
+    // height: 17,
     // width: 141,
     color: '#F5112D',
     fontFamily: 'Roboto-Medium',

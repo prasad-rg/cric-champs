@@ -63,10 +63,10 @@ export const getGroundsByTournamentId = async tournamentId => {
   }
 };
 
-export const getStatsByTournamentId = async tournamentId => {
+export const getStatsByTournamentId = async (tournamentId, query) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/api/tournament/ground-details/all?tournamentId=${tournamentId}`,
+      `${BASE_URL}/api/tournament/stats/${tournamentId}?query=${query}`,
     );
     const data = response.data;
     // console.log(data);
@@ -186,3 +186,35 @@ export const getScoreBoardByMatchIdAndBothTeamId = async (
     return error.response.data;
   }
 };
+
+export const getLiveScoresByMatchIdAndBothTeamId = async (
+  matchId,
+  team1Id,
+  team2Id,
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/match/live-score?tournamentId&matchId=${matchId}&teamId=${team1Id}&team2Id=${team2Id}`,
+    );
+    const data = response.data;
+    console.info('==========', data);
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getInfoByMatchId = async (
+  matchId
+) =>{
+  try {
+    const response=await axios.get(
+      `${BASE_URL}/api/match/get-particular-match?matchId=${matchId}`
+    );
+    const data =response.data;
+    console.info("Info response",data);
+    return data;
+  } catch (error){
+    return error.response.data;
+  }
+}

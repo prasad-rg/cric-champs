@@ -90,10 +90,19 @@ const ProfileImagePicker = ({
         <TouchableOpacity
           onPress={() => {
             createThreeButtonAlert();
-          }}>
-          <Image
-            source={require('../../assets/images/camera.png')}
-          />
+          }}
+          styles={{height: 34,
+            width: 34,}}>
+          <View
+            style={{
+           
+              height: 34,
+              width: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Image source={require('../../assets/images/camera.png')} />
+          </View>
         </TouchableOpacity>
       </View>}
     </View>
@@ -101,46 +110,45 @@ const ProfileImagePicker = ({
 };
 
 const styles = StyleSheet.create({
-
-      teamlogo: {
-        height: 104,
-        width: 104,
-        borderRadius: 60,
-      },
-      teamlogoview: {
-        width: 116,
-        height: 116,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        alignItems: 'center',
-        marginTop: 31,
-        borderWidth: 7,
-        borderRadius: 60,
-        borderColor: 'rgba(255, 255, 255, 0.6)',
-        shadowColor: 'black',
-        shadowOffset: {
-          width: 0,
-          height: 3,
-        },
-        shadowRadius: 60,
-      },
-      imagepicker: {
-        height: 34,
-        width: 34,
-        backgroundColor: '#FFFFFF',
-        boxShadow: '0 2 8 0 rgba(0,0,0,0.2)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 60,
-        position: 'absolute',
-        top: '83%',
-        right: '35%',
-        elevation: 20,
-        shadowColor: '#52006A',
-        shadowOffset: {width: -2, height: 4},
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-      },
-    });
+  teamlogo: {
+    height: 104,
+    width: 104,
+    borderRadius: 60,
+  },
+  teamlogoview: {
+    width: 116,
+    height: 116,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: 31,
+    borderWidth: 7,
+    borderRadius: 60,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 60,
+  },
+  imagepicker: {
+    height: 34,
+    width: 34,
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 2 8 0 rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    position: 'absolute',
+    top: '83%',
+    right: '35%',
+    elevation: 20,
+    shadowColor: '#52006A',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+});
 
 export default ProfileImagePicker;

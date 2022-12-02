@@ -16,14 +16,14 @@ import { combineReducers } from '@reduxjs/toolkit';
     flexWrap = {},
     onPress,
   }) => {
-    const [value, setValue] = useState(0);
-    const [index, setIndex] = useState(0);
+    const [value, setValue] = useState({value: 0});
+    const [index, setIndex] = useState({index: 0});
   
     const setData = (value, index) => {
       setValue(value);
       setIndex(index);
       onPress(value,index);
-      console.log("I am value, I am in",value,index)
+     
    
     };
   
@@ -37,6 +37,7 @@ import { combineReducers } from '@reduxjs/toolkit';
           <RadioButton
             key={i}
             isSelected={index === i}
+            onPress={(value, i) => setData(value, i)}
             
             style={[
               {
@@ -45,8 +46,8 @@ import { combineReducers } from '@reduxjs/toolkit';
                 height: 40,
                 width: 80,
                 borderWidth: 0.8,
-                backgroundColor: index === 0 ? '#989898' :index === 1 ? '#4A90E2':index === 2 ? '#4A90E2':index === 3 ? '#4A90E2': index === 4 ? '#5FB100': index === 5 ? '#5FB100':'#FFFFFF',
-                borderColor: index === 0 ? '#989898' :index === 1 ? '#4A90E2':index === 2 ? '#4A90E2':index === 3 ? '#4A90E2': index === 4 ? '#5FB100': index === 5 ? '#5FB100':'#FFFFFF',
+                backgroundColor: index === i ? '#FF8713' : '#FFFFFF',
+                borderColor:'#C44343',
                 borderRadius: 24,
                 alignItems:'center',
                 justifyContent:'center',

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {TextField} from 'rn-material-ui-textfield';
@@ -16,20 +17,20 @@ import AddProfileDetails from '../components/AddProfileDetails';
 import uuid from 'react-native-uuid';
 import {useDispatch, useSelector} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
+import Toast from 'react-native-simple-toast';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {addUmpires} from '../services/manageTournament2';
-import { updateUmpire } from '../services/manageTournament2';
-import { setEditEntity } from '../redux/manageTournamentSlice';
+import {updateUmpire} from '../services/manageTournament2';
+import {setEditEntity} from '../redux/manageTournamentSlice';
 
-const AddUmpire = ({navigation,route}) => {
+const AddUmpire = ({navigation, route}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const teamId = useSelector(
-    state => state.tournamentdata.teamId,
-  );
+  const teamId = useSelector(state => state.tournamentdata.teamId);
   const editEntity = useSelector(state => state.tournamentdata.editEntity);
   // console.log(editEntity);
 
@@ -42,7 +43,7 @@ const AddUmpire = ({navigation,route}) => {
     name: yup.string().required(),
   });
 
-  const updateParticularUmpire =async (values) =>{
+  const updateParticularUmpire = async values => {
     if (profilePictureUri !== '') {
       var formData = createFormData({
         ...values,
@@ -67,10 +68,10 @@ const AddUmpire = ({navigation,route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
-    }else{
-      console.log("Couldnt Update")
+    } else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
-  } 
+  };
   return (
     <View style={styles.container}>
       <Formik
@@ -91,21 +92,27 @@ const AddUmpire = ({navigation,route}) => {
               tempId: uuid.v4(),
             };
             const umpireData = createFormData(data);
+            setIsLoading(true);
             const response = await addUmpires(umpireData);
-            // console.log('response umpire', response);
+            setIsLoading(false);
+            console.log('response umpire', response);
             if (response.status) {
               // dispatch(addUmpire(response.data));
               navigation.goBack();
+            }else{
+              Toast.show("Something went wrong, Please try again 😭")
             }
+          }else{
+            Toast.show("Umpire profile is required")
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <>
             <KeyboardAwareScrollView>
-              {editEntity && profilePictureUri==='' ? (
+              {editEntity && profilePictureUri === '' ? (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/ground1.png')}
-                  title={editEntity?"Edit Umpire":"Add Umpire"}
+                  title={editEntity ? 'Edit Umpire' : 'Add Umpire'}
                   navigation={navigation}
                   getImageUri={getDetails}
                   profilePictureUri={route.params.umpireLogo}
@@ -113,7 +120,7 @@ const AddUmpire = ({navigation,route}) => {
               ) : (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/ground1.png')}
-                  title={editEntity?"Edit Umpire":"Add Umpire"}
+                  title={editEntity ? 'Edit Umpire' : 'Add Umpire'}
                   navigation={navigation}
                   getImageUri={getDetails}
                 />
@@ -189,39 +196,47 @@ const AddUmpire = ({navigation,route}) => {
                 />
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-          {  editEntity?   <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
-                text="UPDATE UMPIRE"
-                onPress={()=>updateParticularUmpire(values)}
-                style={{height: 50, width: '100%', marginTop: 0}}
-                textstyle={{
-                  height: 16,
-                  fontWeight: '500',
-                  fontSize: 14,
-                  letterSpacing: 0.5,
-                  lineHeight: 19,
-                }}
-              />:
-              <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
-                text="SAVE UMPIRE"
-                onPress={handleSubmit}
-                style={{height: 50, width: '100%', marginTop: 0}}
-                textstyle={{
-                  height: 16,
-                  fontWeight: '500',
-                  fontSize: 14,
-                  letterSpacing: 0.5,
-                  lineHeight: 19,
-                }}
-              />
-              }
-            </View>
+            {isLoading ? (
+              <View style={{marginBottom: 20}}>
+                <ActivityIndicator size="large" color="#FFBA8C" />
+              </View>
+            ) : (
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+                {editEntity ? (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={['#FFBA8C', '#FE5C6A']}
+                    text="UPDATE UMPIRE"
+                    onPress={() => updateParticularUmpire(values)}
+                    style={{height: 50, width: '100%', marginTop: 0}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                  />
+                ) : (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={['#FFBA8C', '#FE5C6A']}
+                    text="SAVE UMPIRE"
+                    onPress={handleSubmit}
+                    style={{height: 50, width: '100%', marginTop: 0}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                  />
+                )}
+              </View>
+            )}
           </>
         )}
       </Formik>

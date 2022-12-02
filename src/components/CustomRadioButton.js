@@ -15,8 +15,8 @@ import RadioForm, {
     flexWrap = {},
     onPress,
   }) => {
-    const [value, setValue] = useState(0);
-    const [index, setIndex] = useState(0);
+    const [value, setValue] = useState({value: 0});
+    const [index, setIndex] = useState({index: 0});
     const setData = (value, index) => {
       setValue(value);
       setIndex(index);
@@ -31,9 +31,7 @@ import RadioForm, {
       //   console.log("I amzero")
       // }
     };
-  // console.log("radioprops")
 
- 
     return (
       <RadioForm
         animation={true}

@@ -28,6 +28,9 @@ import AddPlayer from '../screens/AddPlayer';
 import MatchDetails from '../screens/MatchDetails';
 import AddGround from '../screens/AddGround';
 import AddUmpire from '../screens/AddUmpire';
+import ManageTournament from '../screens/ManageTournament';
+import EditPlayers from '../screens/EditPlayers';
+import EditTeam from '../screens/EditTeam';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +44,10 @@ const RootNavigator = () => {
           <Stack.Screen
             name="OnBoardingStack"
             component={OnBoardingStack}
-            options={{headerShown: false}}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
           />
         )}
         <Stack.Screen
@@ -49,6 +55,7 @@ const RootNavigator = () => {
           component={HomeStack}
           options={{
             headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
         />
 
@@ -72,7 +79,10 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AppStack"
           component={AppStack}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="TeamInfoScreen"
@@ -154,6 +164,16 @@ const RootNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="EditPlayers"
+          component={EditPlayers}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EditTeam"
+          component={EditTeam}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="AddGround"
           component={AddGround}
           options={{headerShown: false}}
@@ -162,6 +182,13 @@ const RootNavigator = () => {
           name="MatchDetails"
           component={MatchDetails}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ManageTournament"
+          component={ManageTournament}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="AddUmpire"
