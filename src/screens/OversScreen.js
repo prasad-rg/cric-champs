@@ -41,8 +41,9 @@ const OversScreen = ({navigation}) => {
     {label: '50', value: '50', id: 7},
   ];
   const handlePress =async () =>{
-    setIsLoading(true)
+    
     if(overs!==''){
+      setIsLoading(true)
       const response= await addOvers(oversData);
       setIsLoading(false)
       console.log("hiiiiiiiiiiiiiii",response)
