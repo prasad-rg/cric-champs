@@ -8,16 +8,15 @@ import {useDispatch} from 'react-redux';
 import {setStart} from '../../redux/MatchSlice';
 import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
+import moment from 'moment';
+const StartDate = ({navigation, route}) => {
+  dateFromRoute = route.params.startDate;
+  convertedDateFromRoute = moment(dateFromRoute).format('YYYY-MM-DD');
 
-const StartDate = ({navigation}) => {
-  const dispatch = useDispatch();
-
-  const startDate = useSelector(state => state.matchdata.startDate);
-  const endDate = useSelector(state => state.matchdata.endDate);
   const [disabled, setDisabled] = useState(false);
-  // console.log("startdate",startDate);
 
   const onDateChange = (date, type) => {
+    console.log('dateee', date);
     setDisabled(true);
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));
@@ -36,19 +35,7 @@ const StartDate = ({navigation}) => {
   }, [navigation]);
 
   const handlePress = async () => {
-    // navigation.navigate('Ground')
-    // if(overs!==''){
-    // const response= await addOvers(oversData);
-    // console.log("hiiiiiiiiiiiiiii",response)
-    // if(response.status){
-    //   navigation.navigate('Ground')
-    // }
-    // }
-    // else{
-    //   console.log("overs is required")
-    // }
     navigation.navigate('END DATE');
-    // console.log("entered")
   };
 
   return (
@@ -130,8 +117,21 @@ const StartDate = ({navigation}) => {
             lineHeight: 14,
             textAlign: 'center',
           }}
-          customDatesStyles={() => {
-            return {
+
+          initialDate={
+            convertedDateFromRoute ? convertedDateFromRoute : undefined
+          }
+          customDatesStyles={[
+            {
+              date: convertedDateFromRoute ? convertedDateFromRoute : undefined,
+              style: {
+                backgroundColor: convertedDateFromRoute ? '#FCA900' : 'FFFFFF',
+              },
+              textStyle: {color: convertedDateFromRoute ? '#FFFFFF' : 'black'}, 
+              containerStyle: [], 
+              allowDisabled: true,
+            },
+            {
               textStyle: {
                 color: '#222222',
                 fontFamily: 'Roboto-Regular',
@@ -141,14 +141,13 @@ const StartDate = ({navigation}) => {
                 textAlign: 'center',
               },
               fontFamily: 'Roboto-Medium',
-            };
-          }}
+            },
+          ]}
         />
       </View>
       <GradientButton
         start={{x: 0, y: 0}}
         end={{x: 2, y: 0}}
-        // colors={['#FFBA8C', '#FE5C6A']}
         colors={disabled ? ['#FFBA8C', '#FE5C6A'] : ['#999999', '#999999']}
         text="PROCEED"
         onPress={handlePress}
