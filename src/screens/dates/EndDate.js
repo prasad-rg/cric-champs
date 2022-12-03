@@ -9,9 +9,12 @@ import { setEnd } from '../../redux/MatchSlice';
 import { setStart } from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import { addDates } from '../../services/manageTournament2';
+import Toast from 'react-native-simple-toast';
 
+const StartDate = ({navigation,route}) => {
 
-const StartDate = ({navigation}) => {
+  dateFromRoute = route.params.params.endDate;
+  console.log("end date",dateFromRoute);
   const dispatch = useDispatch();
 
   const startDate = useSelector(state => state.matchdata.startDate);
@@ -47,7 +50,7 @@ const StartDate = ({navigation}) => {
     if(response.data.status){
       navigation.navigate('TimeScreen')
     }else{
-      console.log("Something Went Wrong")
+      Toast.show("Something Went Wrong, Please try again 😭")
     }
   }
 

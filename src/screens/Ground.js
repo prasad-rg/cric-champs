@@ -41,10 +41,10 @@ const Ground = ({navigation}) => {
     }
   }, [focus]);
 
-  const dispatch = useDispatch();
+ 
   const handlePress = () => {
     navigation.navigate('UmpiresList');
-    dispatch(deleteGround());
+    // dispatch(deleteGround());
   };
 
   const getGroundProfile = (value) => {
@@ -124,7 +124,7 @@ const Ground = ({navigation}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-          onPress={handlePress}
+          onPress={currentTeams.length === 0 ? null : handlePress}
         />
       </View>
     </View>

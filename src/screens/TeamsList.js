@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-import { setTeamId } from '../redux/manageTournamentSlice';
+import { setIsEdit, setTeamId } from '../redux/manageTournamentSlice';
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
 import {getTeamsByTournamentId} from '../services/viewTournament';
@@ -53,8 +53,6 @@ const TeamsList = ({navigation}) => {
     })
     
   }
-
-  const [team, setTeam] = useState(true);
   const handleBack = () => {
     navigation.pop();
   };
@@ -63,6 +61,7 @@ const TeamsList = ({navigation}) => {
     navigation.navigate('OversScreen');
   };
   const handleTeam = () => {
+    dispatch(setIsEdit(false))
     navigation.navigate('AddTeam');
   };
   return (

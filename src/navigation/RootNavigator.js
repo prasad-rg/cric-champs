@@ -29,6 +29,9 @@ import MatchDetails from '../screens/MatchDetails';
 import AddGround from '../screens/AddGround';
 import AddUmpire from '../screens/AddUmpire';
 import ManageTournament from '../screens/ManageTournament';
+import UpdateLiveScore from '../screens/UpdateLiveScore';
+import EditPlayers from '../screens/EditPlayers';
+import EditTeam from '../screens/EditTeam';
 import RNBootSplash from 'react-native-bootsplash';
 
 
@@ -164,6 +167,16 @@ const RootNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="EditPlayers"
+          component={EditPlayers}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EditTeam"
+          component={EditTeam}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="AddGround"
           component={AddGround}
           options={{headerShown: false}}
@@ -185,6 +198,12 @@ const RootNavigator = () => {
           component={AddUmpire}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="UpdateLiveScore"
+          component={UpdateLiveScore}
+          options={{headerShown: false}}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

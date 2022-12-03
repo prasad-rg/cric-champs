@@ -43,6 +43,7 @@ export const matchSlice = createSlice({
     deleteEndTime: (state, action) => {
       state.endTime = [];
     },
+
   },
 });
 export const {

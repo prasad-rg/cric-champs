@@ -17,6 +17,7 @@ import AddProfileDetails from '../components/AddProfileDetails';
 import uuid from 'react-native-uuid';
 import {useDispatch, useSelector} from 'react-redux';
 import {createFormData} from '../utils/createFormData';
+import Toast from 'react-native-simple-toast';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -67,8 +68,8 @@ const AddUmpire = ({navigation, route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
-    } else {
-      console.log('Couldnt Update');
+    } else{
+      Toast.show("Something went wrong, Please try again 😭")
     }
   };
   return (
@@ -98,7 +99,11 @@ const AddUmpire = ({navigation, route}) => {
             if (response.status) {
               // dispatch(addUmpire(response.data));
               navigation.goBack();
+            }else{
+              Toast.show("Something went wrong, Please try again 😭")
             }
+          }else{
+            Toast.show("Umpire profile is required")
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (

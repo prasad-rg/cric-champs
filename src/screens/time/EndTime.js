@@ -17,6 +17,7 @@ import GradientButton from '../../components/GradientButton';
 import {addTime} from '../../services/manageTournament2';
 import moment from 'moment';
 import {getISOTime} from '../../utils/getISOTime';
+import Toast from 'react-native-simple-toast';
 
 const EndTime = ({navigation}) => {
   const dispatch = useDispatch();
@@ -74,6 +75,8 @@ const EndTime = ({navigation}) => {
     setIsLoading(false)
     if (response.data.status) {
       navigation.navigate('Overview');
+    }else{
+      Toast.show("Something Went Wrong, Please try again 😭")
     }
   };
 

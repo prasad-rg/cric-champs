@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
       }
     };
     getRecentDetails(recentActivities);
-  }, [recentActivities]);
+  }, [focus]);
   const handlePress = async () => {
     setIsLoading(true);
     setInputTextError('');

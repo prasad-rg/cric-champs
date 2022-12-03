@@ -16,6 +16,8 @@ import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import { addOvers } from '../services/manageTournament2';
 import { useSelector } from 'react-redux';
+import Toast from 'react-native-simple-toast';
+
 const OversScreen = ({navigation}) => {
   const [isLoading,setIsLoading]=useState(false)
   const tournamentId = useSelector(
@@ -47,10 +49,12 @@ const OversScreen = ({navigation}) => {
       console.log("hiiiiiiiiiiiiiii",response)
       if(response.status){
         navigation.navigate('Ground')
+      }else{
+        Toast.show("Something went wrong, Please try again 😭")
       }
     }
     else{
-      console.log("overs is required")
+      Toast.show("overs is required")
     }
   }
   const getData= data =>{

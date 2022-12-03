@@ -32,8 +32,6 @@ const ManageScreen = ({navigation}) => {
     }
   };
 
-  const handleEdit = () => {};
-
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -87,17 +85,7 @@ const ManageScreen = ({navigation}) => {
       {/* </ScrollView> */}
       {/* </View> */}
       <ScrollView contentContainerStyle={{flex: 1}}>
-        {/* <View
-          style={{
-            // flex:1,
-            // borderWidth: 2,
-            borderColor: 'red',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height:"100%"
-          }}> */}
         <ManageTab navigation={navigation} />
-        {/* </View> */}
       </ScrollView>
     </View>
   );

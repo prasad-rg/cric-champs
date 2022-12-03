@@ -33,7 +33,7 @@ import {setIsEdit} from '../redux/manageTournamentSlice';
 import {updateTeam} from '../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
 
-const AddTeam = ({navigation, route}) => {
+const EditTeam = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const [currentPlayers, setCurrentPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +67,7 @@ const AddTeam = ({navigation, route}) => {
   });
 
   const handlePlayerList = (value, inputValues) => {
+    console.log(value, inputValues);
     navigation.navigate('PlayerProfile', {
       image: value.image.path,
       teamName: inputValues.name,
@@ -94,16 +95,9 @@ const AddTeam = ({navigation, route}) => {
 
   const renderItem = ({item}) => {
     return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('PlayerProfile', {
-            teamId: route.params.teamId,
-            tournamentId: tournamentId,
-            playerId: item._id,
-          })
-        }>
+
         <TeamListName source={item.profilePic.url} text={item.name} />
-      </TouchableOpacity>
+
     );
   };
   useEffect(() => {
@@ -303,25 +297,12 @@ const AddTeam = ({navigation, route}) => {
                   </SafeAreaView>
                 </View>
               </ImageBackground>
-              <View style={styles.tournamentTypeView}>
-                <TouchableOpacity onPress={handlePlayer}>
-                  <View style={styles.addButton}>
-                    <Text style={styles.addTeamText}>ADD PLAYER</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+
               <View style={styles.showaddedplayer}>
                 <Text style={styles.players}>Players</Text>
 
                 {isEdit ? (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('PlayerProfile', {
-                        teamId: teamId,
-                        tournamentId: tournamentId,
-                        playerId: item._id,
-                      })
-                    }>
+                  <TouchableOpacity>
                     {/* <TeamListName source={item.profilePic.url} text={item.name} /> */}
 
                     <FlatList
@@ -347,23 +328,27 @@ const AddTeam = ({navigation, route}) => {
                       </View>
                     ) : (
                       <View style={styles.teamsView}>
-                        {participantdata.map(value => (
-                          // console.log(value.image.path)
-                          <View key={value.tempId}>
-                            <TouchableOpacity
-                              onPress={() => handlePlayerList(value, values)}>
-                              <PlayersList
-                                source={value.image.path}
-                                name={value.name}
-                                designation={value.designation}
-                                expertise={value.expertise}
-                                batting={value.batting}
-                                bowling={value.bowling}
-                                bowlingtype={value.bowlingtype}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        ))}
+                        {participantdata.map(
+                          value => (
+                            console.log(participantdata),
+                            (
+                              <View key={value.tempId}>
+                                {/* <TouchableOpacity
+                                onPress={() => handlePlayerList(value, values)}> */}
+                                <PlayersList
+                                  source={value.image.path}
+                                  name={value.name}
+                                  designation={value.designation}
+                                  expertise={value.expertise}
+                                  batting={value.batting}
+                                  bowling={value.bowling}
+                                  bowlingtype={value.bowlingtype}
+                                />
+                                {/* </TouchableOpacity> */}
+                              </View>
+                            )
+                          ),
+                        )}
                       </View>
                     )}
                   </>
@@ -572,4 +557,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddTeam;
+export default EditTeam;

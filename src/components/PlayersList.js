@@ -54,7 +54,7 @@ const PlayersList = ({
           marginRight: 14,
           marginTop: 14,
         }}>
-        <TouchableOpacity>
+      
           <Text
             style={{
               height: 13,
@@ -74,7 +74,7 @@ const PlayersList = ({
               ? 'W C'
               : ' '}
           </Text>
-        </TouchableOpacity>
+    
       </View>
     </View>
     // </TouchableOpacity>

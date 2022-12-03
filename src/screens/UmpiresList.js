@@ -13,28 +13,26 @@ import React, {useLayoutEffect, useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import TeamListName from '../components/TeamListName';
 import {useSelector} from 'react-redux';
-import {StackActions, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {getUmpiresByTournamentId} from '../services/viewTournament';
 import {setIsEdit} from '../redux/manageTournamentSlice';
-import {setEditEntity} from '../redux/manageTournamentSlice';
 
 const UmpiresList = ({navigation}) => {
   const [currentUmpires, setCurrentUmpires] = useState([]);
-  const [selectedUmpire, setSelectedUmpire] = useState('');
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
 
   const loadUmpires = async () => {
     const response = await getUmpiresByTournamentId(tournamentId);
-
     if (response.status) {
       setCurrentUmpires(response.data);
     }
   };
+
   const focus = useIsFocused();
   useLayoutEffect(() => {
     if (focus == true) {
@@ -45,47 +43,6 @@ const UmpiresList = ({navigation}) => {
   const handlePress = () => {
     navigation.navigate('DateScreen');
   };
-
-  const handleEdit = () => {
-    dispatch(setIsEdit(false));
-    dispatch(setEditEntity(true));
-    // console.log('Currrrrenttttt', selectedUmpire);
-    navigation.dispatch(StackActions.push('AddUmpire'));
-  };
-
-  // const deleteUmpire = async () => {
-  //   const data = {
-  //     tournamentId: tournamentDetails._id,
-  //     groundId: route.params.groundId,
-  //   };
-  //   console.log(data);
-  //   const response = await deleteParticularUmpire(data);
-  //   console.log(response);
-  //   if (response.status){
-  //     navigation.pop(1)
-  //   }else{
-  //     console.log("Cannot Delete, Something went wrong")
-  //   }
-  // };
-
-  // const handleDelete = () => {
-  //   Alert.alert(
-  //     'Are your sure?',
-  //     'Are you sure you want to remove this umpire?',
-  //     [
-  //       {
-  //         text: 'Yes',
-  //         onPress: () => {
-  //           deleteUmpire();
-  //         },
-  //       },
-
-  //       {
-  //         text: 'No',
-  //       },
-  //     ],
-  //   );
-  // };
 
   return (
     <View style={styles.container}>
@@ -165,7 +122,7 @@ const UmpiresList = ({navigation}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-          onPress={handlePress}
+          onPress={currentUmpires.length === 0 ? null : handlePress}
         />
       </View>
     </View>

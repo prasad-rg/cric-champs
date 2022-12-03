@@ -10,16 +10,16 @@ import {
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
 import GradientButton from '../../components/GradientButton';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-
+import Toast from 'react-native-simple-toast';
 import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
 import {StackActions} from '@react-navigation/native';
-import { generateFixture } from '../../services/manageTournament2';
+import {generateFixture} from '../../services/manageTournament2';
 
 const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -53,17 +53,19 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
         onPress: async () => {
           const res = await cancelTournament(tournamentDetails._id);
           if (res.status) {
-            Alert.alert('Tournament Deleted Successsfully');
-            navigation.dispatch(CommonActions.reset({
-          index:0,
-            routes:[
-                {
-                  name:"HomeStack"
-                }
-            ]
-            }))
+            Toast.show('Tournament Deleted Successsfully');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'HomeStack',
+                  },
+                ],
+              }),
+            );
           } else {
-            Alert.alert('Please Try Again');
+            Toast.show('Something went wrong, Please try again 😭');
           }
         },
         style: 'destructive',
@@ -128,32 +130,65 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             number={
               currentOverview !== null && currentOverview?.startDateEnglish
             }
-            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
+            onPress={() =>
+              // navigation.navigate('Meals', {
+              //   screen: 'Meals',
+              //   params: {screen: 'Past'},
+              // })
+              navigation.dispatch(
+                StackActions.push('DateScreen', {
+                  startDate: currentOverview?.startDateEnglish,
+                }),
+              )
+            }
           />
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
-            onPress={() => navigation.dispatch(StackActions.push('DateScreen'))}
+            onPress={() =>
+                navigation.navigate('DateScreen', {
+                screen: 'END DATE',
+                params: {endDate : currentOverview?.endDateEnglish},
+              })
+              // navigation.dispatch(
+              //   StackActions.push('DateScreen', {
+              //     screen: 'DateScreen',
+              //     params : {screen: 'END',endDate: currentOverview?.endDateEnglish},
+              //   }),
+              // )
+            }
           />
           <TournamentInputList
             text="Start of Play"
             number={
               currentOverview !== null && currentOverview?.startTimeNormalFormat
             }
-            onPress={() => navigation.dispatch(StackActions.push('START TIME'))}
+            onPress={() =>
+              navigation.dispatch(
+                StackActions.push('TimeScreen', {
+                  startTime: currentOverview?.startTimeNormalFormat,
+                }),
+              )
+            }
           />
           <TournamentInputList
             text="End of Play"
             number={
               currentOverview !== null && currentOverview?.endTimeNormalFormat
             }
-            onPress={() => navigation.dispatch(StackActions.push('END TIME'))}
+            onPress={() =>
+              navigation.dispatch(
+                StackActions.push('TimeScreen', {
+                  endTime: currentOverview?.endTimeNormalFormat,
+                }),
+              )
+            }
           />
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => createTwoButtonAlert()}>
-          <Text style={styles.cancelText}>Cancel Tournament</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => createTwoButtonAlert()}>
+            <Text style={styles.cancelText}>Cancel Tournament</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       {disableRegenerateFixture && (
@@ -196,7 +231,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom:20,
+    marginBottom: 20,
     justifyContent: 'space-between',
   },
   cancelText: {

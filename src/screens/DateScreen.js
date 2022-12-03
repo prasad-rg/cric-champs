@@ -14,7 +14,7 @@ import moment from 'moment';
 import GradientButton from '../components/GradientButton';
 import {addDates} from '../services/manageTournament2';
 
-const DateScreen = ({navigation}) => {
+const DateScreen = ({navigation,route}) => {
   const handleBack = () => {
     navigation.goBack();
   };
@@ -108,25 +108,9 @@ const DateScreen = ({navigation}) => {
         </SafeAreaView>
       </View>
 
-      <DateTab />
+      <DateTab route={route} navigation={navigation}/>
 
       <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-        {/* <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          // colors={['#FFBA8C', '#FE5C6A']}
-          colors={total > 0 ? ['#FFBA8C', '#FE5C6A'] : ['#999999', '#999999']}
-          text="PROCEED"
-          onPress={handlePress}
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-        /> */}
       </View>
     </View>
   );
