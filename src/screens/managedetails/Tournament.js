@@ -6,6 +6,7 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import TournamentInputList from '../../components/TournamentInputList';
@@ -13,13 +14,14 @@ import GradientButton from '../../components/GradientButton';
 import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
 import {
   cancelTournament,
   tournamentOverview,
 } from '../../services/tournamentManagement';
 import {StackActions} from '@react-navigation/native';
 import {generateFixture} from '../../services/manageTournament2';
+import CustomModal from '../../components/CustomModal';
+import Toast from 'react-native-simple-toast';
 
 const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -81,20 +83,20 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
 
   const handlePress = async () => {
     const response = await generateFixture(tournamentId);
-    // console.log('responseeeee', response.data);
-    // if (response.data.statusCode !== 200) {
-    //   setModal(false);
-    //   // navigation.navigate('TimeScreen')
-    // } else {
-    //   setModal(true);
-    //   // dispatch(deleteStartTime())
-    //   // dispatch(deleteEndTime())
-    //   // dispatch(deleteStartDate())
-    //   // dispatch(deleteEndDate())
+    console.log('responseeeee', response.data);
+    if (response.data.statusCode !== 200) {
+      setModal(false);
+      Toast.show(response.data.message)
+      // navigation.navigate('TimeScreen')
+    } else {
+      setModal(true);
+      // dispatch(deleteStartTime())
+      // dispatch(deleteEndTime())
+      // dispatch(deleteStartDate())
+      // dispatch(deleteEndDate())
+    }
 
-    // }
-
-    // setVisible(true);
+    setVisible(true);
   };
 
   return (
@@ -145,11 +147,12 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
-            onPress={() =>
+            onPress={
+              () =>
                 navigation.navigate('DateScreen', {
-                screen: 'END DATE',
-                params: {endDate : currentOverview?.endDateEnglish},
-              })
+                  screen: 'END DATE',
+                  params: {endDate: currentOverview?.endDateEnglish},
+                })
               // navigation.dispatch(
               //   StackActions.push('DateScreen', {
               //     screen: 'DateScreen',
@@ -210,6 +213,42 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
           />
         </View>
       )}
+
+      {modal ? (
+        <CustomModal visible={visible}>
+          <View style={{alignItems: 'center', marginBottom: 30}}>
+            <Image
+              source={require('../../../assets/images/AwesomeBall.png')}
+              style={styles.image}
+            />
+            <Text style={styles.textView}>
+              Your Fixture has been{'\n'}generated!
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ViewScreen');
+              setVisible(false);
+            }}>
+            <Text style={styles.matchText}>VIEW MATCHES</Text>
+          </TouchableOpacity>
+        </CustomModal>
+      ) : (
+        <CustomModal visible={visible}>
+          <View style={{alignItems: 'center', marginBottom: 30}}>
+            <Image
+              source={require('../../../assets/images/Oopsball.png')}
+              style={styles.image}
+            />
+            <Text style={styles.textView}>
+              Oops! Something {'\n'} went wrong.
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => setVisible(false)}>
+            <Text style={styles.tryText}>TRY AGAIN</Text>
+          </TouchableOpacity>
+        </CustomModal>
+      )}
     </View>
   );
 };
@@ -244,5 +283,43 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 15.36,
     padding: 5,
+  },
+  image: {
+    height: 200,
+    width: 200,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textView: {
+    height: 42,
+    color: '#4A4A4A',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 18,
+    letterSpacing: 0,
+    lineHeight: 21,
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  tryText: {
+    height: 16,
+    width: 77,
+    color: '#F5112D',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    lineHeight: 16,
+    textAlign: 'center',
+  },
+  matchText: {
+    height: 16,
+    color: '#4A90E2',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    lineHeight: 16,
+    textAlign: 'center',
   },
 });
