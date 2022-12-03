@@ -34,7 +34,6 @@ import EditPlayers from '../screens/EditPlayers';
 import EditTeam from '../screens/EditTeam';
 import RNBootSplash from 'react-native-bootsplash';
 
-
 const Stack = createStackNavigator();
 
 const RootNavigator = () => {
@@ -62,14 +61,16 @@ const RootNavigator = () => {
           }}
         />
 
-        <Stack.Screen
-          name="AuthStack"
-          component={AuthStack}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-          }}
-        />
+        {!isLoggedIn && (
+          <Stack.Screen
+            name="AuthStack"
+            component={AuthStack}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            }}
+          />
+        )}
 
         <Stack.Screen
           name="ViewScreen"
@@ -203,7 +204,6 @@ const RootNavigator = () => {
           component={UpdateLiveScore}
           options={{headerShown: false}}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

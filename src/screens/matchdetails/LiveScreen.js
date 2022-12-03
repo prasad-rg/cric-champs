@@ -90,7 +90,11 @@ const LiveScreen = ({navigation, route}) => {
         setMatchNotStarted(false);
         setScoreBoard(response.data);
         setFallOfWickets(response?.data?.score?.fallOfWicket?.pop());
-        setCommentary(response?.data?.commentry?.commentry?.reverse());
+        setCommentary(
+          response?.data?.commentry?.commentry
+            ?.reverse()
+            .filter(item => item.teamId === selectedItem?.id),
+        );
         let arrayResponse = response.data?.playersOfTeam1?.map(player => {
           let tempArr = [
             `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
@@ -244,7 +248,16 @@ const LiveScreen = ({navigation, route}) => {
           </View>
 
           <Text style={styles.runsText}>
-            Coastal Riders need 29 runs to win
+            {scoreBoard?.score?.runsRequiredToWin > 0 ? (
+              `${selectedItem.name} need ${scoreBoard?.score?.runsRequiredToWin} runs to win`
+            ) : scoreBoard?.score?.runsRequiredToWin == 0 ? (
+              <Text
+                style={{
+                  color: 'green',
+                }}>{`${selectedItem.name} won the match`}</Text>
+            ) : (
+              ''
+            )}
           </Text>
 
           <View style={{marginTop: 25}}>
@@ -303,7 +316,7 @@ const LiveScreen = ({navigation, route}) => {
                 <Text style={styles.pship}>FoW:</Text>
                 <Text style={styles.runs}>
                   {'   '}
-                  {fallOfWicket?.runs / fallOfWicket?.wickets}
+                  {`${fallOfWicket?.runs} / ${fallOfWicket?.wickets}`}
                 </Text>
                 <Text style={styles.pship}>
                   {' '}
@@ -380,6 +393,17 @@ const LiveScreen = ({navigation, route}) => {
                         ) : liveScore?.status?.toString().toLowerCase() ==
                           '0' ? (
                           <DotBall />
+                        ) : liveScore?.status?.toString().toLowerCase() ==
+                            'Wd' ||
+                          liveScore?.status?.toString().toLowerCase() == 'Nb' ||
+                          liveScore?.status?.toString().toLowerCase() ==
+                            'Bye' ||
+                          liveScore?.status?.toString().toLowerCase() ==
+                            'Leg Bye' ? (
+                          <Circle
+                            style={{backgroundColor: '#e67e22', margin: 4}}
+                            text={liveScore?.status}
+                          />
                         ) : (
                           <Circle
                             style={{backgroundColor: '#4A90E2', margin: 4}}
@@ -632,7 +656,7 @@ const styles = StyleSheet.create({
   number3: {
     height: 30,
     width: 50,
-   
+
     color: '#000000',
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
