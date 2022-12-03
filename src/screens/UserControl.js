@@ -15,6 +15,7 @@ import {getUserDetails, logoutUser} from '../services/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {addUser} from '../redux/userSlice';
 import {logout, userLogout} from '../redux/authSlice';
+import Toast from 'react-native-simple-toast';
 
 const UserControl = ({navigation}) => {
   // const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -103,24 +104,32 @@ const UserControl = ({navigation}) => {
         </View>
       </ImageBackground>
       <ScrollView style={styles.listContainer}>
-        <UserActions onPress={() => {navigation.navigate('HomeScreen')}} />
+        <UserActions
+          onPress={() => {
+            navigation.navigate('HomeScreen');
+          }}
+        />
         <UserActions
           imageSource={require('../../assets/images/cricketTournament.png')}
           title="Create Tournament"
           tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
-          onPress={()=>isLoggedIn ? navigation.navigate('AppStack') : null}
-  
+          onPress={() => (isLoggedIn ? navigation.navigate('AppStack') : null)}
         />
         <UserActions
           title="Manage Tournament"
           imageSource={require('../../assets/images/cap.png')}
           tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
-          onPress={() => {navigation.navigate('ManageTournament')}}
+          onPress={() => {
+            isLoggedIn && navigation.navigate('ManageTournament');
+          }}
         />
         <UserActions
           title="View Tournament"
           imageSource={require('../../assets/images/glasses.png')}
-          onPress={() => navigation.navigate('ViewScreen')}
+          onPress={() => {
+            Toast.show(`Please Enter Tournament Code to View Tournament`);
+            navigation.navigate('HomeScreen');
+          }}
         />
         <View style={styles.line} />
         <TouchableOpacity>
