@@ -20,7 +20,7 @@ const MatchCard = ({matchDetails}) => {
               styles.statusContainer,
               {
                 backgroundColor:
-                  matchDetails?.status.toUpperCase() == 'ABONDONED'
+                  matchDetails?.status.toUpperCase() == 'ABONDONED' ||  matchDetails?.status.toUpperCase() == 'CANCELLED'
                     ? '#E05140'
                     : matchDetails?.status.toUpperCase() == 'PAST'
                     ? '#0075E1'
