@@ -1,6 +1,5 @@
-
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
-import React, {useEffect, useState,useLayoutEffect} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 
 import AddProfileDetails from '../components/AddProfileDetails';
@@ -34,13 +33,11 @@ const UmpireProfile = ({navigation, route}) => {
       route.params.umpireId,
       tournamentDetails._id,
     );
-    // console.log(response);
+
     setIsLoading(false);
     if (response.status) {
       setCurrentUmpire(response.data);
-      // console.info(response.data);
     }
-    // console.log(response);
   };
   const focus = useIsFocused();
   useLayoutEffect(() => {
@@ -49,8 +46,6 @@ const UmpireProfile = ({navigation, route}) => {
     }
   }, [focus]);
 
-
-  // console.warn(route.params, tournamentDetails._id);
   const Details = [
     {
       id: 1,
@@ -78,11 +73,10 @@ const UmpireProfile = ({navigation, route}) => {
           backroundImageUri={require('../../assets/images/umpire.png')}
           getImageUri={getDetails}
           isView={isView}
-          isEdit ={route.params.isEdit}
+          isEdit={route.params.isEdit}
           type="umpire"
           profilePictureUri={{
             uri: route.params.umpirePicture,
-         
           }}></AddProfileDetails>
         <View>
           {Details.map(item => (

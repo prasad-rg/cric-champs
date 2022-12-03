@@ -15,15 +15,16 @@ const ScoreboardScreen = ({navigation, route}) => {
   let teams = [
     {
       id: route?.params?.team1Id,
-      name: route?.params?.teams.team1Name,
+      name: route?.params?.teams?.team1Name,
     },
     {
       id: route?.params?.team2Id,
-      name: route?.params?.teams.team2Name,
+      name: route?.params?.teams?.team2Name,
     },
   ];
   const [isLoading, setIsLoading] = useState(false);
   const [scoreBoard, setScoreBoard] = useState();
+  const [matchNotStarted, setMatchNotStarted] = useState(true);
   console.info(route.params);
 
   const [visible, setVisible] = useState(false);
@@ -58,9 +59,9 @@ const ScoreboardScreen = ({navigation, route}) => {
 
   const loadScoreBoard = async teamId => {
     let team2Id =
-      teamId === route.params.team1Id
-        ? route.params.team2Id
-        : route.params.team1Id;
+      teamId === route.params?.team1Id
+        ? route.params?.team2Id
+        : route.params?.team1Id;
 
     setIsLoading(true);
     const response = await getScoreBoardByMatchIdAndBothTeamId(
@@ -70,45 +71,50 @@ const ScoreboardScreen = ({navigation, route}) => {
     );
     setIsLoading(false);
     if (response.status) {
-      setScoreBoard(response.data);
-      let arrayResponse = response.data?.playersOfTeam1?.map(player => {
-        let tempArr = [
-          `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
-          player?.runsScored,
-          `${player?.overFaced}.${player?.ballsFaced}`,
-          `${player?.fours}`,
-          `${player?.sixes}`,
-          `${Math.round(player?.strikeRate * 100) / 100}`,
-        ];
-        if (player?.wicket === undefined) {
-          if (player?.currentlyBatting) {
-            tempArr[0] = `${player?.playerName}*\nNot Out`;
-          } else {
-            tempArr[0] = `${player?.playerName}\nNot Out`;
+      if (response?.data?.score === null) {
+        setMatchNotStarted(true);
+      } else {
+        setMatchNotStarted(false)
+        setScoreBoard(response.data);
+        let arrayResponse = response.data?.playersOfTeam1?.map(player => {
+          let tempArr = [
+            `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+            player?.runsScored,
+            `${player?.overFaced}.${player?.ballsFaced}`,
+            `${player?.fours}`,
+            `${player?.sixes}`,
+            `${Math.round(player?.strikeRate * 100) / 100}`,
+          ];
+          if (player?.wicket === undefined) {
+            if (player?.currentlyBatting) {
+              tempArr[0] = `${player?.playerName}*\nNot Out`;
+            } else {
+              tempArr[0] = `${player?.playerName}\nNot Out`;
+            }
           }
-        }
 
-        return tempArr;
-      });
-      setTableData(arrayResponse);
-      let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
-        let bowlerArray = [
-          bowler?.playerName,
-          bowler?.overBowled,
-          bowler?.maiden,
-          bowler?.runsConceded,
-          bowler?.wicketsTaken,
-          bowler?.economyRate,
-        ];
-        if (bowler?.currentlyBatting) {
-          bowlerArray[0] = `${bowler?.playerName}*`;
-        }
-        return bowlerArray;
-      });
-      setData(bowlerData);
-      // console.log(arrayResponse);
-      // setCurrentTeams(arrayResponse);
-      // setTableData(arrayResponse);
+          return tempArr;
+        });
+        setTableData(arrayResponse);
+        let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
+          let bowlerArray = [
+            bowler?.playerName,
+            bowler?.overBowled,
+            bowler?.maiden,
+            bowler?.runsConceded,
+            bowler?.wicketsTaken,
+            bowler?.economyRate,
+          ];
+          if (bowler?.currentlyBatting) {
+            bowlerArray[0] = `${bowler?.playerName}*`;
+          }
+          return bowlerArray;
+        });
+        setData(bowlerData);
+        // console.log(arrayResponse);
+        // setCurrentTeams(arrayResponse);
+        // setTableData(arrayResponse);
+      }
     }
   };
   const [selectedItem, setSelectedItem] = useState(null);
@@ -127,100 +133,103 @@ const ScoreboardScreen = ({navigation, route}) => {
   console.log(' i am selected Item', selectedItem?.id);
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.mainView}>
-          {/* <Text style={styles.header}>UDL Strikers Innings</Text>
-              <TouchableOpacity>
-          <Image source={require('../../../assets/images/downArrow.png')} style={{tintColor:"grey",height:15,width:18}} />
-          </TouchableOpacity> */}
-
-          <DropdownField
-            data={teams}
-            onSelect={onSelect}
-            value={selectedItem}
-            team1Name={teams[0].name}
-          />
-          <View style={{flexDirection: 'row'}}>
-            <Text
-              style={
-                styles.number1
-              }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
-            <Text
-              style={
-                styles.secondNumber
-              }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
-          </View>
+      {matchNotStarted ? (
+        <View style={styles.noMatchView}>
+          <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
         </View>
+      ) : (
+        <ScrollView>
+          <View style={styles.mainView}>
+            <DropdownField
+              data={teams}
+              onSelect={onSelect}
+              value={selectedItem}
+              team1Name={teams[0].name}
+            />
+            <View style={{flexDirection: 'row'}}>
+              <Text
+                style={
+                  styles.number1
+                }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+              <Text
+                style={
+                  styles.secondNumber
+                }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
+            </View>
+          </View>
 
-        <Table style={{marginTop: 10}}>
-          <Row
-            data={tableHead}
-            flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
-            style={styles.table_header}
-            textStyle={styles.header_text}
-          />
-          <TableWrapper>
-            <Rows
-              data={tableData}
-              heightArr={[50, 50, 50, 50, 50, 50]}
+          <Table style={{marginTop: 10}}>
+            <Row
+              data={tableHead}
               flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
-              textStyle={styles.row_text}
+              style={styles.table_header}
+              textStyle={styles.header_text}
             />
-          </TableWrapper>
-        </Table>
+            <TableWrapper>
+              <Rows
+                data={tableData}
+                heightArr={[50, 50, 50, 50, 50, 50]}
+                flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
+                textStyle={styles.row_text}
+              />
+            </TableWrapper>
+          </Table>
 
-        <View style={styles.extraView}>
-          <Text style={styles.extra}> Extras</Text>
+          <View style={styles.extraView}>
+            <Text style={styles.extra}> Extras</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: '10%',
+                marginLeft: '27%',
+              }}>
+              <Text style={styles.extraNumber}>
+                {` ${
+                  scoreBoard?.score?.bye +
+                  scoreBoard?.score?.legBye +
+                  scoreBoard?.score?.wide +
+                  scoreBoard?.score?.noBall +
+                  scoreBoard?.score?.penalty
+                }`}
+              </Text>
+              <Text style={styles.extraInfo}>
+                {` (b ${scoreBoard?.score?.bye}, lb ${scoreBoard?.score?.legBye}, w ${scoreBoard?.score?.wide}, nb ${scoreBoard?.score?.noBall}, p ${scoreBoard?.score?.penalty})`}
+              </Text>
+            </View>
+          </View>
           <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: '10%',
-              marginLeft: '27%',
-            }}>
-            <Text style={styles.extraNumber}>
-              {` ${
-                scoreBoard?.score?.bye +
-                scoreBoard?.score?.legBye +
-                scoreBoard?.score?.wide +
-                scoreBoard?.score?.noBall +
-                scoreBoard?.score?.penalty
-              }`}
-            </Text>
-            <Text style={styles.extraInfo}>
-              {` (b ${scoreBoard?.score?.bye}, lb ${scoreBoard?.score?.legBye}, w ${scoreBoard?.score?.wide}, nb ${scoreBoard?.score?.noBall}, p ${scoreBoard?.score?.penalty})`}
+            style={{height: 50, alignItems: 'center', flexDirection: 'row'}}>
+            <Text style={styles.totalText}>Total</Text>
+            <Text
+              style={styles.totalNumber}>{`${scoreBoard?.score?.runs}`}</Text>
+          </View>
+          <View>
+            <Text style={styles.fallText}>Fall of Wickets</Text>
+            <Text style={styles.fallView}>
+              {scoreBoard?.score?.fallOfWicket?.map(
+                fall =>
+                  `${fall?.runs}/${fall?.wickets} (${fall?.batsmanName}, ${fall?.over}.${fall?.balls}), `,
+              )}
             </Text>
           </View>
-        </View>
-        <View style={{height: 50, alignItems: 'center', flexDirection: 'row'}}>
-          <Text style={styles.totalText}>Total</Text>
-          <Text style={styles.totalNumber}>{`${scoreBoard?.score?.runs}`}</Text>
-        </View>
-        <View>
-          <Text style={styles.fallText}>Fall of Wickets</Text>
-          <Text style={styles.fallView}>
-            {scoreBoard?.score?.fallOfWicket?.map(
-              fall =>
-                `${fall?.runs}/${fall?.wickets} (${fall?.batsmanName}, ${fall?.over}.${fall?.balls}), `,
-            )}
-          </Text>
-        </View>
-        <Table>
-          <Row
-            data={tableHeader}
-            flexArr={[3, 1, 1, 1, 1, 1]}
-            style={styles.table_header}
-            textStyle={styles.header_text}
-          />
-          <TableWrapper>
-            <Rows
-              data={data}
-              heightArr={[40, 40, 40, 40, 40, 40]}
+          <Table>
+            <Row
+              data={tableHeader}
               flexArr={[3, 1, 1, 1, 1, 1]}
-              textStyle={styles.row_text}
+              style={styles.table_header}
+              textStyle={styles.header_text}
             />
-          </TableWrapper>
-        </Table>
-      </ScrollView>
+            <TableWrapper>
+              <Rows
+                data={data}
+                heightArr={[40, 40, 40, 40, 40, 40]}
+                flexArr={[3, 1, 1, 1, 1, 1]}
+                textStyle={styles.row_text}
+              />
+            </TableWrapper>
+          </Table>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -230,6 +239,7 @@ export default ScoreboardScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   mainView: {
     width: 'auto',
@@ -368,5 +378,20 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 28,
     padding: 15,
+  },
+  noMatchView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  noMatchText: {
+    color: '#393939',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 18,
+    fontWeight: '500',
+    letterSpacing: 0,
+    // lineHeight: 21,
+    textAlign: 'center',
   },
 });

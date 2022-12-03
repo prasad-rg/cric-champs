@@ -19,16 +19,15 @@ import DotBall from '../../components/DotBall';
 import {getLiveScoresByMatchIdAndBothTeamId} from '../../services/viewTournament';
 import DropdownField from '../../components/DropdownField';
 
-
 const LiveScreen = ({navigation, route}) => {
   let teams = [
     {
       id: route?.params?.team1Id,
-      name: route?.params?.teams.team1Name,
+      name: route?.params?.teams?.team1Name,
     },
     {
       id: route?.params?.team2Id,
-      name: route?.params?.teams.team2Name,
+      name: route?.params?.teams?.team2Name,
     },
   ];
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +35,7 @@ const LiveScreen = ({navigation, route}) => {
   const [fallOfWicket, setFallOfWickets] = useState({});
   const [commentary, setCommentary] = useState([]);
   let previousOver = 1;
-//  console.warn(route.params)
+  //  console.warn(route.params)
   const [tableHead, setTableHead] = useState([
     'Batsman',
     'R',
@@ -60,14 +59,14 @@ const LiveScreen = ({navigation, route}) => {
   const [data, setData] = useState([['Sashikant D', '0', '0', '0', '0', '0']]);
 
   const [over, setOver] = useState(['5.3', '5.2', '5.1']);
-
+  const [matchNotStarted, setMatchNotStarted] = useState(true);
   // const loadScoreBoard = async () => {
   //   setIsLoading(true);
   //   const response = await getLiveScoresByMatchIdAndBothTeamId(
   //     route.params.matchId,
   //     route.params.team2Id,
   //     route.params.team1Id,
-      
+
   //   );
   const loadScoreBoard = async teamId => {
     let team2Id =
@@ -82,47 +81,54 @@ const LiveScreen = ({navigation, route}) => {
       team2Id,
     );
     setIsLoading(false);
-    // console.log(response);
-    if (response.status) {
-      // console.info(response.data);
-      setScoreBoard(response.data);
-      setFallOfWickets(response?.data?.score?.fallOfWicket?.pop());
-      setCommentary(response?.data?.commentry?.commentry?.reverse());
-      let arrayResponse = response.data?.playersOfTeam1?.map(player => {
-        let tempArr = [
-          `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
-          player?.runsScored,
-          `${player?.ballsFaced}`,
-          `${player?.fours}`,
-          `${player?.sixes}`,
-          `${Math.round(player?.strikeRate * 100) / 100}`,
-        ];
-        if (player?.wicket === undefined) {
-          if (player?.currentlyBatting) {
-            tempArr[0] = `${player?.playerName}*\nNot Out`;
-          } else {
-            tempArr[0] = `${player?.playerName}\nNot Out`;
-          }
-        }
+    console.log('Live score response', route.params.matchId, teamId, team2Id);
 
-        return tempArr;
-      });
-      setTableData(arrayResponse);
-      let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
-        let bowlerArray = [
-          bowler?.playerName,
-          bowler?.overBowled,
-          bowler?.maiden,
-          bowler?.runsConceded,
-          bowler?.wicketsTaken,
-          bowler?.economyRate,
-        ];
-        if (bowler?.currentlyBatting) {
-          bowlerArray[0] = `${bowler?.playerName}*`;
-        }
-        return bowlerArray;
-      });
-      setData(bowlerData);
+    if (response.status) {
+      if (response?.data?.score === null) {
+        setMatchNotStarted(true);
+      } else {
+        setMatchNotStarted(false);
+        setScoreBoard(response.data);
+        setFallOfWickets(response?.data?.score?.fallOfWicket?.pop());
+        setCommentary(response?.data?.commentry?.commentry?.reverse());
+        let arrayResponse = response.data?.playersOfTeam1?.map(player => {
+          let tempArr = [
+            `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+            player?.runsScored,
+            `${player?.ballsFaced}`,
+            `${player?.fours}`,
+            `${player?.sixes}`,
+            `${Math.round(player?.strikeRate * 100) / 100}`,
+          ];
+          if (player?.wicket === undefined) {
+            if (player?.currentlyBatting) {
+              tempArr[0] = `${player?.playerName}*\nNot Out`;
+            } else {
+              tempArr[0] = `${player?.playerName}\nNot Out`;
+            }
+          }
+
+          return tempArr;
+        });
+        setTableData(arrayResponse);
+        let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
+          let bowlerArray = [
+            bowler?.playerName,
+            bowler?.overBowled,
+            bowler?.maiden,
+            bowler?.runsConceded,
+            bowler?.wicketsTaken,
+            bowler?.economyRate,
+          ];
+          if (bowler?.currentlyBatting) {
+            bowlerArray[0] = `${bowler?.playerName}*`;
+          }
+          return bowlerArray;
+        });
+        setData(bowlerData);
+      }
+      // console.info(response.data);
+
       // console.log(arrayResponse);
       // setCurrentTeams(arrayResponse);
       // setTableData(arrayResponse);
@@ -167,147 +173,196 @@ const LiveScreen = ({navigation, route}) => {
     }
   }, [selectedItem]);
 
-  const onSelect=(item)=>{
-  setSelectedItem(item)
-  }
-  
+  const onSelect = item => {
+    setSelectedItem(item);
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
-        }>
-        <View style={styles.headerText}>
-          {/* <Text style={styles.codetext}>Code Warriors</Text> */}
-          <View>
-          <DropdownField data={teams} onSelect={onSelect} value={selectedItem} team1Name={teams[0].name}/>
-          </View>
-          <Text
-            style={
-              styles.numberText
-            }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
-          <Text
-            style={
-              styles.overText
-            }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
+      {matchNotStarted ? (
+        <View style={styles.noMatchView}>
+          <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
         </View>
-        <View style={styles.scoreView}>
-          <View>
-            <Text style={styles.heading1}>Coastal Riders</Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text
-                style={
-                  styles.number1
-                }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
-              <Text
-                style={
-                  styles.secondNumber
-                }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
-            </View>
-          </View>
-          <View style={{width: '20%', marginHorizontal: '30%'}}>
-            <Text style={styles.heading2}>CRR</Text>
-            <Text style={styles.number2}>
-              {scoreBoard?.score?.currentRunRate}
-            </Text>
-          </View>
-
-          <View style={{width: '20%', marginLeft: '-30%'}}>
-            <Text style={styles.heading2}>REQ</Text>
-            <Text style={styles.number2}>
-              {scoreBoard?.score?.requiredRunRate}
-            </Text>
-          </View>
-        </View>
-
-        <Text style={styles.runsText}>Coastal Riders need 29 runs to win</Text>
-
-        <View style={{marginTop: 25}}>
-          <Table>
-            <Row
-              data={tableHead}
-              flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-              style={styles.table_header}
-              textStyle={styles.header_text}
-            />
-            <TableWrapper>
-              <Rows
-                data={tableData}
-                heightArr={[50, 50, 50, 50, 50, 50]}
-                flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-                textStyle={styles.row_text}
-              />
-            </TableWrapper>
-          </Table>
-        </View>
-        <View
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: 'rgba(217,226,233,0.8)',
-          }}>
-          <Table>
-            <Row
-              data={tableHeader}
-              flexArr={[3, 1, 1, 1, 1, 1]}
-              style={styles.table_header}
-              textStyle={styles.header_text}
-            />
-            <TableWrapper>
-              <Rows
-                data={data}
-                heightArr={[50, 50, 50, 50, 50, 50]}
-                flexArr={[3, 1, 1, 1, 1, 1]}
-                textStyle={styles.row_text}
-              />
-            </TableWrapper>
-          </Table>
-        </View>
-        <View style={styles.middleView}>
-          <View style={styles.pshipView}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.pship}>P'ship:</Text>
-              <Text style={styles.runs}>
-                {`  ${scoreBoard?.score?.partnershipRuns}`} runs
-              </Text>
-              <Text
-                style={
-                  styles.pship
-                }>{` (${scoreBoard?.score?.partnershipBalls} balls)`}</Text>
-            </View>
-            <View style={{flexDirection: 'row', alignSelf: 'baseline'}}>
-              <Text style={styles.pship}>FoW:</Text>
-              <Text style={styles.runs}>
-                {'   '}
-                {fallOfWicket?.runs / fallOfWicket?.wickets}
-              </Text>
-              <Text style={styles.pship}>
-                {' '}
-                {`(${fallOfWicket?.over}.${fallOfWicket?.wickets})`}
-              </Text>
-            </View>
-          </View>
-        </View>
+      ) : (
         <ScrollView
-          horizontal={true}
-          contentContainerStyle={styles.recent_view}
-          showsHorizontalScrollIndicator={false}>
-          <View style={styles.recent_view}>
-            <View
-              style={{
-                margin: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                flex: 1,
-                // justifyContent: 'space-evenly',
-              }}>
-              <Text style={styles.recent}>Recent</Text>
-              {commentary?.map(liveScore => {
-                //let currentOver = liveScore?.over;
-                if (previousOver !== liveScore?.over) {
-                  previousOver = liveScore?.over;
-                  return (
-                    <>
-                      <Text style={styles.line}>|</Text>
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
+          }>
+          <View style={styles.headerText}>
+            {/* <Text style={styles.codetext}>Code Warriors</Text> */}
+            <View>
+              <DropdownField
+                data={teams}
+                onSelect={onSelect}
+                value={selectedItem}
+                team1Name={teams[0].name}
+              />
+            </View>
+            <Text
+              style={
+                styles.numberText
+              }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+            <Text
+              style={
+                styles.overText
+              }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
+          </View>
+          <View style={styles.scoreView}>
+            <View>
+              {selectedItem ? (
+                <Text style={styles.heading1}>{selectedItem.name}</Text>
+              ) : (
+                <Text style={styles.heading1}>
+                  {route?.params?.teams?.team1Name}
+                </Text>
+              )}
+
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={
+                    styles.number1
+                  }>{`${scoreBoard?.score?.runs}/${scoreBoard?.score?.wickets}`}</Text>
+                <Text
+                  style={
+                    styles.secondNumber
+                  }>{`(${scoreBoard?.score?.over}.${scoreBoard?.score?.balls})`}</Text>
+              </View>
+            </View>
+            <View style={{width: '20%', marginHorizontal: '30%'}}>
+              <Text style={styles.heading2}>CRR</Text>
+              <Text style={styles.number2}>
+                {scoreBoard?.score?.currentRunRate}
+              </Text>
+            </View>
+
+            <View style={{width: '20%', marginLeft: '-30%'}}>
+              <Text style={styles.heading2}>REQ</Text>
+              <Text style={styles.number3}>
+                {scoreBoard?.score?.requiredRunRate}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.runsText}>
+            Coastal Riders need 29 runs to win
+          </Text>
+
+          <View style={{marginTop: 25}}>
+            <Table>
+              <Row
+                data={tableHead}
+                flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                style={styles.table_header}
+                textStyle={styles.header_text}
+              />
+              <TableWrapper>
+                <Rows
+                  data={tableData}
+                  heightArr={[50, 50, 50, 50, 50, 50]}
+                  flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                  textStyle={styles.row_text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          <View
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: 'rgba(217,226,233,0.8)',
+            }}>
+            <Table>
+              <Row
+                data={tableHeader}
+                flexArr={[3, 1, 1, 1, 1, 1]}
+                style={styles.table_header}
+                textStyle={styles.header_text}
+              />
+              <TableWrapper>
+                <Rows
+                  data={data}
+                  heightArr={[50, 50, 50, 50, 50, 50]}
+                  flexArr={[3, 1, 1, 1, 1, 1]}
+                  textStyle={styles.row_text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          <View style={styles.middleView}>
+            <View style={styles.pshipView}>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.pship}>P'ship:</Text>
+                <Text style={styles.runs}>
+                  {`  ${scoreBoard?.score?.partnershipRuns}`} runs
+                </Text>
+                <Text
+                  style={
+                    styles.pship
+                  }>{` (${scoreBoard?.score?.partnershipBalls} balls)`}</Text>
+              </View>
+              <View style={{flexDirection: 'row', alignSelf: 'baseline'}}>
+                <Text style={styles.pship}>FoW:</Text>
+                <Text style={styles.runs}>
+                  {'   '}
+                  {fallOfWicket?.runs / fallOfWicket?.wickets}
+                </Text>
+                <Text style={styles.pship}>
+                  {' '}
+                  {`(${fallOfWicket?.over}.${fallOfWicket?.wickets})`}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={styles.recent_view}
+            showsHorizontalScrollIndicator={false}>
+            <View style={styles.recent_view}>
+              <View
+                style={{
+                  margin: 20,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flex: 1,
+                  // justifyContent: 'space-evenly',
+                }}>
+                <Text style={styles.recent}>Recent</Text>
+                {commentary?.map(liveScore => {
+                  //let currentOver = liveScore?.over;
+                  if (previousOver !== liveScore?.over) {
+                    previousOver = liveScore?.over;
+                    return (
+                      <>
+                        <Text style={styles.line}>|</Text>
+                        <View key={liveScore?._id}>
+                          {liveScore?.status?.toString().toLowerCase() ===
+                          'w' ? (
+                            <Circle
+                              style={{backgroundColor: '#E05140', margin: 4}}
+                              text="W"
+                            />
+                          ) : liveScore?.status?.toString().toLowerCase() ===
+                              '4' ||
+                            liveScore?.status?.toString().toLowerCase() ===
+                              '6' ? (
+                            <Circle
+                              style={{backgroundColor: '#5FB100', margin: 4}}
+                              text={liveScore?.status}
+                            />
+                          ) : liveScore?.status?.toString().toLowerCase() ==
+                            '0' ? (
+                            <DotBall />
+                          ) : (
+                            <Circle
+                              style={{backgroundColor: '#4A90E2', margin: 4}}
+                              text={liveScore?.status}
+                            />
+                          )}
+                        </View>
+                      </>
+                    );
+                  } else {
+                    previousOver = liveScore?.over;
+                    return (
                       <View key={liveScore?._id}>
                         {liveScore?.status?.toString().toLowerCase() === 'w' ? (
                           <Circle
@@ -332,49 +387,23 @@ const LiveScreen = ({navigation, route}) => {
                           />
                         )}
                       </View>
-                    </>
-                  );
-                } else {
-                  previousOver = liveScore?.over;
-                  return (
-                    <View key={liveScore?._id}>
-                      {liveScore?.status?.toString().toLowerCase() === 'w' ? (
-                        <Circle
-                          style={{backgroundColor: '#E05140', margin: 4}}
-                          text="W"
-                        />
-                      ) : liveScore?.status?.toString().toLowerCase() === '4' ||
-                        liveScore?.status?.toString().toLowerCase() === '6' ? (
-                        <Circle
-                          style={{backgroundColor: '#5FB100', margin: 4}}
-                          text={liveScore?.status}
-                        />
-                      ) : liveScore?.status?.toString().toLowerCase() == '0' ? (
-                        <DotBall />
-                      ) : (
-                        <Circle
-                          style={{backgroundColor: '#4A90E2', margin: 4}}
-                          text={liveScore?.status}
-                        />
-                      )}
-                    </View>
-                  );
-                }
-              })}
+                    );
+                  }
+                })}
+              </View>
             </View>
+          </ScrollView>
+          <View style={styles.headerText}>
+            <Text style={styles.recent}>Commentary</Text>
           </View>
-        </ScrollView>
-        <View style={styles.headerText}>
-          <Text style={styles.recent}>Commentary</Text>
-        </View>
 
-        <FlatList
-          data={commentary}
-          renderItem={commentaryView}
-          keyExtractor={item => item._id}
-        />
+          <FlatList
+            data={commentary}
+            renderItem={commentaryView}
+            keyExtractor={item => item._id}
+          />
 
-        {/* {commentary.map(item => {
+          {/* {commentary.map(item => {
           return (
             <View style={styles.commentaryView} key={item._id}>
               <Text
@@ -402,7 +431,7 @@ const LiveScreen = ({navigation, route}) => {
           );
         })} */}
 
-        {/* <View style={styles.commentaryView}>
+          {/* <View style={styles.commentaryView}>
           <Text style={styles.recent}>5.2</Text>
           <Circle
             style={{
@@ -416,7 +445,7 @@ const LiveScreen = ({navigation, route}) => {
           />
           <Text style={{width: '50%'}}>Deepanjan to Ashley, 1 run</Text>
         </View> */}
-        {/* 
+          {/* 
         <View style={styles.commentaryView}>
           <Text style={styles.recent}>5.1</Text>
           <Circle
@@ -434,59 +463,60 @@ const LiveScreen = ({navigation, route}) => {
             the covers!
           </Text>
         </View> */}
-        <View style={styles.endView}>
-          <Text style={styles.end_of_over}>
-            End of Over : 5 | 4 runs | 1 wt | 31/3 | RR : 6.6
-          </Text>
-        </View>
-        <View style={styles.commentaryView}>
-          <Text style={styles.recent}>4.6</Text>
-          <Circle
-            style={{
-              backgroundColor: '#D8D8D8',
-              height: 22,
-              width: 22,
-              borderRadius: 11,
-            }}
-            text="0"
-            textStyle={{color: 'black'}}
-          />
-          <Text style={{width: '50%'}}>Deepanjan to Sunder, no runs</Text>
-        </View>
+          <View style={styles.endView}>
+            <Text style={styles.end_of_over}>
+              End of Over : 5 | 4 runs | 1 wt | 31/3 | RR : 6.6
+            </Text>
+          </View>
+          <View style={styles.commentaryView}>
+            <Text style={styles.recent}>4.6</Text>
+            <Circle
+              style={{
+                backgroundColor: '#D8D8D8',
+                height: 22,
+                width: 22,
+                borderRadius: 11,
+              }}
+              text="0"
+              textStyle={{color: 'black'}}
+            />
+            <Text style={{width: '50%'}}>Deepanjan to Sunder, no runs</Text>
+          </View>
 
-        <View style={styles.commentaryView}>
-          <Text style={styles.recent}>4.5</Text>
-          <Circle
-            style={{
-              backgroundColor: '#D8D8D8',
-              height: 22,
-              width: 22,
-              borderRadius: 11,
-            }}
-            text="0"
-            textStyle={{color: 'black'}}
-          />
-          <Text style={{width: '50%'}}>Deepanjan to Ashley, 1 run</Text>
-        </View>
+          <View style={styles.commentaryView}>
+            <Text style={styles.recent}>4.5</Text>
+            <Circle
+              style={{
+                backgroundColor: '#D8D8D8',
+                height: 22,
+                width: 22,
+                borderRadius: 11,
+              }}
+              text="0"
+              textStyle={{color: 'black'}}
+            />
+            <Text style={{width: '50%'}}>Deepanjan to Ashley, 1 run</Text>
+          </View>
 
-        <View style={styles.commentaryView}>
-          <Text style={styles.recent}>4.4</Text>
-          <Circle
-            style={{
-              backgroundColor: '#5FB100',
-              height: 22,
-              width: 22,
-              borderRadius: 11,
-            }}
-            text="4"
-            textStyle={{color: '#FFFFFF'}}
-          />
-          <Text style={{width: '50%'}}>
-            Deepanjan to Ashley, 4 runs! Its a beautiful stroke straight through
-            the covers!
-          </Text>
-        </View>
-      </ScrollView>
+          <View style={styles.commentaryView}>
+            <Text style={styles.recent}>4.4</Text>
+            <Circle
+              style={{
+                backgroundColor: '#5FB100',
+                height: 22,
+                width: 22,
+                borderRadius: 11,
+              }}
+              text="4"
+              textStyle={{color: '#FFFFFF'}}
+            />
+            <Text style={{width: '50%'}}>
+              Deepanjan to Ashley, 4 runs! Its a beautiful stroke straight
+              through the covers!
+            </Text>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -601,7 +631,8 @@ const styles = StyleSheet.create({
   },
   number3: {
     height: 30,
-    width: 36,
+    width: 50,
+   
     color: '#000000',
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
@@ -742,5 +773,20 @@ const styles = StyleSheet.create({
     height: 22,
     width: 22,
     borderRadius: 11,
+  },
+  noMatchView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  noMatchText: {
+    color: '#393939',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 18,
+    fontWeight: '500',
+    letterSpacing: 0,
+    // lineHeight: 21,
+    textAlign: 'center',
   },
 });
