@@ -9,16 +9,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import TimeTab from '../navigation/TimeTab';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import moment from 'moment';
 const TimeScreen = ({navigation}) => {
-  let current_time = moment().format("HH:mm")
+  let current_time = moment().format('HH:mm');
 
   const startTime = useSelector(state => state.matchdata.startTime);
   const endTime = useSelector(state => state.matchdata.endTime);
   const start = useSelector(state => state.matchdata.start);
   const end = useSelector(state => state.matchdata.end);
- 
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -39,8 +39,9 @@ const TimeScreen = ({navigation}) => {
               </View>
             </View>
             <View style={styles.datecontainer}>
-              <Text style={styles.timeinhour}>{start ?startTime: end ? endTime:current_time}</Text>
-              
+              <Text style={styles.timeinhour}>
+                {start ? startTime : end ? endTime : current_time}
+              </Text>
             </View>
           </View>
         </SafeAreaView>
@@ -146,7 +147,6 @@ const styles = StyleSheet.create({
   },
   datecontainer: {
     flexDirection: 'row',
-    // justifyContent:'center',
     alignItems: 'center',
     marginLeft: 62,
     marginTop: 15,

@@ -39,8 +39,6 @@ const AppBar = ({
   const isEdit = useSelector(state => state.tournamentdata.isEdit);
   const editEntity = useSelector(state => state.tournamentdata.editEntity);
 
-  // const tournamentdata = useSelector(state => state.tournamentdata.tournamentdata);
-  // console.log(profilePictureUri,title)
 
   const handleEditPlayer = () => {
     navigation.dispatch(
@@ -48,8 +46,7 @@ const AppBar = ({
         playerLogo: profilePictureUri,
         playerName: title,
         playerId: playerId,
-        // teamLogo: route?.params.teamLogo,
-        // teamName: route?.params.teamName,
+       
       }),
     );
     dispatch(setIsEdit(false));
@@ -95,8 +92,6 @@ const AppBar = ({
         umpireLogo: profilePictureUri,
         umpireName: title,
         umpireId: umpireId,
-        // teamLogo: route?.params.teamLogo,
-        // teamName: route?.params.teamName,
       }),
     );
     dispatch(setIsEdit(false));
@@ -109,7 +104,6 @@ const AppBar = ({
       playerId: umpireId,
     };
     const response = await deleteIndividualPlayer(data);
-    // console.log(response);
     if (response.status) {
       navigation.pop(1);
     } else{

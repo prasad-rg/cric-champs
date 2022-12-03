@@ -44,14 +44,14 @@ const StatsScreen = ({navigation}) => {
       id: uuid.v4(),
       title: 'Most Fours',
       value: ['Strike Rate', 'Best Economy Rate','Fours'],
-      variables: ['strikeRate', 'bestEconomyRate','fours'],
+      variables: ['strikeRate', 'bestEconomyRate','careerFours'],
       query: 'most_fours',
     },
     {
       id: uuid.v4(),
       title: 'Most Sixes',
       value: ['Strike Rate', 'Best Economy Rate','Sixes'],
-      variables: ['strikeRate', 'bestEconomyRate','sixes'],
+      variables: ['strikeRate', 'bestEconomyRate','careerSixes'],
       query: 'most_sixes',
     },
     {

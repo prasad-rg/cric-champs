@@ -8,8 +8,9 @@ import {
   Button,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
 import DotBall from '../components/DotBall';
 import GradientButton from '../components/GradientButton';
@@ -19,15 +20,370 @@ import CustomExtrasButton from '../components/CustomExtrasButton';
 import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
+import {useIsFocused} from '@react-navigation/native';
 
-const UpdateLiveScore = () => {
-  const [tournamenttype, setTournamentType] = useState('');
+import {
+  cancelLiveTournament,
+  getListOfAllPlayers,
+  getMatchStatus,
+  getPlayingPlayersList,
+  updateLiveScore,
+} from '../services/updateLiveScore';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  convertLiveScoreData,
+  liveScoreDataStructure,
+} from '../utils/updateLiveScoreUtils';
+import {
+  addInitialPlayerSelected,
+  addTeam1Players,
+  addTeam2Players,
+  addTeamId,
+  swapTeamId,
+  swapTeamPlayers,
+} from '../redux/updateLiveScore';
+import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
+import {DECLARE_END, TIME_TO_END_MATCH, TIME_TO_FLIP} from '../api/constants';
 
+const UpdateLiveScore = ({navigation, route}) => {
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  const {
+    team1Players,
+    team2Players,
+    battingTeamId,
+    bowlingTeamId,
+    initalPlayerSelected,
+  } = useSelector(state => state.liveScoreData);
 
-  const getData = (data, index) => {
-    setTournamentType(data);
-   
+  const dispatch = useDispatch();
+  const [isUpdatePressed, setIsUpdatePressed] = useState(false);
+
+  // console.warn(team1Players, team2Players, battingTeamId, bowlingTeamId);
+
+  let {matchId, team1Id, team2Id, teams} = route.params;
+
+  const [runs, setRuns] = useState(liveScoreDataStructure.runs);
+  const [extras, setExtras] = useState(liveScoreDataStructure.extras);
+  const [wickets, setWickets] = useState(liveScoreDataStructure.wickets);
+  const [players, setPlayers] = useState({});
+  const [initialPlayersSelectionModal, setInitialPlayerSelectionModal] =
+    useState({strikeModal: false, nonStrikeModal: false, bowlerModal: false});
+  const [matchAndInningsStatus, setMatchAndInningsStatus] = useState({
+    matchStatus: 'start',
+    inningsStatus: 'start',
+  });
+  const [strike, setStrike] = useState({
+    strike: '',
+    strikeName: '',
+  });
+  const [nonStrike, setNonStrike] = useState({
+    nonStrike: '',
+    nonStrikeName: '',
+  });
+  const [bowler, setBowler] = useState({
+    bowler: '',
+    bowlerName: '',
+  });
+
+  const [presentScoreFromAPI, setPresentScoreFromAPI] = useState({
+    runs: 0,
+    balls: 0,
+    wickets: 0,
+    overs: 0,
+  });
+
+  const [wicketsStructure, setWicketsStructure] = useState({});
+  const [wicketsModal, setWicketsModal] = useState({
+    batsmanModal: false,
+    fliderModal: false,
+    newBatsmanModal: false,
+  });
+  const [overs, setOvers] = useState({overs: 0, balls: 1});
+  // remaining Players
+  const [remainingPlayersToBat, setRemainingPlayersToBat] = useState([]);
+
+  const [dataToSend, setDataToSend] = useState({
+    tournamentId: tournamentDetails._id,
+    matchId: matchId,
+    teamId: team1Id,
+    team2Id: team2Id,
+    matchStatus: 'start',
+    inningsStatus: 'start',
+    strike: '',
+    strikeName: '',
+    nonStrike: '',
+    nonStrikeName: '',
+    bowler: '',
+    bowlerName: '',
+    runs: 0,
+    extras: {
+      status: false,
+      bye: 0,
+      legBye: 0,
+      wide: 0,
+      noBall: 0,
+    },
+    wickets: {
+      status: false,
+      batsmanId: '',
+      batsman: '',
+      type: '',
+      fielderName: '',
+      new_batsmanId: '',
+      new_batsman: '',
+      bowlerName: '',
+    },
+    commentry: {
+      teamId: team1Id,
+      teamName: '',
+      over: 0,
+      balls: 0,
+      status: 'W',
+      message: 'he he',
+    },
+  });
+
+  const getRuns = (data, index) => {
+    if (data === null) {
+      setRuns(null);
+    } else {
+      setRuns(data);
+    }
   };
+
+  const getExtras = (data, index) => {
+    // console.warn(data);
+    if (data === null) {
+      setExtras(null);
+    } else {
+      setExtras(data);
+    }
+  };
+  const getWickets = (data, index) => {
+    // console.log(data);
+    if (data === null) {
+      setWickets({
+        status: false,
+        batsmanId: '',
+        batsman: '',
+        type: '',
+        fielderName: '',
+        new_batsmanId: '',
+        new_batsman: '',
+        bowlerName: '',
+      });
+      setWicketsModal({...wicketsModal, newBatsmanModal: false});
+    } else {
+      if (data !== 'Run Out' && data !== 'Other' && data !== 'Caught') {
+        // TODO: Add the batsman batsmanId from the striker Id even bowler which is got from the PUT response
+        setWickets({
+          ...liveScoreDataStructure.wickets,
+          type: data,
+          status: true,
+          batsmanId: strike.strike,
+          batsman: strike.strikeName,
+          bowler: bowler.bowler,
+          bowlerName: bowler.bowlerName,
+        });
+        setWicketsModal({...wicketsModal, newBatsmanModal: true});
+      } else {
+        // TODO : Add the batsman batsmanId bowler filder from the Modal fetched from the remaining player list PUT response
+        setWickets({
+          ...liveScoreDataStructure.wickets,
+          type: data,
+          status: true,
+          bowler: bowler.bowler,
+          bowlerName: bowler.bowlerName,
+        });
+        setWicketsModal({...wicketsModal, batsmanModal: true});
+      }
+    }
+  };
+
+  const handelUpdate = async () => {
+    const updateScores = convertLiveScoreData(
+      runs,
+      extras,
+      wickets,
+      battingTeamId,
+      bowlingTeamId,
+      matchId,
+      tournamentDetails._id,
+      matchAndInningsStatus.matchStatus,
+      matchAndInningsStatus.inningsStatus,
+      bowler,
+      nonStrike,
+      strike,
+      presentScoreFromAPI,
+    );
+
+    console.info(updateScores);
+
+    // console.info(updateScores);
+
+    // TODO:---------------------------Think
+
+    console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
+    console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
+
+    const update = await updateLiveScore(updateScores);
+    if (
+      updateScores.commentry.balls + 1 === 7 &&
+      update?.tournamentEntitledOvers !== updateScores.commentry.over
+    ) {
+      setInitialPlayerSelectionModal({
+        ...initialPlayersSelectionModal,
+        bowlerModal: true,
+      });
+    }
+    console.log('000000', update);
+    let inningsTwoUpdate;
+    if (update.status) {
+      if (update?.message === TIME_TO_FLIP) {
+        dispatch(swapTeamId());
+        dispatch(swapTeamPlayers());
+        setInitialPlayerSelectionModal({
+          ...initialPlayersSelectionModal,
+          strikeModal: true,
+        });
+
+        console.info('.....BattingTeamId....AfterSwap', battingTeamId);
+        console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
+
+        inningsTwoUpdate = await updateLiveScore(
+          convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            bowlingTeamId,
+            battingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          ),
+        );
+
+        // console.log(
+        //   '======Converted Data====',
+        //   convertLiveScoreData(
+        //     runs,
+        //     extras,
+        //     wickets,
+        //     bowlingTeamId,
+        //     battingTeamId,
+        //     matchId,
+        //     tournamentDetails._id,
+        //     matchAndInningsStatus.matchStatus,
+        //     matchAndInningsStatus.inningsStatus,
+        //     bowler,
+        //     nonStrike,
+        //     strike,
+        //     presentScoreFromAPI,
+        //   ),
+        // );
+
+        console.info('--------------', inningsTwoUpdate);
+        if (
+          update?.message === TIME_TO_END_MATCH ||
+          update?.message === DECLARE_END
+        ) {
+          console.log('Got a Hit');
+          let lastData = convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            battingTeamId,
+            bowlingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          );
+          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          const endMatchNow = await updateLiveScore({
+            ...lastData,
+            matchStatus: 'end',
+          });
+          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          if (endMatchNow?.matchDone?.statusMessage) {
+            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+          }
+        }
+      } else {
+        if (
+          update?.message === TIME_TO_END_MATCH ||
+          update?.message === DECLARE_END
+        ) {
+          console.log('Got a Hit');
+          let lastData = convertLiveScoreData(
+            runs,
+            extras,
+            wickets,
+            battingTeamId,
+            bowlingTeamId,
+            matchId,
+            tournamentDetails._id,
+            matchAndInningsStatus.matchStatus,
+            matchAndInningsStatus.inningsStatus,
+            bowler,
+            nonStrike,
+            strike,
+            presentScoreFromAPI,
+          );
+          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          const endMatchNow = await updateLiveScore({
+            ...lastData,
+            matchStatus: 'end',
+          });
+          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          if (endMatchNow?.matchDone?.statusMessage) {
+            console.log(endMatchNow?.matchDone);
+            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+          }
+        } else {
+          const simplifiedResponse = await getPlayingPlayersList(
+            tournamentDetails._id,
+            matchId,
+            battingTeamId,
+            bowlingTeamId,
+          );
+          // console.info('=========================', simplifiedResponse?.data);
+          let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
+          setPresentScoreFromAPI({
+            ...presentScoreFromAPI,
+            runs: currentScores.runs,
+            overs: currentScores.over,
+            balls: currentScores.balls,
+            wickets: currentScores.wickets,
+          });
+          setRemainingPlayersToBat(simplifiedResponse?.data?.remainingBatsMan);
+          setOvers({overs: currentScores.over, balls: currentScores.balls});
+          setStrike({
+            strike: currentScores.strike,
+            strikeName: currentScores.strikeName,
+          });
+          setNonStrike({
+            nonStrike: currentScores.nonStrike,
+            nonStrikeName: currentScores.nonStrikeName,
+          });
+          dispatch(changeUpdatePressedState());
+          setRuns(liveScoreDataStructure.runs);
+          setWickets(liveScoreDataStructure.wickets);
+          setExtras(liveScoreDataStructure.extras);
+        }
+      }
+    }
+  };
+
   const Details = [
     {
       id: 1,
@@ -58,11 +414,11 @@ const UpdateLiveScore = () => {
   const Reason = [
     {
       id: 1,
-      title: 'UDL Strikers didnt show Up',
+      title: `${route.params.teams.team1Name} didn't show Up`,
     },
     {
       id: 2,
-      title: 'Paras XI didnt show up',
+      title: `${route.params.teams.team2Name} didn't show up`,
     },
     {
       id: 3,
@@ -99,27 +455,125 @@ const UpdateLiveScore = () => {
   ];
   const [visible, setVisible] = useState({
     stopModal: false,
-     customChooseModal: false,
+    customChooseModal: false,
   });
 
+  const focus = useIsFocused(); // useIsFocused as shown
+
+  useEffect(() => {
+    dispatch(addTeamId({team1Id, team2Id}));
+    if (focus === true) {
+      const getStatus = async () => {
+        const response = await getMatchStatus(matchId);
+        if (response?.status) {
+          if (response?.data?.result?.status === 'upcoming') {
+            setMatchAndInningsStatus({
+              matchStatus: 'start',
+              inningsStatus: 'start',
+            });
+            dispatch(addTeam1Players(response?.data?.team1Player));
+            dispatch(addTeam2Players(response?.data?.team2Player));
+            // console.log(response?.data?.team2Player);
+
+            let openerSelectionCheck = initalPlayerSelected.filter(
+              item => item.matchId === matchId,
+            );
+            if (
+              openerSelectionCheck.length !== 0 &&
+              openerSelectionCheck[0].status === false
+            ) {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: true,
+              });
+            } else if (!openerSelectionCheck.length) {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: true,
+              });
+            } else {
+              setInitialPlayerSelectionModal({
+                ...initialPlayersSelectionModal,
+                strikeModal: false,
+              });
+            }
+          } else {
+            const result = await getPlayingPlayersList(
+              tournamentDetails._id,
+              matchId,
+              battingTeamId,
+              bowlingTeamId,
+            );
+            // console.info(
+            //   'Match Details -----',
+            //   team1Id,
+            //   team2Id,
+            //   tournamentDetails._id,
+            //   matchId,
+            // );
+            // console.warn('=============Got a Hit', result?.data?.scoreOfTeam1);
+            if (result?.data?.scoreOfTeam1?.inningsMessage === 'Innings Done') {
+              // dispatch(swapTeamId());
+              // console.info(result?.data?.scoreOfTeam1?.inningsMessage);
+              setStrike({
+                strike: result?.data?.scoreOfTeam1?.strike,
+                strikeName: result?.data?.scoreOfTeam1?.strikeName,
+              });
+              setNonStrike({
+                nonStrike: result?.data?.scoreOfTeam1?.nonStrike,
+                nonStrikeName: result?.data?.scoreOfTeam1?.nonStrikeName,
+              });
+
+              setPresentScoreFromAPI({
+                runs: result?.data?.scoreOfTeam1?.runs,
+                overs: result?.data?.scoreOfTeam1?.over,
+                wickets: result?.data?.scoreOfTeam1?.wickets,
+                balls: result?.data?.scoreOfTeam1?.balls,
+              });
+            } else {
+              setMatchAndInningsStatus({
+                matchStatus: 'start',
+                inningsStatus: 'start',
+              });
+              dispatch(addTeam1Players(response?.data?.team1Player));
+              dispatch(addTeam2Players(response?.data?.team2Player));
+              setStrike({
+                strike: result?.data?.scoreOfTeam1?.strike,
+                strikeName: result?.data?.scoreOfTeam1?.strikeName,
+              });
+              setNonStrike({
+                nonStrike: result?.data?.scoreOfTeam1?.nonStrike,
+                nonStrikeName: result?.data?.scoreOfTeam1?.nonStrikeName,
+              });
+
+              setPresentScoreFromAPI({
+                runs: result?.data?.scoreOfTeam1?.runs,
+                overs: result?.data?.scoreOfTeam1?.over,
+                wickets: result?.data?.scoreOfTeam1?.wickets,
+                balls: result?.data?.scoreOfTeam1?.balls,
+              });
+              //Tell him to add bowler
+              setBowler({
+                bowler: result?.data?.scoreOfTeam1?.bowler,
+                bowlerName: result?.data?.scoreOfTeam1?.bowlerName,
+              });
+            }
+          }
+        }
+      };
+      getStatus();
+    }
+  }, [focus]);
+  // console.warn('====', nonStrike, '====', strike, '----', bowler);
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.backgroundBeyondSafeArea}>
           <SafeAreaView>
             <View style={styles.profileDetailsContainer}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'baseline',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <TouchableOpacity>
+              <View style={styles.navBar}>
+                <View style={styles.navContainer}>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/goback.png')}
                       style={{height: 20, width: 20}}
@@ -128,6 +582,7 @@ const UpdateLiveScore = () => {
                   <Text style={styles.headerName}>Update Live Score</Text>
                 </View>
                 <View
+                  // eslint-disable-next-line react-native/no-inline-styles
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -136,12 +591,7 @@ const UpdateLiveScore = () => {
                     onPress={() => setVisible({...visible, stopModal: true})}>
                     <Image
                       source={require('../../assets/images/icon-vertical-dots.png')}
-                      style={{
-                        marginHorizontal: '-1%',
-                        tintColor: '#FFFFFF',
-                        height: 25,
-                        width: 25,
-                      }}
+                      style={styles.verticalDots}
                     />
                   </TouchableOpacity>
                 </View>
@@ -157,8 +607,14 @@ const UpdateLiveScore = () => {
             <Text style={styles.runs}>6 runs</Text>
           </View>
           <View style={{padding: 15}}>
-            <Text style={styles.overText}>5.5 Overs</Text>
-            <Text style={styles.overNumber}>10/1</Text>
+            <Text
+              style={
+                styles.overText
+              }>{`${presentScoreFromAPI?.overs}.${presentScoreFromAPI?.balls} Overs`}</Text>
+            <Text
+              style={
+                styles.overNumber
+              }>{`${presentScoreFromAPI?.runs}/${presentScoreFromAPI?.wickets}`}</Text>
           </View>
         </View>
         <CustomChooseModal
@@ -167,35 +623,251 @@ const UpdateLiveScore = () => {
             setVisible({customChooseModal: false, stopModal: false})
           }>
           <Text style={styles.textView}>Choose Reason</Text>
-          {Reason.map(item => (
-            <View key={item.id} style={styles.listview}>
+          <ScrollView>
+            {Reason.map(item => (
+              <View key={item.id} style={styles.listview}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    const response = await cancelLiveTournament(
+                      route.params?.matchId,
+                      item?.title,
+                    );
+                    // console.info('--------------', response);
+                    if (response.status) {
+                      setVisible({customChooseModal: false, stopModal: false});
+                      navigation.goBack();
+                    } else {
+                      Alert.alert('Error Occoured Please Try Again');
+                    }
+                  }}>
+                  <View style={{width: '100%'}}>
+                    <Text style={styles.title}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.strikeModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Strike</Text>
+          <ScrollView>
+            {team1Players.map(item => (
+              <View key={item._id} style={styles.listview}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setStrike({
+                      strike: item._id,
+                      strikeName: item.name,
+                    });
+                    // dispatch(
+                    //   addInitialPlayerSelected({
+                    //     matchId: matchId,
+                    //     status: true,
+                    //   }),
+                    // );
+                    setInitialPlayerSelectionModal({
+                      ...initialPlayersSelectionModal,
+                      nonStrikeModal: true,
+                      strikeModal: false,
+                    });
+                  }}>
+                  <View style={{width: '100%'}}>
+                    <Text style={styles.title}>{item.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.nonStrikeModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Non Strike</Text>
+          <ScrollView>
+            {team1Players.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setNonStrike({
+                        nonStrike: item._id,
+                        nonStrikeName: item.name,
+                      });
+                      setRemainingPlayersToBat(() =>
+                        team1Players.filter(
+                          players =>
+                            players._id !== item._id &&
+                            players._id !== strike.strike,
+                        ),
+                      );
+                      setInitialPlayerSelectionModal({
+                        ...initialPlayersSelectionModal,
+                        nonStrikeModal: false,
+                        bowlerModal: true,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={initialPlayersSelectionModal.bowlerModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Bowler</Text>
+          <ScrollView>
+            {team2Players.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setBowler({
+                        bowler: item._id,
+                        bowlerName: item.name,
+                      });
+                      setInitialPlayerSelectionModal({
+                        ...initialPlayersSelectionModal,
+                        bowlerModal: false,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={wicketsModal.batsmanModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Choose batsman</Text>
+          <ScrollView>
+            <View key={strike.strike} style={styles.listview}>
               <TouchableOpacity
-                onPress={() =>
-                  setVisible({customChooseModal: false, stopModal: false})
-                }>
+                onPress={() => {
+                  setWickets({
+                    ...wickets,
+                    batsmanId: strike.strike,
+                    batsman: strike.strikeName,
+                  });
+                  setWicketsModal({
+                    ...wicketsModal,
+                    batsmanModal: false,
+                    fliderModal: true,
+                  });
+                }}>
                 <View style={{width: '100%'}}>
-                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.title}>{strike.strikeName}</Text>
                 </View>
               </TouchableOpacity>
             </View>
-          ))}
+            <View key={nonStrike.nonStrike} style={styles.listview}>
+              <TouchableOpacity
+                onPress={() => {
+                  setWickets({
+                    ...wickets,
+                    batsmanId: nonStrike.nonStrike,
+                    batsman: nonStrike.nonStrikeName,
+                  });
+                  setWicketsModal({
+                    ...wicketsModal,
+                    batsmanModal: false,
+                    fliderModal: true,
+                  });
+                }}>
+                <View style={{width: '100%'}}>
+                  <Text style={styles.title}>{nonStrike.nonStrikeName}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={wicketsModal.fliderModal}
+          // onPress={() => setVisible(!initialPlayersSelectionModal)}
+        >
+          <Text style={styles.textView}>Select Filder</Text>
+          <ScrollView>
+            {team2Players.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setWickets({
+                        ...wickets,
+                        fielderName: item.name,
+                      });
+                      setWicketsModal({
+                        ...wicketsModal,
+                        fliderModal: false,
+                        newBatsmanModal: true,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </CustomChooseModal>
+        <CustomChooseModal
+          visible={
+            remainingPlayersToBat.length === 0
+              ? false
+              : wicketsModal.newBatsmanModal
+          }
+          onPress={() =>
+            setWicketsModal({...wicketsModal, newBatsmanModal: false})
+          }>
+          <Text style={styles.textView}>Select New Batsman</Text>
+          <ScrollView>
+            {remainingPlayersToBat.map(item => {
+              return (
+                <View key={item._id} style={styles.listview}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setWickets({
+                        ...wickets,
+                        new_batsmanId: item._id,
+                        new_batsman: item.name,
+                      });
+                      setWicketsModal({
+                        ...wicketsModal,
+                        newBatsmanModal: false,
+                      });
+                    }}>
+                    <View style={{width: '100%'}}>
+                      <Text style={styles.title}>{item.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
         </CustomChooseModal>
         <View style={styles.mainView}>
           <View style={{width: '58%'}}>
             <Text style={styles.runs}>Runs</Text>
-            <CustomRunsButton   
+            <CustomRunsButton
               radio_props={run_props}
               formHorizontal={true}
-              style={{
-                marginRight: 15,
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                marginHorizontal: 2,
-                marginTop: 15,
-              }}
+              style={styles.runsRadioGroup}
               flexWrap={{flexWrap: 'wrap'}}
-              onPress={getData}
+              onPress={getRuns}
             />
           </View>
           <View style={{width: '42%'}}>
@@ -203,21 +875,13 @@ const UpdateLiveScore = () => {
             <CustomExtrasButton
               radio_props={extra_props}
               formHorizontal={true}
-              style={{
-                marginRight: 7,
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                marginHorizontal: 15,
-                marginTop: 15,
-                borderColor: '#FF8713',
-              }}
+              style={styles.extrasRadioGroup}
               flexWrap={{flexWrap: 'wrap'}}
-              onPress={getData}
+              onPress={getExtras}
             />
           </View>
         </View>
-        <View style={{marginTop:20}}>
+        <View style={{marginTop: 20}}>
           <Text style={styles.wickets}>Wickets</Text>
         </View>
         <View
@@ -235,15 +899,15 @@ const UpdateLiveScore = () => {
               width: 'auto',
             }}
             flexWrap={{flexWrap: 'wrap'}}
-            onPress={getData}
+            onPress={getWickets}
           />
         </View>
       </ScrollView>
       <StopMatchModal visible={visible.stopModal}>
         <TouchableOpacity
-          onPress={() =>
-            setVisible({customChooseModal: true, stopModal: false})
-          }>
+          onPress={() => {
+            setVisible({customChooseModal: true, stopModal: false});
+          }}>
           <Text>Stop Match</Text>
         </TouchableOpacity>
       </StopMatchModal>
@@ -254,13 +918,8 @@ const UpdateLiveScore = () => {
           colors={['#FFBA8C', '#FE5C6A']}
           text="UPDATE"
           style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
+          textstyle={styles.buttonText}
+          onPress={handelUpdate}
         />
       </View>
     </View>
@@ -352,8 +1011,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-    paddingHorizontal:20,
-
+    paddingHorizontal: 20,
   },
 
   //   csd
@@ -402,5 +1060,44 @@ const styles = StyleSheet.create({
     height: 13,
     width: 13,
     tintColor: '#000000',
+  },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  navContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  verticalDots: {
+    marginHorizontal: '-1%',
+    tintColor: '#FFFFFF',
+    height: 25,
+    width: 25,
+  },
+  runsRadioGroup: {
+    marginRight: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 2,
+    marginTop: 15,
+  },
+  extrasRadioGroup: {
+    marginRight: 7,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: '#FF8713',
+  },
+  buttonText: {
+    height: 16,
+    fontWeight: '500',
+    fontSize: 14,
+    letterSpacing: 0.5,
+    lineHeight: 19,
   },
 });

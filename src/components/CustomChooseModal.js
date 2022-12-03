@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 
-const CustomChooseModal = ({visible, children,onPress}) => {
+const CustomChooseModal = ({visible, children, onPress}) => {
   const [showModal, setShowModal] = useState(visible);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
@@ -25,28 +25,35 @@ const CustomChooseModal = ({visible, children,onPress}) => {
         useNativeDriver: true,
       }).start();
     } else {
-      setTimeout(() => setShowModal(false), 0);
+      // setTimeout(() => setShowModal(false), 0);
       Animated.timing(scaleValue, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
+      setShowModal(false);
     }
   };
   return (
     <Modal transparent visible={showModal}>
       <View style={styles.modalBackground}>
-        <View style={{bottom:10,width: '75%'}}>
-        <TouchableOpacity style={{width:15,height:15,alignSelf:"flex-end"}} onPress={onPress}>
-          <Image
-            source={require('../../assets/images/icon-close.png')}
-            style={styles.image}
-          />
-        </TouchableOpacity>
+        <View style={{bottom: 10, width: '75%'}}>
+          <TouchableOpacity
+            style={{width: 15, height: 15, alignSelf: 'flex-end'}}
+            onPress={onPress}>
+            <Image
+              source={require('../../assets/images/icon-close.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.modalContainer}>
           <Animated.View
-            style={[styles.modalContainer, {transform: [{scale: scaleValue}]}]}>
+            style={[
+              styles.modalContainer,
+              {transform: [{scale: scaleValue}]},
+              {flex: 1},
+            ]}>
             {children}
           </Animated.View>
         </View>
@@ -62,20 +69,21 @@ const styles = StyleSheet.create({
     height: 15,
     width: 15,
 
-     alignSelf:"flex-end"
+    alignSelf: 'flex-end',
   },
   modalBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   modalContainer: {
-    height: '39%',
+    flex: 0.5,
     width: '80%',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     borderRadius: 20,
+    // borderWidth: 1,
   },
 });

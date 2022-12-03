@@ -4,31 +4,24 @@ import React from 'react';
 const StadiumList = ({source, text, place}) => {
   return (
     <View>
-    
-       <View style={styles.card}>
+      <View style={styles.card}>
         <Image source={source} style={styles.ground} />
         <View style={{justifyContent: 'center'}}>
           <Text style={styles.groundName}>{text}</Text>
           <Text style={styles.place}>{place}</Text>
         </View>
-        
-        
-       </View>
-  
+      </View>
     </View>
-  )
-}
+  );
+};
 
 export default StadiumList;
 
 const styles = StyleSheet.create({
   card: {
-    // width: 350,
     height: 70,
     backgroundColor: '#FFFFFF',
     marginHorizontal: 20,
-    //    boxShadow: '0 5 12 0 rgba(217,226,233,0.5)',
-
     borderRadius: 5,
     overflow: 'hidden',
     marginTop: 15,
@@ -41,7 +34,6 @@ const styles = StyleSheet.create({
     width: 49,
     borderRadius: 24,
     overflow: 'hidden',
-    // borderWidth:1,
   },
   groundName: {
     height: 15.36,

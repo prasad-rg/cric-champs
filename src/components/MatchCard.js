@@ -11,16 +11,18 @@ const MatchCard = ({matchDetails}) => {
             <Text style={styles.matchText}>
               Match {matchDetails?.matchNumber}
             </Text>
-            <Text style={styles.LeagueText}>
-              {`League Play at ${matchDetails?.groundName}  Ground`}
-            </Text>
+            <View style={{width: 200}}>
+              <Text style={styles.LeagueText}>
+                {`League Play at ${matchDetails?.groundName}  Ground`}
+              </Text>
+            </View>
           </View>
           <View
             style={[
               styles.statusContainer,
               {
                 backgroundColor:
-                  matchDetails?.status.toUpperCase() == 'ABONDONED'
+                  matchDetails?.status.toUpperCase() == 'ABONDONED' ||  matchDetails?.status.toUpperCase() == 'CANCELLED'
                     ? '#E05140'
                     : matchDetails?.status.toUpperCase() == 'PAST'
                     ? '#0075E1'
@@ -45,7 +47,7 @@ const MatchCard = ({matchDetails}) => {
             paddingTop: 20,
           }}>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>{matchDetails?.team1Name}</Text>
+             <Text style={styles.name}>{matchDetails?.team1Name}</Text>
             {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
               <>
                 <Text style={styles.number}>-</Text>
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
   },
   name: {
     // height: 32,
-    width: 75,
+    // width: 75,
     color: '#B2B2B2',
     fontFamily: 'Roboto-Regular',
     fontSize: 12,
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
   },
   messageView: {
     height: 24,
-    width: 182,
+    width: 230,
     borderRadius: 4,
     backgroundColor: '#F1F1F1',
     alignItems: 'center',

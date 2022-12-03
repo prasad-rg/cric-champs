@@ -218,3 +218,17 @@ export const getInfoByMatchId = async (
     return error.response.data;
   }
 }
+export const getGraphValues = async (
+  matchId,team1Id,team2Id
+) =>{
+  try {
+    const response=await axios.get(
+      `${BASE_URL}/api/match/graph?matchId=${matchId}&team1Id=${team1Id}&team2Id=${team2Id}`
+    );
+    const data =response.data;
+    console.info("Info response",data);
+    return data;
+  } catch (error){
+    return error.response.data;
+  }
+}

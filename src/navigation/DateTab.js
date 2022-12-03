@@ -5,13 +5,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import StartDate from '../screens/dates/StartDate';
 import EndDate from '../screens/dates/EndDate';
 
-const DateTab = () => {
+const DateTab = (props) => {
+
   const Tab = createMaterialTopTabNavigator();
   return (
     // <NavigationContainer>
     <Tab.Navigator
       screenOptions={{
-      swipeEnabled:false,
+        swipeEnabled: false,
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
         tabBarStyle: {
@@ -33,8 +34,13 @@ const DateTab = () => {
           width: '50%',
         },
       }}>
-      <Tab.Screen name="START DATE" component={StartDate} />
-      <Tab.Screen name="END DATE" component={EndDate} />
+       
+      <Tab.Screen name="START DATE">
+        {() => <StartDate showProps={true} {...props} />}
+      </Tab.Screen>
+      <Tab.Screen name="END DATE">
+        {() => <EndDate showProps={true} {...props} />}
+      </Tab.Screen>
     </Tab.Navigator>
     //  </NavigationContainer>
   );

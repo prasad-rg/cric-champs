@@ -143,8 +143,8 @@ const LoginScreen = ({navigation}) => {
                 <TextInput
                   label="Password"
                   name="password"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
+                  // keyboardType="email-address"
+                  // autoCapitalize="none"
                   textColor="#666666"
                   activeUnderlineColor="rgba(153, 153, 153, 0.4)"
                   secureTextEntry={secureTextEntry}

@@ -1,14 +1,16 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 
-const DropdownField = ({data = [], value = {}, onSelect = () => {},team1Name=''}) => {
-  // console.log("team1 id",data[0].id)
-  // console.log("team2 id",data[1].id)
+const DropdownField = ({
+  data = [],
+  value = {},
+  onSelect = () => {},
+  team1Name = '',
+}) => {
   const [showOptions, setShowOptions] = useState(false);
   const onSelectedItem = val => {
     setShowOptions(false);
     onSelect(val);
-    console.log("I am value",val)
   };
   return (
     <View style={styles.container}>
