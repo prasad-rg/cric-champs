@@ -10,8 +10,8 @@ import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
 const StartDate = ({navigation, route}) => {
-  dateFromRoute = route.params.startDate;
-  convertedDateFromRoute = moment(dateFromRoute).format('YYYY-MM-DD');
+
+  convertedDateFromRoute = moment(route?.params?.startDate).format('YYYY-MM-DD');
 
   const [disabled, setDisabled] = useState(false);
 

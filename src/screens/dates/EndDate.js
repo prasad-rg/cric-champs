@@ -13,7 +13,7 @@ import Toast from 'react-native-simple-toast';
 
 const StartDate = ({navigation,route}) => {
 
-  dateFromRoute = route.params.params.endDate;
+  dateFromRoute = route?.params?.params?.endDate;
   console.log("end date",dateFromRoute);
   const dispatch = useDispatch();
 
