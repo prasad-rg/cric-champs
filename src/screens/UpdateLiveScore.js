@@ -459,9 +459,9 @@ const UpdateLiveScore = ({navigation, route}) => {
   });
 
   const focus = useIsFocused(); // useIsFocused as shown
-  dispatch(addTeamId({team1Id, team2Id}));
 
   useEffect(() => {
+    dispatch(addTeamId({team1Id, team2Id}));
     if (focus === true) {
       const getStatus = async () => {
         const response = await getMatchStatus(matchId);

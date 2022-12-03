@@ -2,11 +2,11 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
 import {RadioButton} from 'react-native-simple-radio-button';
 import {StyleSheet} from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const CustomExtrasButton = ({
   radio_props,
@@ -29,7 +29,7 @@ const CustomExtrasButton = ({
     // console.log('I am value, I am in', val, ind);
     if (index === ind) {
       setData(null);
-      setIndex();
+      setIndex(null);
     }
   };
 
