@@ -2,6 +2,8 @@ export const convertMatchesDataWithScores = data => {
   let allScroes = data.scores;
   let allMatches = data.matches;
 
+  // console.warn('=====================', allMatches);
+
   let newMatchesWithScoresArray = [];
 
   allMatches.forEach(match => {
@@ -14,6 +16,6 @@ export const convertMatchesDataWithScores = data => {
     newMatchesWithScoresArray.push({...match, scores: temp});
   });
 
-  //   console.log(newMatchesWithScoresArray);
+  // console.info(newMatchesWithScoresArray);
   return newMatchesWithScoresArray;
 };

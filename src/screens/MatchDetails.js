@@ -15,6 +15,7 @@ import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
 import MatchTab from '../navigation/MatchTab';
 const MatchDetails = ({navigation, route}) => {
+  // console.info('========================', route.params);
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{flex: 1}}>

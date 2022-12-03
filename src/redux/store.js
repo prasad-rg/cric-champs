@@ -10,7 +10,8 @@ import recentActivitiesReducer from './recentActivitiesSlice';
 import GroundReducer from './GroundSlice';
 import UmpireReducer from './umpireSlice';
 import userSliceReducer from './userSlice';
-
+import updateLiveScoreReducer from './updateLiveScore';
+import updateLiveScoreControlsReducer from './updateLiveScoreControls';
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -27,6 +28,8 @@ const reducer = combineReducers({
   tournamentdata: manageTournamentReducer,
   recentActivities: recentActivitiesReducer,
   userData: userSliceReducer,
+  liveScoreData: updateLiveScoreReducer,
+  updateLiveScoreControls: updateLiveScoreControlsReducer,
 });
 const persistRed = persistReducer(persistConfig, reducer);
 

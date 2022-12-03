@@ -12,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function MatchTab(props) {
   return (
-     //<NavigationContainer>
+    // <NavigationContainer>
     <Tab.Navigator
       screenOptions={{
         //   tabBarScrollEnabled: true,
@@ -43,6 +43,6 @@ export default function MatchTab(props) {
       <Tab.Screen name="SCOREBOARD">{() => <ScoreboardScreen {...props} />}</Tab.Screen>
       <Tab.Screen name="GRAPH">{() => <Graph {...props} />}</Tab.Screen>
     </Tab.Navigator>
- //</NavigationContainer>
+    // </NavigationContainer>
   );
 }
