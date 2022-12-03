@@ -47,7 +47,7 @@ const MatchCard = ({matchDetails}) => {
             paddingTop: 20,
           }}>
           <View style={{alignItems: 'center'}}>
-            <Text style={styles.name}>{matchDetails?.team1Name}</Text>
+             <Text style={styles.name}>{matchDetails?.team1Name}</Text>
             {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
               <>
                 <Text style={styles.number}>-</Text>
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   name: {
     // height: 32,
-    width: 75,
+    // width: 75,
     color: '#B2B2B2',
     fontFamily: 'Roboto-Regular',
     fontSize: 12,

@@ -10,11 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {LineChart} from 'react-native-chart-kit';
 import {getGraphValues} from '../../services/viewTournament';
 
-// import {get} from '../../services/viewTournament';
-
 const MyLineChart = ({team1Name, team2Name, team1Values, team2Values}) => {
-  console.warn('========================', team2Values);
-  console.warn('======ftttthjklljh', team1Values);
   return (
     <>
       <Text style={styles.header}>Run Rate</Text>
@@ -24,8 +20,9 @@ const MyLineChart = ({team1Name, team2Name, team1Values, team2Values}) => {
           datasets: [
             {
               data: [...team1Values],
-              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-              strokeWidth: 1,
+              color: (opacity = 0) => `rgba(255, 0, 0, ${opacity})`,
+
+              strokeWidth: 2,
             },
             {
               data: [...team2Values],
@@ -36,26 +33,23 @@ const MyLineChart = ({team1Name, team2Name, team1Values, team2Values}) => {
           legend: [team1Name, team2Name],
         }}
         width={Dimensions.get('window').width - 16}
-        height={220}
-        withDots={false}
+        height={300}
+        // withDots={false}
         withShadow={false}
-        // yAxisLabel="car"
-        // yAxisSuffix="bike"
-
         chartConfig={{
-          backgroundColor: 'red',
-          backgroundGradientFrom: '#ADD8E6',
+          // backgroundColor: 'red',
+          backgroundGradientFrom: 'rgb(255, 255, 266)',
           backgroundGradientTo: '#efefef',
           backgroundGradientToOpacity: 0.5,
           decimalPlaces: 2,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {
-            borderRadius: 17,
+            // borderRadius: 17,
           },
         }}
         style={{
           marginVertical: 8,
-          borderRadius: 10,
+          // borderRadius: 10,
         }}
       />
     </>
@@ -66,6 +60,7 @@ const Graph = ({navigation, route}) => {
   const [team1Values, setTeam1Values] = useState([]);
   const [team2Values, setTeam2Values] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [matchNotStarted, setMatchNotStarted] = useState(true);
 
   useEffect(() => {
     const fetchGraphValues = async () => {
@@ -75,36 +70,35 @@ const Graph = ({navigation, route}) => {
         route.params?.team2Id,
       );
       if (response.status) {
-        // let test = response?.data?.commentry.filter(
-        //   item => item.teamId === route.params?.team1Id,
-        // );
-        let team1Array = [];
-        let team2Array = [];
-        let tempTeam1 = response?.data?.commentry.filter(item => {
-          if (item.teamId === route.params?.team1Id) {
-            if (!isNaN(Number(item.status))) {
-              let temp = Number(item.status);
-              team1Array.push(temp);
-              return temp;
+        if (response?.data?.scoreOfTeam1=== false) {
+          setMatchNotStarted(true);
+        } else {
+          setMatchNotStarted(false);
+          let team1Array = [];
+          let team2Array = [];
+          let tempTeam1 = response?.data?.commentry.filter(item => {
+            if (item.teamId === route.params?.team1Id) {
+              if (!isNaN(Number(item.status))) {
+                let temp = Number(item.status);
+                team1Array.push(temp);
+                return temp;
+              }
             }
-          }
-        });
+          });
 
-        let tempTeam2 = response?.data?.commentry.filter(item => {
-          if (item.teamId === route.params?.team2Id) {
-            if (!isNaN(Number(item.status))) {
-              let temp = Number(item.status);
-              team2Array.push(temp);
-              return temp;
+          let tempTeam2 = response?.data?.commentry.filter(item => {
+            if (item.teamId === route.params?.team2Id) {
+              if (!isNaN(Number(item.status))) {
+                let temp = Number(item.status);
+                team2Array.push(temp);
+                return temp;
+              }
             }
-          }
-        });
+          });
 
-        setTeam1Values(team1Array);
-        setTeam2Values(team2Array);
-
-        // console.info('Team 1', team1Values);
-        // console.info('Team 2', team2Values);
+          setTeam1Values(team1Array);
+          setTeam2Values(team2Array);
+        }
       }
     };
     fetchGraphValues();
@@ -112,19 +106,25 @@ const Graph = ({navigation, route}) => {
 
   console.warn(route.params);
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View>
-            <MyLineChart
-              team1Name={route.params.teams.team1Name}
-              team2Name={route.params.teams.team2Name}
-              team1Values={team1Values}
-              team2Values={team2Values}
-            />
-          </View>
+    <SafeAreaView style={{flex: 1, backgroundColor:"#FFFFFF"}}>
+          {matchNotStarted ? (
+            <View style={styles.noMatchView}>
+              <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
+            </View>
+          ) : (
+            <ScrollView>
+            <View style={styles.container}>
+            <View>
+              <MyLineChart
+                team1Name={route.params.teams.team1Name}
+                team2Name={route.params.teams.team2Name}
+                team1Values={team1Values}
+                team2Values={team2Values}
+              />
+            </View>
         </View>
       </ScrollView>
+          )}
     </SafeAreaView>
   );
 };
@@ -134,16 +134,31 @@ export default Graph;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
     padding: 10,
+    backgroundColor:"#FFFFFF"
   },
   header: {
     textAlign: 'center',
     fontSize: 18,
     padding: 16,
     marginTop: 16,
+  },
+  noMatchView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  noMatchText: {
+    color: '#393939',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 18,
+    fontWeight: '500',
+    letterSpacing: 0,
+    // lineHeight: 21,
+    textAlign: 'center',
   },
 });

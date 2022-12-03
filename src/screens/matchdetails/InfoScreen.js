@@ -16,6 +16,7 @@ import {getInfoByMatchId} from '../../services/viewTournament';
 const InfoScreen = ({route}) => {
   const [matchDetails, setMatchDetails] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  console.log("match Id from Info screen",route?.params?.matchId)
 
   const loadTeams = async () => {
     setIsLoading(true);
