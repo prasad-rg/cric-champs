@@ -148,11 +148,12 @@ const UpdateLiveScore = ({navigation, route}) => {
       setRuns(null);
     } else {
       setRuns(data);
+      setRunsStatus({...runsStatus, runs: data});
     }
   };
 
   const getExtras = (data, index) => {
-    // console.warn(data);
+    console.warn(data);
     if (data === null) {
       setExtras(null);
     } else {
@@ -162,19 +163,10 @@ const UpdateLiveScore = ({navigation, route}) => {
   const getWickets = (data, index) => {
     // console.log(data);
     if (data === null) {
-      setWickets({
-        status: false,
-        batsmanId: '',
-        batsman: '',
-        type: '',
-        fielderName: '',
-        new_batsmanId: '',
-        new_batsman: '',
-        bowlerName: '',
-      });
+      setWickets({...liveScoreDataStructure.wickets, status: false});
       setWicketsModal({...wicketsModal, newBatsmanModal: false});
     } else {
-      if (data !== 'Run Out' && data !== 'Other' && data !== 'Caught') {
+      if (data === 'Run Out') {
         // TODO: Add the batsman batsmanId from the striker Id even bowler which is got from the PUT response
         setWickets({
           ...liveScoreDataStructure.wickets,
@@ -185,17 +177,31 @@ const UpdateLiveScore = ({navigation, route}) => {
           bowler: bowler.bowler,
           bowlerName: bowler.bowlerName,
         });
-        setWicketsModal({...wicketsModal, newBatsmanModal: true});
+        setWicketsModal({...wicketsModal, batsmanModal: true});
       } else {
         // TODO : Add the batsman batsmanId bowler filder from the Modal fetched from the remaining player list PUT response
-        setWickets({
-          ...liveScoreDataStructure.wickets,
-          type: data,
-          status: true,
-          bowler: bowler.bowler,
-          bowlerName: bowler.bowlerName,
-        });
-        setWicketsModal({...wicketsModal, batsmanModal: true});
+        if (data === 'Caught' || data === 'Other') {
+          setWickets({
+            ...liveScoreDataStructure.wickets,
+            type: data,
+            status: true,
+            bowler: bowler.bowler,
+            bowlerName: bowler.bowlerName,
+          });
+          setWicketsModal({
+            ...wicketsModal,
+            fliderModal: true,
+          });
+        } else {
+          setWickets({
+            ...liveScoreDataStructure.wickets,
+            type: data,
+            status: true,
+            bowler: bowler.bowler,
+            bowlerName: bowler.bowlerName,
+          });
+          setWicketsModal({...wicketsModal, newBatsmanModal: true});
+        }
       }
     }
   };
@@ -458,6 +464,12 @@ const UpdateLiveScore = ({navigation, route}) => {
     customChooseModal: false,
   });
 
+  const [runsStatus, setRunsStatus] = useState({
+    runs: 0,
+    wicketsType: '',
+    extrasType: '',
+  });
+
   const focus = useIsFocused(); // useIsFocused as shown
 
   useEffect(() => {
@@ -601,10 +613,43 @@ const UpdateLiveScore = ({navigation, route}) => {
         </View>
         {/* start */}
         <View style={styles.infoView}>
-          <View style={{padding: 15}}>
-            <Text style={styles.comment}>Balls.runs.wicket</Text>
+          <View style={{paddingLeft: 15}}>
+            {wickets?.status ? (
+              <Text style={[styles.comment, {color: '#C44343'}]}>
+                {wickets?.type}
+              </Text>
+            ) : runsStatus?.runs == 4 || runsStatus?.runs == 6 ? (
+              <Text style={[styles.comment, {color: '#5FB100'}]}>
+                {runsStatus?.runs == 4 ? 'Bounary' : 'Sixer'}
+              </Text>
+            ) : (
+              <Text style={[styles.comment, {color: '#4A90E2'}]}>
+                {extras !== null && (
+                  <Text style={{color: '#FF8713'}}>
+                    {extras === 'Wd'
+                      ? 'Wide  '
+                      : extras === 'Lb '
+                      ? 'Leg Bye'
+                      : extras === 'Nb '
+                      ? 'No ball'
+                      : 'Bye  '}
+                  </Text>
+                )}
+                {runsStatus?.runs} Runs
+              </Text>
+            )}
             {/* <DotBall style={{backgroundColor:"rgba(0,0,0,0.2)"}}/> */}
-            <Text style={styles.runs}>6 runs</Text>
+            {wickets.status ? (
+              <Text style={styles.calculatedFiled}>
+                {wickets.type === 'Caught' || wickets.type === 'Other'
+                  ? `${wickets.type} by ${wickets.bowlerName}`
+                  : wickets?.type}
+              </Text>
+            ) : (
+              <Text style={styles.calculatedFiled}>
+                {runsStatus?.runs} Runs
+              </Text>
+            )}
           </View>
           <View style={{padding: 15}}>
             <Text
@@ -650,8 +695,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.strikeModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              strikeModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Strike</Text>
           <ScrollView>
             {team1Players.map(item => (
@@ -684,8 +733,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.nonStrikeModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              nonStrikeModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Non Strike</Text>
           <ScrollView>
             {team1Players.map(item => {
@@ -721,8 +774,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.bowlerModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              bowlerModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Bowler</Text>
           <ScrollView>
             {team2Players.map(item => {
@@ -750,8 +807,9 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={wicketsModal.batsmanModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setWicketsModal({...wicketsModal, batsmanModal: false})
+          }>
           <Text style={styles.textView}>Choose batsman</Text>
           <ScrollView>
             <View key={strike.strike} style={styles.listview}>
@@ -796,9 +854,8 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={wicketsModal.fliderModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
-          <Text style={styles.textView}>Select Filder</Text>
+          onPress={() => setWickets({...wicketsModal, fliderModal: false})}>
+          <Text style={styles.textView}>Select Fielder</Text>
           <ScrollView>
             {team2Players.map(item => {
               return (
@@ -1099,5 +1156,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.5,
     lineHeight: 19,
+  },
+  comment: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Roboto-Medium',
+  },
+  calculatedFiled: {
+    color: '#999999',
+    lineHeight: 20,
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
   },
 });

@@ -41,6 +41,8 @@ const Matches = ({navigation}) => {
       return (
         <TouchableOpacity
           onPress={() =>
+            (item.status.toUpperCase() === 'LIVE' ||
+              item.status.toUpperCase() === 'UPCOMING') &&
             navigation.navigate('UpdateLiveScore', {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
@@ -57,6 +59,8 @@ const Matches = ({navigation}) => {
       return (
         <TouchableOpacity
           onPress={() =>
+            (item.status.toUpperCase() === 'LIVE' ||
+              item.status.toUpperCase() === 'UPCOMING') &&
             navigation.navigate('UpdateLiveScore', {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
