@@ -10,7 +10,7 @@ import {setToken, getToken, deleteToken} from '../utils/token';
 export const userLogin = createAsyncThunk('user/login', async userData => {
   try {
     const response = await loginUser(userData);
-
+    console.log(response);
     if (response.status === 200) {
       const headers = response.headers;
       let stringifiedToken = JSON.stringify({

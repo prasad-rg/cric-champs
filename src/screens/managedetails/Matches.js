@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dayText: {
-    height: 19,
+    // height: 19,
     width: 248,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
