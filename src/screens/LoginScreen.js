@@ -115,11 +115,17 @@ const LoginScreen = ({navigation}) => {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   textColor="#666666"
-                  activeUnderlineColor="rgba(153, 153, 153, 0.4)"
-                  style={{backgroundColor: 'rgba(255, 255, 255, 0.4)'}}
+                  activeUnderlineColor="#E0E0E0"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                    fontFamily: 'Roboto-Medium',
+                    letterSpacing: 2,
+                  }}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
                   value={values.email}
+                  ref={this.fieldRef}
+                  underlineStyle={{marginLeft: 13}}
                 />
                 {errors.email && touched.email && (
                   <Text style={styles.errorText}>{errors.email}</Text>
@@ -141,10 +147,12 @@ const LoginScreen = ({navigation}) => {
                   autoCapitalize="none"
                 /> */}
                 <TextInput
+                  mode={'flat'}
+                  underlineStyle={{marginLeft: 13}}
                   label="Password"
                   name="password"
                   // keyboardType="email-address"
-                  // autoCapitalize="none"
+                  autoCapitalize="none"
                   textColor="#666666"
                   activeUnderlineColor="rgba(153, 153, 153, 0.4)"
                   secureTextEntry={secureTextEntry}
@@ -158,7 +166,10 @@ const LoginScreen = ({navigation}) => {
                       }}
                     />
                   }
-                  style={{backgroundColor: 'rgba(255, 255, 255, 0.4)'}}
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                    marginTop: 20,
+                  }}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   value={values.password}
@@ -314,6 +325,8 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 10,
     color: 'red',
+    marginTop: 5,
+    marginLeft: 15,
   },
 });
 

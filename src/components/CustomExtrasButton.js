@@ -52,10 +52,9 @@ const CustomExtrasButton = ({
           style={[
             {
               borderWidth: 1,
-              alignItems: 'center',
               height: 40,
               width: 80,
-              borderWidth: 0.8,
+              // borderWidth: 0.8,
               backgroundColor: index === i ? '#FF8713' : '#FFFFFF',
               borderColor: '#C44343',
               borderRadius: 24,
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     width: 150,
-    borderWidth: 0.8,
+    // borderWidth: 0.8,
     borderColor: '#FA7171',
     borderRadius: 24,
   },

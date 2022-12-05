@@ -65,14 +65,16 @@ const RootNavigator = () => {
           }}
         />
 
-        <Stack.Screen
-          name="AuthStack"
-          component={AuthStack}
-          options={{
-            headerShown: false,
-            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-          }}
-        />
+        {!isLoggedIn && (
+          <Stack.Screen
+            name="AuthStack"
+            component={AuthStack}
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            }}
+          />
+        )}
 
         <Stack.Screen
           name="ViewScreen"
