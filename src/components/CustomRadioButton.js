@@ -56,7 +56,6 @@ const CustomRadioButton = ({
           style={[
             {
               borderWidth: 1,
-              alignItems: 'center',
               height: 40,
               width: 80,
               // borderWidth: 0.8,
