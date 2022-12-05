@@ -11,9 +11,12 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {getTournamentByCode} from '../services/viewTournament';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
-import {removeRecentActivities} from '../redux/recentActivitiesSlice';
+import {
+  removeRecentActivities,
+  storeRecentActivities,
+} from '../redux/recentActivitiesSlice';
 import {setTournamentData} from '../redux/manageTournamentSlice';
-import { setIsView } from '../redux/manageTournamentSlice';
+import {setIsView} from '../redux/manageTournamentSlice';
 
 const RecentActivityCard = ({
   title = 'Robosoft Premiere League',
@@ -25,6 +28,7 @@ const RecentActivityCard = ({
   navigation,
   id,
   isView,
+  isManage = false,
 }) => {
   const dispatch = useDispatch();
 
@@ -35,12 +39,15 @@ const RecentActivityCard = ({
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.machCodeText}>{matchCode}</Text>
         </View>
-        <TouchableOpacity onPress={() => dispatch(removeRecentActivities(id))}>
-          <Image
-            source={require('../../assets/images/trash.png')}
-            style={styles.verticalDots}
-          />
-        </TouchableOpacity>
+        {!isManage && (
+          <TouchableOpacity
+            onPress={() => dispatch(removeRecentActivities(id))}>
+            <Image
+              source={require('../../assets/images/trash.png')}
+              style={styles.verticalDots}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.footer}>
         <View
@@ -68,7 +75,8 @@ const RecentActivityCard = ({
                   email: email,
                 };
                 dispatch(setTournamentData(tournamentresponse));
-
+                dispatch(storeRecentActivities(res._id));
+                dispatch(setIsView(false));
                 navigation.navigate('ManageScreen');
               }
             }}>
@@ -82,7 +90,7 @@ const RecentActivityCard = ({
               Alert.alert(res.message.toUpperCase());
             } else {
               dispatch(storeTournamentDetails(res));
-             
+              dispatch(storeRecentActivities(res._id));
               navigation.navigate('ViewScreen');
             }
           }}>

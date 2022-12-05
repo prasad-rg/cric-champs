@@ -219,7 +219,7 @@ const LoginScreen = ({navigation}) => {
               onPress={async () => {
                 const result = await getToken();
                 const jsonToken = JSON.parse(result);
-                // console.log(jsonToken.accessToken.substr(7));
+                console.log(jsonToken.accessToken.substr(7));
                 const accessToken = jsonToken.accessToken.substr(7);
                 const decode = jwt_decode(accessToken);
                 let isAuthTokenExpired =

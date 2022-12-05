@@ -62,6 +62,16 @@ export const userRegister = createAsyncThunk(
   },
 );
 
+export const userLogout = createAsyncThunk('user/logout', async () => {
+  try {
+    const response = await logoutUser();
+    // console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -74,7 +84,7 @@ export const userSlice = createSlice({
     logout: (state, action) => {
       state.isLoggedIn = false;
       state.isLoading = false;
-      state.error = 'Error In Logging Out';
+      // state.error = 'Error In Logging Out';
     },
     changeInitialLaunchStatus: state => {
       state.isInitialAppLaunch = false;
@@ -117,6 +127,20 @@ export const userSlice = createSlice({
     });
     builder.addCase(userRegister.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(userLogout.pending, (state, action) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(userLogout.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isLoggedIn = false;
+      state.error = null;
+    });
+    builder.addCase(userLogout.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isLoggedIn = true;
       state.error = action.payload;
     });
   },

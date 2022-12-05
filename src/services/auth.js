@@ -32,7 +32,10 @@ export const logoutUser = async () => {
     const res = await axios.delete(`${BASE_URL}/api/user/login`, {
       headers: {'Refresh-Token': jsonToken.refreshToken},
     });
-    return res.data;
+    if (res.data.status) {
+      await deleteToken();
+      return res.data;
+    }
   } catch (error) {
     return error.data;
   }
