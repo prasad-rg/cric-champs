@@ -9,7 +9,7 @@ import {
   Share,
   ScrollView,
 } from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useEffect} from 'react';
 import {StackActions, useIsFocused} from '@react-navigation/native';
 import ViewTournamentTab from '../navigation/ViewTournamentTab';
 import {useSelector} from 'react-redux';
@@ -26,6 +26,7 @@ const ViewScreen = ({navigation, route}) => {
       dispatch(setIsView(true));
     }
   }, [focus]);
+
 
   const onShare = async () => {
     try {

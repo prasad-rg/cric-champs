@@ -184,6 +184,7 @@ const AddPlayer = ({navigation, route}) => {
                   navigation={navigation}
                   getImageUri={getDetails}
                   profilePictureUri={route.params?.playerLogo}
+                  type='addplayer'
                 />
               ) : (
                 <AddProfileDetails

@@ -10,12 +10,14 @@ import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
 const StartDate = ({navigation, route}) => {
-
-  convertedDateFromRoute = moment(route?.params?.startDate).format('YYYY-MM-DD');
+  convertedDateFromRoute = moment(route?.params?.startDate).format(
+    'YYYY-MM-DD',
+  );
 
   const [disabled, setDisabled] = useState(false);
-
+const dispatch = useDispatch()
   const onDateChange = (date, type) => {
+
     console.log('dateee', date);
     setDisabled(true);
     if (type === 'END_DATE') {
@@ -117,7 +119,6 @@ const StartDate = ({navigation, route}) => {
             lineHeight: 14,
             textAlign: 'center',
           }}
-
           initialDate={
             convertedDateFromRoute ? convertedDateFromRoute : undefined
           }
@@ -127,8 +128,8 @@ const StartDate = ({navigation, route}) => {
               style: {
                 backgroundColor: convertedDateFromRoute ? '#FCA900' : 'FFFFFF',
               },
-              textStyle: {color: convertedDateFromRoute ? '#FFFFFF' : 'black'}, 
-              containerStyle: [], 
+              textStyle: {color: convertedDateFromRoute ? '#FFFFFF' : 'black'},
+              containerStyle: [],
               allowDisabled: true,
             },
             {
@@ -145,21 +146,39 @@ const StartDate = ({navigation, route}) => {
           ]}
         />
       </View>
-      <GradientButton
-        start={{x: 0, y: 0}}
-        end={{x: 2, y: 0}}
-        colors={disabled ? ['#FFBA8C', '#FE5C6A'] : ['#999999', '#999999']}
-        text="PROCEED"
-        onPress={handlePress}
-        style={{height: 50, width: '100%', marginTop: 0}}
-        textstyle={{
-          height: 16,
-          fontWeight: '500',
-          fontSize: 14,
-          letterSpacing: 0.5,
-          lineHeight: 19,
-        }}
-      />
+      {route.params?.isManage ? (
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={['#FFBA8C', '#FE5C6A']}
+          text="OK"
+          style={{height: 50, width: '100%', marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+          onPress={() => navigation.goBack()}
+        />
+      ) : (
+        <GradientButton
+          start={{x: 0, y: 0}}
+          end={{x: 2, y: 0}}
+          colors={disabled ? ['#FFBA8C', '#FE5C6A'] : ['#999999', '#999999']}
+          text="PROCEED"
+          onPress={handlePress}
+          style={{height: 50, width: '100%', marginTop: 0}}
+          textstyle={{
+            height: 16,
+            fontWeight: '500',
+            fontSize: 14,
+            letterSpacing: 0.5,
+            lineHeight: 19,
+          }}
+        />
+      )}
     </View>
   );
 };

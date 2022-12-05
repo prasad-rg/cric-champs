@@ -16,10 +16,10 @@ import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
 
-const StartTime = ({navigation}) => {
+const StartTime = ({navigation, route}) => {
   const [disabled, setDisabled] = useState(true);
   const startTime = useSelector(state => state.matchdata.startTime);
- 
+
   let current_time = moment();
 
   const dispatch = useDispatch();
@@ -35,7 +35,6 @@ const StartTime = ({navigation}) => {
       setDisabled(false);
       dispatch(setStart(true));
       dispatch(setEnd(false));
-     
     },
     [setVisible],
   );
@@ -45,7 +44,6 @@ const StartTime = ({navigation}) => {
   };
 
   React.useEffect(() => {
-
     const unsubscribe = navigation.addListener('tabPress', e => {
       dispatch(setStart(true));
       dispatch(setEnd(false));
@@ -62,8 +60,8 @@ const StartTime = ({navigation}) => {
             visible={true}
             onDismiss={onDismiss}
             onConfirm={onConfirm}
-            hours={current_time.format("HH")} // default: current hours
-            minutes={current_time.format("mm")} // default: current minutes
+            hours={current_time.format('HH')} // default: current hours
+            minutes={current_time.format('mm')} // default: current minutes
             label="Select time" // optional, default 'Select time'
             uppercase={false} // optional, default is true
             cancelLabel="Cancel" // optional, default: 'Cancel'
@@ -76,21 +74,39 @@ const StartTime = ({navigation}) => {
         </View>
       </ScrollView>
       <View style={styles.gradientButton}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={disabled ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
-          text="PROCEED"
-          style={{width: '100%', marginTop: 0, height: 48}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={handlePress}
-        />
+        {route.params?.isManage ? (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="OK"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={disabled ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
+            text="PROCEED"
+            style={{width: '100%', marginTop: 0, height: 48}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={handlePress}
+          />
+        )}
       </View>
       {/* <Button title='efewf'/> */}
     </View>
