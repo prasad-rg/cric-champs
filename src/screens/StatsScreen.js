@@ -6,14 +6,14 @@ import ListItem from '../components/ListItem';
 const StatsScreen = ({navigation}) => {
   const batting = [
     {
-      id: 0,
+      id: uuid.v4(),
       title: 'Most Runs',
       value: ['Strike Rate', 'Carrer Runs', 'Best Economy Rate'],
       variables: ['strikeRate', 'careerRuns', 'bestEconomyRate'],
       query: 'most_runs',
     },
     {
-      id: 1,
+      id: uuid.v4(),
       title: 'Best Batting average',
       value: ['Strike Rate', 'Best Batting Average', 'Best Economy Rate'],
       variables: ['strikeRate', 'bestBattingAverage', 'bestEconomyRate'],

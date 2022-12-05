@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text, Alert} from 'react-native';
+import {View, StyleSheet, Text, Alert,Platform} from 'react-native';
 import React, {useState} from 'react';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {TextField} from 'rn-material-ui-textfield';
@@ -189,6 +189,7 @@ const RegisterUserScreen = ({navigation}) => {
                 </View>
               </AddProfileDetails>
             </KeyboardAwareScrollView>
+            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
             <GradientButton
               start={{x: 0, y: 0}}
               end={{x: 2, y: 0}}
@@ -197,8 +198,9 @@ const RegisterUserScreen = ({navigation}) => {
               // onPress={() => navigation.navigate('SetPasswordScreen')}
               onPress={handleSubmit}
               // eslint-disable-next-line react-native/no-inline-styles
-              style={{width: '100%', marginBottom: 10, height: 48}}
+              style={{width: '100%', height: 48}}
             />
+            </View>
           </>
         )}
       </Formik>

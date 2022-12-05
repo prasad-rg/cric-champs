@@ -54,7 +54,7 @@ const ManageTournament = ({navigation}) => {
                       source={require('../../assets/images/backicon.png')}
                     />
                   </TouchableOpacity>
-                  <Text style={styles.stadiumName}>ManageTournament</Text>
+                  <Text style={styles.stadiumName}>Manage Tournament</Text>
                 </View>
                 <View
                   style={{
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileDetailsContainer: {
-    height: 47,
-    marginTop: 15,
+    height: 40,
+    marginTop: 10,
   },
   backgroundBeyondSafeArea: {
     backgroundColor: 'rgba(0, 102, 226, 1)',

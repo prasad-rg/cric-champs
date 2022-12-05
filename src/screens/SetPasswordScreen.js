@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, Platform} from 'react-native';
 import React, {useState} from 'react';
 import AppBar from '../components/AppBar';
 import {TextField} from 'rn-material-ui-textfield';
@@ -109,6 +109,7 @@ const SetPasswordScreen = ({navigation, route}) => {
                 )}
               </View>
             </KeyboardAwareScrollView>
+            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
             <GradientButton
               start={{x: 0, y: 0}}
               end={{x: 2, y: 0}}
@@ -118,6 +119,7 @@ const SetPasswordScreen = ({navigation, route}) => {
               onPress={handleSubmit}
               style={styles.buttonStyle}
             />
+            </View>
           </>
         )}
       </Formik>
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: '100%',
-    marginBottom: 10,
+    // marginBottom: 10,
     height: 48,
   },
   errorText: {

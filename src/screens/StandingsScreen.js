@@ -57,7 +57,7 @@ const StandingsScreen = ({navigation}) => {
         <Table>
           <Row
             data={tableHead}
-            flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.6]}
+            flexArr={[2.3, 1.2, 1, 1, 1, 1.5, 1.7]}
             style={styles.table_header}
             textStyle={styles.header_text}
           />
@@ -65,7 +65,7 @@ const StandingsScreen = ({navigation}) => {
             <Rows
               data={tableData}
               heightArr={[50, 50, 50, 50, 50, 50]}
-              flexArr={[2.4, 1.2, 1, 1, 1, 1.3, 1.6]}
+              flexArr={[2.3, 1.2, 1, 1, 1, 1.5, 1.7]}
               style={styles.row}
               textStyle={styles.row_text}
             />
