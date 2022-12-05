@@ -14,7 +14,10 @@ import {Button, RadioButton} from 'react-native-paper';
 import ReadMeExampleSingle from './test';
 import DateScreen from './src/screens/DateScreen';
 import TimeScreen from './src/screens/TimeScreen';
-import RootNavigator from './src/navigation/RootNavigator'
+import RootNavigator from './src/navigation/RootNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
+import EditPlayers from './src/screens/EditPlayers';
+
 
 let persistor = persistStore(store);
 
