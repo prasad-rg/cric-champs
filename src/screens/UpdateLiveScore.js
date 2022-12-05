@@ -181,29 +181,44 @@ const UpdateLiveScore = ({navigation, route}) => {
       } else {
         // TODO : Add the batsman batsmanId bowler filder from the Modal fetched from the remaining player list PUT response
         if (data === 'Caught' || data === 'Other') {
+          setWicketsModal({
+            ...wicketsModal,
+            fliderModal: true,
+          });
           setWickets({
             ...liveScoreDataStructure.wickets,
             type: data,
             status: true,
-            bowler: bowler.bowler,
-            bowlerName: bowler.bowlerName,
-          });
-          setWicketsModal({
-            ...wicketsModal,
-            fliderModal: true,
+            bowler: bowler?.bowler,
+            bowlerName: bowler?.bowlerName,
+            batsmanId: strike?.strike,
+            batsman: strike?.strikeName,
+            fielderName: wickets?.fielderName,
           });
         } else {
           setWickets({
             ...liveScoreDataStructure.wickets,
             type: data,
             status: true,
-            bowler: bowler.bowler,
-            bowlerName: bowler.bowlerName,
+            bowler: bowler?.bowler,
+            bowlerName: bowler?.bowlerName,
+            batsmanId: strike?.strike,
+            batsman: strike?.strikeName,
           });
           setWicketsModal({...wicketsModal, newBatsmanModal: true});
         }
       }
     }
+  };
+
+  const inningsTwoStrikeSelection = async () => {
+    const returnStrikeAndNonStrike = new Promise(resolve =>
+      setInitialPlayerSelectionModal({
+        ...initialPlayersSelectionModal,
+        strikeModal: true,
+      }),
+    );
+    return returnStrikeAndNonStrike;
   };
 
   const handelUpdate = async () => {
@@ -229,8 +244,8 @@ const UpdateLiveScore = ({navigation, route}) => {
 
     // TODO:---------------------------Think
 
-    console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
-    console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
+    // console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
+    // console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
 
     const update = await updateLiveScore(updateScores);
     if (
@@ -242,19 +257,20 @@ const UpdateLiveScore = ({navigation, route}) => {
         bowlerModal: true,
       });
     }
-    console.log('000000', update);
+    console.log('----------------------------------', update);
     let inningsTwoUpdate;
     if (update.status) {
       if (update?.message === TIME_TO_FLIP) {
         dispatch(swapTeamId());
         dispatch(swapTeamPlayers());
-        setInitialPlayerSelectionModal({
-          ...initialPlayersSelectionModal,
-          strikeModal: true,
-        });
+        await inningsTwoStrikeSelection();
+        // setInitialPlayerSelectionModal({
+        //   ...initialPlayersSelectionModal,
+        //   strikeModal: true,
+        // });
 
-        console.info('.....BattingTeamId....AfterSwap', battingTeamId);
-        console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
+        // console.info('.....BattingTeamId....AfterSwap', battingTeamId);
+        // console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
 
         inningsTwoUpdate = await updateLiveScore(
           convertLiveScoreData(
@@ -273,6 +289,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           ),
         );
+        console.warn('----------------------------------', inningsTwoUpdate);
 
         // console.log(
         //   '======Converted Data====',
@@ -293,43 +310,43 @@ const UpdateLiveScore = ({navigation, route}) => {
         //   ),
         // );
 
-        console.info('--------------', inningsTwoUpdate);
-        if (
-          update?.message === TIME_TO_END_MATCH ||
-          update?.message === DECLARE_END
-        ) {
-          console.log('Got a Hit');
-          let lastData = convertLiveScoreData(
-            runs,
-            extras,
-            wickets,
-            battingTeamId,
-            bowlingTeamId,
-            matchId,
-            tournamentDetails._id,
-            matchAndInningsStatus.matchStatus,
-            matchAndInningsStatus.inningsStatus,
-            bowler,
-            nonStrike,
-            strike,
-            presentScoreFromAPI,
-          );
-          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
-          const endMatchNow = await updateLiveScore({
-            ...lastData,
-            matchStatus: 'end',
-          });
-          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
-          if (endMatchNow?.matchDone?.statusMessage) {
-            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
-          }
-        }
+        // console.info('--------------', inningsTwoUpdate);
+        // if (
+        //   update?.message === TIME_TO_END_MATCH ||
+        //   update?.message === DECLARE_END
+        // ) {
+        //   // console.log('Got a Hit');
+        //   let lastData = convertLiveScoreData(
+        //     runs,
+        //     extras,
+        //     wickets,
+        //     battingTeamId,
+        //     bowlingTeamId,
+        //     matchId,
+        //     tournamentDetails._id,
+        //     matchAndInningsStatus.matchStatus,
+        //     matchAndInningsStatus.inningsStatus,
+        //     bowler,
+        //     nonStrike,
+        //     strike,
+        //     presentScoreFromAPI,
+        //   );
+        //   // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+        //   const endMatchNow = await updateLiveScore({
+        //     ...lastData,
+        //     matchStatus: 'end',
+        //   });
+        //   // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+        //   if (endMatchNow?.matchDone?.statusMessage) {
+        //     Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+        //   }
+        // }
       } else {
         if (
           update?.message === TIME_TO_END_MATCH ||
           update?.message === DECLARE_END
         ) {
-          console.log('Got a Hit');
+          console.log(update);
           let lastData = convertLiveScoreData(
             runs,
             extras,
@@ -350,8 +367,10 @@ const UpdateLiveScore = ({navigation, route}) => {
             ...lastData,
             matchStatus: 'end',
           });
-          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          console.info('+++++++PUT Req Res+++++++', endMatchNow);
           if (endMatchNow?.matchDone?.statusMessage) {
+            // make an async call and navigate back to the matches screen with a reload......
+            // check only if endMatchNow?.matchDone?._id is present and make an API call Accordingly.....
             console.log(endMatchNow?.matchDone);
             Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
           }
@@ -628,10 +647,10 @@ const UpdateLiveScore = ({navigation, route}) => {
                   <Text style={{color: '#FF8713'}}>
                     {extras === 'Wd'
                       ? 'Wide  '
-                      : extras === 'Lb '
-                      ? 'Leg Bye'
-                      : extras === 'Nb '
-                      ? 'No ball'
+                      : extras === 'Lb'
+                      ? 'Leg Bye  '
+                      : extras === 'Nb'
+                      ? 'No ball  '
                       : 'Bye  '}
                   </Text>
                 )}
