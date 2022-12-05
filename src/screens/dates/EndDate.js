@@ -10,11 +10,14 @@ import { setStart } from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import { addDates } from '../../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
-
+import moment from 'moment';
 const StartDate = ({navigation,route}) => {
 
   dateFromRoute = route?.params?.params?.endDate;
-  console.log("end date",dateFromRoute);
+  console.log("end date",route.params?.params);
+  convertedDateFromRoute = moment(route?.params?.startDate).format(
+    'YYYY-MM-DD',
+  );
   const dispatch = useDispatch();
 
   const startDate = useSelector(state => state.matchdata.startDate);

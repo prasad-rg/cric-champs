@@ -53,6 +53,7 @@ const AddTeam = ({navigation, route}) => {
   );
   const teamId = useSelector(state => state.tournamentdata.teamId);
 
+
   const handlePlayer = () => {
     dispatch(setIsEdit(false));
     navigation.navigate('AddPlayer');

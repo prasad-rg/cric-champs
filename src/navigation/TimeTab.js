@@ -5,7 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import StartTime from '../screens/time/StartTime';
 import EndTime from '../screens/time/EndTime';
 
-const TimeTab = () => {
+const TimeTab = (props) => {
   const Tab = createMaterialTopTabNavigator();
   return (
     // <NavigationContainer>
@@ -33,8 +33,12 @@ const TimeTab = () => {
             width: '50%',
           },
         }}>
-        <Tab.Screen name="START OF PLAY" component={StartTime} />
-        <Tab.Screen name="END OF PLAY" component={EndTime} />
+        <Tab.Screen name="START OF PLAY" >
+        {() => <StartTime showProps={true} {...props} />}
+        </Tab.Screen>
+        <Tab.Screen name="END OF PLAY"  >
+        {() => <EndTime showProps={true} {...props} />}
+        </Tab.Screen>
       </Tab.Navigator>
     // </NavigationContainer>
   );

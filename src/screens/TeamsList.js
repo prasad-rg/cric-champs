@@ -8,31 +8,32 @@ import {
   Image,
   ScrollView,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-import { setIsEdit, setTeamId } from '../redux/manageTournamentSlice';
+import {setIsEdit, setTeamId} from '../redux/manageTournamentSlice';
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
 import {getTeamsByTournamentId} from '../services/viewTournament';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import {useSelector} from 'react-redux';
-const TeamsList = ({navigation}) => {
-  dispatch = useDispatch ()
+const TeamsList = ({navigation, route}) => {
+  console.log(route.params);
+  dispatch = useDispatch();
   const [currentTeams, setCurrentTeams] = useState([]);
-  const [isLoading,setIsLoading]=useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
 
   const loadTeams = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await getTeamsByTournamentId(tournamentId);
-    setIsLoading(false)
-  
+    setIsLoading(false);
+
     if (response.status) {
       setCurrentTeams(response.data);
     }
@@ -44,24 +45,22 @@ const TeamsList = ({navigation}) => {
     }
   }, [focus]);
 
-  const handleTeamList = (team) =>{
-    dispatch(setTeamId(team._id))
-    navigation.navigate('TeamInfoScreen',{
-      teamId:team?._id,
-      teamName:team?.name,
-      teamLogo:team?.logo.url,
-    })
-    
-  }
+  const handleTeamList = team => {
+    dispatch(setTeamId(team._id));
+    navigation.navigate('TeamInfoScreen', {
+      teamId: team?._id,
+      teamName: team?.name,
+      teamLogo: team?.logo.url,
+    });
+  };
   const handleBack = () => {
     navigation.pop();
   };
   const handlePress = () => {
-  
     navigation.navigate('OversScreen');
   };
   const handleTeam = () => {
-    dispatch(setIsEdit(false))
+    dispatch(setIsEdit(false));
     navigation.navigate('AddTeam');
   };
   return (
@@ -101,7 +100,7 @@ const TeamsList = ({navigation}) => {
             <View style={styles.teamsView}>
               {currentTeams.map(team => (
                 <View key={team?._id}>
-                  <TouchableOpacity onPress={()=>handleTeamList(team)}>
+                  <TouchableOpacity onPress={() => handleTeamList(team)}>
                     <TeamListName source={team?.logo.url} text={team?.name} />
                   </TouchableOpacity>
                 </View>
@@ -111,48 +110,61 @@ const TeamsList = ({navigation}) => {
         </View>
       </ScrollView>
       {isLoading ? (
-          <View style={{marginBottom: 20}}>
+        <View style={{marginBottom: 20}}>
           <ActivityIndicator size="large" color="#FFBA8C" />
-          </View>
-      ):(
+        </View>
+      ) : (
         <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-        {currentTeams.length === 0 ? (
-          <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={ ['#999999', '#999999'] }
-          text="PROCEED"
-          style={{height: 48, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-        
-        />
-        ) : (
-          <GradientButton
-            start={{x: 0, y: 0}}
-            end={{x: 2, y: 0}}
-            colors={['#FFBA8C', '#FE5C6A']}
-            text="PROCEED"
-            style={{height: 48, width: '100%', marginTop: 0}}
-            textstyle={{
-              height: 16,
-              fontWeight: '500',
-              fontSize: 14,
-              letterSpacing: 0.5,
-              lineHeight: 19,
-            }}
-            onPress={handlePress}
-          />
-        )}
-  
+          {route.params?.isManage ? (
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#FFBA8C', '#FE5C6A']}
+              text="OK"
+              style={{height: 48, width: '100%', marginTop: 0}}
+              textstyle={{
+                height: 16,
+                fontWeight: '500',
+                fontSize: 14,
+                letterSpacing: 0.5,
+                lineHeight: 19,
+              }}
+              onPress={()=>navigation.goBack()}
+            />
+          ) : currentTeams.length === 0 ? (
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#999999', '#999999']}
+              text="PROCEED"
+              style={{height: 48, width: '100%', marginTop: 0}}
+              textstyle={{
+                height: 16,
+                fontWeight: '500',
+                fontSize: 14,
+                letterSpacing: 0.5,
+                lineHeight: 19,
+              }}
+            />
+          ) : (
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#FFBA8C', '#FE5C6A']}
+              text="PROCEED"
+              style={{height: 48, width: '100%', marginTop: 0}}
+              textstyle={{
+                height: 16,
+                fontWeight: '500',
+                fontSize: 14,
+                letterSpacing: 0.5,
+                lineHeight: 19,
+              }}
+              onPress={handlePress}
+            />
+          )}
         </View>
       )}
-     
     </View>
   );
 };

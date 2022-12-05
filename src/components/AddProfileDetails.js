@@ -26,6 +26,7 @@ const AddProfileDetails = ({
   getImageUri,
   isView,
 }) => {
+
   const {width, height} = useWindowDimensions();
   const [imageUri, setImageUri] = useState('');
 

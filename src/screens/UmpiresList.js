@@ -18,7 +18,7 @@ import {useDispatch} from 'react-redux';
 import {getUmpiresByTournamentId} from '../services/viewTournament';
 import {setIsEdit} from '../redux/manageTournamentSlice';
 
-const UmpiresList = ({navigation}) => {
+const UmpiresList = ({navigation, route}) => {
   const [currentUmpires, setCurrentUmpires] = useState([]);
 
   const dispatch = useDispatch();
@@ -105,25 +105,43 @@ const UmpiresList = ({navigation}) => {
         </View>
       </ScrollView>
       <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={
-            currentUmpires.length === 0
-              ? ['#999999', '#999999']
-              : ['#FFBA8C', '#FE5C6A']
-          }
-          text="PROCEED"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={currentUmpires.length === 0 ? null : handlePress}
-        />
+        {route.params?.isManage ? (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="OK"
+            style={{height: 48, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={
+              currentUmpires.length === 0
+                ? ['#999999', '#999999']
+                : ['#FFBA8C', '#FE5C6A']
+            }
+            text="PROCEED"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={currentUmpires.length === 0 ? null : handlePress}
+          />
+        )}
       </View>
     </View>
   );

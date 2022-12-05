@@ -11,7 +11,7 @@ import React from 'react';
 import TimeTab from '../navigation/TimeTab';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
-const TimeScreen = ({navigation}) => {
+const TimeScreen = ({navigation,route}) => {
   let current_time = moment().format('HH:mm');
 
   const startTime = useSelector(state => state.matchdata.startTime);
@@ -47,7 +47,7 @@ const TimeScreen = ({navigation}) => {
         </SafeAreaView>
       </View>
 
-      <TimeTab />
+      <TimeTab route={route} navigation={navigation}/>
     </View>
   );
 };
