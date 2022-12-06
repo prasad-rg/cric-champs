@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  StatusBar
 } from 'react-native';
 
 import React, {useEffect, useState, useLayoutEffect} from 'react';
@@ -76,6 +77,11 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+           <StatusBar
+          barStyle="light-content"
+          hidden={false}
+          backgroundColor= 'rgba(0, 102, 226, 1)'
+        />
       <View style={styles.backgroundBeyondSafeArea}>
         <SafeAreaView>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -206,7 +212,7 @@ const styles = StyleSheet.create({
   },
   cricket: {
     height: 24,
-    width: 64,
+    // width: 64,
     color: 'rgba(255,255,255,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,

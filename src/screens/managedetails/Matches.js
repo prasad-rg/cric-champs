@@ -16,7 +16,6 @@ import {convertMatchesDataWithScores} from '../../utils/convertMatchesDataWithSc
 
 const Matches = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
-  // console.error(tournamentDetails._id);
   const [currentMatches, setCurrentMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let prevDate = null;
@@ -26,7 +25,6 @@ const Matches = ({navigation}) => {
     setIsLoading(false);
     if (response.status) {
       setCurrentMatches(() => convertMatchesDataWithScores(response.data));
-      // console.warn(convertMatchesDataWithScores(response.data));
     }
   };
 

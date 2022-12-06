@@ -37,7 +37,6 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
-    // console.log(response.data.data);
     if (response.status) {
       setCurrentOverview(response.data.data);
     }
@@ -86,16 +85,10 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
     console.log('responseeeee', response.data);
     if (response.data.statusCode !== 200) {
       setModal(false);
-      Toast.show(response.data.message)
-      // navigation.navigate('TimeScreen')
+      Toast.show(response.data.message);
     } else {
       setModal(true);
-      // dispatch(deleteStartTime())
-      // dispatch(deleteEndTime())
-      // dispatch(deleteStartDate())
-      // dispatch(deleteEndDate())
     }
-
     setVisible(true);
   };
 

@@ -235,7 +235,7 @@ const LiveScreen = ({navigation, route}) => {
             <View style={{width: '20%', marginHorizontal: '30%'}}>
               <Text style={styles.heading2}>CRR</Text>
               <Text style={styles.number2}>
-                {scoreBoard?.score?.currentRunRate}
+               {Math.round(scoreBoard?.score?.currentRunRate *100)/100}
               </Text>
             </View>
 
@@ -260,19 +260,21 @@ const LiveScreen = ({navigation, route}) => {
             )}
           </Text>
 
-          <View style={{marginTop: 25}}>
+          <View style={{marginTop: 5}}>
             <Table>
               <Row
                 data={tableHead}
-                flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
                 style={styles.table_header}
                 textStyle={styles.header_text}
               />
               <TableWrapper>
                 <Rows
                   data={tableData}
-                  heightArr={[50, 50, 50, 50, 50, 50]}
-                  flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                  // heightArr={[60, 60, 60, 60, 60, 60]}
+                  // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
+                  flexArr={[3, 1,1, 1.1, 1.1, 1.4]}
                   textStyle={styles.row_text}
                 />
               </TableWrapper>
@@ -286,7 +288,8 @@ const LiveScreen = ({navigation, route}) => {
             <Table>
               <Row
                 data={tableHeader}
-                flexArr={[3, 1, 1, 1, 1, 1]}
+                // flexArr={[3, 1, 1, 1, 1, 1]}
+                flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
                 style={styles.table_header}
                 textStyle={styles.header_text}
               />
@@ -294,7 +297,8 @@ const LiveScreen = ({navigation, route}) => {
                 <Rows
                   data={data}
                   heightArr={[50, 50, 50, 50, 50, 50]}
-                  flexArr={[3, 1, 1, 1, 1, 1]}
+                  // flexArr={[3, 1, 1, 1, 1, 1]}
+                  flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
                   textStyle={styles.row_text}
                 />
               </TableWrapper>
@@ -312,7 +316,7 @@ const LiveScreen = ({navigation, route}) => {
                     styles.pship
                   }>{` (${scoreBoard?.score?.partnershipBalls} balls)`}</Text>
               </View>
-              <View style={{flexDirection: 'row', alignSelf: 'baseline'}}>
+              <View style={{flexDirection: 'row',alignItems:"center"}}>
                 <Text style={styles.pship}>FoW:</Text>
                 <Text style={styles.runs}>
                   {'   '}
@@ -596,7 +600,6 @@ const styles = StyleSheet.create({
     height: 77,
     margin: 15,
     padding: 5,
-
     flexDirection: 'row',
   },
   heading1: {
@@ -618,6 +621,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
+   justifyContent:"center",
+   alignSelf:"center"
   },
   heading3: {
     height: 16,
@@ -643,28 +648,32 @@ const styles = StyleSheet.create({
   },
   number2: {
     height: 30,
-    width: 36,
+    // width: 36,
     color: '#000000',
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     fontWeight: '500',
     letterSpacing: 0,
-    lineHeight: 21,
+    // lineHeight: 21,
     textAlign: 'center',
     paddingTop: 7,
+    marginHorizontal:10,
   },
   number3: {
     height: 30,
-    width: 50,
-
+    // width: 50,
+  // borderWidth:1,
     color: '#000000',
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     fontWeight: '500',
     letterSpacing: 0,
-    lineHeight: 21,
+    // lineHeight: 21,
     textAlign: 'center',
     paddingTop: 7,
+    marginHorizontal:10,
+    // marginRight:30,
+    // paddingHorizontal:-20
   },
   secondNumber: {
     height: 30,
@@ -724,15 +733,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     letterSpacing: 0,
     lineHeight: 15,
+    // borderWidth:1,
   },
   runs: {
-    // height: 24,
+    height: 15,
     // width: 40,
     color: 'rgba(0,0,0,0.87)',
     fontFamily: 'Roboto-Regular',
     fontWeight: 'bold',
     fontSize: 13,
     letterSpacing: 0,
+    lineHeight: 15,
+    // paddingTop:-20
     // lineHeight: 24,
   },
   middleView: {

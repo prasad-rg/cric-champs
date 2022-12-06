@@ -1,6 +1,6 @@
-import {StyleSheet, Text, SafeAreaView, View} from 'react-native';
+import {StyleSheet, Text, ScrollView, View} from 'react-native';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
+
 import CoAdminCard from '../../components/CoAdminCard';
 
 const CoAdmins = ({navigation}) => {
@@ -20,13 +20,4 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
-  // card: {
-  //   height: 173,
-
-  //   backgroundColor: '#FFFFFF',
-  //   marginHorizontal: 20,
-  //   borderRadius: 10,
-  //   overflow: 'hidden',
-  //   marginTop: 15,
-  // },
 });

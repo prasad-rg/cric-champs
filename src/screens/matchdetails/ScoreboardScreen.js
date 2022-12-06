@@ -161,15 +161,17 @@ const ScoreboardScreen = ({navigation, route}) => {
           <Table style={{marginTop: 10}}>
             <Row
               data={tableHead}
-              flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
+              // flexArr={[2.2, 1, 1.2, 1, 1.2, 1.4]}
+              flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
               style={styles.table_header}
               textStyle={styles.header_text}
             />
             <TableWrapper>
               <Rows
                 data={tableData}
-                heightArr={[50, 50, 50, 50, 50, 50]}
-                flexArr={[3, 1, 1.2, 0.8, 0.8, 1.4]}
+                heightArr={[52, 52, 52, 52, 52, 52]}
+                // flexArr={[2.2, 1, 1.2, 1, 1.2, 1.4]}
+                flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
                 textStyle={styles.row_text}
               />
             </TableWrapper>
@@ -180,8 +182,8 @@ const ScoreboardScreen = ({navigation, route}) => {
             <View
               style={{
                 flexDirection: 'row',
-                marginHorizontal: '10%',
-                marginLeft: '27%',
+                // marginHorizontal: '10%',
+                marginLeft: '22%',
               }}>
               <Text style={styles.extraNumber}>
                 {` ${
@@ -215,7 +217,8 @@ const ScoreboardScreen = ({navigation, route}) => {
           <Table>
             <Row
               data={tableHeader}
-              flexArr={[3, 1, 1, 1, 1, 1]}
+              // flexArr={[3, 1, 1, 1, 1, 1]}
+              flexArr={[3, 1, 1, 1.1, 1.1, 1.6]}
               style={styles.table_header}
               textStyle={styles.header_text}
             />
@@ -223,7 +226,8 @@ const ScoreboardScreen = ({navigation, route}) => {
               <Rows
                 data={data}
                 heightArr={[40, 40, 40, 40, 40, 40]}
-                flexArr={[3, 1, 1, 1, 1, 1]}
+                // flexArr={[3, 1, 1, 1, 1, 1]}
+                flexArr={[3, 1, 1, 1.1, 1.1, 1.6]}
                 textStyle={styles.row_text}
               />
             </TableWrapper>
@@ -293,10 +297,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0,
     lineHeight: 24,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   row_text: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 7,
   },
   fallText: {
     height: 50,
@@ -329,6 +333,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
+    // marginRight:30,
   },
   extraInfo: {
     height: 19,
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-    marginLeft: '25%',
+    marginLeft: '20%',
   },
   fallText: {
     height: 50,

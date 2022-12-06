@@ -232,3 +232,30 @@ export const getGraphValues = async (
     return error.response.data;
   }
 }
+export const forgotPassword = async (
+  email
+) =>{
+  console.log("email",email)
+  try {
+    const response=await axios.get(
+      `${BASE_URL}/api/otp?email=${email}`
+    );
+  
+    return response.data;
+  } catch (error){
+    return error.response.data;
+  }
+}
+
+export const verifyOTP = async data => {
+  console.log("data from",data)
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/otp`,
+        data,
+      );
+      return response;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }

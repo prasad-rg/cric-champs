@@ -57,7 +57,7 @@ const StandingsScreen = ({navigation}) => {
         <Table>
           <Row
             data={tableHead}
-            flexArr={[2.3, 1.2, 1, 1, 1, 1.5, 1.7]}
+            flexArr={[2, 1.2, 1, 1, 1, 1.7, 1.5]}
             style={styles.table_header}
             textStyle={styles.header_text}
           />
@@ -65,7 +65,7 @@ const StandingsScreen = ({navigation}) => {
             <Rows
               data={tableData}
               heightArr={[50, 50, 50, 50, 50, 50]}
-              flexArr={[2.3, 1.2, 1, 1, 1, 1.5, 1.7]}
+              flexArr={[2, 1.2, 1, 1, 1, 1.7, 1.5]}
               style={styles.row}
               textStyle={styles.row_text}
             />
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: 'bold',
     letterSpacing: 0,
-    lineHeight: 24,
-    paddingHorizontal: 15,
+    // lineHeight: 24,
+    // paddingHorizontal: 15,
     textAlign: 'center',
   },
   row: {
@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.2,
   },
   row_text: {
-    paddingHorizontal: 12,
     fontFamily: 'Roboto-Regular',
     textAlign: 'center',
   },

@@ -29,7 +29,7 @@ const passwordValidationSchema = yup.object().shape({
     .required('Confirm password is required'),
 });
 
-const SetPasswordScreen = ({navigation, route}) => {
+const ResetPassword = ({navigation, route}) => {
   const dispatch = useDispatch();
   const {isLoading, isLoggedIn, error} = useSelector(state => state.auth);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -43,16 +43,7 @@ const SetPasswordScreen = ({navigation, route}) => {
         validationSchema={passwordValidationSchema}
         initialValues={{password: '', confirmPassword: ''}}
         onSubmit={values => {
-          const formData = createFormData({
-            ...route.params.regDetails,
-            password: values.password,
-          });
-          // console.log({
-          //   ...route.params.regDetails,
-          //   password: values.password,
-          // });
-          dispatch(userRegister(formData));
-          // registerUser(formData);
+         console.log("valuse",values)
         }}>
         {({
           handleChange,
@@ -64,14 +55,14 @@ const SetPasswordScreen = ({navigation, route}) => {
           touched,
         }) => (
           <>
-            <AppBar navigation={navigation} title="Set Password" />
+            <AppBar navigation={navigation} title="Reset Password" />
             <KeyboardAwareScrollView>
               <View style={styles.contentContainer}>
                 <Image
                   source={require('../../assets/images/resetPass.png')}
                   style={styles.image}
                 />
-                <Text style={styles.heroText}>Set your password</Text>
+                <Text style={styles.heroText}>Reset your password</Text>
               </View>
               <View style={styles.emailField}>
                 <TextInput
@@ -197,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetPasswordScreen;
+export default ResetPassword;

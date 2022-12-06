@@ -6,6 +6,9 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import GradientButton from '../components/GradientButton';
+import { forgotPassword } from '../services/viewTournament';
+import Toast from 'react-native-simple-toast';
+
 
 const forgotPasswordValidationSchema = yup.object().shape({
   email: yup
@@ -15,13 +18,24 @@ const forgotPasswordValidationSchema = yup.object().shape({
 });
 
 const ForgotPasswordScreen = ({navigation}) => {
+  const handleforgot = async values => {
+     const response = await forgotPassword(values.email)
+     console.log("forgot response",response)
+     if(response.status){
+      Toast.show("OTP sent successfully")
+      navigation.navigate('VerifyOtp',{email:values.email})
+     } else {
+      Toast.show("Something went wrong..Please try again")
+     }
+
+  };
   return (
     <View style={styles.container}>
-      <AppBar navigation={navigation} />
+      <AppBar navigation={navigation} title="Forgot Password"/>
       <Formik
         validationSchema={forgotPasswordValidationSchema}
         initialValues={{email: ''}}
-        onSubmit={values => console.log(values)}>
+        onSubmit={values => handleforgot(values)}>
         {({
           handleChange,
           handleBlur,
