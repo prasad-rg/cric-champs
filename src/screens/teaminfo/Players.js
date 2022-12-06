@@ -74,6 +74,7 @@ const Players = ({navigation, route}) => {
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>
         <FlatList
+         showsVerticalScrollIndicator = {false}
           data={currentPlayers}
           renderItem={renderItem}
           keyExtractor={item => item._id}

@@ -8,27 +8,27 @@ import {
   Image,
   ScrollView,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import RadioButton from '../components/RadioButton';
 import GradientButton from '../components/GradientButton';
-import { addOvers } from '../services/manageTournament2';
-import { useSelector } from 'react-redux';
+import {addOvers} from '../services/manageTournament2';
+import {useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 
-const OversScreen = ({navigation}) => {
-  const [isLoading,setIsLoading]=useState(false)
+const OversScreen = ({navigation, route}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
   const [overs, setOvers] = useState('');
 
-  const oversData ={
-    overs:overs,
-    tournamentId:tournamentId,
-  }
+  const oversData = {
+    overs: overs,
+    tournamentId: tournamentId,
+  };
 
   const radio_props = [
     {label: '5', value: '5', id: 0},
@@ -40,27 +40,25 @@ const OversScreen = ({navigation}) => {
     {label: '40', value: '40', id: 6},
     {label: '50', value: '50', id: 7},
   ];
-  const handlePress =async () =>{
-    
-    if(overs!==''){
-      setIsLoading(true)
-      const response= await addOvers(oversData);
-      setIsLoading(false)
-      console.log("hiiiiiiiiiiiiiii",response)
-      if(response.status){
-        navigation.navigate('Ground')
-      }else{
-        Toast.show("Something went wrong, Please try again 😭")
+  const handlePress = async () => {
+    if (overs !== '') {
+      setIsLoading(true);
+      const response = await addOvers(oversData);
+      setIsLoading(false);
+      console.log('hiiiiiiiiiiiiiii', response);
+      if (response.status) {
+        navigation.navigate('Ground');
+      } else {
+        Toast.show('Something went wrong, Please try again 😭');
       }
+    } else {
+      Toast.show('overs is required');
     }
-    else{
-      Toast.show("overs is required")
-    }
-  }
-  const getData= data =>{
-    setOvers(data)
+  };
+  const getData = data => {
+    setOvers(data);
     // console.log(data)
-  }
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -71,7 +69,7 @@ const OversScreen = ({navigation}) => {
             <SafeAreaView>
               <View style={styles.profileDetailsContainer}>
                 <View style={styles.headerText}>
-                  <TouchableOpacity onPress={()=>navigation.goBack()}>
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -103,27 +101,47 @@ const OversScreen = ({navigation}) => {
         </View>
       </ScrollView>
       {isLoading ? (
-         <View style={{marginBottom: 20}}>
-         <ActivityIndicator size="large" color="#FFBA8C" />
-         </View>
-      ):(
+        <View style={{marginBottom: 20}}>
+          <ActivityIndicator size="large" color="#FFBA8C" />
+        </View>
+      ) : (
         <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={overs === ''  ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']}
-          text="PROCEED"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={handlePress}
-        />
-      </View>
+          {route.params?.isManage ? (
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={['#FFBA8C', '#FE5C6A']}
+              text="OK"
+              style={{height: 48, width: '100%', marginTop: 0}}
+              textstyle={{
+                height: 16,
+                fontWeight: '500',
+                fontSize: 14,
+                letterSpacing: 0.5,
+                lineHeight: 19,
+              }}
+              onPress={() => navigation.goBack()}
+            />
+          ) : (
+            <GradientButton
+              start={{x: 0, y: 0}}
+              end={{x: 2, y: 0}}
+              colors={
+                overs === '' ? ['#999999', '#999999'] : ['#FFBA8C', '#FE5C6A']
+              }
+              text="PROCEED"
+              style={{height: 50, width: '100%', marginTop: 0}}
+              textstyle={{
+                height: 16,
+                fontWeight: '500',
+                fontSize: 14,
+                letterSpacing: 0.5,
+                lineHeight: 19,
+              }}
+              onPress={handlePress}
+            />
+          )}
+        </View>
       )}
     </View>
   );
@@ -158,7 +176,7 @@ const styles = StyleSheet.create({
     height: 24,
     width: 100,
     color: 'rgba(255,255,255,0.87)',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
@@ -168,7 +186,7 @@ const styles = StyleSheet.create({
   overs: {
     height: 16,
     color: '#8E9BA8',
-    fontFamily:"Roboto-Medium",
+    fontFamily: 'Roboto-Medium',
     fontSize: 15,
     fontWeight: '500',
     letterSpacing: 0,

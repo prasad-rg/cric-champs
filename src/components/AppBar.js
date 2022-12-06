@@ -30,6 +30,7 @@ const AppBar = ({
   type,
   isView,
 }) => {
+
   const dispatch = useDispatch();
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
@@ -39,14 +40,12 @@ const AppBar = ({
   const isEdit = useSelector(state => state.tournamentdata.isEdit);
   const editEntity = useSelector(state => state.tournamentdata.editEntity);
 
-
   const handleEditPlayer = () => {
     navigation.dispatch(
       StackActions.push('EditPlayers', {
         playerLogo: profilePictureUri,
         playerName: title,
         playerId: playerId,
-       
       }),
     );
     dispatch(setIsEdit(false));
@@ -62,8 +61,8 @@ const AppBar = ({
     console.log(response);
     if (response.status) {
       navigation.pop(1);
-    }else{
-      Toast.show("Something went wrong, Please try again 😭")
+    } else {
+      Toast.show('Something went wrong, Please try again 😭');
     }
   };
 
@@ -106,8 +105,8 @@ const AppBar = ({
     const response = await deleteIndividualPlayer(data);
     if (response.status) {
       navigation.pop(1);
-    } else{
-      Toast.show("Something went wrong, Please try again 😭")
+    } else {
+      Toast.show('Something went wrong, Please try again 😭');
     }
   };
 
@@ -135,7 +134,7 @@ const AppBar = ({
       <SafeAreaView>
         <View style={styles.header}>
           <View style={styles.leftHeader}>
-            {editEntity ? (
+            {editEntity && type == 'addplayer' ? (
               <TouchableOpacity
                 onPress={() => {
                   dispatch(setEditEntity(false));
@@ -147,9 +146,22 @@ const AppBar = ({
                   style={[styles.backIcon, {...iconTint}]}
                 />
               </TouchableOpacity>
+            ) :!editEntity && type == 'addplayerinedit' ? (
+            
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setIsEdit(true));
+                  navigation.pop();
+                }}>
+                <Image
+                  source={require('../../assets/images/back.png')}
+                  style={[styles.backIcon, {...iconTint}]}
+                />
+              </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => {
+            
                   // dispatch(setIsEdit(false));
                   // dispatch(setEditEntity(false));
                   navigation.goBack();
@@ -162,57 +174,83 @@ const AppBar = ({
             )}
             <Text style={styles.text}>{title}</Text>
           </View>
-          {isView ? null : <View>
-            {isEdit && type == 'umpire' ? (
-              <View style={styles.rightHeader}>
-                <TouchableOpacity onPress={handleEditUmpire}>
-                  <Image
-                    source={require('../../assets/images/pencil.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                      marginRight: 23,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDeleteUmpire}>
-                  <Image
-                    source={require('../../assets/images/trash.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            ) : isEdit && type == 'player' ? (
-              <View style={styles.rightHeader}>
-                <TouchableOpacity onPress={handleEditPlayer}>
-                  <Image
-                    source={require('../../assets/images/pencil.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                      marginRight: 23,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDeletePlayer}>
-                  <Image
-                    source={require('../../assets/images/trash.png')}
-                    style={{
-                      tintColor: '#FFFFFF',
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            ) : null}
-          </View>}
+          {isView ? null : (
+            <View>
+              {isEdit && type == 'umpire' ? (
+                <View style={styles.rightHeader}>
+                  <TouchableOpacity onPress={handleEditUmpire}>
+                    <Image
+                      source={require('../../assets/images/pencil.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                        marginRight: 23,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleDeleteUmpire}>
+                    <Image
+                      source={require('../../assets/images/trash.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : isEdit && type == 'player' ? (
+                <View style={styles.rightHeader}>
+                  <TouchableOpacity onPress={handleEditPlayer}>
+                    <Image
+                      source={require('../../assets/images/pencil.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                        marginRight: 23,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleDeletePlayer}>
+                    <Image
+                      source={require('../../assets/images/trash.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : isEdit && type == 'addplayerinedit' ? (
+                <View style={styles.rightHeader}>
+                  <TouchableOpacity onPress={handleEditPlayer}>
+                    <Image
+                      source={require('../../assets/images/pencil.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                        marginRight: 23,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleDeletePlayer}>
+                    <Image
+                      source={require('../../assets/images/trash.png')}
+                      style={{
+                        tintColor: '#FFFFFF',
+                        height: 25,
+                        width: 25,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </View>

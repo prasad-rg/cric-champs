@@ -33,6 +33,7 @@ import UpdateLiveScore from '../screens/UpdateLiveScore';
 import EditPlayers from '../screens/EditPlayers';
 import EditTeam from '../screens/EditTeam';
 import RNBootSplash from 'react-native-bootsplash';
+import AddPlayersInEditScreen from '../screens/AddPlayersInEditScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +42,10 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide()}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          gestureEnabled: true,
+        }}>
         {isInitialAppLaunch && (
           <Stack.Screen
             name="OnBoardingStack"
@@ -165,6 +169,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="AddPlayer"
           component={AddPlayer}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddPlayersInEditScreen"
+          component={AddPlayersInEditScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen

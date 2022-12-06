@@ -15,10 +15,11 @@ import * as yup from 'yup';
 import {Alert} from 'react-native';
 import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
-import {setEditEntity} from '../redux/manageTournamentSlice';
+import {setEditEntity, setIsEdit} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import {addParticipant} from '../services/manageTournament';
 
-const AddPlayer = ({navigation, route}) => {
+const AddPlayersInEditScreen = ({navigation, route}) => {
   const [designation, setDesignation] = useState('');
   const [expertise, setExpertise] = useState('');
   const [batting, setBatting] = useState('');
@@ -33,6 +34,7 @@ const AddPlayer = ({navigation, route}) => {
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
   const teamId = useSelector(state => state.tournamentdata.teamId);
+  const participantdata = useSelector(state => state.participantdata.value);
 
   const [whiteList, setWhiteList] = useState({
     designation: {isVisble: false},
@@ -141,8 +143,8 @@ const AddPlayer = ({navigation, route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
-    }else{
-      Toast.show("Something went wrong, Please try again 😭")
+    } else {
+      Toast.show('Something went wrong, Please try again 😭');
     }
   };
 
@@ -155,23 +157,40 @@ const AddPlayer = ({navigation, route}) => {
           city: '',
           phoneNo: '',
         }}
-        onSubmit={values => {
+        onSubmit={async values => {
           setName(values.name);
           if (profilePictureUri !== '') {
-            let data = {
-              ...values,
-              tempId: uuid.v4(),
-              designation: designation,
-              expertise: expertise,
+            var object = {
+              name: values.name,
+              city: values.city,
+              phoneNo: values.phoneNo,
               batting: batting,
               bowling: bowling,
               bowlingtype: bowlingtype,
+              designation: designation,
+              expertise: expertise,
               image: profilePictureUri,
+              tournamentId: tournamentId,
+              teamId: teamId,
+              role: 'player',
             };
-            dispatch(addTeam(data));
-            navigation.pop();
-          } else {
-            Toast.show('Please Add profile picture');
+            Object.keys(object).forEach(key => {
+              if (object[key] === '') {
+                delete object[key];
+              }
+            });
+            const participantFormData = createFormData(object);
+            const createparticipantresponse = await addParticipant(
+              participantFormData,
+            );
+            console.log('Inside Add Player', createparticipantresponse);
+            if (createparticipantresponse.status) {
+              navigation.goBack();
+            } else {
+              Toast.show('Something went wrong. Please try again 😭');
+            }
+          }else{
+            Toast.show('Please add profile picture');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
@@ -183,8 +202,8 @@ const AddPlayer = ({navigation, route}) => {
                   title={editEntity ? 'Update Player' : 'Add Player'}
                   navigation={navigation}
                   getImageUri={getDetails}
+                  type="addplayerinedit"
                   profilePictureUri={route.params?.playerLogo}
-                  type='addplayer'
                 />
               ) : (
                 <AddProfileDetails
@@ -192,6 +211,7 @@ const AddPlayer = ({navigation, route}) => {
                   title={editEntity ? 'Update Player' : 'Add Player'}
                   navigation={navigation}
                   getImageUri={getDetails}
+                  type="addplayerinedit"
                 />
               )}
               <View style={styles.form}>
@@ -507,27 +527,7 @@ const AddPlayer = ({navigation, route}) => {
               />
             </KeyboardAwareScrollView>
             <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-              {editEntity ? (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    values.name === ''
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="EDIT PLAYER"
-                  onPress={() => handleEdit(values)}
-                  style={{height: 50, width: '100%', marginTop: 0}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                />
-              ) : (
+         
                 <GradientButton
                   start={{x: 0, y: 0}}
                   end={{x: 2, y: 0}}
@@ -547,7 +547,6 @@ const AddPlayer = ({navigation, route}) => {
                     lineHeight: 19,
                   }}
                 />
-              )}
             </View>
           </>
         )}
@@ -556,7 +555,7 @@ const AddPlayer = ({navigation, route}) => {
   );
 };
 
-export default AddPlayer;
+export default AddPlayersInEditScreen;
 
 const styles = StyleSheet.create({
   container: {

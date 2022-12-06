@@ -37,6 +37,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
+    console.log(response.data);
     if (response.status) {
       setCurrentOverview(response.data.data);
     }
@@ -99,25 +100,45 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
           <TournamentInputList
             text="Teams"
             number={currentOverview !== null && currentOverview?.teams}
-            onPress={() => navigation.dispatch(StackActions.push('TeamsList'))}
+            onPress={() =>
+              navigation.dispatch(
+                StackActions.push('TeamsList', {
+                  isManage: true,
+                }),
+              )
+            }
           />
           <TournamentInputList
             text="Overs"
             number={currentOverview !== null && currentOverview?.overs}
             onPress={() =>
-              navigation.dispatch(StackActions.push('OversScreen'))
+              navigation.dispatch(
+                StackActions.push('OversScreen', {
+                  isManage: true,
+                }),
+              )
             }
           />
           <TournamentInputList
             text="Grounds"
             number={currentOverview !== null && currentOverview?.grounds}
-            onPress={() => navigation.dispatch(StackActions.push('Ground'))}
+            onPress={() =>
+              navigation.dispatch(
+                StackActions.push('Ground', {
+                  isManage: true,
+                }),
+              )
+            }
           />
           <TournamentInputList
             text="Umpires"
             number={currentOverview !== null && currentOverview?.umpires}
             onPress={() =>
-              navigation.dispatch(StackActions.push('UmpiresList'))
+              navigation.dispatch(
+                StackActions.push('UmpiresList', {
+                  isManage: true,
+                }),
+              )
             }
           />
           <TournamentInputList
@@ -126,13 +147,10 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               currentOverview !== null && currentOverview?.startDateEnglish
             }
             onPress={() =>
-              // navigation.navigate('Meals', {
-              //   screen: 'Meals',
-              //   params: {screen: 'Past'},
-              // })
               navigation.dispatch(
                 StackActions.push('DateScreen', {
                   startDate: currentOverview?.startDateEnglish,
+                  isManage: true,
                 }),
               )
             }
@@ -140,18 +158,17 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
           <TournamentInputList
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
-            onPress={
-              () =>
-                navigation.navigate('DateScreen', {
+            onPress={() =>
+              navigation.dispatch(
+                StackActions.push('DateScreen', {
                   screen: 'END DATE',
-                  params: {endDate: currentOverview?.endDateEnglish},
-                })
-              // navigation.dispatch(
-              //   StackActions.push('DateScreen', {
-              //     screen: 'DateScreen',
-              //     params : {screen: 'END',endDate: currentOverview?.endDateEnglish},
-              //   }),
-              // )
+                  params: {
+                    startDate: currentOverview?.startDateEnglish,
+                    endDate: currentOverview?.endDateEnglish,
+                    isManage: true,
+                  },
+                }),
+              )
             }
           />
           <TournamentInputList
@@ -163,6 +180,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               navigation.dispatch(
                 StackActions.push('TimeScreen', {
                   startTime: currentOverview?.startTimeNormalFormat,
+                  isManage: true,
                 }),
               )
             }
@@ -175,7 +193,11 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             onPress={() =>
               navigation.dispatch(
                 StackActions.push('TimeScreen', {
-                  endTime: currentOverview?.endTimeNormalFormat,
+                  screen: 'END OF PLAY',
+                  params: {
+                    endTime: currentOverview?.endTimeNormalFormat,
+                    isManage: true,
+                  },
                 }),
               )
             }
