@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {TimePickerModal, TimePicker} from 'react-native-paper-dates';
 import {useDispatch} from 'react-redux';
 import {setEndTime} from '../../redux/MatchSlice';
@@ -19,6 +19,8 @@ import {addTime} from '../../services/manageTournament2';
 import moment from 'moment';
 import {getISOTime} from '../../utils/getISOTime';
 import Toast from 'react-native-simple-toast';
+import {checkForAmorPm} from '../../utils/checkForAmOrPm';
+import {useIsFocused} from '@react-navigation/native';
 
 const EndTime = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -28,6 +30,11 @@ const EndTime = ({navigation, route}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
+  const [endTimeFromRoute, setEndTimeFromRoute] = useState(
+    route.params?.params?.endTime,
+  );
+ 
+  const convertedTime = checkForAmorPm(endTimeFromRoute);
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -39,6 +46,27 @@ const EndTime = ({navigation, route}) => {
   }, [setVisible]);
 
   const onConfirm = React.useCallback(
+    ({hours, minutes}) => {
+      setVisible(false);
+      dispatch(setEndTime(`${hours}:${minutes}`));
+      setDisabled(false);
+      dispatch(setEnd(true));
+      dispatch(setStart(false));
+      setHours(hours);
+    },
+    [setVisible],
+  );
+  // const focus = useIsFocused();
+
+  // useLayoutEffect(() => {
+  //   if (focus == true) {
+  //     route.params?.params?.isManage
+  //       ? (dispatch(setEndTime(`${convertedTime}:00`)), dispatch(setEnd(true)),dispatch(setStart(false)))
+  //       : null;
+  //   }
+  // }, [focus]);
+
+  const onConfirmInManage = React.useCallback(
     ({hours, minutes}) => {
       setVisible(false);
       dispatch(setEndTime(`${hours}:${minutes}`));
@@ -85,19 +113,35 @@ const EndTime = ({navigation, route}) => {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.text}>When do you want start for the day?</Text>
         <View style={{flex: 1, marginTop: 30}}>
-          <TimePickerModal
-            visible={true}
-            onDismiss={onDismiss}
-            onConfirm={onConfirm}
-            hours={12}
-            minutes={14}
-            label="Select time"
-            uppercase={false}
-            cancelLabel="Cancel"
-            confirmLabel="OK"
-            animationType="fade"
-            locale="en"
-          />
+          {route.params?.params?.isManage ? (
+            <TimePickerModal
+              visible={true}
+              onDismiss={onDismiss}
+              onConfirm={onConfirmInManage}
+              hours={12}
+              minutes={14}
+              label="Select time"
+              uppercase={false}
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              animationType="fade"
+              locale="en"
+            />
+          ) : (
+            <TimePickerModal
+              visible={true}
+              onDismiss={onDismiss}
+              onConfirm={onConfirm}
+              hours={12}
+              minutes={14}
+              label="Select time"
+              uppercase={false}
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              animationType="fade"
+              locale="en"
+            />
+          )}
         </View>
       </ScrollView>
       {isLoading ? (

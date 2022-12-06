@@ -102,19 +102,41 @@ export const addTime = async dateData => {
   }
 };
 
-export const generateFixture = async data => {
+export const generateFixture = async (data, type) => {
   const validateAndGetToken = await refreshTokenIfExpired();
   if (validateAndGetToken !== null) {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/match/generate-fixture?tournamentId=${data}`,
+      if (type === 'league') {
+        var response = await axios.get(
+          `${BASE_URL}/api/match/generate-fixture?tournamentId=${data}`,
 
-        {
-          headers: {
-            Authorization: validateAndGetToken,
+          {
+            headers: {
+              Authorization: validateAndGetToken,
+            },
           },
-        },
-      );
+        );
+      } else if (type === 'knockout') {
+        var response = await axios.get(
+          `${BASE_URL}/api/match/generate-fixture-knock?tournamentId=${data}`,
+
+          {
+            headers: {
+              Authorization: validateAndGetToken,
+            },
+          },
+        );
+      } else {
+        var response = await axios.get(
+          `${BASE_URL}/api/match/individual-match-fixture?tournamentId=${data}`,
+
+          {
+            headers: {
+              Authorization: validateAndGetToken,
+            },
+          },
+        );
+      }
 
       return response;
     } catch (error) {

@@ -37,7 +37,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
-    // console.log(response.data.data);
+    console.log(response.data);
     if (response.status) {
       setCurrentOverview(response.data.data);
     }
@@ -159,14 +159,16 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             text="End Date"
             number={currentOverview !== null && currentOverview?.endDateEnglish}
             onPress={() =>
-              navigation.navigate('DateScreen', {
-                screen: 'END DATE',
-                params: {
-                  startDate: currentOverview?.startDateEnglish,
-                  endDate: currentOverview?.endDateEnglish,
-                  isManage: true,
-                },
-              })
+              navigation.dispatch(
+                StackActions.push('DateScreen', {
+                  screen: 'END DATE',
+                  params: {
+                    startDate: currentOverview?.startDateEnglish,
+                    endDate: currentOverview?.endDateEnglish,
+                    isManage: true,
+                  },
+                }),
+              )
             }
           />
           <TournamentInputList
@@ -193,9 +195,10 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 StackActions.push('TimeScreen', {
                   screen: 'END OF PLAY',
                   params: {
-                    endDate: currentOverview?.endDateEnglish,
+                    endTime: currentOverview?.endTimeNormalFormat,
                     isManage: true,
-                }}),
+                  },
+                }),
               )
             }
           />

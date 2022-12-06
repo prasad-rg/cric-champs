@@ -16,12 +16,13 @@ import CustomModal from '../components/CustomModal';
 import Tournament from './managedetails/Tournament';
 import {useSelector} from 'react-redux';
 import {generateFixture} from '../services/manageTournament2';
-import {StackActions} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {deleteStartTime} from '../redux/MatchSlice';
 import {deleteEndTime} from '../redux/MatchSlice';
 import {deleteStartDate} from '../redux/MatchSlice';
 import {deleteEndDate} from '../redux/MatchSlice';
+import Toast from 'react-native-simple-toast';
+import { CommonActions } from '@react-navigation/native';
 
 const Overview = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -31,20 +32,20 @@ const Overview = ({navigation}) => {
   const tournamentdata = useSelector(
     state => state.tournamentdata.tournamentdata,
   );
-  // console.log(tournamentdata);
-
+  const {tournamentDetails} = useSelector(state => state.tournamentDetails);
+  
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
 
-
   const handlePress = async () => {
     setIsLoading(true);
-    const response = await generateFixture(tournamentId);
+    const response = await generateFixture(tournamentId,tournamentDetails.tournamentType);
     setIsLoading(false);
     console.log('responseeeee', response.data.statusCode);
     if (response.data.statusCode !== 200) {
       setModal(false);
+      Toast.show(response.data.message);
     } else {
       setModal(true);
       dispatch(deleteStartTime());
@@ -66,7 +67,18 @@ const Overview = ({navigation}) => {
             <View style={styles.profileDetailsContainer}>
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [
+                          {
+                            name: 'HomeStack',
+                          },
+                        ],
+                      }),
+                    );
+                  }}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
                       style={styles.backButtonImage}
@@ -161,7 +173,6 @@ const Overview = ({navigation}) => {
       )}
     </View>
 
-    // </ScrollView>
   );
 };
 

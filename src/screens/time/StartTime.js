@@ -15,15 +15,24 @@ import {useSelector} from 'react-redux';
 import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
+import {checkForAmorPm} from '../../utils/checkForAmOrPm';
+import { useIsFocused } from '@react-navigation/native';
+import { useLayoutEffect } from 'react';
 
 const StartTime = ({navigation, route}) => {
   const [disabled, setDisabled] = useState(true);
   const startTime = useSelector(state => state.matchdata.startTime);
+  const [startTimeFromRoute, setStartTimeFromRoute] = useState(
+    route.params?.startTime,
+  );
+
+  const convertedTime = checkForAmorPm(startTimeFromRoute);
 
   let current_time = moment();
 
   const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
+
   const onDismiss = React.useCallback(() => {
     setVisible(false);
   }, [setVisible]);
@@ -32,6 +41,31 @@ const StartTime = ({navigation, route}) => {
     ({hours, minutes}) => {
       setVisible(false);
       dispatch(setStartTime(`${hours}:${minutes}`));
+      setDisabled(false);
+      dispatch(setStart(true));
+      dispatch(setEnd(false));
+    },
+    [setVisible],
+  );
+
+  const focus = useIsFocused();
+
+  // useLayoutEffect(() => {
+  //   if (focus == true) {
+  //     route.params?.isManage
+  //       ? (dispatch(setStartTime(`${convertedTime}:00`)), dispatch(setEnd(false)),dispatch(setStart(true)))
+  //       : null;
+  //   }
+  // }, [focus]);
+
+  const onDismissInManage = React.useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  const onConfirmInManage = React.useCallback(
+    ({hours, minutes}) => {
+      setVisible(false);
+      dispatch(setStartTime(`${convertedTime}:00`));
       setDisabled(false);
       dispatch(setStart(true));
       dispatch(setEnd(false));
@@ -56,21 +90,35 @@ const StartTime = ({navigation, route}) => {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.text}>When do you want start for the day?</Text>
         <View style={{flex: 1, marginTop: 30}}>
-          <TimePickerModal
-            visible={true}
-            onDismiss={onDismiss}
-            onConfirm={onConfirm}
-            hours={current_time.format('HH')} // default: current hours
-            minutes={current_time.format('mm')} // default: current minutes
-            label="Select time" // optional, default 'Select time'
-            uppercase={false} // optional, default is true
-            cancelLabel="Cancel" // optional, default: 'Cancel'
-            confirmLabel="OK" // optional, default: 'Ok'
-            animationType="fade" // optional, default is 'none'
-            locale="en" // optional, default is automically detected by your system
-            // keyboardIcon="keyboard-outline" // optional, default is "keyboard-outline"
-            // clockIcon="clock-outline" // optional, default is "clock-outline"
-          />
+          {route.params?.isManage ? (
+            <TimePickerModal
+              visible={true}
+              onDismiss={onDismissInManage}
+              onConfirm={onConfirmInManage}
+              hours={current_time.format('HH')}
+              minutes={current_time.format('mm')}
+              label="Select time"
+              uppercase={false}
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              animationType="fade"
+              locale="en"
+            />
+          ) : (
+            <TimePickerModal
+              visible={true}
+              onDismiss={onDismiss}
+              onConfirm={onConfirm}
+              hours={current_time.format('HH')}
+              minutes={current_time.format('mm')}
+              label="Select time"
+              uppercase={false}
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              animationType="fade"
+              locale="en"
+            />
+          )}
         </View>
       </ScrollView>
       <View style={styles.gradientButton}>
@@ -108,7 +156,6 @@ const StartTime = ({navigation, route}) => {
           />
         )}
       </View>
-      {/* <Button title='efewf'/> */}
     </View>
   );
 };

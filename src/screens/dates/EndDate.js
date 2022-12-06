@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, ActivityIndicator, View} from 'react-native';
+import {Image, StyleSheet, ActivityIndicator, View, Text} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {useSelector} from 'react-redux';
 import {setStartDate} from '../../redux/MatchSlice';
@@ -12,20 +12,21 @@ import {addDates} from '../../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 const StartDate = ({navigation, route}) => {
-  dateFromRoute = route?.params?.params?.endDate;
-  console.log('end date', route.params?.params);
-  convertedDateFromRoute = moment(route?.params?.startDate).format(
-    'YYYY-MM-DD',
-  );
-  const dispatch = useDispatch();
+  const dateFromRoute = route?.params?.params?.endDate;
 
-  console.log(route);
+  const dispatch = useDispatch();
 
   const startDate = useSelector(state => state.matchdata.startDate);
   const endDate = useSelector(state => state.matchdata.endDate);
   const [isLoading, setIsLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const convertedStartDateFromRoute = moment(
+    route?.params?.params?.startDate,
+  ).format('YYYY-MM-DD');
 
+  const [convertedEndDateFromRoute, setConvertedEndDate] = useState(
+    moment(route?.params?.params?.endDate).format('YYYY-MM-DD'),
+  );
   // console.log(startDate, endDate);
 
   let date1 = new Date(startDate);
@@ -60,6 +61,7 @@ const StartDate = ({navigation, route}) => {
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));
+      setConvertedEndDate(date);
       setDisabled(true);
     } else {
       dispatch(setEndDate(endDate));
@@ -78,99 +80,196 @@ const StartDate = ({navigation, route}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-        <CalendarPicker
-          previousComponent={
-            <Image
-              source={require('../../../assets/images/back_calender.png')}
-              style={{tintColor: '#222222', marginLeft: 15}}
-            />
-          }
-          nextComponent={
-            <Image
-              source={require('../../../assets/images/next_calender.png')}
-              style={{tintColor: '#222222', marginRight: 15}}
-            />
-          }
-          onDateChange={onDateChange}
-          selectedStartDate={startDate}
-          weekdays={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
-          allowRangeSelection={true}
-          todayTextColor="black"
-          todayTextStyle={(textStyle = {color: 'red'})}
-          selectedDayColor={'#FCA900'}
-          selectedDayTextColor={'#FFFFFF'}
-          dayLabelsWrapper={{
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-            color: 'rgba(0,0,0,0.38)',
-            fontFamily: 'Roboto-Medium',
-            fontSize: 12,
-            fontWeight: '500',
-            letterSpacing: 0,
-            lineHeight: 14,
-            textAlign: 'center',
-          }}
-          customDayHeaderStyles={() => {
-            return {
-              textStyle: {color: '#00000061'},
+        {route.params?.params?.isManage ? (
+          <CalendarPicker
+            previousComponent={
+              <Image
+                source={require('../../../assets/images/back_calender.png')}
+                style={{tintColor: '#222222', marginLeft: 15}}
+              />
+            }
+            nextComponent={
+              <Image
+                source={require('../../../assets/images/next_calender.png')}
+                style={{tintColor: '#222222', marginRight: 15}}
+              />
+            }
+            onDateChange={onDateChange}
+            selectedStartDate={convertedStartDateFromRoute}
+            selectedEndDate={convertedEndDateFromRoute}
+            weekdays={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
+            allowRangeSelection={true}
+            todayTextColor="black"
+            todayTextStyle={(textStyle = {color: 'red'})}
+            selectedDayColor={'#FCA900'}
+            selectedDayTextColor={'#FFFFFF'}
+            dayLabelsWrapper={{
+              borderTopWidth: 0,
+              borderBottomWidth: 0,
+              color: 'rgba(0,0,0,0.38)',
+              fontFamily: 'Roboto-Medium',
+              fontSize: 12,
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 14,
+              textAlign: 'center',
+            }}
+            customDayHeaderStyles={() => {
+              return {
+                textStyle: {color: '#00000061'},
+                fontFamily: 'Roboto-Medium',
+                fontWeight: '500',
+              };
+            }}
+            monthTitleStyle={{
+              height: 24,
+              fontSize: 14,
+              color: 'rgba(0,0,0,0.87)',
               fontFamily: 'Roboto-Medium',
               fontWeight: '500',
-            };
-          }}
-          monthTitleStyle={{
-            height: 24,
-            fontSize: 14,
-            color: 'rgba(0,0,0,0.87)',
-            fontFamily: 'Roboto-Medium',
-            fontWeight: '500',
-            letterSpacing: 0,
-            lineHeight: 24,
-            textAlign: 'center',
-          }}
-          yearTitleStyle={{
-            height: 24,
-            fontSize: 14,
-            color: 'rgba(0,0,0,0.87)',
-            fontFamily: 'Roboto-Medium',
-            fontWeight: '500',
-            letterSpacing: 0,
-            lineHeight: 24,
-            textAlign: 'center',
-          }}
-          monthYearHeaderWrapperStyle={{
-            height: 24,
-            color: 'rgba(0,0,0,0.87)',
-            fontFamily: 'Roboto-Medium',
-            fontWeight: '500',
-            letterSpacing: 0,
-            lineHeight: 24,
-            textAlign: 'center',
-          }}
-          selectedDayTextStyle={{
-            height: 14,
-            width: 15,
-            color: '#FFFFFF',
-            fontFamily: 'Roboto-Regular',
-            fontSize: 12,
-            fontWeight: '500',
-            letterSpacing: 0,
-            lineHeight: 14,
-            textAlign: 'center',
-          }}
-          customDatesStyles={() => {
-            return {
-              textStyle: {
-                color: '#222222',
-                fontFamily: 'Roboto-Regular',
-                fontSize: 12,
-                letterSpacing: 0,
-                lineHeight: 14,
-                textAlign: 'center',
-              },
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            yearTitleStyle={{
+              height: 24,
+              fontSize: 14,
+              color: 'rgba(0,0,0,0.87)',
               fontFamily: 'Roboto-Medium',
-            };
-          }}
-        />
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            monthYearHeaderWrapperStyle={{
+              height: 24,
+              color: 'rgba(0,0,0,0.87)',
+              fontFamily: 'Roboto-Medium',
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            selectedDayTextStyle={{
+              height: 14,
+              width: 15,
+              color: '#FFFFFF',
+              fontFamily: 'Roboto-Regular',
+              fontSize: 12,
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 14,
+              textAlign: 'center',
+            }}
+            customDatesStyles={() => {
+              return {
+                textStyle: {
+                  color: '#222222',
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 12,
+                  letterSpacing: 0,
+                  lineHeight: 14,
+                  textAlign: 'center',
+                },
+                fontFamily: 'Roboto-Medium',
+              };
+            }}
+          />
+        ) : (
+          <CalendarPicker
+            previousComponent={
+              <Image
+                source={require('../../../assets/images/back_calender.png')}
+                style={{tintColor: '#222222', marginLeft: 15}}
+              />
+            }
+            nextComponent={
+              <Image
+                source={require('../../../assets/images/next_calender.png')}
+                style={{tintColor: '#222222', marginRight: 15}}
+              />
+            }
+            onDateChange={onDateChange}
+            selectedStartDate={startDate}
+            weekdays={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
+            allowRangeSelection={true}
+            todayTextColor="black"
+            todayTextStyle={(textStyle = {color: 'red'})}
+            selectedDayColor={'#FCA900'}
+            selectedDayTextColor={'#FFFFFF'}
+            dayLabelsWrapper={{
+              borderTopWidth: 0,
+              borderBottomWidth: 0,
+              color: 'rgba(0,0,0,0.38)',
+              fontFamily: 'Roboto-Medium',
+              fontSize: 12,
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 14,
+              textAlign: 'center',
+            }}
+            customDayHeaderStyles={() => {
+              return {
+                textStyle: {color: '#00000061'},
+                fontFamily: 'Roboto-Medium',
+                fontWeight: '500',
+              };
+            }}
+            monthTitleStyle={{
+              height: 24,
+              fontSize: 14,
+              color: 'rgba(0,0,0,0.87)',
+              fontFamily: 'Roboto-Medium',
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            yearTitleStyle={{
+              height: 24,
+              fontSize: 14,
+              color: 'rgba(0,0,0,0.87)',
+              fontFamily: 'Roboto-Medium',
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            monthYearHeaderWrapperStyle={{
+              height: 24,
+              color: 'rgba(0,0,0,0.87)',
+              fontFamily: 'Roboto-Medium',
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 24,
+              textAlign: 'center',
+            }}
+            selectedDayTextStyle={{
+              height: 14,
+              width: 15,
+              color: '#FFFFFF',
+              fontFamily: 'Roboto-Regular',
+              fontSize: 12,
+              fontWeight: '500',
+              letterSpacing: 0,
+              lineHeight: 14,
+              textAlign: 'center',
+            }}
+            customDatesStyles={() => {
+              return {
+                textStyle: {
+                  color: '#222222',
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 12,
+                  letterSpacing: 0,
+                  lineHeight: 14,
+                  textAlign: 'center',
+                },
+                fontFamily: 'Roboto-Medium',
+              };
+            }}
+          />
+        )}
       </View>
       {isLoading ? (
         <View style={{marginBottom: 20}}>
@@ -183,7 +282,7 @@ const StartDate = ({navigation, route}) => {
           // colors={['#FFBA8C', '#FE5C6A']}
           colors={['#FFBA8C', '#FE5C6A']}
           text="OK"
-          onPress={()=>navigation.goBack()}
+          onPress={() => navigation.goBack()}
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,
