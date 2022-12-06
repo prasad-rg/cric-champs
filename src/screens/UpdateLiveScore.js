@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
@@ -58,6 +59,7 @@ const UpdateLiveScore = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const [isUpdatePressed, setIsUpdatePressed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.warn(team1Players, team2Players, battingTeamId, bowlingTeamId);
 
@@ -247,8 +249,9 @@ const UpdateLiveScore = ({navigation, route}) => {
 
     // console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
     // console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
-
+    setIsLoading(true);
     const update = await updateLiveScore(updateScores);
+    setIsLoading(false);
     if (
       updateScores.commentry.balls + 1 === 7 &&
       update?.tournamentEntitledOvers !== updateScores.commentry.over
@@ -265,6 +268,7 @@ const UpdateLiveScore = ({navigation, route}) => {
         dispatch(swapTeamId());
         dispatch(swapTeamPlayers());
         // console.log('=====Wait ======');
+
         await inningsTwoStrikeSelection();
         // console.log('+++Got A Hit After Selection');
         // setInitialPlayerSelectionModal({
@@ -275,6 +279,7 @@ const UpdateLiveScore = ({navigation, route}) => {
         // console.info('.....BattingTeamId....AfterSwap', battingTeamId);
         // console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
 
+        setIsLoading(true);
         inningsTwoUpdate = await updateLiveScore(
           convertLiveScoreData(
             runs,
@@ -292,6 +297,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           ),
         );
+        setIsLoading(false);
         // console.warn('----------------------------------', inningsTwoUpdate);
 
         // console.log(
@@ -366,10 +372,12 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           );
           // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          setIsLoading(true);
           const endMatchNow = await updateLiveScore({
             ...lastData,
             matchStatus: 'end',
           });
+          setIsLoading(false);
           // console.info('+++++++PUT Req Res+++++++', endMatchNow);
           if (endMatchNow?.matchDone?._id) {
             Toast.show(
@@ -387,12 +395,14 @@ const UpdateLiveScore = ({navigation, route}) => {
             // console.log('=====++++++======', endMatch);
           }
         } else {
+          setIsLoading(true);
           const simplifiedResponse = await getPlayingPlayersList(
             tournamentDetails._id,
             matchId,
             battingTeamId,
             bowlingTeamId,
           );
+          setIsLoading(false);
           // console.info('=========================', simplifiedResponse?.data);
           let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
           setPresentScoreFromAPI({
@@ -505,6 +515,7 @@ const UpdateLiveScore = ({navigation, route}) => {
 
   useEffect(() => {
     dispatch(addTeamId({team1Id, team2Id}));
+
     if (focus === true) {
       const getStatus = async () => {
         const response = await getMatchStatus(matchId);
@@ -1000,15 +1011,19 @@ const UpdateLiveScore = ({navigation, route}) => {
         </TouchableOpacity>
       </StopMatchModal>
       <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="UPDATE"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={styles.buttonText}
-          onPress={handelUpdate}
-        />
+        {isLoading ? (
+          <ActivityIndicator size={'large'} color={'#FFBA8C'} />
+        ) : (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="UPDATE"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={styles.buttonText}
+            onPress={handelUpdate}
+          />
+        )}
       </View>
     </View>
   );
