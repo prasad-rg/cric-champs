@@ -21,6 +21,7 @@ import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
 import {useIsFocused} from '@react-navigation/native';
+import Toast from 'react-native-simple-toast';
 
 import {
   cancelLiveTournament,
@@ -153,7 +154,7 @@ const UpdateLiveScore = ({navigation, route}) => {
   };
 
   const getExtras = (data, index) => {
-    console.warn(data);
+    // console.warn(data);
     if (data === null) {
       setExtras(null);
     } else {
@@ -263,7 +264,9 @@ const UpdateLiveScore = ({navigation, route}) => {
       if (update?.message === TIME_TO_FLIP) {
         dispatch(swapTeamId());
         dispatch(swapTeamPlayers());
+        // console.log('=====Wait ======');
         await inningsTwoStrikeSelection();
+        // console.log('+++Got A Hit After Selection');
         // setInitialPlayerSelectionModal({
         //   ...initialPlayersSelectionModal,
         //   strikeModal: true,
@@ -289,7 +292,7 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           ),
         );
-        console.warn('----------------------------------', inningsTwoUpdate);
+        // console.warn('----------------------------------', inningsTwoUpdate);
 
         // console.log(
         //   '======Converted Data====',
@@ -367,12 +370,21 @@ const UpdateLiveScore = ({navigation, route}) => {
             ...lastData,
             matchStatus: 'end',
           });
-          console.info('+++++++PUT Req Res+++++++', endMatchNow);
-          if (endMatchNow?.matchDone?.statusMessage) {
+          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+          if (endMatchNow?.matchDone?._id) {
+            Toast.show(
+              'Match has ended please check the match details in view mode',
+            );
+            navigation.goBack();
             // make an async call and navigate back to the matches screen with a reload......
             // check only if endMatchNow?.matchDone?._id is present and make an API call Accordingly.....
-            console.log(endMatchNow?.matchDone);
-            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+            // console.log(endMatchNow?.matchDone);
+            // Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+            // const endMatch = await updateLiveScore({
+            //   ...liveScoreDataStructure,
+            //   matchStatus: 'end',
+            // });
+            // console.log('=====++++++======', endMatch);
           }
         } else {
           const simplifiedResponse = await getPlayingPlayersList(
@@ -643,7 +655,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               </Text>
             ) : (
               <Text style={[styles.comment, {color: '#4A90E2'}]}>
-                {extras !== null && (
+                {extras !== null && extras?.status !== false && (
                   <Text style={{color: '#FF8713'}}>
                     {extras === 'Wd'
                       ? 'Wide  '
