@@ -216,22 +216,22 @@ const LoginScreen = ({navigation}) => {
               end={{x: 2, y: 0}}
               colors={['#7197E1', '#7197E1']}
               text="LOGIN WITH FACEBOOK"
-              onPress={async () => {
-                const result = await getToken();
-                const jsonToken = JSON.parse(result);
-                // console.log(jsonToken.accessToken.substr(7));
-                const accessToken = jsonToken.accessToken.substr(7);
-                const decode = jwt_decode(accessToken);
-                let isAuthTokenExpired =
-                  decode.exp - Math.floor(Date.now() / 1000) < 1 ? true : false;
-                if (isAuthTokenExpired) {
-                  const newToken = await getNewAccessToken(
-                    jsonToken.accessToken,
-                    jsonToken.refreshToken,
-                  );
-                  console.log(jsonToken.refreshToken);
-                }
-              }}
+              // onPress={async () => {
+              //   const result = await getToken();
+              //   const jsonToken = JSON.parse(result);
+              //   console.log(jsonToken.accessToken.substr(7));
+              //   const accessToken = jsonToken.accessToken.substr(7);
+              //   const decode = jwt_decode(accessToken);
+              //   let isAuthTokenExpired =
+              //     decode.exp - Math.floor(Date.now() / 1000) < 1 ? true : false;
+              //   if (isAuthTokenExpired) {
+              //     const newToken = await getNewAccessToken(
+              //       jsonToken.accessToken,
+              //       jsonToken.refreshToken,
+              //     );
+              //     console.log(jsonToken.refreshToken);
+              //   }
+              // }}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{width: '90%'}}
             />

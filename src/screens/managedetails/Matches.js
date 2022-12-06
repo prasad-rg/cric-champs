@@ -39,6 +39,8 @@ const Matches = ({navigation}) => {
       return (
         <TouchableOpacity
           onPress={() =>
+            (item.status.toUpperCase() === 'LIVE' ||
+              item.status.toUpperCase() === 'UPCOMING') &&
             navigation.navigate('UpdateLiveScore', {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
@@ -55,6 +57,8 @@ const Matches = ({navigation}) => {
       return (
         <TouchableOpacity
           onPress={() =>
+            (item.status.toUpperCase() === 'LIVE' ||
+              item.status.toUpperCase() === 'UPCOMING') &&
             navigation.navigate('UpdateLiveScore', {
               team1Id: item.team1Id,
               team2Id: item.team2Id,
@@ -97,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dayText: {
-    height: 19,
+    // height: 19,
     width: 248,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',

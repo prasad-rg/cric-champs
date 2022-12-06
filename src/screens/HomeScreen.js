@@ -40,18 +40,20 @@ const HomeScreen = ({navigation}) => {
   const focus = useIsFocused();
 
   useLayoutEffect(() => {
-    const getRecentDetails = async tournamentIds => {
-      const recents = await getRecentActivities({tournamentIds});
-      // console.log(recents);
-      if (recents.status) {
-        setRecentsData(recents.data.data);
-      } else {
+    if (isLoggedIn) {
+      const getRecentDetails = async tournamentIds => {
+        const recents = await getRecentActivities({tournamentIds});
         // console.log(recents);
-        Alert.alert('Recents Fetch Failed');
-      }
-    };
-    getRecentDetails(recentActivities);
-  }, [focus]);
+        if (recents.status) {
+          setRecentsData(recents.data.data);
+        } else {
+          // console.log(recents);
+          Alert.alert('Recents Fetch Failed');
+        }
+      };
+      getRecentDetails(recentActivities);
+    }
+  }, [focus, recentActivities]);
   const handlePress = async () => {
     setIsLoading(true);
     setInputTextError('');
@@ -146,7 +148,7 @@ const HomeScreen = ({navigation}) => {
                 onPress={() => navigation.navigate('AuthStack')}
               />
             )}
-            {recentsData.length > 0 && (
+            {recentsData.length > 0 && isLoggedIn && (
               <View style={styles.recentActivityView}>
                 <Text style={styles.recentActivityText}>Recent Activities</Text>
                 {recentsData.map(tournament => (

@@ -22,7 +22,8 @@ const MatchCard = ({matchDetails}) => {
               styles.statusContainer,
               {
                 backgroundColor:
-                  matchDetails?.status.toUpperCase() == 'ABONDONED' ||  matchDetails?.status.toUpperCase() == 'CANCELLED'
+                  matchDetails?.status.toUpperCase() == 'ABONDONED' ||
+                  matchDetails?.status.toUpperCase() == 'CANCELLED'
                     ? '#E05140'
                     : matchDetails?.status.toUpperCase() == 'PAST'
                     ? '#0075E1'
@@ -47,7 +48,7 @@ const MatchCard = ({matchDetails}) => {
             paddingTop: 20,
           }}>
           <View style={{alignItems: 'center'}}>
-             <Text style={styles.name}>{matchDetails?.team1Name}</Text>
+            <Text style={styles.name}>{matchDetails?.team1Name}</Text>
             {matchDetails?.status.toUpperCase() === 'UPCOMING' ? (
               <>
                 <Text style={styles.number}>-</Text>
@@ -241,13 +242,14 @@ const styles = StyleSheet.create({
   },
   messageView: {
     height: 24,
-    width: 230,
+    // width: 230,
     borderRadius: 4,
     backgroundColor: '#F1F1F1',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: 30,
+    paddingHorizontal: 5,
   },
   message: {
     height: 14,

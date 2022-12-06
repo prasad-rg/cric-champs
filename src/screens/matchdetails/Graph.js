@@ -9,14 +9,19 @@ import {
 import React, {useEffect, useState} from 'react';
 import {LineChart} from 'react-native-chart-kit';
 import {getGraphValues} from '../../services/viewTournament';
+import {createGraphData} from '../../utils/graphDataConversion';
 
 const MyLineChart = ({team1Name, team2Name, team1Values, team2Values}) => {
+  let team1GraphValues = createGraphData(team1Values);
+  let team2GraphValues = createGraphData(team2Values);
+
   return (
     <>
       <Text style={styles.header}>Run Rate</Text>
       <LineChart
         data={{
-          labels: ['0', '0.3', '1.0', '1.3', '2.0', '2.3', '3.0'],
+          // labels: ['0.3', '1.0', '1.3', '2.0', '2.3', '3.0'],
+          labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
           datasets: [
             {
               data: [...team1Values],
@@ -70,7 +75,7 @@ const Graph = ({navigation, route}) => {
         route.params?.team2Id,
       );
       if (response.status) {
-        if (response?.data?.scoreOfTeam1=== false) {
+        if (response?.data?.scoreOfTeam1 === false) {
           setMatchNotStarted(true);
         } else {
           setMatchNotStarted(false);
@@ -106,14 +111,14 @@ const Graph = ({navigation, route}) => {
 
   console.warn(route.params);
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor:"#FFFFFF"}}>
-          {matchNotStarted ? (
-            <View style={styles.noMatchView}>
-              <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
-            </View>
-          ) : (
-            <ScrollView>
-            <View style={styles.container}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
+      {matchNotStarted ? (
+        <View style={styles.noMatchView}>
+          <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
+        </View>
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <View>
               <MyLineChart
                 team1Name={route.params.teams.team1Name}
@@ -122,9 +127,9 @@ const Graph = ({navigation, route}) => {
                 team2Values={team2Values}
               />
             </View>
-        </View>
-      </ScrollView>
-          )}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     padding: 10,
-    backgroundColor:"#FFFFFF"
+    backgroundColor: '#FFFFFF',
   },
   header: {
     textAlign: 'center',

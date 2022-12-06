@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import CustomChooseModal from '../components/CustomChooseModal';
@@ -21,6 +22,7 @@ import CustomModal from '../components/CustomModal';
 import StopMatchModal from '../components/StopMatchModal';
 import CustomRunsButton from '../components/CustomRunsButton';
 import {useIsFocused} from '@react-navigation/native';
+import Toast from 'react-native-simple-toast';
 
 import {
   cancelLiveTournament,
@@ -57,6 +59,7 @@ const UpdateLiveScore = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const [isUpdatePressed, setIsUpdatePressed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.warn(team1Players, team2Players, battingTeamId, bowlingTeamId);
 
@@ -148,6 +151,7 @@ const UpdateLiveScore = ({navigation, route}) => {
       setRuns(null);
     } else {
       setRuns(data);
+      setRunsStatus({...runsStatus, runs: data});
     }
   };
 
@@ -162,19 +166,10 @@ const UpdateLiveScore = ({navigation, route}) => {
   const getWickets = (data, index) => {
     // console.log(data);
     if (data === null) {
-      setWickets({
-        status: false,
-        batsmanId: '',
-        batsman: '',
-        type: '',
-        fielderName: '',
-        new_batsmanId: '',
-        new_batsman: '',
-        bowlerName: '',
-      });
+      setWickets({...liveScoreDataStructure.wickets, status: false});
       setWicketsModal({...wicketsModal, newBatsmanModal: false});
     } else {
-      if (data !== 'Run Out' && data !== 'Other' && data !== 'Caught') {
+      if (data === 'Run Out') {
         // TODO: Add the batsman batsmanId from the striker Id even bowler which is got from the PUT response
         setWickets({
           ...liveScoreDataStructure.wickets,
@@ -185,19 +180,48 @@ const UpdateLiveScore = ({navigation, route}) => {
           bowler: bowler.bowler,
           bowlerName: bowler.bowlerName,
         });
-        setWicketsModal({...wicketsModal, newBatsmanModal: true});
+        setWicketsModal({...wicketsModal, batsmanModal: true});
       } else {
         // TODO : Add the batsman batsmanId bowler filder from the Modal fetched from the remaining player list PUT response
-        setWickets({
-          ...liveScoreDataStructure.wickets,
-          type: data,
-          status: true,
-          bowler: bowler.bowler,
-          bowlerName: bowler.bowlerName,
-        });
-        setWicketsModal({...wicketsModal, batsmanModal: true});
+        if (data === 'Caught' || data === 'Other') {
+          setWicketsModal({
+            ...wicketsModal,
+            fliderModal: true,
+          });
+          setWickets({
+            ...liveScoreDataStructure.wickets,
+            type: data,
+            status: true,
+            bowler: bowler?.bowler,
+            bowlerName: bowler?.bowlerName,
+            batsmanId: strike?.strike,
+            batsman: strike?.strikeName,
+            fielderName: wickets?.fielderName,
+          });
+        } else {
+          setWickets({
+            ...liveScoreDataStructure.wickets,
+            type: data,
+            status: true,
+            bowler: bowler?.bowler,
+            bowlerName: bowler?.bowlerName,
+            batsmanId: strike?.strike,
+            batsman: strike?.strikeName,
+          });
+          setWicketsModal({...wicketsModal, newBatsmanModal: true});
+        }
       }
     }
+  };
+
+  const inningsTwoStrikeSelection = async () => {
+    const returnStrikeAndNonStrike = new Promise(resolve =>
+      setInitialPlayerSelectionModal({
+        ...initialPlayersSelectionModal,
+        strikeModal: true,
+      }),
+    );
+    return returnStrikeAndNonStrike;
   };
 
   const handelUpdate = async () => {
@@ -223,10 +247,11 @@ const UpdateLiveScore = ({navigation, route}) => {
 
     // TODO:---------------------------Think
 
-    console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
-    console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
-
+    // console.info('.....BattingTeamId....BeforeSwap', battingTeamId);
+    // console.info('.....BowlingTeamId....BeforeSwap', bowlingTeamId);
+    setIsLoading(true);
     const update = await updateLiveScore(updateScores);
+    setIsLoading(false);
     if (
       updateScores.commentry.balls + 1 === 7 &&
       update?.tournamentEntitledOvers !== updateScores.commentry.over
@@ -236,20 +261,25 @@ const UpdateLiveScore = ({navigation, route}) => {
         bowlerModal: true,
       });
     }
-    console.log('000000', update);
+    console.log('----------------------------------', update);
     let inningsTwoUpdate;
     if (update.status) {
       if (update?.message === TIME_TO_FLIP) {
         dispatch(swapTeamId());
         dispatch(swapTeamPlayers());
-        setInitialPlayerSelectionModal({
-          ...initialPlayersSelectionModal,
-          strikeModal: true,
-        });
+        // console.log('=====Wait ======');
 
-        console.info('.....BattingTeamId....AfterSwap', battingTeamId);
-        console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
+        await inningsTwoStrikeSelection();
+        // console.log('+++Got A Hit After Selection');
+        // setInitialPlayerSelectionModal({
+        //   ...initialPlayersSelectionModal,
+        //   strikeModal: true,
+        // });
 
+        // console.info('.....BattingTeamId....AfterSwap', battingTeamId);
+        // console.info('.....BowlingTeamId....AfterSwap', bowlingTeamId);
+
+        setIsLoading(true);
         inningsTwoUpdate = await updateLiveScore(
           convertLiveScoreData(
             runs,
@@ -267,6 +297,8 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           ),
         );
+        setIsLoading(false);
+        // console.warn('----------------------------------', inningsTwoUpdate);
 
         // console.log(
         //   '======Converted Data====',
@@ -287,43 +319,43 @@ const UpdateLiveScore = ({navigation, route}) => {
         //   ),
         // );
 
-        console.info('--------------', inningsTwoUpdate);
-        if (
-          update?.message === TIME_TO_END_MATCH ||
-          update?.message === DECLARE_END
-        ) {
-          console.log('Got a Hit');
-          let lastData = convertLiveScoreData(
-            runs,
-            extras,
-            wickets,
-            battingTeamId,
-            bowlingTeamId,
-            matchId,
-            tournamentDetails._id,
-            matchAndInningsStatus.matchStatus,
-            matchAndInningsStatus.inningsStatus,
-            bowler,
-            nonStrike,
-            strike,
-            presentScoreFromAPI,
-          );
-          // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
-          const endMatchNow = await updateLiveScore({
-            ...lastData,
-            matchStatus: 'end',
-          });
-          // console.info('+++++++PUT Req Res+++++++', endMatchNow);
-          if (endMatchNow?.matchDone?.statusMessage) {
-            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
-          }
-        }
+        // console.info('--------------', inningsTwoUpdate);
+        // if (
+        //   update?.message === TIME_TO_END_MATCH ||
+        //   update?.message === DECLARE_END
+        // ) {
+        //   // console.log('Got a Hit');
+        //   let lastData = convertLiveScoreData(
+        //     runs,
+        //     extras,
+        //     wickets,
+        //     battingTeamId,
+        //     bowlingTeamId,
+        //     matchId,
+        //     tournamentDetails._id,
+        //     matchAndInningsStatus.matchStatus,
+        //     matchAndInningsStatus.inningsStatus,
+        //     bowler,
+        //     nonStrike,
+        //     strike,
+        //     presentScoreFromAPI,
+        //   );
+        //   // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+        //   const endMatchNow = await updateLiveScore({
+        //     ...lastData,
+        //     matchStatus: 'end',
+        //   });
+        //   // console.info('+++++++PUT Req Res+++++++', endMatchNow);
+        //   if (endMatchNow?.matchDone?.statusMessage) {
+        //     Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+        //   }
+        // }
       } else {
         if (
           update?.message === TIME_TO_END_MATCH ||
           update?.message === DECLARE_END
         ) {
-          console.log('Got a Hit');
+          console.log(update);
           let lastData = convertLiveScoreData(
             runs,
             extras,
@@ -340,22 +372,37 @@ const UpdateLiveScore = ({navigation, route}) => {
             presentScoreFromAPI,
           );
           // console.info('TTTTttttttttttttttttttttttttttttttt', lastData);
+          setIsLoading(true);
           const endMatchNow = await updateLiveScore({
             ...lastData,
             matchStatus: 'end',
           });
+          setIsLoading(false);
           // console.info('+++++++PUT Req Res+++++++', endMatchNow);
-          if (endMatchNow?.matchDone?.statusMessage) {
-            console.log(endMatchNow?.matchDone);
-            Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+          if (endMatchNow?.matchDone?._id) {
+            Toast.show(
+              'Match has ended please check the match details in view mode',
+            );
+            navigation.goBack();
+            // make an async call and navigate back to the matches screen with a reload......
+            // check only if endMatchNow?.matchDone?._id is present and make an API call Accordingly.....
+            // console.log(endMatchNow?.matchDone);
+            // Alert.alert(`${endMatchNow?.matchDone?.statusMessage}`);
+            // const endMatch = await updateLiveScore({
+            //   ...liveScoreDataStructure,
+            //   matchStatus: 'end',
+            // });
+            // console.log('=====++++++======', endMatch);
           }
         } else {
+          setIsLoading(true);
           const simplifiedResponse = await getPlayingPlayersList(
             tournamentDetails._id,
             matchId,
             battingTeamId,
             bowlingTeamId,
           );
+          setIsLoading(false);
           // console.info('=========================', simplifiedResponse?.data);
           let currentScores = simplifiedResponse?.data?.scoreOfTeam1;
           setPresentScoreFromAPI({
@@ -458,10 +505,17 @@ const UpdateLiveScore = ({navigation, route}) => {
     customChooseModal: false,
   });
 
+  const [runsStatus, setRunsStatus] = useState({
+    runs: 0,
+    wicketsType: '',
+    extrasType: '',
+  });
+
   const focus = useIsFocused(); // useIsFocused as shown
 
   useEffect(() => {
     dispatch(addTeamId({team1Id, team2Id}));
+
     if (focus === true) {
       const getStatus = async () => {
         const response = await getMatchStatus(matchId);
@@ -601,10 +655,43 @@ const UpdateLiveScore = ({navigation, route}) => {
         </View>
         {/* start */}
         <View style={styles.infoView}>
-          <View style={{padding: 15}}>
-            <Text style={styles.comment}>Balls.runs.wicket</Text>
+          <View style={{paddingLeft: 15}}>
+            {wickets?.status ? (
+              <Text style={[styles.comment, {color: '#C44343'}]}>
+                {wickets?.type}
+              </Text>
+            ) : runsStatus?.runs == 4 || runsStatus?.runs == 6 ? (
+              <Text style={[styles.comment, {color: '#5FB100'}]}>
+                {runsStatus?.runs == 4 ? 'Bounary' : 'Sixer'}
+              </Text>
+            ) : (
+              <Text style={[styles.comment, {color: '#4A90E2'}]}>
+                {extras !== null && extras?.status !== false && (
+                  <Text style={{color: '#FF8713'}}>
+                    {extras === 'Wd'
+                      ? 'Wide  '
+                      : extras === 'Lb'
+                      ? 'Leg Bye  '
+                      : extras === 'Nb'
+                      ? 'No ball  '
+                      : 'Bye  '}
+                  </Text>
+                )}
+                {runsStatus?.runs} Runs
+              </Text>
+            )}
             {/* <DotBall style={{backgroundColor:"rgba(0,0,0,0.2)"}}/> */}
-            <Text style={styles.runs}>6 runs</Text>
+            {wickets.status ? (
+              <Text style={styles.calculatedFiled}>
+                {wickets.type === 'Caught' || wickets.type === 'Other'
+                  ? `${wickets.type} by ${wickets.bowlerName}`
+                  : wickets?.type}
+              </Text>
+            ) : (
+              <Text style={styles.calculatedFiled}>
+                {runsStatus?.runs} Runs
+              </Text>
+            )}
           </View>
           <View style={{padding: 15}}>
             <Text
@@ -650,8 +737,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.strikeModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              strikeModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Strike</Text>
           <ScrollView>
             {team1Players.map(item => (
@@ -684,8 +775,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.nonStrikeModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              nonStrikeModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Non Strike</Text>
           <ScrollView>
             {team1Players.map(item => {
@@ -721,8 +816,12 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={initialPlayersSelectionModal.bowlerModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setInitialPlayerSelectionModal({
+              ...initialPlayersSelectionModal,
+              bowlerModal: false,
+            })
+          }>
           <Text style={styles.textView}>Select Bowler</Text>
           <ScrollView>
             {team2Players.map(item => {
@@ -750,8 +849,9 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={wicketsModal.batsmanModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
+          onPress={() =>
+            setWicketsModal({...wicketsModal, batsmanModal: false})
+          }>
           <Text style={styles.textView}>Choose batsman</Text>
           <ScrollView>
             <View key={strike.strike} style={styles.listview}>
@@ -796,9 +896,8 @@ const UpdateLiveScore = ({navigation, route}) => {
         </CustomChooseModal>
         <CustomChooseModal
           visible={wicketsModal.fliderModal}
-          // onPress={() => setVisible(!initialPlayersSelectionModal)}
-        >
-          <Text style={styles.textView}>Select Filder</Text>
+          onPress={() => setWickets({...wicketsModal, fliderModal: false})}>
+          <Text style={styles.textView}>Select Fielder</Text>
           <ScrollView>
             {team2Players.map(item => {
               return (
@@ -912,15 +1011,19 @@ const UpdateLiveScore = ({navigation, route}) => {
         </TouchableOpacity>
       </StopMatchModal>
       <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 0}}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={['#FFBA8C', '#FE5C6A']}
-          text="UPDATE"
-          style={{height: 50, width: '100%', marginTop: 0}}
-          textstyle={styles.buttonText}
-          onPress={handelUpdate}
-        />
+        {isLoading ? (
+          <ActivityIndicator size={'large'} color={'#FFBA8C'} />
+        ) : (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="UPDATE"
+            style={{height: 50, width: '100%', marginTop: 0}}
+            textstyle={styles.buttonText}
+            onPress={handelUpdate}
+          />
+        )}
       </View>
     </View>
   );
@@ -1099,5 +1202,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.5,
     lineHeight: 19,
+  },
+  comment: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Roboto-Medium',
+  },
+  calculatedFiled: {
+    color: '#999999',
+    lineHeight: 20,
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
   },
 });

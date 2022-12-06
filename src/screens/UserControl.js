@@ -33,9 +33,11 @@ const UserControl = ({navigation}) => {
         // setUserData(userInfo);
         dispatch(addUser(userInfo));
       }
-      console.warn(userInfo);
+      // console.warn(userInfo);
     };
-    getUserInfo();
+    if (isLoggedIn) {
+      getUserInfo();
+    }
   }, [isLoggedIn]);
 
   return (
@@ -158,15 +160,7 @@ const UserControl = ({navigation}) => {
         {isLoggedIn ? (
           <TouchableOpacity
             style={styles.logout}
-            onPress={async () => {
-              const res = await logoutUser();
-              console.log(res);
-              if (res?.status) {
-                dispatch(logout());
-              } else {
-                dispatch(logout());
-              }
-            }}>
+            onPress={async () => dispatch(userLogout())}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         ) : (

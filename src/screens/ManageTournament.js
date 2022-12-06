@@ -11,7 +11,7 @@ import React, {useLayoutEffect, useState} from 'react';
 import RecentActivityCard from '../components/RecentActivityCard';
 import {useIsFocused} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import { getUserCreatedTournament } from '../services/manageTournament';
+import {getUserCreatedTournament} from '../services/manageTournament';
 
 const ManageTournament = ({navigation}) => {
   const {recentActivities} = useSelector(state => state.recentActivities);
@@ -22,23 +22,27 @@ const ManageTournament = ({navigation}) => {
   useLayoutEffect(() => {
     const getRecentDetails = async tournamentIds => {
       const recents = await getUserCreatedTournament();
-      console.log("Recent data",recents.data);
-      setRecentsData(recents.data)
-    //   if (recents.status) {
-    //     setRecentsData(recents.data.data);
-    //   } else {
-    //     // console.log(recents);
-    //     Alert.alert('Recents Fetch Failed');
-    //   }
+      // console.log('Recent data', recents.data);
+      setRecentsData(recents.data);
+      //   if (recents.status) {
+      //     setRecentsData(recents.data.data);
+      //   } else {
+      //     // console.log(recents);
+      //     Alert.alert('Recents Fetch Failed');
+      //   }
     };
     getRecentDetails(recentActivities);
   }, [focus]);
   return (
     <View style={styles.container}>
-
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={styles.profileDetailsContainer}>
+      <View style={styles.backgroundBeyondSafeArea}>
+        <SafeAreaView>
+          <View style={styles.profileDetailsContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -63,24 +67,26 @@ const ManageTournament = ({navigation}) => {
                   }}></View>
               </View>
             </View>
-          </SafeAreaView>
-        </View>
-        <ScrollView>
+          </View>
+        </SafeAreaView>
+      </View>
+      <ScrollView>
         {recentsData.length > 0 && (
-              <View style={styles.recentActivityView}>
-                <Text style={styles.recentActivityText}>Recent Activities</Text>
-                {recentsData.map(tournament => (
-                  <RecentActivityCard
-                    key={tournament._id}
-                    title={tournament.name}
-                    matchCode={tournament.code}
-                    navigation={navigation}
-                    id={tournament._id}
-                  />
-                ))}
-              </View>
-            )}
-            </ScrollView>
+          <View style={styles.recentActivityView}>
+            <Text style={styles.recentActivityText}>Manage Tournament</Text>
+            {recentsData.map(tournament => (
+              <RecentActivityCard
+                key={tournament._id}
+                title={tournament.name}
+                matchCode={tournament.code}
+                navigation={navigation}
+                id={tournament._id}
+                isManage={true}
+              />
+            ))}
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };

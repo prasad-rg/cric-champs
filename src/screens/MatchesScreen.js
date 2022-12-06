@@ -16,7 +16,7 @@ import {convertMatchesDataWithScores} from '../utils/convertMatchesDataWithScore
 
 const MatchesScreen = ({navigation}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
-  console.log("touurrrrrr",tournamentDetails)
+  console.log('touurrrrrr', tournamentDetails);
   const [currentMatches, setCurrentMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let prevDate = null;
@@ -47,7 +47,7 @@ const MatchesScreen = ({navigation}) => {
               matchId: item._id,
               matchNumber: item.matchNumber,
               teams: {team1Name: item.team1Name, team2Name: item.team2Name},
-              tournamentName:tournamentDetails.name,
+              tournamentName: tournamentDetails.name,
             })
           }>
           <MatchCard matchDetails={item} />
@@ -64,7 +64,7 @@ const MatchesScreen = ({navigation}) => {
               matchId: item._id,
               matchNumber: item.matchNumber,
               teams: {team1Name: item.team1Name, team2Name: item.team2Name},
-              tournamentName:tournamentDetails.name,
+              tournamentName: tournamentDetails.name,
             })
           }>
           <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dayText: {
-    height: 19,
+    // height: 19,
     width: 248,
     color: '#8E9BA8',
     fontFamily: 'Roboto-Medium',
