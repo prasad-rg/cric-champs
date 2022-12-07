@@ -82,7 +82,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   }, [focus]);
 
   const handlePress = async () => {
-    const response = await generateFixture(tournamentId);
+    const response = await generateFixture(tournamentId,tournamentDetails.tournamentType);
     console.log('responseeeee', response.data);
     if (response.data.statusCode !== 200) {
       setModal(false);

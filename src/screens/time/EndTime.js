@@ -30,16 +30,17 @@ const EndTime = ({navigation, route}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const [startTimeFromRoute, setStartTimeFromRoute] = useState(
-    ()=>checkForAmorPm(route.params?.params?.startTime),
+  const [startTimeFromRoute, setStartTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.params?.startTime),
   );
-  const [endTimeFromRoute, setEndTimeFromRoute] = useState(()=>checkForAmorPm(route.params?.params?.endTime),);
-  // let [hrs, minutes] = endTimeFromRoute?.split(':');
+  const [endTimeFromRoute, setEndTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.params?.endTime),
+  );
 
-  // const convertedEndTime = checkForAmorPm(endTimeFromRoute);
-  // console.log('Got a hit');
-  // const convertedStartTime = checkForAmorPm(startTimeFromRoute);
-  console.log(`${startTimeFromRoute}------>${startTimeFromRoute}:00`,`${endTimeFromRoute}:00`);
+  console.log(
+    `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
+    `${endTimeFromRoute}:00`,
+  );
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -89,15 +90,11 @@ const EndTime = ({navigation, route}) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', e => {
-      // dispatch(setEndTime(hours));
       dispatch(setEnd(true));
       dispatch(setStart(false));
     });
     return unsubscribe;
   }, [navigation]);
-
-  // var sDate =
-  // new Date(`${hours}:${minutes}`);
 
   const handlePress = async () => {
     setIsLoading(true);
@@ -106,7 +103,7 @@ const EndTime = ({navigation, route}) => {
       startTimeInISO: getISOTime(startTime),
       endTimeInISO: getISOTime(endTime),
     };
-    // console.log(timeData);
+
     const response = await addTime(timeData);
     console.log('I am response for time', response.data);
     setIsLoading(false);
@@ -187,7 +184,6 @@ const EndTime = ({navigation, route}) => {
                 } else {
                   SimpleToast.show('Something Went Wrong, Please try again 😭');
                 }
-
               }}
             />
           ) : (
