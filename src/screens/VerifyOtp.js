@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   TouchableOpacity,
   Image,
   TextInput,
@@ -14,6 +13,7 @@ import {useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import {forgotPassword, verifyOTP} from '../services/viewTournament';
 import Toast from 'react-native-simple-toast';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const VerifyOtp = ({navigation, route}) => {
   const [text, setText] = useState('');
@@ -84,7 +84,7 @@ const VerifyOtp = ({navigation, route}) => {
           Please fill in the verification code that has been {'\n'} sent to your
           mobile number.
         </Text>
-        <View style={{alignSelf: 'center',paddingBottom:10,paddingLeft:20}}>
+        <View style={{alignSelf: 'center', paddingBottom: 10, paddingLeft: 20}}>
           <View style={styles.textinputView}>
             <TextInput
               name="text"
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
   textinputView: {
     // height: 35,
-    width: Platform.OS === 'ios' ? "100%" : 'auto',
+    width: Platform.OS === 'ios' ? '100%' : 'auto',
     marginTop: 70,
     fontSize: 16,
     alignItems: 'center',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   textInput: {
     // height: 35,
     // width: '110%',
-    width: Platform.OS === 'ios' ? "90%" : "110%",
+    width: Platform.OS === 'ios' ? '90%' : '110%',
     color: '#393939',
     fontSize: 20,
     letterSpacing: 45,

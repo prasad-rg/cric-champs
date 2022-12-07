@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   Image,
   Alert,
   TouchableOpacity,
@@ -18,6 +17,7 @@ import {
 import {StackActions} from '@react-navigation/native';
 import {setEditEntity} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AppBar = ({
   navigation,
@@ -30,7 +30,6 @@ const AppBar = ({
   type,
   isView,
 }) => {
-
   const dispatch = useDispatch();
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
@@ -146,8 +145,7 @@ const AppBar = ({
                   style={[styles.backIcon, {...iconTint}]}
                 />
               </TouchableOpacity>
-            ) :!editEntity && type == 'addplayerinedit' ? (
-            
+            ) : !editEntity && type == 'addplayerinedit' ? (
               <TouchableOpacity
                 onPress={() => {
                   dispatch(setIsEdit(true));
@@ -161,7 +159,6 @@ const AppBar = ({
             ) : (
               <TouchableOpacity
                 onPress={() => {
-            
                   // dispatch(setIsEdit(false));
                   // dispatch(setEditEntity(false));
                   navigation.goBack();

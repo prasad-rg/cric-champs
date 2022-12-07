@@ -60,15 +60,18 @@ const ResetPassword = ({navigation, route}) => {
             email: route?.params?.email,
             password: values.password,
           };
-          setIsLoad(true)
+          setIsLoad(true);
           const response = await resetPassword(obj, route?.params?.token);
-          setIsLoad(false)
+          setIsLoad(false);
           if (response.status) {
             Toast.show('Password updated successfully');
             navigation.dispatch(
               CommonActions.reset({
-                index: 0,
+                index: 1,
                 routes: [
+                  {
+                    name: 'HomeStack',
+                  },
                   {
                     name: 'AuthStack',
                   },
