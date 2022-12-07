@@ -72,6 +72,7 @@ const RootNavigator = () => {
             options={{
               headerShown: false,
               cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+              gestureEnabled: true,
             }}
           />
         )}
