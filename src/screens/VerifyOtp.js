@@ -84,7 +84,7 @@ const VerifyOtp = ({navigation, route}) => {
           Please fill in the verification code that has been {'\n'} sent to your
           mobile number.
         </Text>
-        <View style={{alignSelf: 'center'}}>
+        <View style={{alignSelf: 'center',paddingBottom:10,paddingLeft:20}}>
           <View style={styles.textinputView}>
             <TextInput
               name="text"
@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
   },
   textinputView: {
     // height: 35,
-    // width:"100%",
-    marginTop: 60,
+    width: Platform.OS === 'ios' ? "100%" : 'auto',
+    marginTop: 70,
     fontSize: 16,
     alignItems: 'center',
     // marginLeft: 20,
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     // height: 35,
-    width: '110%',
+    // width: '110%',
+    width: Platform.OS === 'ios' ? "90%" : "110%",
     color: '#393939',
     fontSize: 20,
     letterSpacing: 45,
@@ -198,14 +199,15 @@ const styles = StyleSheet.create({
     // alignConten: 'center',
     // justifyContent:"center",
     // alignSelf:"center"
-    marginLeft: 7,
+    // marginLeft: 7,
+    marginLeft: Platform.OS === 'ios' ? 13.512 : 7,
   },
   textInputBorderin1: {
     height: 0.5,
     width: 35,
     opacity: 0.6,
     backgroundColor: '#7A7A7A',
-    marginRight: 17,
+    marginRight: 25,
   },
   textInputBorderin2: {
     height: 0.5,
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
     width: 35,
     opacity: 0.6,
     backgroundColor: '#7A7A7A',
-    marginLeft: 15,
+    marginLeft: 10,
   },
   textInputBorder: {
     flexDirection: 'row',
