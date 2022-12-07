@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Image, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import AppBar from '../components/AppBar';
 import {TextField} from 'rn-material-ui-textfield';
@@ -9,7 +16,10 @@ import GradientButton from '../components/GradientButton';
 import {createFormData} from '../utils/createFormData';
 import {useDispatch, useSelector} from 'react-redux';
 import {userRegister} from '../redux/authSlice';
-import { TextInput } from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
+import {resetPassword} from '../services/viewTournament';
+import Toast from 'react-native-simple-toast';
+import {CommonActions} from '@react-navigation/native';
 
 const passwordValidationSchema = yup.object().shape({
   password: yup
@@ -36,14 +46,42 @@ const ResetPassword = ({navigation, route}) => {
   const [icon, setIcon] = useState('eye');
   const [secureTextEntry2, setSecureTextEntry2] = useState(true);
   const [icon2, setIcon2] = useState('eye');
+  const [isLoad, setIsLoad] = useState(false);
   console.info(isLoading, isLoggedIn, error);
+  // console.log("token in rest scrreen",route?.params?.token)
   return (
     <View style={styles.container}>
       <Formik
         validationSchema={passwordValidationSchema}
         initialValues={{password: '', confirmPassword: ''}}
-        onSubmit={values => {
-         console.log("valuse",values)
+        onSubmit={async values => {
+          console.log('valuse', values);
+          const obj = {
+            email: route?.params?.email,
+            password: values.password,
+          };
+          setIsLoad(true);
+          const response = await resetPassword(obj, route?.params?.token);
+          setIsLoad(false);
+          if (response.status) {
+            Toast.show('Password updated successfully');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: 'HomeStack',
+                  },
+                  {
+                    name: 'AuthStack',
+                  },
+                ],
+              }),
+            );
+            Toast.show('Please Login with new password..');
+          }
+
+          console.log('response for reset password', response);
         }}>
         {({
           handleChange,
@@ -83,9 +121,9 @@ const ResetPassword = ({navigation, route}) => {
                   secureTextEntry={secureTextEntry}
                   right={
                     <TextInput.Icon
-                    icon={icon}
-                    iconColor="darkgrey"
-                    onPress={() => {
+                      icon={icon}
+                      iconColor="darkgrey"
+                      onPress={() => {
                         setSecureTextEntry(!secureTextEntry),
                           secureTextEntry ? setIcon('eye-off') : setIcon('eye');
                       }}
@@ -104,11 +142,13 @@ const ResetPassword = ({navigation, route}) => {
                   secureTextEntry={secureTextEntry2}
                   right={
                     <TextInput.Icon
-                    icon={icon2}
-                    iconColor="darkgrey"
-                    onPress={() => {
+                      icon={icon2}
+                      iconColor="darkgrey"
+                      onPress={() => {
                         setSecureTextEntry2(!secureTextEntry2),
-                          secureTextEntry2 ? setIcon2('eye-off') : setIcon2('eye');
+                          secureTextEntry2
+                            ? setIcon2('eye-off')
+                            : setIcon2('eye');
                       }}
                     />
                   }
@@ -125,17 +165,23 @@ const ResetPassword = ({navigation, route}) => {
                 )}
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-            <GradientButton
-              start={{x: 0, y: 0}}
-              end={{x: 2, y: 0}}
-              colors={['#FFBA8C', '#FE5C6A']}
-              text="SUBMIT"
-              // onPress={() => navigation.navigate('RegistrationSuccessScreen')}
-              onPress={handleSubmit}
-              style={styles.buttonStyle}
-            />
-            </View>
+            {isLoad ? (
+              <View style={{marginBottom: 20}}>
+                <ActivityIndicator size="large" color="#FFBA8C" />
+              </View>
+            ) : (
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={['#FFBA8C', '#FE5C6A']}
+                  text="SUBMIT"
+                  // onPress={() => navigation.navigate('RegistrationSuccessScreen')}
+                  onPress={handleSubmit}
+                  style={styles.buttonStyle}
+                />
+              </View>
+            )}
           </>
         )}
       </Formik>

@@ -74,11 +74,19 @@ const ScoreboardScreen = ({navigation, route}) => {
       if (response?.data?.score === null) {
         setMatchNotStarted(true);
       } else {
-        setMatchNotStarted(false)
+        setMatchNotStarted(false);
         setScoreBoard(response.data);
         let arrayResponse = response.data?.playersOfTeam1?.map(player => {
           let tempArr = [
-            `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+            `${player?.playerName}\n${
+              player?.wicket?.fielderName !== undefined
+                ? 'c ' + player?.wicket?.fielderName
+                : ''
+            } ${
+              player?.wicket?.bowlerName !== undefined
+                ? 'b ' + player?.wicket?.bowlerName
+                : ''
+            }`,
             player?.runsScored,
             `${player?.overFaced}.${player?.ballsFaced}`,
             `${player?.fours}`,
@@ -99,7 +107,7 @@ const ScoreboardScreen = ({navigation, route}) => {
         let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
           let bowlerArray = [
             bowler?.playerName,
-            bowler?.overBowled,
+            `${bowler?.overBowled}.${bowler?.ballsBowled}`,
             bowler?.maiden,
             bowler?.runsConceded,
             bowler?.wicketsTaken,

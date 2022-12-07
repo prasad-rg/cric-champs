@@ -22,18 +22,19 @@ export default function ManageTab(props) {
         tabBarLabelStyle: {
           fontSize: 14,
           height: 19,
+          width:"100%",
           fontFamily: 'Roboto-Medium',
           fontWeight: '500',
-          letterSpacing: 0.5,
+          // letterSpacing: 0.5,
           lineHeight: 16,
-          textAlign: 'center',
+          // textAlign: 'center',
         },
         tabBarIndicatorStyle: {
           borderBottomColor: '#FFB400',
           borderBottomWidth: 2.5,
           borderRadius: 3.5,
 
-          width: '33.33%',
+          // width: '34%',
         },
       }}>
       <Tab.Screen name="TOURNAMENT">

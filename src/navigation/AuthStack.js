@@ -11,7 +11,6 @@ import RegistrationSuccessScreen from '../screens/RegistrationSuccessScreen';
 import VerifyOtp from '../screens/VerifyOtp';
 import ResetPassword from '../screens/ResetPassword';
 
-
 const Stack = createStackNavigator();
 
 const AuthStack = () => {
@@ -28,37 +27,50 @@ const AuthStack = () => {
       <Stack.Screen
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
-         <Stack.Screen
+      <Stack.Screen
         name="VerifyOtp"
         component={VerifyOtp}
-        options={{headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="ResetPassword"
         component={ResetPassword}
-        options={{headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="RegisterUserScreen"
         component={RegisterUserScreen}
-        options={{headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="SetPasswordScreen"
         component={SetPasswordScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="RegistrationSuccessScreen"
         component={RegistrationSuccessScreen}
-        options={{headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,}}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
     </Stack.Navigator>
   );

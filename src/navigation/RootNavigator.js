@@ -42,7 +42,10 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide()}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          gestureEnabled: false,
+        }}>
         {isInitialAppLaunch && (
           <Stack.Screen
             name="OnBoardingStack"
@@ -69,6 +72,7 @@ const RootNavigator = () => {
             options={{
               headerShown: false,
               cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+              gestureEnabled: true,
             }}
           />
         )}

@@ -9,7 +9,7 @@ import {
   ScrollView,
   Platform,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import RadioButton from '../components/RadioButton';
@@ -23,6 +23,7 @@ import {useDispatch} from 'react-redux';
 import {setIsEdit, setTournamentData} from '../redux/manageTournamentSlice';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import { storeRecentActivities } from '../redux/recentActivitiesSlice';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -65,10 +66,11 @@ const CreateTournament = ({navigation}) => {
         };
         dispatch(setTournamentData(tournamentresponse));
         dispatch(storeTournamentDetails(response?.data.result));
-        dispatch(setIsEdit(false))
+        dispatch(storeRecentActivities(response?.data.result._id));
+        dispatch(setIsEdit(false));
         navigation.navigate('CreateTournamentSuccess');
-      }else{
-        Toast.show("Something went wrong, Try again 😭")
+      } else {
+        Toast.show('Something went wrong, Try again 😭');
       }
     } else {
       Toast.show('Tournament profile is required');
@@ -143,36 +145,34 @@ const CreateTournament = ({navigation}) => {
       </ScrollView>
       {isLoading ? (
         <View style={{marginBottom: 20}}>
-        <ActivityIndicator size="large" color="#FFBA8C" />
+          <ActivityIndicator size="large" color="#FFBA8C" />
         </View>
-      ):(
+      ) : (
         <View style={styles.gradientButton}>
-        <GradientButton
-          start={{x: 0, y: 0}}
-          end={{x: 2, y: 0}}
-          colors={
-            tournamentName === ''
-              ? ['#999999', '#999999']
-              : ['#FFBA8C', '#FE5C6A']
-          }
-          text="CREATE TOURNAMENT"
-          style={{width: '100%', marginTop: 0, height: 48}}
-          textstyle={{
-            height: 16,
-            fontWeight: '500',
-            fontSize: 14,
-            letterSpacing: 0.5,
-            lineHeight: 19,
-          }}
-          onPress={handlePress}
-        />
-      </View>
-      ) }
-    
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={
+              tournamentName === ''
+                ? ['#999999', '#999999']
+                : ['#FFBA8C', '#FE5C6A']
+            }
+            text="CREATE TOURNAMENT"
+            style={{width: '100%', marginTop: 0, height: 48}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={handlePress}
+          />
+        </View>
+      )}
     </View>
   );
 };
-
 
 // {isLoading ? (
 //   <View style={{marginTop: 20}}>
@@ -188,17 +188,6 @@ const CreateTournament = ({navigation}) => {
 //     style={{width: '90%'}}
 //   />
 // )}
-
-
-
-
-
-
-
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {
