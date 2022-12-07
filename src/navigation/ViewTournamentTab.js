@@ -46,7 +46,7 @@ const ViewTournamentTab = () => {
       <Tab.Screen
         name="MATCHES"
         component={MatchesScreen}
-        options={{gesturesEnabled: false}}
+        // options={{gesturesEnabled: false}}
       />
       <Tab.Screen name="TEAMS" component={TeamsScreen} />
       <Tab.Screen name="STANDINGS" component={StandingsScreen} />

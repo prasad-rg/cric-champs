@@ -42,10 +42,7 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide()}>
-      <Stack.Navigator
-        screenOptions={{
-          gestureEnabled: true,
-        }}>
+      <Stack.Navigator>
         {isInitialAppLaunch && (
           <Stack.Screen
             name="OnBoardingStack"

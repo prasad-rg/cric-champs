@@ -56,15 +56,15 @@ const EndTime = ({navigation, route}) => {
     },
     [setVisible],
   );
-  // const focus = useIsFocused();
+  const focus = useIsFocused();
 
-  // useLayoutEffect(() => {
-  //   if (focus == true) {
-  //     route.params?.params?.isManage
-  //       ? (dispatch(setEndTime(`${convertedTime}:00`)), dispatch(setEnd(true)),dispatch(setStart(false)))
-  //       : null;
-  //   }
-  // }, [focus]);
+  useLayoutEffect(() => {
+    if (focus == true) {
+      route.params?.params?.isManage
+        ? (dispatch(setEndTime(`${convertedTime}:00`)), dispatch(setEnd(true)),dispatch(setStart(false)))
+        : null;
+    }
+  }, [focus]);
 
   const onConfirmInManage = React.useCallback(
     ({hours, minutes}) => {

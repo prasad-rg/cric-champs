@@ -50,13 +50,13 @@ const StartTime = ({navigation, route}) => {
 
   const focus = useIsFocused();
 
-  // useLayoutEffect(() => {
-  //   if (focus == true) {
-  //     route.params?.isManage
-  //       ? (dispatch(setStartTime(`${convertedTime}:00`)), dispatch(setEnd(false)),dispatch(setStart(true)))
-  //       : null;
-  //   }
-  // }, [focus]);
+  useLayoutEffect(() => {
+    if (focus == true) {
+      route.params?.isManage
+        ? (dispatch(setStartTime(`${convertedTime}:00`)), dispatch(setEnd(false)),dispatch(setStart(true)))
+        : null;
+    }
+  }, [focus]);
 
   const onDismissInManage = React.useCallback(() => {
     setVisible(false);
@@ -65,7 +65,7 @@ const StartTime = ({navigation, route}) => {
   const onConfirmInManage = React.useCallback(
     ({hours, minutes}) => {
       setVisible(false);
-      dispatch(setStartTime(`${convertedTime}:00`));
+      dispatch(setStartTime(`${hours}:00`));
       setDisabled(false);
       dispatch(setStart(true));
       dispatch(setEnd(false));
