@@ -163,11 +163,16 @@ const StadiumInformation = ({navigation, route}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    // justifyContent: 'space-between',
                   }}>
                   <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
+                      style={{ 
+                        height: 20,
+                        width: 20,
+                        marginTop:2.5
+                      }}
                     />
                   </TouchableOpacity>
                   <Text style={styles.stadiumName}>
@@ -258,7 +263,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileDetailsContainer: {
-    height: 47,
+    height: 37,
     marginTop: 15,
   },
   backgroundBeyondSafeArea: {
@@ -267,14 +272,24 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   stadiumName: {
+    // height: 24,
+    // color: '#FFFFFF',
+    // fontFamily: 'Roboto-Medium',
+    // fontSize: 20,
+    // fontWeight: '500',
+    // letterSpacing: 0,
+    // lineHeight: 24,
+    // marginHorizontal: '7%',
     height: 24,
-    color: '#FFFFFF',
+    width: 100,
+    color: 'rgba(255,255,255,0.87)',
     fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 24,
-    marginHorizontal: '10%',
+    marginLeft: 40,
+    // marginBottom:30
   },
   wrap: {
     width: WIDTH,

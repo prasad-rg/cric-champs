@@ -27,7 +27,7 @@ const ForgotPasswordScreen = ({navigation}) => {
       Toast.show("OTP sent successfully")
       navigation.navigate('VerifyOtp',{email:values.email})
      } else {
-      Toast.show("Something went wrong..Please try again")
+      Toast.show("Please check your email..")
      }
 
   };
