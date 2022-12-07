@@ -28,10 +28,12 @@ const UserControl = ({navigation}) => {
     const getUserInfo = async () => {
       setIsLodaing(true);
       const userInfo = await getUserDetails();
-      if (userInfo._id) {
+      if (userInfo?._id) {
         setIsLodaing(false);
         // setUserData(userInfo);
         dispatch(addUser(userInfo));
+      } else {
+        console.info('Check UseEffect of User Control', userInfo);
       }
       // console.warn(userInfo);
     };

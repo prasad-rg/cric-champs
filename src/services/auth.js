@@ -41,29 +41,67 @@ export const logoutUser = async () => {
   }
 };
 
+// export const getNewAccessToken = async (oldAcccessToken, refreshToken) => {
+//   console.log('{}{}{}', refreshToken);
+//   try {
+//     const response = await axios.get(`${BASE_URL}/api/refresh`, {
+//       headers: {'refresh-token': refreshToken},
+//     });
+//     console.log('Got A Hit', response.data);
+//     console.log('HEaders', response);
+//     if (response.status === 200) {
+//       const headers = response.headers;
+//       console.log('newAccessToken', headers);
+//       let stringifiedToken = JSON.stringify({
+//         accessToken: headers.authorization,
+//         refreshToken: refreshToken,
+//       });
+//       const isSecurelyStored = await setToken(stringifiedToken);
+//       if (isSecurelyStored) {
+//         return headers.authorization;
+//       } else {
+//         return null;
+//       }
+//     }
+//   } catch (error) {
+//     console.log('Check getNewAccessToken Function', error);
+//     return null;
+//     // return error.response.data.message;
+//   }
+// };
+
 export const getNewAccessToken = async (oldAcccessToken, refreshToken) => {
+  console.log('{}{}{}', refreshToken);
   try {
-    const response = await axios.get(`${BASE_URL}/api/refresh`, {
-      headers: {Authorization: oldAcccessToken, 'refresh-token': refreshToken},
+    let response = await fetch(`${BASE_URL}/api/refresh`, {
+      method: 'GET',
+      headers: new Headers({
+        'refresh-token': refreshToken,
+      }),
     });
-    if (response.status === 200) {
-      const headers = response.headers;
-      let stringifiedToken = JSON.stringify({
-        accessToken: headers.authorization,
-        refreshToken: refreshToken,
-      });
-      const isSecurelyStored = await setToken(stringifiedToken);
-      if (isSecurelyStored) {
-        return headers.authorization;
-      } else {
-        return false;
-      }
-    } else {
-      return {error: response};
-    }
+    console.log(response.headers);
+    response = await response.json();
+    console.log('Got A Hit', response);
+
+    // console.log('HEaders', response);
+    // if (response.status === 200) {
+    //   const headers = response.headers;
+    //   console.log('newAccessToken', headers);
+    //   let stringifiedToken = JSON.stringify({
+    //     accessToken: headers.authorization,
+    //     refreshToken: refreshToken,
+    //   });
+    //   const isSecurelyStored = await setToken(stringifiedToken);
+    //   if (isSecurelyStored) {
+    //     return headers.authorization;
+    //   } else {
+    //     return null;
+    //   }
+    // }
   } catch (error) {
-    console.log(error);
-    return error.response.data.message;
+    console.log('Check getNewAccessToken Function', error);
+    return null;
+    // return error.response.data.message;
   }
 };
 
@@ -72,6 +110,7 @@ export const refreshTokenIfExpired = async () => {
   const jsonToken = JSON.parse(result);
   const refreshToken = jsonToken.refreshToken;
   const decodedRefreshToken = jwt_decode(refreshToken);
+  console.log('--RefreshToken', jsonToken.refreshToken);
   let isRefreshExpired =
     decodedRefreshToken.exp - Math.floor(Date.now() / 1000) < 1 ? true : false;
   if (!isRefreshExpired) {
@@ -79,22 +118,26 @@ export const refreshTokenIfExpired = async () => {
     const decode = jwt_decode(accessToken);
     let isAuthTokenExpired =
       decode.exp - Math.floor(Date.now() / 1000) < 1 ? true : false;
-    if (isAuthTokenExpired) {
+
+    if (!isAuthTokenExpired) {
       const newToken = await getNewAccessToken(
         jsonToken.accessToken,
         jsonToken.refreshToken,
       );
+      console.warn(newToken);
       return newToken;
     } else {
       return jsonToken.accessToken;
     }
   } else {
+    //if refreshTokenExpired then remove the token and logout the user......
     return null;
   }
 };
 
 export const getUserDetails = async () => {
   const validateAndGetToken = await refreshTokenIfExpired();
+  // console.log('---', validateAndGetToken);
   if (validateAndGetToken !== null) {
     try {
       const response = await axios.get(`${BASE_URL}/api/user`, {
@@ -105,7 +148,9 @@ export const getUserDetails = async () => {
       // console.log("response from api",response)
       return response.data.data[0];
     } catch (error) {
-      return error.response.data.message;
+      console.log('Error In getUserDetails', error.response.data);
+      return null;
+      // return error.response.data.message;
     }
   } else {
     return null;
