@@ -15,7 +15,7 @@ export default function MatchTab(props) {
     // <NavigationContainer>
     <Tab.Navigator
       screenOptions={{
-        //   tabBarScrollEnabled: true,
+      // swipeEnabled:false,
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
         tabBarStyle: {

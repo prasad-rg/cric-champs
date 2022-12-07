@@ -44,7 +44,7 @@ const RootNavigator = () => {
     <NavigationContainer onReady={() => RNBootSplash.hide()}>
       <Stack.Navigator
         screenOptions={{
-          gestureEnabled: true,
+          gestureEnabled: false,
         }}>
         {isInitialAppLaunch && (
           <Stack.Screen
