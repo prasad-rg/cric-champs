@@ -95,10 +95,18 @@ const LiveScreen = ({navigation, route}) => {
             ?.reverse()
             .filter(item => item.teamId === selectedItem?.id),
         );
-        console.info('+---++____++++', commentary[0]);
+        // console.info('+---++____++++', commentary[0]);
         let arrayResponse = response.data?.playersOfTeam1?.map(player => {
           let tempArr = [
-            `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
+            `${player?.playerName}\n${
+              player?.wicket?.fielderName !== undefined
+                ? 'c ' + player?.wicket?.fielderName
+                : ''
+            } ${
+              player?.wicket?.bowlerName !== undefined
+                ? 'b ' + player?.wicket?.bowlerName
+                : ''
+            }`,
             player?.runsScored,
             `${player?.ballsFaced}`,
             `${player?.fours}`,
@@ -119,20 +127,20 @@ const LiveScreen = ({navigation, route}) => {
         let bowlerData = response?.data?.playersOfTeam2?.map(bowler => {
           let bowlerArray = [
             bowler?.playerName,
-            bowler?.overBowled,
+            `${bowler?.overBowled}.${bowler?.ballsBowled}`,
             bowler?.maiden,
             bowler?.runsConceded,
             bowler?.wicketsTaken,
             bowler?.economyRate,
           ];
-          if (bowler?.currentlyBatting) {
-            bowlerArray[0] = `${bowler?.playerName}*`;
-          }
+          // if (bowler?.currentlyBatting) {
+          //   bowlerArray[0] = `${bowler?.playerName}*`;
+          // }
           return bowlerArray;
         });
         setData(bowlerData);
       }
-      // console.info(response.data);
+      console.info(response?.data?.playersOfTeam2);
 
       // console.log(arrayResponse);
       // setCurrentTeams(arrayResponse);
@@ -285,7 +293,7 @@ const LiveScreen = ({navigation, route}) => {
                   data={tableData}
                   // heightArr={[60, 60, 60, 60, 60, 60]}
                   // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-                  flexArr={[3, 1,1, 1.1, 1.1, 1.6]}
+                  flexArr={[3, 1, 1, 1.1, 1.1, 1.6]}
                   textStyle={styles.row_text}
                 />
               </TableWrapper>
@@ -331,11 +339,13 @@ const LiveScreen = ({navigation, route}) => {
                 <Text style={styles.pship}>FoW:</Text>
                 <Text style={styles.runs}>
                   {'   '}
-                  {`${fallOfWicket?.runs} / ${fallOfWicket?.wickets}`}
+                  {fallOfWicket?.runs &&
+                    `${fallOfWicket?.runs} / ${fallOfWicket?.wickets}`}
                 </Text>
                 <Text style={styles.pship}>
                   {' '}
-                  {`(${fallOfWicket?.over}.${fallOfWicket?.wickets})`}
+                  {fallOfWicket?.wickets &&
+                    `(${fallOfWicket?.over}.${fallOfWicket?.wickets})`}
                 </Text>
               </View>
             </View>
@@ -522,7 +532,7 @@ const LiveScreen = ({navigation, route}) => {
             the covers!
           </Text>
         </View> */}
-          <View style={styles.endView}>
+          {/* <View style={styles.endView}>
             <Text style={styles.end_of_over}>
               End of Over : 5 | 4 runs | 1 wt | 31/3 | RR : 6.6
             </Text>
@@ -540,8 +550,8 @@ const LiveScreen = ({navigation, route}) => {
               textStyle={{color: 'black'}}
             />
             <Text style={{width: '50%'}}>Deepanjan to Sunder, no runs</Text>
-          </View>
-
+          </View> */}
+          {/* 
           <View style={styles.commentaryView}>
             <Text style={styles.recent}>4.5</Text>
             <Circle
@@ -555,9 +565,9 @@ const LiveScreen = ({navigation, route}) => {
               textStyle={{color: 'black'}}
             />
             <Text style={{width: '50%'}}>Deepanjan to Ashley, 1 run</Text>
-          </View>
+          </View> */}
 
-          <View style={styles.commentaryView}>
+          {/* <View style={styles.commentaryView}>
             <Text style={styles.recent}>4.4</Text>
             <Circle
               style={{
@@ -573,7 +583,7 @@ const LiveScreen = ({navigation, route}) => {
               Deepanjan to Ashley, 4 runs! Its a beautiful stroke straight
               through the covers!
             </Text>
-          </View>
+          </View> */}
         </ScrollView>
       )}
     </View>
