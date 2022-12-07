@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 11,
     flex: 1,
-    // borderWidth: 1,
   },
   gradientButton: {
     width: '100%',
