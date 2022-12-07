@@ -16,17 +16,31 @@ import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
 import {checkForAmorPm} from '../../utils/checkForAmOrPm';
-import { useIsFocused } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import {useLayoutEffect} from 'react';
+import {addTime} from '../../services/manageTournament2';
+import SimpleToast from 'react-native-simple-toast';
+import {getISOTime} from '../../utils/getISOTime';
 
 const StartTime = ({navigation, route}) => {
   const [disabled, setDisabled] = useState(true);
   const startTime = useSelector(state => state.matchdata.startTime);
-  const [startTimeFromRoute, setStartTimeFromRoute] = useState(
-    route.params?.startTime,
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  const [startTimeFromRoute, setStartTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.startTime),
+  );
+  const [endTimeFromRoute, setEndTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.endTime),
   );
 
-  const convertedTime = checkForAmorPm(startTimeFromRoute);
+  // let [hours, minutes] = startTimeFromRoute?.split(':');
+
+  // const convertedStartTime = checkForAmorPm(startTimeFromRoute);
+  // const convertedEndTime = checkForAmorPm(endTimeFromRoute);
+
+
 
   let current_time = moment();
 
@@ -53,7 +67,10 @@ const StartTime = ({navigation, route}) => {
   useLayoutEffect(() => {
     if (focus == true) {
       route.params?.isManage
-        ? (dispatch(setStartTime(`${convertedTime}:00`)), dispatch(setEnd(false)),dispatch(setStart(true)))
+        ? (dispatch(setStartTime(`${startTimeFromRoute}:00`)),
+          setStartTimeFromRoute(startTimeFromRoute),
+          dispatch(setEnd(false)),
+          dispatch(setStart(true)))
         : null;
     }
   }, [focus]);
@@ -65,7 +82,8 @@ const StartTime = ({navigation, route}) => {
   const onConfirmInManage = React.useCallback(
     ({hours, minutes}) => {
       setVisible(false);
-      dispatch(setStartTime(`${hours}:00`));
+      dispatch(setStartTime(`${hours}:${minutes}`));
+      setStartTimeFromRoute(hours);
       setDisabled(false);
       dispatch(setStart(true));
       dispatch(setEnd(false));
@@ -136,7 +154,22 @@ const StartTime = ({navigation, route}) => {
               letterSpacing: 0.5,
               lineHeight: 19,
             }}
-            onPress={() => navigation.goBack()}
+            onPress={async () => {
+              const timeData = {
+                tournamentId: tournamentId,
+                startTimeInISO: getISOTime(`${startTimeFromRoute}:00`),
+                endTimeInISO: getISOTime(`${endTimeFromRoute}:00`),
+              };
+              console.log(timeData);
+              const response = await addTime(timeData);
+              console.log('I am response for time', response.data);
+              if (response.data.status) {
+                navigation.goBack();
+              } else {
+                SimpleToast.show('Something Went Wrong, Please try again 😭');
+              }
+
+            }}
           />
         ) : (
           <GradientButton

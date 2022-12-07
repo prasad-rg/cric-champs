@@ -11,6 +11,7 @@ import GradientButton from '../../components/GradientButton';
 import {addDates} from '../../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
+
 const StartDate = ({navigation, route}) => {
   const dateFromRoute = route?.params?.params?.endDate;
 
@@ -27,17 +28,14 @@ const StartDate = ({navigation, route}) => {
   const [convertedEndDateFromRoute, setConvertedEndDate] = useState(
     moment(route?.params?.params?.endDate).format('YYYY-MM-DD'),
   );
-  // console.log(startDate, endDate);
-
-  let date1 = new Date(startDate);
-  let date2 = new Date(endDate);
-
-  let total = date2.getUTCDate() - date1.getUTCDate() + 1;
-  // console.log("total days",total)
 
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
+  let date1 = new Date(convertedStartDateFromRoute);
+  let date2 = new Date(convertedEndDateFromRoute);
+
+  let total = date2.getUTCDate() - date1.getUTCDate() + 1;
 
   const dateData = {
     startDateInISO: startDate,
@@ -70,9 +68,15 @@ const StartDate = ({navigation, route}) => {
   };
 
   React.useEffect(() => {
+    if (route.params?.params?.isManage) {
+      dispatch(setEnd(true));
+      dispatch(setStart(false));
+    }
+
     const unsubscribe = navigation.addListener('tabPress', e => {
       dispatch(setEnd(true));
       dispatch(setStart(false));
+      setConvertedEndDate(`${convertedEndDateFromRoute}:00`);
     });
     return unsubscribe;
   }, [navigation]);
@@ -282,7 +286,22 @@ const StartDate = ({navigation, route}) => {
           // colors={['#FFBA8C', '#FE5C6A']}
           colors={['#FFBA8C', '#FE5C6A']}
           text="OK"
-          onPress={() => navigation.goBack()}
+          onPress={async () => {
+            const dateData = {
+              startDateInISO: date1,
+              endDateInISO: date2,
+              tournamentId: tournamentId,
+              tournamentDays: total,
+            };
+
+            const response = await addDates(dateData);
+            console.log('I am response for date', response.data);
+            if (response.data.status) {
+              navigation.goBack();
+            } else {
+              SimpleToast.show('Something Went Wrong, Please try again 😭');
+            }
+          }}
           style={{height: 50, width: '100%', marginTop: 0}}
           textstyle={{
             height: 16,

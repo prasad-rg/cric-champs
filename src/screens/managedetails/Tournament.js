@@ -150,6 +150,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               navigation.dispatch(
                 StackActions.push('DateScreen', {
                   startDate: currentOverview?.startDateEnglish,
+                  endDate: currentOverview?.endDateEnglish,
                   isManage: true,
                 }),
               )
@@ -180,6 +181,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               navigation.dispatch(
                 StackActions.push('TimeScreen', {
                   startTime: currentOverview?.startTimeNormalFormat,
+                  endTime: currentOverview?.endTimeNormalFormat,
                   isManage: true,
                 }),
               )
@@ -195,6 +197,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 StackActions.push('TimeScreen', {
                   screen: 'END OF PLAY',
                   params: {
+                    startTime: currentOverview?.startTimeNormalFormat,
                     endTime: currentOverview?.endTimeNormalFormat,
                     isManage: true,
                   },

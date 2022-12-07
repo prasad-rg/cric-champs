@@ -30,11 +30,16 @@ const EndTime = ({navigation, route}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const [endTimeFromRoute, setEndTimeFromRoute] = useState(
-    route.params?.params?.endTime,
+  const [startTimeFromRoute, setStartTimeFromRoute] = useState(
+    ()=>checkForAmorPm(route.params?.params?.startTime),
   );
- 
-  const convertedTime = checkForAmorPm(endTimeFromRoute);
+  const [endTimeFromRoute, setEndTimeFromRoute] = useState(()=>checkForAmorPm(route.params?.params?.endTime),);
+  // let [hrs, minutes] = endTimeFromRoute?.split(':');
+
+  // const convertedEndTime = checkForAmorPm(endTimeFromRoute);
+  // console.log('Got a hit');
+  // const convertedStartTime = checkForAmorPm(startTimeFromRoute);
+  console.log(`${startTimeFromRoute}------>${startTimeFromRoute}:00`,`${endTimeFromRoute}:00`);
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -61,7 +66,10 @@ const EndTime = ({navigation, route}) => {
   useLayoutEffect(() => {
     if (focus == true) {
       route.params?.params?.isManage
-        ? (dispatch(setEndTime(`${convertedTime}:00`)), dispatch(setEnd(true)),dispatch(setStart(false)))
+        ? (dispatch(setEndTime(`${endTimeFromRoute}:00`)),
+          setEndTimeFromRoute(endTimeFromRoute),
+          dispatch(setEnd(true)),
+          dispatch(setStart(false)))
         : null;
     }
   }, [focus]);
@@ -70,6 +78,7 @@ const EndTime = ({navigation, route}) => {
     ({hours, minutes}) => {
       setVisible(false);
       dispatch(setEndTime(`${hours}:${minutes}`));
+      setEndTimeFromRoute(hours);
       setDisabled(false);
       dispatch(setEnd(true));
       dispatch(setStart(false));
@@ -164,7 +173,22 @@ const EndTime = ({navigation, route}) => {
                 letterSpacing: 0.5,
                 lineHeight: 19,
               }}
-              onPress={() => navigation.goBack()}
+              onPress={async () => {
+                const timeData = {
+                  tournamentId: tournamentId,
+                  startTimeInISO: getISOTime(`${startTimeFromRoute}:00`),
+                  endTimeInISO: getISOTime(`${endTimeFromRoute}:00`),
+                };
+                console.log(timeData);
+                const response = await addTime(timeData);
+                console.log('I am response for time', response.data);
+                if (response.data.status) {
+                  navigation.goBack();
+                } else {
+                  SimpleToast.show('Something Went Wrong, Please try again 😭');
+                }
+
+              }}
             />
           ) : (
             <GradientButton
