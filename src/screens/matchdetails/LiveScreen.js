@@ -273,7 +273,7 @@ const LiveScreen = ({navigation, route}) => {
               <Text
                 style={{
                   color: 'green',
-                }}>{`${selectedItem.name} won the match`}</Text>
+                }}>{`${selectedItem?.name} won the match`}</Text>
             ) : (
               ''
             )}
