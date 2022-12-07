@@ -95,6 +95,7 @@ const LiveScreen = ({navigation, route}) => {
             ?.reverse()
             .filter(item => item.teamId === selectedItem?.id),
         );
+        console.info('+---++____++++', commentary[0]);
         let arrayResponse = response.data?.playersOfTeam1?.map(player => {
           let tempArr = [
             `${player?.playerName}\nc ${player?.wicket?.fielderName} b ${player?.wicket?.bowlerName}`,
@@ -154,7 +155,9 @@ const LiveScreen = ({navigation, route}) => {
               ? {...styles.circleStyling, backgroundColor: '#4A90E2'}
               : item?.status == 0
               ? styles.circleStyling
-              : {...styles.circleStyling, backgroundColor: '#E05140'}
+              : item?.status.toLowerCase() == 'w'
+              ? {...styles.circleStyling, backgroundColor: '#E05140'}
+              : {...styles.circleStyling, backgroundColor: '#e67e22'}
           }
           text={item?.status}
           textStyle={item?.status == 0 && {color: 'black'}}
@@ -167,6 +170,9 @@ const LiveScreen = ({navigation, route}) => {
   // useEffect(() => {
   //   loadScoreBoard();
   // }, []);
+
+  const [isRefreshed, setIsRefreshed] = useState(false);
+
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
@@ -175,7 +181,7 @@ const LiveScreen = ({navigation, route}) => {
     } else {
       loadScoreBoard(selectedItem.id);
     }
-  }, [selectedItem]);
+  }, [selectedItem, isRefreshed]);
 
   const onSelect = item => {
     setSelectedItem(item);
@@ -190,7 +196,10 @@ const LiveScreen = ({navigation, route}) => {
       ) : (
         <ScrollView
           refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={loadScoreBoard} />
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => setIsRefreshed(!isRefreshed)}
+            />
           }>
           <View style={styles.headerText}>
             {/* <Text style={styles.codetext}>Code Warriors</Text> */}
@@ -235,14 +244,16 @@ const LiveScreen = ({navigation, route}) => {
             <View style={{width: '20%', marginHorizontal: '30%'}}>
               <Text style={styles.heading2}>CRR</Text>
               <Text style={styles.number2}>
-               {Math.round(scoreBoard?.score?.currentRunRate *100)/100}
+                {Math.round(scoreBoard?.score?.currentRunRate * 100) / 100}
               </Text>
             </View>
 
             <View style={{width: '20%', marginLeft: '-30%'}}>
               <Text style={styles.heading2}>REQ</Text>
               <Text style={styles.number3}>
-                {scoreBoard?.score?.requiredRunRate}
+                {scoreBoard?.score?.requiredRunRate > 0
+                  ? scoreBoard?.score?.requiredRunRate
+                  : ''}
               </Text>
             </View>
           </View>
@@ -274,7 +285,7 @@ const LiveScreen = ({navigation, route}) => {
                   data={tableData}
                   // heightArr={[60, 60, 60, 60, 60, 60]}
                   // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-                  flexArr={[3, 1,1, 1.1, 1.1, 1.4]}
+                  flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
                   textStyle={styles.row_text}
                 />
               </TableWrapper>
@@ -316,7 +327,7 @@ const LiveScreen = ({navigation, route}) => {
                     styles.pship
                   }>{` (${scoreBoard?.score?.partnershipBalls} balls)`}</Text>
               </View>
-              <View style={{flexDirection: 'row',alignItems:"center"}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={styles.pship}>FoW:</Text>
                 <Text style={styles.runs}>
                   {'   '}
@@ -346,10 +357,11 @@ const LiveScreen = ({navigation, route}) => {
                 {commentary?.map(liveScore => {
                   //let currentOver = liveScore?.over;
                   if (previousOver !== liveScore?.over) {
+                    // console.warn('---', previousOver);
+                    // console.warn('+++', liveScore?.over);
                     previousOver = liveScore?.over;
                     return (
                       <>
-                        <Text style={styles.line}>|</Text>
                         <View key={liveScore?._id}>
                           {liveScore?.status?.toString().toLowerCase() ===
                           'w' ? (
@@ -368,6 +380,18 @@ const LiveScreen = ({navigation, route}) => {
                           ) : liveScore?.status?.toString().toLowerCase() ==
                             '0' ? (
                             <DotBall />
+                          ) : liveScore?.status?.toString().toLowerCase() ==
+                              'wd' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'nb' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'bye' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'leg bye' ? (
+                            <Circle
+                              style={{backgroundColor: '#e67e22', margin: 4}}
+                              text={liveScore?.status}
+                            />
                           ) : (
                             <Circle
                               style={{backgroundColor: '#4A90E2', margin: 4}}
@@ -380,41 +404,48 @@ const LiveScreen = ({navigation, route}) => {
                   } else {
                     previousOver = liveScore?.over;
                     return (
-                      <View key={liveScore?._id}>
-                        {liveScore?.status?.toString().toLowerCase() === 'w' ? (
-                          <Circle
-                            style={{backgroundColor: '#E05140', margin: 4}}
-                            text="W"
-                          />
-                        ) : liveScore?.status?.toString().toLowerCase() ===
-                            '4' ||
-                          liveScore?.status?.toString().toLowerCase() ===
-                            '6' ? (
-                          <Circle
-                            style={{backgroundColor: '#5FB100', margin: 4}}
-                            text={liveScore?.status}
-                          />
-                        ) : liveScore?.status?.toString().toLowerCase() ==
-                          '0' ? (
-                          <DotBall />
-                        ) : liveScore?.status?.toString().toLowerCase() ==
-                            'Wd' ||
-                          liveScore?.status?.toString().toLowerCase() == 'Nb' ||
-                          liveScore?.status?.toString().toLowerCase() ==
-                            'Bye' ||
-                          liveScore?.status?.toString().toLowerCase() ==
-                            'Leg Bye' ? (
-                          <Circle
-                            style={{backgroundColor: '#e67e22', margin: 4}}
-                            text={liveScore?.status}
-                          />
-                        ) : (
-                          <Circle
-                            style={{backgroundColor: '#4A90E2', margin: 4}}
-                            text={liveScore?.status}
-                          />
+                      <>
+                        {liveScore?.balls == 0 && (
+                          <Text style={styles.line}>|</Text>
                         )}
-                      </View>
+                        <View key={liveScore?._id}>
+                          {liveScore?.status?.toString().toLowerCase() ===
+                          'w' ? (
+                            <Circle
+                              style={{backgroundColor: '#E05140', margin: 4}}
+                              text="W"
+                            />
+                          ) : liveScore?.status?.toString().toLowerCase() ===
+                              '4' ||
+                            liveScore?.status?.toString().toLowerCase() ===
+                              '6' ? (
+                            <Circle
+                              style={{backgroundColor: '#5FB100', margin: 4}}
+                              text={liveScore?.status}
+                            />
+                          ) : liveScore?.status?.toString().toLowerCase() ==
+                            '0' ? (
+                            <DotBall />
+                          ) : liveScore?.status?.toString().toLowerCase() ==
+                              'wd' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'nb' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'bye' ||
+                            liveScore?.status?.toString().toLowerCase() ==
+                              'leg bye' ? (
+                            <Circle
+                              style={{backgroundColor: '#e67e22', margin: 4}}
+                              text={liveScore?.status}
+                            />
+                          ) : (
+                            <Circle
+                              style={{backgroundColor: '#4A90E2', margin: 4}}
+                              text={liveScore?.status}
+                            />
+                          )}
+                        </View>
+                      </>
                     );
                   }
                 })}
@@ -621,8 +652,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 16,
-   justifyContent:"center",
-   alignSelf:"center"
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   heading3: {
     height: 16,
@@ -657,12 +688,12 @@ const styles = StyleSheet.create({
     // lineHeight: 21,
     textAlign: 'center',
     paddingTop: 7,
-    marginHorizontal:10,
+    marginHorizontal: 10,
   },
   number3: {
     height: 30,
     // width: 50,
-  // borderWidth:1,
+    // borderWidth:1,
     color: '#000000',
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
@@ -671,7 +702,7 @@ const styles = StyleSheet.create({
     // lineHeight: 21,
     textAlign: 'center',
     paddingTop: 7,
-    marginHorizontal:10,
+    marginHorizontal: 10,
     // marginRight:30,
     // paddingHorizontal:-20
   },
