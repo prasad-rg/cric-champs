@@ -5,6 +5,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import React from 'react';
 import {setIsEdit} from '../redux/manageTournamentSlice';
@@ -17,7 +18,7 @@ import {
 import {StackActions} from '@react-navigation/native';
 import {setEditEntity} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
-import {SafeAreaView} from 'react-native-safe-area-context';
+// import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AppBar = ({
   navigation,
