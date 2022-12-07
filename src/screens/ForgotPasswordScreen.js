@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import React, {useState} from 'react';
 import AppBar from '../components/AppBar';
 import {TextField} from 'rn-material-ui-textfield';
@@ -16,11 +16,13 @@ const forgotPasswordValidationSchema = yup.object().shape({
     .email('Please enter valid email')
     .required('Email Address is Required'),
 });
-
 const ForgotPasswordScreen = ({navigation}) => {
+  const [isLoading,setIsLoading]=useState(false)
   const handleforgot = async values => {
+    setIsLoading(true)
      const response = await forgotPassword(values.email)
      console.log("forgot response",response)
+     setIsLoading(false)
      if(response.status){
       Toast.show("OTP sent successfully")
       navigation.navigate('VerifyOtp',{email:values.email})
@@ -81,14 +83,28 @@ const ForgotPasswordScreen = ({navigation}) => {
                 )}
               </View>
             </KeyboardAwareScrollView>
-            <GradientButton
-              start={{x: 0, y: 0}}
-              end={{x: 2, y: 0}}
-              colors={['#FFBA8C', '#FE5C6A']}
-              text="SUBMIT"
-              onPress={handleSubmit}
-              style={styles.buttonStyle}
-            />
+            {isLoading?( <View style={{marginBottom: 20}}>
+          <ActivityIndicator size="large" color="#FFBA8C" />
+        </View>):(
+              <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+              <GradientButton
+                start={{x: 0, y: 0}}
+                end={{x: 2, y: 0}}
+                colors={['#FFBA8C', '#FE5C6A']}
+                text="SUBMIT"
+                onPress={handleSubmit}
+                style={{height: 50, width: '100%', marginTop: 0}}
+                textstyle={{
+                  height: 16,
+                  fontWeight: '500',
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  lineHeight: 19,
+                }}
+              />
+              </View>
+            )}
+            
           </>
         )}
       </Formik>
@@ -106,6 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 56,
+    
   },
   image: {
     width: 147,

@@ -265,7 +265,7 @@ const LiveScreen = ({navigation, route}) => {
               <Row
                 data={tableHead}
                 // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-                flexArr={[3, 1, 1, 1.1, 1.1, 1.4]}
+                flexArr={[3, 1, 1, 1.1, 1.1, 1.6]}
                 style={styles.table_header}
                 textStyle={styles.header_text}
               />
@@ -274,7 +274,7 @@ const LiveScreen = ({navigation, route}) => {
                   data={tableData}
                   // heightArr={[60, 60, 60, 60, 60, 60]}
                   // flexArr={[3, 0.8, 0.8, 0.9, 0.9, 1.4]}
-                  flexArr={[3, 1,1, 1.1, 1.1, 1.4]}
+                  flexArr={[3, 1,1, 1.1, 1.1, 1.6]}
                   textStyle={styles.row_text}
                 />
               </TableWrapper>
@@ -773,9 +773,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   recent_view: {
-    // borderWidth: 1,
-    height: 54,
-    // width: '100%',
+    height: 60,
     alignContent: 'center',
     justifyContent: 'center',
   },

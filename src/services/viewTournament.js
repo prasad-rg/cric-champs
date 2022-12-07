@@ -1,5 +1,6 @@
 import {BASE_URL} from '../api/baseURL';
 import axios from 'axios';
+import { refreshTokenIfExpired } from './auth';
 
 export const getTournamentByCode = async code => {
   try {
@@ -204,55 +205,62 @@ export const getLiveScoresByMatchIdAndBothTeamId = async (
   }
 };
 
-export const getInfoByMatchId = async (
-  matchId
-) =>{
+export const getInfoByMatchId = async matchId => {
   try {
-    const response=await axios.get(
-      `${BASE_URL}/api/match/get-particular-match?matchId=${matchId}`
+    const response = await axios.get(
+      `${BASE_URL}/api/match/get-particular-match?matchId=${matchId}`,
     );
-    const data =response.data;
-    console.info("Info response",data);
+    const data = response.data;
+    console.info('Info response', data);
     return data;
-  } catch (error){
+  } catch (error) {
     return error.response.data;
   }
-}
-export const getGraphValues = async (
-  matchId,team1Id,team2Id
-) =>{
+};
+export const getGraphValues = async (matchId, team1Id, team2Id) => {
   try {
-    const response=await axios.get(
-      `${BASE_URL}/api/match/graph?matchId=${matchId}&team1Id=${team1Id}&team2Id=${team2Id}`
+    const response = await axios.get(
+      `${BASE_URL}/api/match/graph?matchId=${matchId}&team1Id=${team1Id}&team2Id=${team2Id}`,
     );
-    const data =response.data;
-    console.info("Info response",data);
+    const data = response.data;
+    console.info('Info response', data);
     return data;
-  } catch (error){
+  } catch (error) {
     return error.response.data;
   }
-}
-export const forgotPassword = async (
-  email
-) =>{
-  console.log("email",email)
+};
+export const forgotPassword = async email => {
+  console.log('email', email);
   try {
-    const response=await axios.get(
-      `${BASE_URL}/api/otp?email=${email}`
-    );
-  
+    const response = await axios.get(`${BASE_URL}/api/otp?email=${email}`);
+
     return response.data;
-  } catch (error){
+  } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const verifyOTP = async data => {
-  console.log("data from",data)
+  console.log('data from', data);
+  try {
+    const response = await axios.post(`${BASE_URL}/api/otp`, data);
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const resetPassword = async (data, token) => {
+  console.log("token",token)
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/otp`,
+        `${BASE_URL}/api/otp/reset-password`,
         data,
+        {
+          headers: {
+            'OTP-VERIFICATION-TOKEN': token,
+          },
+        },
       );
       return response;
     } catch (error) {
