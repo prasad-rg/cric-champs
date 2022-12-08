@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, Platform} from 'react-native';
+import {View, Text, StyleSheet, Image, Platform, ActivityIndicator} from 'react-native';
 import React, {useState} from 'react';
 import AppBar from '../components/AppBar';
 import {TextField} from 'rn-material-ui-textfield';
@@ -36,6 +36,7 @@ const SetPasswordScreen = ({navigation, route}) => {
   const [icon, setIcon] = useState('eye');
   const [secureTextEntry2, setSecureTextEntry2] = useState(true);
   const [icon2, setIcon2] = useState('eye');
+  const [isLoad,setIsLoad]=useState(false)
   console.info(isLoading, isLoggedIn, error);
   return (
     <View style={styles.container}>
@@ -47,12 +48,10 @@ const SetPasswordScreen = ({navigation, route}) => {
             ...route.params.regDetails,
             password: values.password,
           });
-          // console.log({
-          //   ...route.params.regDetails,
-          //   password: values.password,
-          // });
-          dispatch(userRegister(formData));
-          // registerUser(formData);
+          
+          setIsLoad(true);
+          dispatch(userRegister(formData)).then(()=>setIsLoad(false)).catch((e)=>setIsLoad(false))
+          
         }}>
         {({
           handleChange,
@@ -134,7 +133,11 @@ const SetPasswordScreen = ({navigation, route}) => {
                 )}
               </View>
             </KeyboardAwareScrollView>
-            <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+            {isLoad ?(
+               <View style={{marginBottom: 20}}>
+               <ActivityIndicator size="large" color="#FFBA8C" />
+             </View>
+            ):( <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
             <GradientButton
               start={{x: 0, y: 0}}
               end={{x: 2, y: 0}}
@@ -144,7 +147,8 @@ const SetPasswordScreen = ({navigation, route}) => {
               onPress={handleSubmit}
               style={styles.buttonStyle}
             />
-            </View>
+            </View>)}
+           
           </>
         )}
       </Formik>

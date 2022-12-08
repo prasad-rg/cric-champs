@@ -5,6 +5,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  Platform,
   SafeAreaView,
 } from 'react-native';
 import React from 'react';

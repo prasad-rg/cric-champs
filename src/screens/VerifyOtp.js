@@ -7,13 +7,14 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
 import GradientButton from '../components/GradientButton';
 import {forgotPassword, verifyOTP} from '../services/viewTournament';
 import Toast from 'react-native-simple-toast';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import AppBar from '../components/AppBar';
 
 const VerifyOtp = ({navigation, route}) => {
   const [text, setText] = useState('');
@@ -57,26 +58,7 @@ const VerifyOtp = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.backgroundBeyondSafeArea}>
-        <SafeAreaView>
-          <View style={styles.profileDetailsContainer}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Image source={require('../../assets/images/backicon.png')} />
-                </TouchableOpacity>
-                <Text style={styles.stadiumName}>Verify OTP</Text>
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
+        <AppBar navigation={navigation} title="Verify OTP" />
       </View>
       <ScrollView>
         <Text style={styles.heroText}>Verification Code</Text>
@@ -141,28 +123,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  profileDetailsContainer: {
-    height: 45,
-    marginTop: 10,
-    paddingRight: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
   backgroundBeyondSafeArea: {
-    backgroundColor: 'rgba(0, 102, 226, 1)',
+    // backgroundColor: 'rgba(0, 102, 226, 1)',
+    backgroundColor: '#0E85FF',
     paddingRight: 20,
     paddingLeft: 20,
-  },
-  stadiumName: {
-    height: 24,
-    width: 188,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto-Medium',
-    fontSize: 20,
-    fontWeight: '500',
-    letterSpacing: 0,
-    lineHeight: 24,
-    marginHorizontal: '10%',
   },
   heroText: {
     color: '#393939',
@@ -180,26 +145,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textinputView: {
-    // height: 35,
     width: Platform.OS === 'ios' ? '100%' : 'auto',
     marginTop: 70,
     fontSize: 16,
     alignItems: 'center',
-    // marginLeft: 20,
-    // borderWidth:1
   },
   textInput: {
-    // height: 35,
-    // width: '110%',
     width: Platform.OS === 'ios' ? '90%' : '110%',
     color: '#393939',
     fontSize: 20,
     letterSpacing: 45,
     fontFamily: 'Roboto-Medium',
-    // alignConten: 'center',
-    // justifyContent:"center",
-    // alignSelf:"center"
-    // marginLeft: 7,
     marginLeft: Platform.OS === 'ios' ? 13.512 : 7,
   },
   textInputBorderin1: {
