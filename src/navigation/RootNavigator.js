@@ -128,91 +128,140 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ManageScreen"
           component={ManageScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="TeamsList"
           component={TeamsList}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="OversScreen"
           component={OversScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="Ground"
           component={Ground}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="UmpiresList"
           component={UmpiresList}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
 
         <Stack.Screen
           name="DateScreen"
           component={DateScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
 
         <Stack.Screen
           name="TimeScreen"
           component={TimeScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="AddTeam"
           component={AddTeam}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="AddPlayer"
           component={AddPlayer}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="AddPlayersInEditScreen"
           component={AddPlayersInEditScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="EditPlayers"
           component={EditPlayers}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="EditTeam"
           component={EditTeam}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="AddGround"
           component={AddGround}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="MatchDetails"
           component={MatchDetails}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="ManageTournament"
           component={ManageTournament}
           options={{
             headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
         />
         <Stack.Screen
           name="AddUmpire"
           component={AddUmpire}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
         <Stack.Screen
           name="UpdateLiveScore"
           component={UpdateLiveScore}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
