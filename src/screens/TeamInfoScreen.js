@@ -37,8 +37,8 @@ const TeamInfoScreen = ({navigation, route}) => {
     navigation.dispatch(
       StackActions.push('EditTeam', {
         title: 'Edit Team',
-        teamLogo: route?.params.teamLogo,
-        teamName: route?.params.teamName,
+        teamLogo: route?.params?.teamLogo,
+        teamName: route?.params?.teamName,
       }),
     );
   };

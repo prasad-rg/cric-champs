@@ -17,6 +17,7 @@ import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
 
 import Toast from 'react-native-simple-toast';
+import { setIsEdit } from '../redux/manageTournamentSlice';
 
 const EditPlayers = ({navigation, route}) => {
   const [designation, setDesignation] = useState('');
@@ -138,7 +139,7 @@ const EditPlayers = ({navigation, route}) => {
     // console.log('Response after Player Update', response.status);
     if (response.status) {
       navigation.pop(2);
-      dispatch(setIsEdit(false));
+      // dispatch(setIsEdit(false));
     } else {
       Toast.show('Something went wrong, Please try again 😭');
     }

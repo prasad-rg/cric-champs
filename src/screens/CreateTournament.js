@@ -23,7 +23,8 @@ import {useDispatch} from 'react-redux';
 import {setIsEdit, setTournamentData} from '../redux/manageTournamentSlice';
 import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import Toast from 'react-native-simple-toast';
-import { storeRecentActivities } from '../redux/recentActivitiesSlice';
+import {storeRecentActivities} from '../redux/recentActivitiesSlice';
+import { StackActions } from '@react-navigation/native';
 
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
@@ -68,9 +69,14 @@ const CreateTournament = ({navigation}) => {
         dispatch(storeTournamentDetails(response?.data.result));
         dispatch(storeRecentActivities(response?.data.result._id));
         dispatch(setIsEdit(false));
-        navigation.navigate('CreateTournamentSuccess');
+        // navigation.navigate('CreateTournamentSuccess');
+        navigation.dispatch(
+          StackActions.push('CreateTournamentSuccess'),
+        );
       } else {
-        Toast.show('Something went wrong, Try again 😭');
+        Toast.show(
+          'Something went wrong, Make sure to enter all the fields!!!',
+        );
       }
     } else {
       Toast.show('Tournament profile is required');

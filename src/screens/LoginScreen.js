@@ -34,14 +34,18 @@ const loginValidationSchema = yup.object().shape({
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const {isLoading, isLoggedIn, error} = useSelector(state => state.auth);
-  console.log(isLoading, isLoggedIn, error);
+  const {isLoggedIn, error} = useSelector(state => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(isLoggedIn, error);
   // const [error, setError] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [icon, setIcon] = useState('eye');
   const handelLogin = async values => {
-    dispatch(userLogin(values));
+    setIsLoading(true);
+    dispatch(userLogin(values))
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
     // setError('');
     // // setIsLoading(true);
     // const response = await loginUser(values);

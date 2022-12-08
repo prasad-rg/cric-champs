@@ -29,9 +29,12 @@ export const manageTournamentSlice = createSlice({
     },
     setIsEdit: (state, action) => {
       state.isEdit = action.payload;
+      console.log("SetIsEdit......",state.isEdit)
     },
     setEditEntity : (state, action) => {
       state.editEntity = action.payload;
+      console.log("setEditEntity......",state.editEntity)
+
     },
     setIsView: (state, action) => {
       state.isView = action.payload;

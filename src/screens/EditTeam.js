@@ -31,7 +31,7 @@ import {getPlayersByTeamIdAndTournamentId} from '../services/viewTournament';
 import {setIsEdit} from '../redux/manageTournamentSlice';
 import {updateTeam} from '../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
-import {useIsFocused} from '@react-navigation/native';
+import {CommonActions, StackActions, useIsFocused,NavigationActions} from '@react-navigation/native';
 import {useLayoutEffect} from 'react';
 
 const EditTeam = ({navigation, route}) => {
@@ -110,10 +110,52 @@ const EditTeam = ({navigation, route}) => {
 
     const response = await updateTeam(formData);
     if (response.status) {
-      navigation.pop(2);
       dispatch(setIsEdit(false));
+      navigation.pop(2)
+      // navigation.mycallback(
+      //   {
+      //         title: 'Edit Team',
+      //         teamLogo: route?.params?.teamLogo,
+      //         teamName: route?.params?.teamName,
+      //       }
+      // );
+      // navigation.navigate('TeamsList')
+
+      // navigation.pop(1)
+
+      // navigation.dispatch(
+      //   StackActions.push('EditTeam', {
+      //     title: 'Edit Team',
+      //     teamLogo: route?.params.teamLogo,
+      //     teamName: route?.params.teamName,
+      //   }),
+      // );
+      // const { routes } = navigation.getState();
+
+      // const filteredRoutes = routes.filter(
+      //   route => route.name !== 'Screen3' && route.name !== 'Screen2',
+      // );
+  
+      // navigation.reset({
+      //   index: filteredRoutes.length - 1,
+      //   routes: filteredRoutes,
+      // // navigation.reset("TeamsList")
+      // navigation.dispatch(
+      //   StackActions.reset({
+      //     index: 3,
+      //     actions: [
+      //       // NavigationActions.navigate({ routeName: 'HomeScreen' }),
+      //       // NavigationActions.navigate({ routeName: 'CreateTournament' }),
+      //       // NavigationActions.navigate({ routeName: 'CreateTournamentSuccess' }),
+      //       NavigationActions.navigate({ routeName: 'TeamsList' }),
+      //       NavigationActions.navigate({ routeName: 'TeamInfoScreen' }),
+      //       NavigationActions.navigate({ routeName: 'EditTeam' }),
+      //     ],
+      //   }),
+      // );
+     
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show(response.message);
     }
   };
 

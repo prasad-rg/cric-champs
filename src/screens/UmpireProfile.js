@@ -5,6 +5,7 @@ import {useIsFocused} from '@react-navigation/native';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {useSelector} from 'react-redux';
 import {getUmpireDetailsByUmpireIdAndTournamentId} from '../services/viewTournament';
+import GradientButton from '../components/GradientButton';
 
 const UmpireProfile = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -87,6 +88,25 @@ const UmpireProfile = ({navigation, route}) => {
           ))}
         </View>
       </ScrollView>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+        {route.params?.isManage ? (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="CALL UMPIRE"
+            style={{height: 48, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={() => navigation.goBack()}
+          />
+        ) : null}
+      </View>
     </View>
   );
 };

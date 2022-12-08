@@ -77,7 +77,7 @@ const AddUmpire = ({navigation, route}) => {
       <Formik
         validationSchema={addPlayerValidationSchema}
         initialValues={{
-          name: editEntity ? route.params.umpireName : '',
+          name: editEntity ? route.params?.umpireName : '',
           city: '',
           phoneNo: '',
         }}

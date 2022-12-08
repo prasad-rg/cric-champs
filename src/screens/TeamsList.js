@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
-import {useIsFocused} from '@react-navigation/native';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 import {setIsEdit, setTeamId} from '../redux/manageTournamentSlice';
 import TeamListName from '../components/TeamListName';
 import GradientButton from '../components/GradientButton';
@@ -47,21 +47,30 @@ const TeamsList = ({navigation, route}) => {
 
   const handleTeamList = team => {
     dispatch(setTeamId(team._id));
-    navigation.navigate('TeamInfoScreen', {
-      teamId: team?._id,
-      teamName: team?.name,
-      teamLogo: team?.logo.url,
-    });
+
+    navigation.dispatch(
+      StackActions.push('TeamInfoScreen', {
+        teamId: team?._id,
+        teamName: team?.name,
+        teamLogo: team?.logo.url,
+      }),
+    );
   };
   const handleBack = () => {
     navigation.pop();
   };
   const handlePress = () => {
-    navigation.navigate('OversScreen');
+    // navigation.navigate('OversScreen');
+    navigation.dispatch(
+      StackActions.push('OversScreen'),
+    );
   };
   const handleTeam = () => {
     dispatch(setIsEdit(false));
-    navigation.navigate('AddTeam');
+    // navigation.navigate('AddTeam');
+    navigation.dispatch(
+      StackActions.push('AddTeam'),
+    );
   };
   return (
     <View style={styles.container}>

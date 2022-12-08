@@ -18,7 +18,6 @@ import {
 import {StackActions} from '@react-navigation/native';
 import {setEditEntity} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
-// import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AppBar = ({
   navigation,
@@ -35,11 +34,10 @@ const AppBar = ({
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-
   const teamId = useSelector(state => state.tournamentdata.teamId);
   const isEdit = useSelector(state => state.tournamentdata.isEdit);
   const editEntity = useSelector(state => state.tournamentdata.editEntity);
-
+  console.log('Edit Entity', editEntity);
   const handleEditPlayer = () => {
     navigation.dispatch(
       StackActions.push('EditPlayers', {
@@ -137,8 +135,11 @@ const AppBar = ({
             {editEntity && type == 'addplayer' ? (
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(setEditEntity(false));
+                  // dispatch(setEditEntity(false));
+                  // dispatch(setIsEdit(false));
                   dispatch(setIsEdit(false));
+                  // dispatch(setEditEntity(true));
+
                   navigation.goBack();
                 }}>
                 <Image
@@ -161,7 +162,7 @@ const AppBar = ({
               <TouchableOpacity
                 onPress={() => {
                   // dispatch(setIsEdit(false));
-                  // dispatch(setEditEntity(false));
+                  dispatch(setEditEntity(false));
                   navigation.goBack();
                 }}>
                 <Image

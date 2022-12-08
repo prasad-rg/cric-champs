@@ -12,6 +12,7 @@ import React, {useState} from 'react';
 import OutlinedButton from '../components/OutlinedButton';
 import GradientButton from '../components/GradientButton';
 import {useSelector} from 'react-redux';
+import { StackActions } from '@react-navigation/native';
 
 const CreateTournamentSuccess = ({navigation}) => {
   const tournamentdata = useSelector(
@@ -22,7 +23,10 @@ const CreateTournamentSuccess = ({navigation}) => {
     navigation.navigate('CreateTournament');
   };
   const handleProceed = () => {
-    navigation.navigate('TeamsList');
+    // navigation.navigate('TeamsList');
+    navigation.dispatch(
+      StackActions.push('TeamsList'),
+    );
   };
   const onShare = async () => {
     try {

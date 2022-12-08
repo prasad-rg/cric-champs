@@ -142,6 +142,8 @@ const AddPlayer = ({navigation, route}) => {
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
     }else{
+      dispatch(setIsEdit(false));
+      dispatch(setEditEntity(false));
       Toast.show("Something went wrong, Please try again 😭")
     }
   };
@@ -192,6 +194,7 @@ const AddPlayer = ({navigation, route}) => {
                   title={editEntity ? 'Update Player' : 'Add Player'}
                   navigation={navigation}
                   getImageUri={getDetails}
+                  type='addplayer'
                 />
               )}
               <View style={styles.form}>

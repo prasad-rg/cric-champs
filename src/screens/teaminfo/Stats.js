@@ -22,12 +22,12 @@ const Stats = ({navigation, route}) => {
     {
       id: currentInfo?.captainId,
       title: 'Captain',
-      value: `${currentInfo?.captainName} (c)`,
+      value: currentInfo?.captainName ?  `${currentInfo?.captainName} (c)` : 'NA',
     },
     {
       id: currentInfo?.viceCaptainId,
       title: 'Vice Captain',
-      value: `${currentInfo?.viceCaptainName} (vc)`,
+      value: currentInfo?.viceCaptainName ? `${currentInfo?.viceCaptainName} (vc)` : 'NA',
     },
     {
       id: 2,

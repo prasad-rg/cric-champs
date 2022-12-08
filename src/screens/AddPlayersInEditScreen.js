@@ -109,45 +109,6 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
     name: yup.string().required(),
   });
 
-  const handleEdit = async values => {
-    // const response = await updatePlayer();
-    if (profilePictureUri !== '') {
-      var formData = createFormData({
-        ...values,
-        playerId: route.params.playerId,
-        teamId: teamId,
-        tournamentId: tournamentId,
-        designation: designation,
-        expertise: expertise,
-        batting: batting,
-        bowling: bowling,
-        bowlingtype: bowlingtype,
-        image: profilePictureUri,
-      });
-    } else {
-      var formData = createFormData({
-        ...values,
-        playerId: route.params.playerId,
-        teamId: teamId,
-        tournamentId: tournamentId,
-        designation: designation,
-        expertise: expertise,
-        batting: batting,
-        bowling: bowling,
-        bowlingtype: bowlingtype,
-      });
-    }
-    const response = await updatePlayer(formData);
-    // console.log('Response after Player Update', response.status);
-    if (response.status) {
-      navigation.pop(2);
-      dispatch(setIsEdit(false));
-      dispatch(setEditEntity(false));
-    } else {
-      Toast.show('Something went wrong, Please try again 😭');
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Formik
@@ -187,7 +148,7 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
             if (createparticipantresponse.status) {
               navigation.goBack();
             } else {
-              Toast.show('Something went wrong. Please try again 😭');
+              Toast.show(createparticipantresponse?.message);
             }
           }else{
             Toast.show('Please add profile picture');
@@ -199,7 +160,7 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
               {editEntity && profilePictureUri === '' ? (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/dhoni.jpeg')}
-                  title={editEntity ? 'Update Player' : 'Add Player'}
+                  title= 'Add Player'
                   navigation={navigation}
                   getImageUri={getDetails}
                   type="addplayerinedit"
@@ -208,7 +169,7 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
               ) : (
                 <AddProfileDetails
                   backroundImageUri={require('../../assets/images/dhoni.jpeg')}
-                  title={editEntity ? 'Update Player' : 'Add Player'}
+                  title='Add Player'
                   navigation={navigation}
                   getImageUri={getDetails}
                   type="addplayerinedit"

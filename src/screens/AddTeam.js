@@ -32,6 +32,7 @@ import {getPlayersByTeamIdAndTournamentId} from '../services/viewTournament';
 import {setIsEdit} from '../redux/manageTournamentSlice';
 import {updateTeam} from '../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
+import { StackActions } from '@react-navigation/native';
 
 const AddTeam = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -53,10 +54,13 @@ const AddTeam = ({navigation, route}) => {
   );
   const teamId = useSelector(state => state.tournamentdata.teamId);
 
-
   const handlePlayer = () => {
     dispatch(setIsEdit(false));
-    navigation.navigate('AddPlayer');
+    // navigation.navigate('AddPlayer');
+    navigation.dispatch(
+      StackActions.push('AddPlayer')
+    )
+    
   };
   const handleBack = () => {
     dispatch(setIsEdit(false));
@@ -68,17 +72,30 @@ const AddTeam = ({navigation, route}) => {
   });
 
   const handlePlayerList = (value, inputValues) => {
-    navigation.navigate('PlayerProfile', {
-      image: value.image.path,
-      teamName: inputValues.name,
-      name: value.name,
-      city: inputValues.city,
-      batting: value.batting,
-      bowling: value.bowling,
-      bowlingtype: value.bowlingtype,
-      designation: value.designation,
-      expertise: value.expertise,
-    });
+    // navigation.navigate('PlayerProfile', {
+    //   image: value.image.path,
+    //   teamName: inputValues.name,
+    //   name: value.name,
+    //   city: inputValues.city,
+    //   batting: value.batting,
+    //   bowling: value.bowling,
+    //   bowlingtype: value.bowlingtype,
+    //   designation: value.designation,
+    //   expertise: value.expertise,
+    // });
+    navigation.dispatch(
+      StackActions.push('PlayerProfile', {
+        image: value.image.path,
+        teamName: inputValues.name,
+        name: value.name,
+        city: inputValues.city,
+        batting: value.batting,
+        bowling: value.bowling,
+        bowlingtype: value.bowlingtype,
+        designation: value.designation,
+        expertise: value.expertise,
+      })
+    )
   };
 
   const loadPlayers = async () => {
@@ -97,11 +114,18 @@ const AddTeam = ({navigation, route}) => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('PlayerProfile', {
-            teamId: route.params.teamId,
-            tournamentId: tournamentId,
-            playerId: item._id,
-          })
+          // navigation.navigate('PlayerProfile', {
+          //   teamId: route.params.teamId,
+          //   tournamentId: tournamentId,
+          //   playerId: item._id,
+          // })
+          navigation.dispatch(
+            StackActions.push('PlayerProfile', {
+              teamId: route?.params?.teamId,
+              tournamentId: tournamentId,
+              playerId: item?._id,
+            })
+          )
         }>
         <TeamListName source={item.profilePic.url} text={item.name} />
       </TouchableOpacity>
@@ -155,7 +179,7 @@ const AddTeam = ({navigation, route}) => {
             });
             setIsLoading(true);
             const response = await createTeam(formData);
-
+            // console.log("create team response",response)
             if (response.status) {
               dispatch(setTeamId(response.data._id));
 
@@ -187,17 +211,16 @@ const AddTeam = ({navigation, route}) => {
                   return createparticipantresponse;
                 }),
               );
-
-              const status = result.map(stat => {
-                // console.log(stat);
-              });
-              if (status) {
-                setIsLoading(false);
-                navigation.goBack();
-                dispatch(deletePlayers());
-              } else {
-                Toast.show('Something went wrong. Please try again 😭');
-              }
+                // console.log("Result.............",result);
+              const status = result.map(stat => { });
+                if (status) {
+                  setIsLoading(false);
+                  navigation.goBack();
+                  dispatch(deletePlayers());
+                } else {
+                  Toast.show('Something went wrong. Please try again 😭');
+                }
+             
             } else {
               Toast.show('Something went wrong. Please try again 😭');
             }
@@ -317,11 +340,18 @@ const AddTeam = ({navigation, route}) => {
                 {isEdit ? (
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('PlayerProfile', {
-                        teamId: teamId,
-                        tournamentId: tournamentId,
-                        playerId: item._id,
-                      })
+                      // navigation.navigate('PlayerProfile', {
+                      //   teamId: teamId,
+                      //   tournamentId: tournamentId,
+                      //   playerId: item._id,
+                      // })
+                      navigation.dispatch(
+                        StackActions.push('PlayerProfile', {
+                          teamId: teamId,
+                          tournamentId: tournamentId,
+                          playerId: item?._id,
+                        })
+                      )
                     }>
                     {/* <TeamListName source={item.profilePic.url} text={item.name} /> */}
 

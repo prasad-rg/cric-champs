@@ -24,6 +24,7 @@ import {getRecentActivities} from '../services/recentActivities';
 import {useIsFocused} from '@react-navigation/native';
 import {setIsView} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import { setIsEdit } from '../redux/manageTournamentSlice';
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -40,6 +41,7 @@ const HomeScreen = ({navigation}) => {
   const focus = useIsFocused();
 
   useLayoutEffect(() => {
+    dispatch(setIsEdit(false))
     if (isLoggedIn) {
       const getRecentDetails = async tournamentIds => {
         const recents = await getRecentActivities({tournamentIds});
