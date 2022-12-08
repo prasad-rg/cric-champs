@@ -178,7 +178,13 @@ const LoginScreen = ({navigation}) => {
                 {errors.password && touched.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}
-                {error && <Text style={styles.errorText}>{error}</Text>}
+                {error && (
+                  <Text style={styles.errorText}>
+                    {error?.type
+                      ? 'Something Went Wrong'
+                      : JSON.stringify(error)}
+                  </Text>
+                )}
                 <TouchableOpacity
                   style={styles.forgotPasswordButton}
                   onPress={() => navigation.navigate('ForgotPasswordScreen')}>

@@ -19,7 +19,7 @@ import {setEditEntity} from '../redux/manageTournamentSlice';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {cleanSingle} from 'react-native-image-crop-picker';
-import { deleteParticularGround } from '../services/manageTournament2';
+import {deleteParticularGround} from '../services/manageTournament2';
 import Toast from 'react-native-simple-toast';
 
 const AddGround = ({navigation, route}) => {
@@ -47,7 +47,6 @@ const AddGround = ({navigation, route}) => {
         tournamentId: tournamentId,
         groundId: route.params.groundId,
       });
-  
     } else {
       var formData = createFormData({
         ...values,
@@ -55,13 +54,15 @@ const AddGround = ({navigation, route}) => {
         groundId: route.params.groundId,
       });
     }
-    
-    const response = await updateGround(formData)
-    if(response.status){
-      navigation.pop(2)
-      dispatch(setEditEntity(false))
-    }else{
-      Toast.show("Something went wrong, Please try again 😭")
+
+    const response = await updateGround(formData);
+    console.log('78909876', response)
+    if (response.status) {
+      navigation.pop(2);
+      dispatch(setEditEntity(false));
+    } else {
+      
+      Toast.show(response?.message);
     }
   };
 
@@ -92,8 +93,8 @@ const AddGround = ({navigation, route}) => {
             } else {
               Toast.show('Something went wrong, Try again 😭');
             }
-          }else{
-            console.log("Profile Picture not uploaded")
+          } else {
+            console.log('Profile Picture not uploaded');
           }
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
@@ -105,7 +106,7 @@ const AddGround = ({navigation, route}) => {
                   title={editEntity ? 'Edit Ground' : 'Add Ground'}
                   navigation={navigation}
                   getImageUri={getDetails}
-                  profilePictureUri={route.params.groundImage}
+                  profilePictureUri={route?.params?.groundImage[0]}
                 />
               ) : (
                 <AddProfileDetails
@@ -138,7 +139,7 @@ const AddGround = ({navigation, route}) => {
                     letterSpacing: 0.57,
                     lineHeight: 19,
                   }}
-                  defaultValue={editEntity ? route.params.groundName : ''}
+                  defaultValue={editEntity ? route?.params?.groundName : ''}
                 />
                 <TextField
                   label="City"
@@ -212,52 +213,51 @@ const AddGround = ({navigation, route}) => {
               <View style={{marginBottom: 20}}>
                 <ActivityIndicator size="large" color="#FFBA8C" />
               </View>
-            ):(
+            ) : (
               <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
-              {editEntity ? (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    values.name === ''
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="UPDATE GROUND"
-                  onPress={() => handleUpdate(values)}
-                  style={{height: 50, width: '100%', marginTop: 0}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                />
-              ) : (
-                <GradientButton
-                  start={{x: 0, y: 0}}
-                  end={{x: 2, y: 0}}
-                  colors={
-                    values.name === ''
-                      ? ['#999999', '#999999']
-                      : ['#FFBA8C', '#FE5C6A']
-                  }
-                  text="SAVE GROUND"
-                  onPress={handleSubmit}
-                  style={{height: 50, width: '100%', marginTop: 0}}
-                  textstyle={{
-                    height: 16,
-                    fontWeight: '500',
-                    fontSize: 14,
-                    letterSpacing: 0.5,
-                    lineHeight: 19,
-                  }}
-                />
-              )}
-            </View>
+                {editEntity ? (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={
+                      values.name === ''
+                        ? ['#999999', '#999999']
+                        : ['#FFBA8C', '#FE5C6A']
+                    }
+                    text="UPDATE GROUND"
+                    onPress={() => handleUpdate(values)}
+                    style={{height: 50, width: '100%', marginTop: 0}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                  />
+                ) : (
+                  <GradientButton
+                    start={{x: 0, y: 0}}
+                    end={{x: 2, y: 0}}
+                    colors={
+                      values.name === ''
+                        ? ['#999999', '#999999']
+                        : ['#FFBA8C', '#FE5C6A']
+                    }
+                    text="SAVE GROUND"
+                    onPress={handleSubmit}
+                    style={{height: 50, width: '100%', marginTop: 0}}
+                    textstyle={{
+                      height: 16,
+                      fontWeight: '500',
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                      lineHeight: 19,
+                    }}
+                  />
+                )}
+              </View>
             )}
-           
           </>
         )}
       </Formik>
