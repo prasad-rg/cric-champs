@@ -6,6 +6,8 @@ import AddProfileDetails from '../components/AddProfileDetails';
 import {useSelector} from 'react-redux';
 import {getUmpireDetailsByUmpireIdAndTournamentId} from '../services/viewTournament';
 import GradientButton from '../components/GradientButton';
+import call from 'react-native-phone-call'
+import SimpleToast from 'react-native-simple-toast';
 
 const UmpireProfile = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');
@@ -31,13 +33,13 @@ const UmpireProfile = ({navigation, route}) => {
   const loadUmpire = async () => {
     setIsLoading(true);
     const response = await getUmpireDetailsByUmpireIdAndTournamentId(
-      route.params.umpireId,
+      route.params?.umpireId,
       tournamentDetails._id,
     );
-
+    console.log(response)
     setIsLoading(false);
-    if (response.status) {
-      setCurrentUmpire(response.data);
+    if (response?.status) {
+      setCurrentUmpire(response?.data);
     }
   };
   const focus = useIsFocused();
@@ -103,7 +105,20 @@ const UmpireProfile = ({navigation, route}) => {
               letterSpacing: 0.5,
               lineHeight: 19,
             }}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              if(route?.params?.phoneNo){
+                const args = {
+                  number: route?.params?.phoneNo, // String value with the number to call
+                  prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+                  skipCanOpen: true // Skip the canOpenURL check
+                }
+                
+                call(args).catch(console.error)
+              }else{
+                SimpleToast.show('Umpire Number Not Found!!!')
+              }
+
+            }}
           />
         ) : null}
       </View>
