@@ -115,7 +115,7 @@ const UmpireProfile = ({navigation, route}) => {
                 
                 call(args).catch(console.error)
               }else{
-                SimpleToast.show('Umpire Number Not Found!!!')
+                SimpleToast.show('Umpire Number Not Found')
               }
 
             }}
