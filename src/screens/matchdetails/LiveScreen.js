@@ -187,7 +187,7 @@ const LiveScreen = ({navigation, route}) => {
     if (selectedItem === null) {
       loadScoreBoard(route.params.team1Id);
     } else {
-      loadScoreBoard(selectedItem.id);
+      loadScoreBoard(selectedItem?.id);
     }
   }, [selectedItem, isRefreshed]);
 
@@ -231,7 +231,7 @@ const LiveScreen = ({navigation, route}) => {
           <View style={styles.scoreView}>
             <View>
               {selectedItem ? (
-                <Text style={styles.heading1}>{selectedItem.name}</Text>
+                <Text style={styles.heading1}>{selectedItem?.name}</Text>
               ) : (
                 <Text style={styles.heading1}>
                   {route?.params?.teams?.team1Name}
@@ -273,7 +273,9 @@ const LiveScreen = ({navigation, route}) => {
               <Text
                 style={{
                   color: 'green',
-                }}>{`${selectedItem?.name} won the match`}</Text>
+                }}>
+                {selectedItem?.name && `${selectedItem?.name} won the match`}
+              </Text>
             ) : (
               ''
             )}
