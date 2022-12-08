@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Formik} from 'formik';
@@ -281,6 +282,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     lineHeight: 16,
     color: '#FE8579',
+    marginTop: Platform.OS === 'android' ? 2.5 : 0,
   },
   newUser: {
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {Image, StyleSheet, Platform, View, Button} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {useSelector} from 'react-redux';
@@ -9,29 +9,51 @@ import {setStart} from '../../redux/MatchSlice';
 import {setEnd} from '../../redux/MatchSlice';
 import GradientButton from '../../components/GradientButton';
 import moment from 'moment';
-const StartDate = ({navigation, route}) => {
+import {useIsFocused} from '@react-navigation/native';
+import SimpleToast from 'react-native-simple-toast';
+import {addDates} from '../../services/manageTournament2';
+import {getISOTime} from '../../utils/getISOTime';
 
+const StartDate = ({navigation, route}) => {
   const [convertedDateFromRoute, setConvertedStartDate] = useState(
     moment(route?.params?.startDate).format('YYYY-MM-DD'),
   );
+  const [convertedEndDateFromRoute, setConvertedEndDate] = useState(
+    moment(route?.params?.endDate).format('YYYY-MM-DD'),
+  );
+  const tournamentId = useSelector(
+    state => state.tournamentdata.tournamentdata.tournamentid,
+  );
+  let date1 = new Date(convertedDateFromRoute);
+  let date2 = new Date(convertedEndDateFromRoute);
+
+  let total = date2.getUTCDate() - date1.getUTCDate() + 1;
+
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
+
   const onDateChange = (date, type) => {
-    console.log('dateee', date);
+  
     setDisabled(true);
     if (type === 'END_DATE') {
-      setConvertedStartDate(date)
       dispatch(setEndDate(date));
     } else {
+      setConvertedStartDate(date);
       dispatch(setEndDate(date));
       dispatch(setStartDate(date));
     }
   };
 
   React.useEffect(() => {
+    if (route.params?.isManage) {
+      dispatch(setStart(true));
+      dispatch(setEnd(false));
+    }
+
     const unsubscribe = navigation.addListener('tabPress', e => {
       dispatch(setStart(true));
       dispatch(setEnd(false));
+      setConvertedStartDate(`${convertedDateFromRoute}:00`);
     });
     return unsubscribe;
   }, [navigation]);
@@ -39,6 +61,16 @@ const StartDate = ({navigation, route}) => {
   const handlePress = async () => {
     navigation.navigate('END DATE');
   };
+
+  // const focus = useIsFocused();
+
+  // useLayoutEffect(() => {
+  //   if (focus == true) {
+  //     route.params?.isManage
+  //       ? (dispatch(setConvertedStartDate(`${convertedDateFromRoute}:00`)), dispatch(setEndDate(false)),dispatch(setStart(true)))
+  //       : null;
+  //   }
+  // }, [focus]);
 
   return (
     <View style={styles.maincontainer}>
@@ -160,7 +192,22 @@ const StartDate = ({navigation, route}) => {
             letterSpacing: 0.5,
             lineHeight: 19,
           }}
-          onPress={() => navigation.goBack()}
+          onPress={async () => {
+            const dateData = {
+              startDateInISO: date1,
+              endDateInISO: date2,
+              tournamentId: tournamentId,
+              tournamentDays: total,
+            };
+
+            const response = await addDates(dateData);
+            console.log('I am response for date', response.data);
+            if (response.data.status) {
+              navigation.goBack();
+            } else {
+              SimpleToast.show('Something Went Wrong, Please try again 😭');
+            }
+          }}
         />
       ) : (
         <GradientButton

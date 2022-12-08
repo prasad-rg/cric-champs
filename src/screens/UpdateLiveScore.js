@@ -662,7 +662,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               </Text>
             ) : runsStatus?.runs == 4 || runsStatus?.runs == 6 ? (
               <Text style={[styles.comment, {color: '#5FB100'}]}>
-                {runsStatus?.runs == 4 ? 'Bounary' : 'Sixer'}
+                {runsStatus?.runs == 4 ? 'Boundary' : 'Sixer'}
               </Text>
             ) : (
               <Text style={[styles.comment, {color: '#4A90E2'}]}>
@@ -693,7 +693,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               </Text>
             )}
           </View>
-          <View style={{padding: 15}}>
+          <View style={{padding: 20}}>
             <Text
               style={
                 styles.overText
@@ -1057,7 +1057,7 @@ const styles = StyleSheet.create({
   },
   overText: {
     height: 14,
-    width: 51,
+    // width: 51,
     color: 'rgba(0,0,0,0.54)',
     fontFamily: 'Roboto-Regular',
     fontSize: 12,
@@ -1067,7 +1067,7 @@ const styles = StyleSheet.create({
   },
   overNumber: {
     height: 16,
-    width: 30,
+    // width: 30,
     color: 'rgba(0,0,0,0.54)',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
