@@ -47,7 +47,7 @@ const OversScreen = ({navigation, route}) => {
       setIsLoading(false);
       console.log('hiiiiiiiiiiiiiii', response);
       if (response.status) {
-        navigation.navigate('Ground');
+        route.params?.isManage ? navigation.goBack() : navigation.navigate('Ground') 
       } else {
         Toast.show('Something went wrong, Please try again 😭');
       }
@@ -57,7 +57,6 @@ const OversScreen = ({navigation, route}) => {
   };
   const getData = data => {
     setOvers(data);
-    // console.log(data)
   };
   return (
     <View style={styles.container}>
@@ -120,7 +119,7 @@ const OversScreen = ({navigation, route}) => {
                 letterSpacing: 0.5,
                 lineHeight: 19,
               }}
-              onPress={() => navigation.goBack()}
+              onPress={handlePress}
             />
           ) : (
             <GradientButton

@@ -268,7 +268,7 @@ const LiveScreen = ({navigation, route}) => {
 
           <Text style={styles.runsText}>
             {scoreBoard?.score?.runsRequiredToWin > 0 ? (
-              `${selectedItem.name} need ${scoreBoard?.score?.runsRequiredToWin} runs to win`
+              `${selectedItem?.name} need ${scoreBoard?.score?.runsRequiredToWin} runs to win`
             ) : scoreBoard?.score?.runsRequiredToWin == 0 ? (
               <Text
                 style={{

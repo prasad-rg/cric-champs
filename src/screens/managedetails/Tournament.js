@@ -82,7 +82,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
   }, [focus]);
 
   const handlePress = async () => {
-    const response = await generateFixture(tournamentId);
+    const response = await generateFixture(tournamentId,tournamentDetails.tournamentType);
     console.log('responseeeee', response.data);
     if (response.data.statusCode !== 200) {
       setModal(false);
@@ -150,6 +150,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               navigation.dispatch(
                 StackActions.push('DateScreen', {
                   startDate: currentOverview?.startDateEnglish,
+                  endDate: currentOverview?.endDateEnglish,
                   isManage: true,
                 }),
               )
@@ -180,6 +181,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               navigation.dispatch(
                 StackActions.push('TimeScreen', {
                   startTime: currentOverview?.startTimeNormalFormat,
+                  endTime: currentOverview?.endTimeNormalFormat,
                   isManage: true,
                 }),
               )
@@ -195,6 +197,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 StackActions.push('TimeScreen', {
                   screen: 'END OF PLAY',
                   params: {
+                    startTime: currentOverview?.startTimeNormalFormat,
                     endTime: currentOverview?.endTimeNormalFormat,
                     isManage: true,
                   },

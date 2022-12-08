@@ -30,11 +30,17 @@ const EndTime = ({navigation, route}) => {
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
-  const [endTimeFromRoute, setEndTimeFromRoute] = useState(
-    route.params?.params?.endTime,
+  const [startTimeFromRoute, setStartTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.params?.startTime),
   );
- 
-  const convertedTime = checkForAmorPm(endTimeFromRoute);
+  const [endTimeFromRoute, setEndTimeFromRoute] = useState(() =>
+    checkForAmorPm(route.params?.params?.endTime),
+  );
+
+  console.log(
+    `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
+    `${endTimeFromRoute}:00`,
+  );
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -56,20 +62,24 @@ const EndTime = ({navigation, route}) => {
     },
     [setVisible],
   );
-  // const focus = useIsFocused();
+  const focus = useIsFocused();
 
-  // useLayoutEffect(() => {
-  //   if (focus == true) {
-  //     route.params?.params?.isManage
-  //       ? (dispatch(setEndTime(`${convertedTime}:00`)), dispatch(setEnd(true)),dispatch(setStart(false)))
-  //       : null;
-  //   }
-  // }, [focus]);
+  useLayoutEffect(() => {
+    if (focus == true) {
+      route.params?.params?.isManage
+        ? (dispatch(setEndTime(`${endTimeFromRoute}:00`)),
+          setEndTimeFromRoute(endTimeFromRoute),
+          dispatch(setEnd(true)),
+          dispatch(setStart(false)))
+        : null;
+    }
+  }, [focus]);
 
   const onConfirmInManage = React.useCallback(
     ({hours, minutes}) => {
       setVisible(false);
       dispatch(setEndTime(`${hours}:${minutes}`));
+      setEndTimeFromRoute(hours);
       setDisabled(false);
       dispatch(setEnd(true));
       dispatch(setStart(false));
@@ -80,15 +90,11 @@ const EndTime = ({navigation, route}) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', e => {
-      // dispatch(setEndTime(hours));
       dispatch(setEnd(true));
       dispatch(setStart(false));
     });
     return unsubscribe;
   }, [navigation]);
-
-  // var sDate =
-  // new Date(`${hours}:${minutes}`);
 
   const handlePress = async () => {
     setIsLoading(true);
@@ -97,7 +103,7 @@ const EndTime = ({navigation, route}) => {
       startTimeInISO: getISOTime(startTime),
       endTimeInISO: getISOTime(endTime),
     };
-    // console.log(timeData);
+
     const response = await addTime(timeData);
     console.log('I am response for time', response.data);
     setIsLoading(false);
@@ -164,7 +170,21 @@ const EndTime = ({navigation, route}) => {
                 letterSpacing: 0.5,
                 lineHeight: 19,
               }}
-              onPress={() => navigation.goBack()}
+              onPress={async () => {
+                const timeData = {
+                  tournamentId: tournamentId,
+                  startTimeInISO: getISOTime(`${startTimeFromRoute}:00`),
+                  endTimeInISO: getISOTime(`${endTimeFromRoute}:00`),
+                };
+                console.log(timeData);
+                const response = await addTime(timeData);
+                console.log('I am response for time', response.data);
+                if (response.data.status) {
+                  navigation.goBack();
+                } else {
+                  SimpleToast.show('Something Went Wrong, Please try again 😭');
+                }
+              }}
             />
           ) : (
             <GradientButton
@@ -209,7 +229,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 11,
     flex: 1,
-    // borderWidth: 1,
   },
   gradientButton: {
     width: '100%',
