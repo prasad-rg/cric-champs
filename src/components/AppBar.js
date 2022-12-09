@@ -48,6 +48,11 @@ const AppBar = ({
         playerId: playerId,
       }),
     );
+    // navigation.navigate('EditPlayers', {
+    //   playerLogo: profilePictureUri,
+    //   playerName: title,
+    //   playerId: playerId,
+    // });
     dispatch(setIsEdit(false));
     dispatch(setEditEntity(true));
   };
