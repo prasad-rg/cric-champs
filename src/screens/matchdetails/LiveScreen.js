@@ -81,7 +81,7 @@ const LiveScreen = ({navigation, route}) => {
       team2Id,
     );
     setIsLoading(false);
-    console.log('Live score response', route.params.matchId, teamId, team2Id);
+    console.log('Live score response', response?.data?.score?.inningsMessage);
 
     if (response.status) {
       if (response?.data?.score === null) {
@@ -181,7 +181,10 @@ const LiveScreen = ({navigation, route}) => {
 
   const [isRefreshed, setIsRefreshed] = useState(false);
 
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({
+    id: route?.params?.team1Id,
+    name: route?.params.team1Name,
+  });
 
   useEffect(() => {
     if (selectedItem === null) {
@@ -269,7 +272,8 @@ const LiveScreen = ({navigation, route}) => {
           <Text style={styles.runsText}>
             {scoreBoard?.score?.runsRequiredToWin > 0 ? (
               `${selectedItem?.name} need ${scoreBoard?.score?.runsRequiredToWin} runs to win`
-            ) : scoreBoard?.score?.runsRequiredToWin == 0 ? (
+            ) : scoreBoard?.score?.runsRequiredToWin == 0 &&
+              scoreBoard?.score?.inningsMessage !== 'Innings going on' ? (
               <Text
                 style={{
                   color: 'green',
