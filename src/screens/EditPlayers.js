@@ -15,8 +15,9 @@ import * as yup from 'yup';
 import {Alert} from 'react-native';
 import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
-
+import {StackActions} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
+import {setIsEdit} from '../redux/manageTournamentSlice';
 
 const EditPlayers = ({navigation, route}) => {
   const [designation, setDesignation] = useState('');
@@ -136,9 +137,10 @@ const EditPlayers = ({navigation, route}) => {
     }
     const response = await updatePlayer(formData);
     // console.log('Response after Player Update', response.status);
-    if (response.status) {
-      navigation.pop(2);
+    if (response?.status) {
       dispatch(setIsEdit(false));
+      // navigation.dispatch(StackActions.replace('TeamInfoScreen'));
+      navigation.dispatch(StackActions.pop());
     } else {
       Toast.show('Something went wrong, Please try again  ');
     }
@@ -196,7 +198,7 @@ const EditPlayers = ({navigation, route}) => {
                     letterSpacing: 0.57,
                     lineHeight: 19,
                   }}
-                    defaultValue={ route.params?.playerName }
+                  defaultValue={route.params?.playerName}
                 />
                 <TextField
                   label="City / Town (Optional)"

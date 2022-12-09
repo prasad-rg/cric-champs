@@ -110,7 +110,7 @@ const EditTeam = ({navigation, route}) => {
 
     const response = await updateTeam(formData);
     if (response.status) {
-      navigation.pop(2);
+      navigation.pop();
       dispatch(setIsEdit(false));
     } else {
       Toast.show('Something went wrong, Please try again  ');

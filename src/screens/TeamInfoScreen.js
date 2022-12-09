@@ -143,7 +143,7 @@ const TeamInfoScreen = ({navigation, route}) => {
               </View> */}
               <ProfileImagePicker
                 getImageUri={getDetails}
-                profilePictureUri={{uri: route.params.teamLogo}}
+                profilePictureUri={{uri: route?.params?.teamLogo}}
                 isView={isView}
               />
             </View>
