@@ -62,7 +62,7 @@ const AppBar = ({
     if (response.status) {
       navigation.pop(1);
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show('Something went wrong, Please try again');
     }
   };
 
@@ -106,7 +106,7 @@ const AppBar = ({
     if (response.status) {
       navigation.pop(1);
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show('Something went wrong, Please try again  ');
     }
   };
 

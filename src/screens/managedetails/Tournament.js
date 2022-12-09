@@ -67,7 +67,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               }),
             );
           } else {
-            Toast.show('Something went wrong, Please try again 😭');
+            Toast.show('Something went wrong, Please try again  ');
           }
         },
         style: 'destructive',

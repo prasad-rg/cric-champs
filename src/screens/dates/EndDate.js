@@ -52,7 +52,7 @@ const StartDate = ({navigation, route}) => {
     if (response.data.status) {
       navigation.navigate('TimeScreen');
     } else {
-      Toast.show('Something Went Wrong, Please try again 😭');
+      Toast.show('Something Went Wrong, Please try again  ');
     }
   };
 
@@ -299,7 +299,7 @@ const StartDate = ({navigation, route}) => {
             if (response.data.status) {
               navigation.goBack();
             } else {
-              SimpleToast.show('Something Went Wrong, Please try again 😭');
+              SimpleToast.show('Something Went Wrong, Please try again  ');
             }
           }}
           style={{height: 50, width: '100%', marginTop: 0}}

@@ -110,7 +110,7 @@ const EndTime = ({navigation, route}) => {
     if (response.data.status) {
       navigation.navigate('Overview');
     } else {
-      Toast.show('Something Went Wrong, Please try again 😭');
+      Toast.show('Something Went Wrong, Please try again  ');
     }
   };
 
@@ -182,7 +182,7 @@ const EndTime = ({navigation, route}) => {
                 if (response.data.status) {
                   navigation.goBack();
                 } else {
-                  SimpleToast.show('Something Went Wrong, Please try again 😭');
+                  SimpleToast.show('Something Went Wrong, Please try again  ');
                 }
               }}
             />

@@ -53,7 +53,7 @@ const TeamInfoScreen = ({navigation, route}) => {
     if (response.status) {
       navigation.pop(1);
     }else{
-      Toast.show("Something went wrong, Please try again 😭")
+      Toast.show("Something went wrong, Please try again  ")
     }
   };
 

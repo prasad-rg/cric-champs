@@ -140,7 +140,7 @@ const EditPlayers = ({navigation, route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show('Something went wrong, Please try again  ');
     }
   };
 
