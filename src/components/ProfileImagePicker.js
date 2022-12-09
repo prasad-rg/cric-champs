@@ -70,7 +70,7 @@ const ProfileImagePicker = ({
               ? profilePictureUri
               : imageUri
               ? {uri: imageUri}
-              : require('../../assets/images/team4.png')
+              : require('../../assets/images/profile_team.png')
           }
           style={styles.teamlogo}
         />

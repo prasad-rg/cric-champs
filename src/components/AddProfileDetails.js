@@ -139,7 +139,7 @@ const AddProfileDetails = ({
                     ? profilePictureUri
                     : imageUri
                     ? {uri: imageUri}
-                    : require('../../assets/images/profile4.png')
+                    : require('../../assets/images/avatar.png')
                 }
                 style={styles.imageSize}
               />

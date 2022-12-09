@@ -1,5 +1,9 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import CreateTournament from '../screens/CreateTournament';
 import CreateTournamentSuccess from '../screens/CreateTournamentSuccess';
@@ -20,8 +24,7 @@ import UmpireProfile from '../screens/UmpireProfile';
 import StadiumInformation from '../screens/StadiumInformation';
 import ManageScreen from '../screens/ManageScreen';
 
-
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
@@ -35,95 +38,131 @@ const AppNavigator = () => {
       <Stack.Screen
         name="CreateTournament"
         component={CreateTournament}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="CreateTournamentSuccess"
         component={CreateTournamentSuccess}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="TeamsList"
         component={TeamsList}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="AddTeam"
         component={AddTeam}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="AddPlayer"
         component={AddPlayer}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="OversScreen"
         component={OversScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="Ground"
         component={Ground}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="UmpiresList"
         component={UmpiresList}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="AddGround"
         component={AddGround}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="AddUmpire"
         component={AddUmpire}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
 
       <Stack.Screen
         name="DateScreen"
         component={DateScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
 
       <Stack.Screen
         name="TimeScreen"
         component={TimeScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
       <Stack.Screen
         name="Overview"
         component={Overview}
-        options={{headerShown: false}}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       />
-       <Stack.Screen
-          name="TeamInfoScreen"
-          component={TeamInfoScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="PlayerProfile"
-          component={PlayerProfile}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="UmpireProfile"
-          component={UmpireProfile}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="StadiumInformation"
-          component={StadiumInformation}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Overview"
-          component={Overview}
-          options={{headerShown: false}}
-        />
+      <Stack.Screen
+        name="TeamInfoScreen"
+        component={TeamInfoScreen}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="PlayerProfile"
+        component={PlayerProfile}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="UmpireProfile"
+        component={UmpireProfile}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="StadiumInformation"
+        component={StadiumInformation}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Overview"
+        component={Overview}
+        options={{headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
     </Stack.Navigator>
     //  </NavigationContainer>
   );
