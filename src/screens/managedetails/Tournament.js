@@ -37,9 +37,9 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
     setIsLoading(true);
     const response = await tournamentOverview(tournamentDetails._id);
     setIsLoading(false);
-    console.log(response.data);
+    console.log(response?.data);
     if (response.status) {
-      setCurrentOverview(response.data.data);
+      setCurrentOverview(response?.data?.data);
     }
   };
 
@@ -67,7 +67,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
               }),
             );
           } else {
-            Toast.show('Something went wrong, Please try again 😭');
+            Toast.show('Something went wrong, Please try again  ');
           }
         },
         style: 'destructive',
@@ -149,8 +149,8 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             onPress={() =>
               navigation.dispatch(
                 StackActions.push('DateScreen', {
-                  startDate: currentOverview?.startDateEnglish,
-                  endDate: currentOverview?.endDateEnglish,
+                  startDate: currentOverview?.startDateEnglish ? currentOverview?.startDateEnglish : undefined,
+                  endDate: currentOverview?.endDateEnglish ? currentOverview?.endDateEnglish : undefined,
                   isManage: true,
                 }),
               )
@@ -164,8 +164,8 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 StackActions.push('DateScreen', {
                   screen: 'END DATE',
                   params: {
-                    startDate: currentOverview?.startDateEnglish,
-                    endDate: currentOverview?.endDateEnglish,
+                    startDate: currentOverview?.startDateEnglish ? currentOverview?.startDateEnglish : undefined,
+                    endDate: currentOverview?.endDateEnglish ? currentOverview?.endDateEnglish : undefined,
                     isManage: true,
                   },
                 }),
@@ -180,8 +180,8 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
             onPress={() =>
               navigation.dispatch(
                 StackActions.push('TimeScreen', {
-                  startTime: currentOverview?.startTimeNormalFormat,
-                  endTime: currentOverview?.endTimeNormalFormat,
+                  startTime: currentOverview?.startTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "09 AM",
+                  endTime: currentOverview?.endTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "06 PM",
                   isManage: true,
                 }),
               )
@@ -197,8 +197,8 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                 StackActions.push('TimeScreen', {
                   screen: 'END OF PLAY',
                   params: {
-                    startTime: currentOverview?.startTimeNormalFormat,
-                    endTime: currentOverview?.endTimeNormalFormat,
+                    startTime: currentOverview?.startTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "09 AM" ,
+                    endTime: currentOverview?.endTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "06 PM",
                     isManage: true,
                   },
                 }),

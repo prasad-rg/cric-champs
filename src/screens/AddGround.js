@@ -91,7 +91,7 @@ const AddGround = ({navigation, route}) => {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
             } else {
-              Toast.show('Something went wrong, Try again 😭');
+              Toast.show('Something went wrong, Try again  ');
             }
           } else {
             console.log('Profile Picture not uploaded');

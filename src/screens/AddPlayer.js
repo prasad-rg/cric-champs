@@ -142,7 +142,7 @@ const AddPlayer = ({navigation, route}) => {
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
     }else{
-      Toast.show("Something went wrong, Please try again 😭")
+      Toast.show("Something went wrong, Please try again  ")
     }
   };
 

@@ -69,7 +69,7 @@ const AddUmpire = ({navigation, route}) => {
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
     } else{
-      Toast.show("Something went wrong, Please try again 😭")
+      Toast.show("Something went wrong, Please try again  ")
     }
   };
   return (
@@ -100,7 +100,7 @@ const AddUmpire = ({navigation, route}) => {
               // dispatch(addUmpire(response.data));
               navigation.goBack();
             }else{
-              Toast.show("Something went wrong, Please try again 😭")
+              Toast.show("Something went wrong, Please try again  ")
             }
           }else{
             Toast.show("Umpire profile is required")

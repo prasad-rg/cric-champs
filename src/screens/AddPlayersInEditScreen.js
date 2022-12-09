@@ -144,7 +144,7 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
       dispatch(setIsEdit(false));
       dispatch(setEditEntity(false));
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show('Something went wrong, Please try again  ');
     }
   };
 
@@ -187,7 +187,7 @@ const AddPlayersInEditScreen = ({navigation, route}) => {
             if (createparticipantresponse.status) {
               navigation.goBack();
             } else {
-              Toast.show('Something went wrong. Please try again 😭');
+              Toast.show('Something went wrong. Please try again  ');
             }
           }else{
             Toast.show('Please add profile picture');

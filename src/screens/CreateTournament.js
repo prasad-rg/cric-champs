@@ -28,7 +28,7 @@ import { storeRecentActivities } from '../redux/recentActivitiesSlice';
 const radio_props = [
   {label: 'League', value: 'League', id: 0},
   {label: 'Knockout', value: 'Knockout', id: 1},
-  {label: 'Individual Match', value: 'Individual Match', id: 2},
+  {label: 'Individual Match', value: 'individual Match', id: 2},
 ];
 
 const CreateTournament = ({navigation}) => {

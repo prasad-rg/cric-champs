@@ -134,7 +134,7 @@ const AddTeam = ({navigation, route}) => {
       navigation.pop(2);
       dispatch(setIsEdit(false));
     } else {
-      Toast.show('Something went wrong, Please try again 😭');
+      Toast.show('Something went wrong, Please try again  ');
     }
   };
 
@@ -196,10 +196,10 @@ const AddTeam = ({navigation, route}) => {
                 navigation.goBack();
                 dispatch(deletePlayers());
               } else {
-                Toast.show('Something went wrong. Please try again 😭');
+                Toast.show('Something went wrong. Please try again  ');
               }
             } else {
-              Toast.show('Something went wrong. Please try again 😭');
+              Toast.show('Something went wrong. Please try again  ');
             }
           } else {
             Toast.show('Please add team profile picture');

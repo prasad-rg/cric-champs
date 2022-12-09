@@ -205,7 +205,7 @@ const StartDate = ({navigation, route}) => {
             if (response.data.status) {
               navigation.goBack();
             } else {
-              SimpleToast.show('Something Went Wrong, Please try again 😭');
+              SimpleToast.show('Something Went Wrong, Please try again  ');
             }
           }}
         />

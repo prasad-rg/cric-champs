@@ -49,7 +49,7 @@ const OversScreen = ({navigation, route}) => {
       if (response.status) {
         route.params?.isManage ? navigation.goBack() : navigation.navigate('Ground') 
       } else {
-        Toast.show('Something went wrong, Please try again 😭');
+        Toast.show('Something went wrong, Please try again  ');
       }
     } else {
       Toast.show('overs is required');
