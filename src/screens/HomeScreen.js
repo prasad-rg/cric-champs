@@ -49,8 +49,8 @@ const HomeScreen = ({navigation}) => {
         if (recents.status) {
           setRecentsData(recents.data.data);
         } else {
-          // console.log(recents);
-          Alert.alert('Recents Fetch Failed');
+          console.log(recents);
+          // Alert.alert('Recents Fetch Failed');
         }
       };
       getRecentDetails(recentActivities);

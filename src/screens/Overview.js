@@ -68,17 +68,17 @@ const Overview = ({navigation}) => {
               <View style={styles.headerText}>
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity onPress={() => {
-                    // navigation.dispatch(
-                    //   CommonActions.reset({
-                    //     index: 0,
-                    //     routes: [
-                    //       {
-                    //         name: 'HomeStack',
-                    //       },
-                    //     ],
-                    //   }),
-                    // );
-                    navigation.goback()
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [
+                          {
+                            name: 'HomeStack',
+                          },
+                        ],
+                      }),
+                    );
+                    // navigation.goBack();
                   }}>
                     <Image
                       source={require('../../assets/images/backicon.png')}
