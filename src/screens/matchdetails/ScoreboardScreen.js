@@ -115,7 +115,7 @@ const ScoreboardScreen = ({navigation, route}) => {
           ];
           // if (bowler?.currentlyBatting) {
           //   bowlerArray[0] = `${bowler?.playerName}*`;
-          // }
+          // /}
           return bowlerArray;
         });
         setData(bowlerData);
