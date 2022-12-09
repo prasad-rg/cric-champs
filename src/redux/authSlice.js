@@ -10,8 +10,8 @@ import {setToken, getToken, deleteToken} from '../utils/token';
 export const userLogin = createAsyncThunk('user/login', async userData => {
   try {
     const response = await loginUser(userData);
-    console.log(response);
-    if (response.status === 200) {
+    console.log('=====', response);
+    if (response?.status === 200) {
       const headers = response.headers;
       let stringifiedToken = JSON.stringify({
         accessToken: headers.authorization,
@@ -24,11 +24,12 @@ export const userLogin = createAsyncThunk('user/login', async userData => {
         return false;
       }
     } else {
+      // console.info('=====================',error);
       return {error: response};
     }
   } catch (error) {
-    console.log(error);
-    return error;
+    // console.info(error);
+    return error.response.data;
   }
 });
 
@@ -37,7 +38,6 @@ export const userRegister = createAsyncThunk(
   async userData => {
     try {
       const response = await registerUser(userData);
-      console.warn(response);
       if (response.status === 200) {
         const headers = response.headers.map;
         let stringifiedToken = JSON.stringify({
@@ -96,8 +96,14 @@ export const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(userLogin.fulfilled, (state, action) => {
+      let checkString = '';
+      if (typeof action.payload.error === 'string') {
+        checkString = action.payload.error;
+      }else{
+        checkString = 'Something went wrong!'
+      }
       if (action.payload?.error) {
-        state.error = action.payload.error;
+        state.error = checkString;
         state.isLoggedIn = false;
         state.isLoading = false;
       } else {
@@ -107,16 +113,28 @@ export const userSlice = createSlice({
       }
     });
     builder.addCase(userLogin.rejected, (state, action) => {
+      let checkString = '';
+      if (typeof action.payload === 'string') {
+        checkString = action.payload;
+      }else{
+        checkString = 'Something went wrong!'
+      }
       state.isLoading = false;
-      state.error = action.payload;
+      state.error = checkString;
     });
     builder.addCase(userRegister.pending, (state, action) => {
       state.isLoading = true;
       state.error = null;
     });
     builder.addCase(userRegister.fulfilled, (state, action) => {
+      let checkString = '';
+      if (typeof action.payload?.error === 'string') {
+        checkString = action.payload?.error;
+      }else{
+        checkString = 'Something went wrong!'
+      }
       if (action.payload?.error) {
-        state.error = action.payload.error;
+        state.error = checkString;
         state.isLoggedIn = false;
         state.isLoading = false;
       } else {
@@ -127,7 +145,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(userRegister.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.payload;
+      state.error = null;
     });
     builder.addCase(userLogout.pending, (state, action) => {
       state.isLoading = true;
@@ -141,7 +159,7 @@ export const userSlice = createSlice({
     builder.addCase(userLogout.rejected, (state, action) => {
       state.isLoading = false;
       state.isLoggedIn = true;
-      state.error = action.payload;
+      state.error = null;
     });
   },
 });

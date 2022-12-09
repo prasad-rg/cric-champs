@@ -959,7 +959,7 @@ const UpdateLiveScore = ({navigation, route}) => {
           </ScrollView>
         </CustomChooseModal>
         <View style={styles.mainView}>
-          <View style={{width: '58%'}}>
+          <View style={{width: '63%'}}>
             <Text style={styles.runs}>Runs</Text>
             <CustomRunsButton
               radio_props={run_props}
@@ -969,7 +969,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               onPress={getRuns}
             />
           </View>
-          <View style={{width: '42%'}}>
+          <View style={{width: '46%',paddingRight:1}}>
             <Text style={styles.extras}>Extras</Text>
             <CustomExtrasButton
               radio_props={extra_props}
@@ -985,7 +985,7 @@ const UpdateLiveScore = ({navigation, route}) => {
         </View>
         <View
           style={{
-            marginHorizontal: 10,
+            // marginHorizontal: 10,
             padding: 20,
           }}>
           <CustomRadioButton
@@ -1103,6 +1103,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
+   
     marginHorizontal: '10%',
   },
   wickets: {
