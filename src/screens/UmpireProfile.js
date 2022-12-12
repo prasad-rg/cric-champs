@@ -1,10 +1,12 @@
 import {View, StyleSheet, Text, Alert, ScrollView} from 'react-native';
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-
+import call from 'react-native-phone-call'
+import SimpleToast from 'react-native-simple-toast';
 import AddProfileDetails from '../components/AddProfileDetails';
 import {useSelector} from 'react-redux';
 import {getUmpireDetailsByUmpireIdAndTournamentId} from '../services/viewTournament';
+import GradientButton from '../components/GradientButton';
 
 const UmpireProfile = ({navigation, route}) => {
   const [profilePictureUri, setProfilePictureUri] = useState('');

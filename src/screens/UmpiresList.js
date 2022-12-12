@@ -91,6 +91,8 @@ const UmpiresList = ({navigation, route}) => {
                         umpireName: value.name,
                         umpirePicture: value.profilePic.url,
                         setIsEdit: dispatch(setIsEdit(true)),
+                        isManage:route?.params?.isManage,
+                        phoneNo: value?.phoneNo,
                       })
                     }>
                     <TeamListName
