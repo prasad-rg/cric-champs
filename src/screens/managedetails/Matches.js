@@ -11,7 +11,10 @@ import {
 import React, {useEffect, useState} from 'react';
 import MatchCard from '../../components/MatchCard';
 import {useSelector} from 'react-redux';
-import {getMatchesByTournamentId} from '../../services/viewTournament';
+import {
+  getMatchesByTournamentId,
+  getMatchesByTournamentIdWithAdmin,
+} from '../../services/viewTournament';
 import {convertMatchesDataWithScores} from '../../utils/convertMatchesDataWithScores';
 
 const Matches = ({navigation}) => {
@@ -21,7 +24,9 @@ const Matches = ({navigation}) => {
   let prevDate = null;
   const loadMatches = async () => {
     setIsLoading(true);
-    const response = await getMatchesByTournamentId(tournamentDetails._id);
+    const response = await getMatchesByTournamentIdWithAdmin(
+      tournamentDetails._id,
+    );
     setIsLoading(false);
     if (response.status) {
       setCurrentMatches(() => convertMatchesDataWithScores(response?.data));
@@ -36,41 +41,45 @@ const Matches = ({navigation}) => {
     let currentDate = item.matchDateInEnglish;
     if (currentDate === prevDate) {
       prevDate = currentDate;
-      return (
-        <TouchableOpacity
-          onPress={() =>
-            (item.status.toUpperCase() === 'LIVE' ||
-              item.status.toUpperCase() === 'UPCOMING') &&
-            navigation.navigate('UpdateLiveScore', {
-              team1Id: item.team1Id,
-              team2Id: item.team2Id,
-              matchId: item._id,
-              matchNumber: item.matchNumber,
-              teams: {team1Name: item.team1Name, team2Name: item.team2Name},
-            })
-          }>
-          <MatchCard matchDetails={item} />
-        </TouchableOpacity>
-      );
+      if (item?.isAdmin) {
+        return (
+          <TouchableOpacity
+            onPress={() =>
+              (item.status.toUpperCase() === 'LIVE' ||
+                item.status.toUpperCase() === 'UPCOMING') &&
+              navigation.navigate('UpdateLiveScore', {
+                team1Id: item.team1Id,
+                team2Id: item.team2Id,
+                matchId: item._id,
+                matchNumber: item.matchNumber,
+                teams: {team1Name: item.team1Name, team2Name: item.team2Name},
+              })
+            }>
+            <MatchCard matchDetails={item} />
+          </TouchableOpacity>
+        );
+      }
     } else {
       prevDate = currentDate;
-      return (
-        <TouchableOpacity
-          onPress={() =>
-            (item.status.toUpperCase() === 'LIVE' ||
-              item.status.toUpperCase() === 'UPCOMING') &&
-            navigation.navigate('UpdateLiveScore', {
-              team1Id: item.team1Id,
-              team2Id: item.team2Id,
-              matchId: item._id,
-              matchNumber: item.matchNumber,
-              teams: {team1Name: item.team1Name, team2Name: item.team2Name},
-            })
-          }>
-          <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
-          <MatchCard matchDetails={item} />
-        </TouchableOpacity>
-      );
+      if (item?.isAdmin) {
+        return (
+          <TouchableOpacity
+            onPress={() =>
+              (item.status.toUpperCase() === 'LIVE' ||
+                item.status.toUpperCase() === 'UPCOMING') &&
+              navigation.navigate('UpdateLiveScore', {
+                team1Id: item.team1Id,
+                team2Id: item.team2Id,
+                matchId: item._id,
+                matchNumber: item.matchNumber,
+                teams: {team1Name: item.team1Name, team2Name: item.team2Name},
+              })
+            }>
+            <Text style={styles.dayText}>{item.matchDateInEnglish}</Text>
+            <MatchCard matchDetails={item} />
+          </TouchableOpacity>
+        );
+      }
     }
   };
 

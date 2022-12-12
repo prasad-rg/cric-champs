@@ -1,6 +1,6 @@
 import {BASE_URL} from '../api/baseURL';
 import axios from 'axios';
-import { refreshTokenIfExpired } from './auth';
+import {refreshTokenIfExpired} from './auth';
 
 export const getTournamentByCode = async code => {
   try {
@@ -251,19 +251,39 @@ export const verifyOTP = async data => {
 };
 
 export const resetPassword = async (data, token) => {
-  console.log("token",token)
+  console.log('token', token);
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/otp/reset-password`,
+      data,
+      {
+        headers: {
+          'OTP-VERIFICATION-TOKEN': token,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const getMatchesByTournamentIdWithAdmin = async tournamentId => {
+  const validateAndGetToken = await refreshTokenIfExpired();
+  if (validateAndGetToken !== null) {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/api/otp/reset-password`,
-        data,
+      const response = await axios.get(
+        `${BASE_URL}/api/match?tournamentId=${tournamentId}`,
         {
           headers: {
-            'OTP-VERIFICATION-TOKEN': token,
+            Authorization: validateAndGetToken,
           },
         },
       );
-      return response;
+      const data = response.data;
+      return data;
     } catch (error) {
-      return error.response.data.message;
+      return error.response.data;
     }
   }
+};
