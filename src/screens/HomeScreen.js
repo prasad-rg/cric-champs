@@ -75,7 +75,7 @@ const HomeScreen = ({navigation}) => {
         navigation.navigate('ViewScreen');
       }
     } else {
-      setInputTextError('Pleas Enter a Tournament Code to Proceed');
+      setInputTextError('Please Enter a Tournament Code to Proceed');
     }
   };
 
