@@ -606,7 +606,6 @@ const UpdateLiveScore = ({navigation, route}) => {
                 wickets: result?.data?.scoreOfTeam1?.wickets,
                 balls: result?.data?.scoreOfTeam1?.balls,
               });
-              //Tell him to add bowler
               setBowler({
                 bowler: result?.data?.scoreOfTeam1?.bowler,
                 bowlerName: result?.data?.scoreOfTeam1?.bowlerName,

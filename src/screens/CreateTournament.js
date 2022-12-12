@@ -70,7 +70,7 @@ const CreateTournament = ({navigation}) => {
         dispatch(setIsEdit(false));
         navigation.navigate('CreateTournamentSuccess');
       } else {
-        Toast.show('Something went wrong, Try again 😭');
+        Toast.show('Something went wrong, Try again');
       }
     } else {
       Toast.show('Tournament profile is required');

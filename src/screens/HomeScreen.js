@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 
 import React, {useEffect, useState, useLayoutEffect} from 'react';
@@ -22,8 +22,13 @@ import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {storeRecentActivities} from '../redux/recentActivitiesSlice';
 import {getRecentActivities} from '../services/recentActivities';
 import {useIsFocused} from '@react-navigation/native';
-import {setEditEntity, setIsEdit, setIsView} from '../redux/manageTournamentSlice';
+import {
+  setEditEntity,
+  setIsEdit,
+  setIsView,
+} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -40,8 +45,8 @@ const HomeScreen = ({navigation}) => {
   const focus = useIsFocused();
 
   useLayoutEffect(() => {
-    dispatch(setEditEntity(false))
-    dispatch(setIsEdit(false))
+    dispatch(setEditEntity(false));
+    dispatch(setIsEdit(false));
     if (isLoggedIn) {
       const getRecentDetails = async tournamentIds => {
         const recents = await getRecentActivities({tournamentIds});
@@ -81,93 +86,97 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-           <StatusBar
-          barStyle="light-content"
-          hidden={false}
-          backgroundColor= 'rgba(0, 102, 226, 1)'
-        />
-      <View style={styles.backgroundBeyondSafeArea}>
-        <SafeAreaView>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('UserControls')}>
-              <View style={styles.burgerView}>
-                <Image
-                  source={require('../../assets/images/burgermenu.png')}
-                  style={styles.burgermenu}
-                />
-              </View>
-            </TouchableOpacity>
-            <Text style={styles.cricket}>Cricket</Text>
-          </View>
-        </SafeAreaView>
-      </View>
-      <ScrollView>
-        <View>
-          <View style={styles.subheader}>
-            <Text style={styles.viewManage}>View or Manage Tournament</Text>
-          </View>
-          <View>
-            <Text style={styles.enterTournament}>
-              Enter tournament code to view / manage
-            </Text>
-            <View style={styles.middleView}>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={text => handelTextChange(text)}
-                value={code}
-                autoCapitalize="none"
-              />
-              {isLoading ? (
-                <View style={{marginHorizontal: 10}}>
-                  <ActivityIndicator size="large" color="#FFBA8C" />
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="rgba(0, 102, 226, 1)"
+      />
+      <KeyboardAwareScrollView>
+        <View style={styles.backgroundBeyondSafeArea}>
+          <SafeAreaView>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('UserControls')}>
+                <View style={styles.burgerView}>
+                  <Image
+                    source={require('../../assets/images/burgermenu.png')}
+                    style={styles.burgermenu}
+                  />
                 </View>
+              </TouchableOpacity>
+              <Text style={styles.cricket}>Cricket</Text>
+            </View>
+          </SafeAreaView>
+        </View>
+        <ScrollView>
+          <View>
+            <View style={styles.subheader}>
+              <Text style={styles.viewManage}>View or Manage Tournament</Text>
+            </View>
+            <View>
+              <Text style={styles.enterTournament}>
+                Enter tournament code to view / manage
+              </Text>
+              <View style={styles.middleView}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={text => handelTextChange(text)}
+                  value={code}
+                  autoCapitalize="none"
+                />
+                {isLoading ? (
+                  <View style={{marginHorizontal: 10}}>
+                    <ActivityIndicator size="large" color="#FFBA8C" />
+                  </View>
+                ) : (
+                  <OutlinedButton text="ENTER" onPress={handlePress} />
+                )}
+              </View>
+              {inputTextError && (
+                <Text style={styles.errorText}>{inputTextError}</Text>
+              )}
+              <Text style={styles.codeAcquired}>
+                Code can be acquired from the admin.
+              </Text>
+              <Text style={styles.or}>Or</Text>
+              {isLoggedIn ? (
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={['#FFBA8C', '#FE5C6A']}
+                  text="CREATE TOURNAMENT"
+                  onPress={() => navigation.navigate('AppStack')}
+                />
               ) : (
-                <OutlinedButton text="ENTER" onPress={handlePress} />
+                <GradientButton
+                  start={{x: 0, y: 0}}
+                  end={{x: 2, y: 0}}
+                  colors={['#FFBA8C', '#FE5C6A']}
+                  text="CREATE TOURNAMENT"
+                  onPress={() => navigation.navigate('AuthStack')}
+                />
+              )}
+              {recentsData.length > 0 && isLoggedIn && (
+                <View style={styles.recentActivityView}>
+                  <Text style={styles.recentActivityText}>
+                    Recent Activities
+                  </Text>
+                  {recentsData.map(tournament => (
+                    <RecentActivityCard
+                      key={tournament._id}
+                      title={tournament.name}
+                      matchCode={tournament.code}
+                      isAdmin={tournament.isAdmin}
+                      navigation={navigation}
+                      id={tournament._id}
+                    />
+                  ))}
+                </View>
               )}
             </View>
-            {inputTextError && (
-              <Text style={styles.errorText}>{inputTextError}</Text>
-            )}
-            <Text style={styles.codeAcquired}>
-              Code can be acquired from the admin.
-            </Text>
-            <Text style={styles.or}>Or</Text>
-            {isLoggedIn ? (
-              <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
-                text="CREATE TOURNAMENT"
-                onPress={() => navigation.navigate('AppStack')}
-              />
-            ) : (
-              <GradientButton
-                start={{x: 0, y: 0}}
-                end={{x: 2, y: 0}}
-                colors={['#FFBA8C', '#FE5C6A']}
-                text="CREATE TOURNAMENT"
-                onPress={() => navigation.navigate('AuthStack')}
-              />
-            )}
-            {recentsData.length > 0 && isLoggedIn && (
-              <View style={styles.recentActivityView}>
-                <Text style={styles.recentActivityText}>Recent Activities</Text>
-                {recentsData.map(tournament => (
-                  <RecentActivityCard
-                    key={tournament._id}
-                    title={tournament.name}
-                    matchCode={tournament.code}
-                    isAdmin={tournament.isAdmin}
-                    navigation={navigation}
-                    id={tournament._id}
-                  />
-                ))}
-              </View>
-            )}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

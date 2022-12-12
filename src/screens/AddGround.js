@@ -87,7 +87,7 @@ const AddGround = ({navigation, route}) => {
             setIsLoading(true);
             const response = await addGrounds(groundData);
             setIsLoading(false);
-            if (response.status) {
+            if (response?.status) {
               dispatch(addGround(response.data.grounds));
               navigation.goBack();
             } else {

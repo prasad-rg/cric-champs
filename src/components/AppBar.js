@@ -65,7 +65,7 @@ const AppBar = ({
     };
     const response = await deleteIndividualPlayer(data);
     console.log(response);
-    if (response.status) {
+    if (response?.status) {
       navigation.pop(1);
     } else {
       Toast.show('Something went wrong, Please try again');
@@ -109,7 +109,7 @@ const AppBar = ({
       playerId: umpireId,
     };
     const response = await deleteIndividualPlayer(data);
-    if (response.status) {
+    if (response?.status) {
       navigation.pop(1);
     } else {
       Toast.show('Something went wrong, Please try again  ');

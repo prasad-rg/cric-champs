@@ -7,13 +7,13 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
-import React, {useState, useEffect,useLayoutEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import TeamListName from '../../components/TeamListName';
 import {getPlayersByTeamIdAndTournamentId} from '../../services/viewTournament';
 import {useSelector} from 'react-redux';
-import { setIsEdit } from '../../redux/manageTournamentSlice';
+import {setIsEdit} from '../../redux/manageTournamentSlice';
 import {StackActions, useIsFocused} from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const Players = ({navigation, route}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,7 +21,7 @@ const Players = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
   const dispatch = useDispatch();
-  
+
   const loadPlayers = async () => {
     setIsLoading(true);
     const response = await getPlayersByTeamIdAndTournamentId(
@@ -37,15 +37,16 @@ const Players = ({navigation, route}) => {
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
-        {  dispatch(setIsEdit(true))
-        
+        // key={item._id}
+        onPress={() => {
+          dispatch(setIsEdit(true));
+
           navigation.navigate('PlayerProfile', {
             teamId: route.params.teamId,
             tournamentId: tournamentDetails._id,
             playerId: item._id,
-          })}
-        }>
+          });
+        }}>
         <TeamListName source={item.profilePic.url} text={item.name} />
       </TouchableOpacity>
     );
@@ -58,11 +59,9 @@ const Players = ({navigation, route}) => {
     }
   }, [focus]);
 
-
   return (
     <View style={{flex: 1}}>
-    
-        {/* <View style={styles.container}>
+      {/* <View style={styles.container}>
           <TouchableOpacity onPress={()=> navigation.dispatch(StackActions.push('AddPlayer'))}>
             <View style={styles.addButton}>
               <Text style={styles.addTeamText}>ADD PLAYER</Text>
@@ -70,11 +69,11 @@ const Players = ({navigation, route}) => {
           </TouchableOpacity>
 
         </View> */}
-   
+
       <View style={styles.mainView}>
         <Text style={styles.players}>Players</Text>
         <FlatList
-         showsVerticalScrollIndicator = {false}
+          showsVerticalScrollIndicator={false}
           data={currentPlayers}
           renderItem={renderItem}
           keyExtractor={item => item._id}
