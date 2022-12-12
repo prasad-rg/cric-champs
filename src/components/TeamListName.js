@@ -11,7 +11,8 @@ const TeamListName = ({source, text}) => {
     </View>
   );
 };
-
+// 
+// 
 export default TeamListName;
 
 const styles = StyleSheet.create({
