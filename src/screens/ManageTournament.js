@@ -26,7 +26,7 @@ const ManageTournament = ({navigation}) => {
     const getRecentDetails = async tournamentIds => {
       setIsLoading(true);
       const recents = await getUserCreatedTournament();
-      setRecentsData(recents.data);
+      setRecentsData(recents?.data.reverse());
       setIsLoading(false);
     };
     getRecentDetails(recentActivities);
