@@ -43,7 +43,7 @@ const RecentActivityCard = ({
           <TouchableOpacity
             onPress={() => dispatch(removeRecentActivities(id))}>
             <Image
-              source={require('../../assets/images/trash.png')}
+              source={require('../../assets/images/icon-vertical-dots.png')}
               style={styles.verticalDots}
             />
           </TouchableOpacity>

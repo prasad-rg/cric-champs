@@ -22,6 +22,7 @@ import {storeTournamentDetails} from '../redux/viewTournamentSlice';
 import {storeRecentActivities} from '../redux/recentActivitiesSlice';
 import {getRecentActivities} from '../services/recentActivities';
 import {useIsFocused} from '@react-navigation/native';
+
 import {
   setEditEntity,
   setIsEdit,
@@ -38,7 +39,8 @@ const HomeScreen = ({navigation}) => {
   const [recentsData, setRecentsData] = useState([]);
   const {isLoggedIn} = useSelector(state => state.auth);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {userData} = useSelector(state => state.userData);
+  console.info('userDetails', userData);
   const handelTextChange = text => {
     setCode(text);
   };
@@ -77,7 +79,11 @@ const HomeScreen = ({navigation}) => {
         setCode('');
         dispatch(storeTournamentDetails(res));
         dispatch(storeRecentActivities(res._id));
-        navigation.navigate('ViewScreen');
+        if (res.userId === userData._id) {
+          navigation.navigate('ManageScreen');
+        } else {
+          navigation.navigate('ViewScreen');
+        }
       }
     } else {
       setInputTextError('Please Enter a Tournament Code to Proceed');
@@ -107,8 +113,8 @@ const HomeScreen = ({navigation}) => {
           </View>
         </SafeAreaView>
       </View>
-        <ScrollView>
-      <KeyboardAwareScrollView>
+      <ScrollView>
+        <KeyboardAwareScrollView>
           <View>
             <View style={styles.subheader}>
               <Text style={styles.viewManage}>View or Manage Tournament</Text>
@@ -176,8 +182,8 @@ const HomeScreen = ({navigation}) => {
               )}
             </View>
           </View>
-      </KeyboardAwareScrollView>
-        </ScrollView>
+        </KeyboardAwareScrollView>
+      </ScrollView>
     </View>
   );
 };
