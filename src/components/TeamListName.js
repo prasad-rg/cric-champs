@@ -12,6 +12,7 @@ const TeamListName = ({source, text}) => {
   );
 };
 // 
+// 
 export default TeamListName;
 
 const styles = StyleSheet.create({
