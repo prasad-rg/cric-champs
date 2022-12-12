@@ -24,7 +24,7 @@ const Matches = ({navigation}) => {
     const response = await getMatchesByTournamentId(tournamentDetails._id);
     setIsLoading(false);
     if (response.status) {
-      setCurrentMatches(() => convertMatchesDataWithScores(response.data));
+      setCurrentMatches(() => convertMatchesDataWithScores(response?.data));
     }
   };
 
