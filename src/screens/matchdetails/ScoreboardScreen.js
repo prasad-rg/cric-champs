@@ -88,7 +88,7 @@ const ScoreboardScreen = ({navigation, route}) => {
                 : ''
             }`,
             player?.runsScored,
-            `${player?.overFaced}.${player?.ballsFaced}`,
+            `${player?.ballsFaced}`,
             `${player?.fours}`,
             `${player?.sixes}`,
             `${Math.round(player?.strikeRate * 100) / 100}`,

@@ -91,28 +91,29 @@ const HomeScreen = ({navigation}) => {
         hidden={false}
         backgroundColor="rgba(0, 102, 226, 1)"
       />
-      <KeyboardAwareScrollView>
-        <View style={styles.backgroundBeyondSafeArea}>
-          <SafeAreaView>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('UserControls')}>
-                <View style={styles.burgerView}>
-                  <Image
-                    source={require('../../assets/images/burgermenu.png')}
-                    style={styles.burgermenu}
-                  />
-                </View>
-              </TouchableOpacity>
-              <Text style={styles.cricket}>Cricket</Text>
-            </View>
-          </SafeAreaView>
-        </View>
+      <View style={styles.backgroundBeyondSafeArea}>
+        <SafeAreaView>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('UserControls')}>
+              <View style={styles.burgerView}>
+                <Image
+                  source={require('../../assets/images/burgermenu.png')}
+                  style={styles.burgermenu}
+                />
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.cricket}>Cricket</Text>
+          </View>
+        </SafeAreaView>
+      </View>
         <ScrollView>
+      <KeyboardAwareScrollView>
           <View>
             <View style={styles.subheader}>
               <Text style={styles.viewManage}>View or Manage Tournament</Text>
             </View>
+
             <View>
               <Text style={styles.enterTournament}>
                 Enter tournament code to view / manage
@@ -175,8 +176,8 @@ const HomeScreen = ({navigation}) => {
               )}
             </View>
           </View>
-        </ScrollView>
       </KeyboardAwareScrollView>
+        </ScrollView>
     </View>
   );
 };
