@@ -5,7 +5,7 @@ import {refreshTokenIfExpired} from './auth';
 export const getRecentActivities = async tournamentIds => {
   // console.log(tournamentIds);
   const validateAndGetToken = await refreshTokenIfExpired();
-  console.log(validateAndGetToken);
+  // console.log(validateAndGetToken);
   if (validateAndGetToken !== null) {
     try {
       const response = await axios.post(

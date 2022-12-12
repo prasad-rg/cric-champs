@@ -20,7 +20,6 @@ import {useSelector} from 'react-redux';
 import {getPlayerDetailsByTeamIdAndTournamentIdAndPlayerId} from '../services/viewTournament';
 
 const PlayerProfile = ({navigation, route}) => {
-
   const [gender, setGender] = useState('');
   const [profilePictureUri, setProfilePictureUri] = useState('');
   const getDetails = data => {
@@ -41,9 +40,11 @@ const PlayerProfile = ({navigation, route}) => {
       tournamentDetails._id,
     );
     setIsLoading(false);
-    if (response.status) {
-      setCurrentPlayerDetails(response.data);
+    if (response?.status) {
+      setCurrentPlayerDetails(response?.data);
     }
+
+    // console.info(response);
   };
 
   // const data={
@@ -137,7 +138,7 @@ const PlayerProfile = ({navigation, route}) => {
     {
       id: 10,
       title: 'Achievements',
-      value: 'Man of the Match (Match 5)',
+      value: ' ',
     },
   ];
   const focus = useIsFocused();
