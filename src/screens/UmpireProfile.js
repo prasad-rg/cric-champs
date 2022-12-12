@@ -87,6 +87,37 @@ const UmpireProfile = ({navigation, route}) => {
           ))}
         </View>
       </ScrollView>
+      <View style={{marginBottom: Platform.OS === 'ios' ? 10 : 0}}>
+        {route.params?.isManage ? (
+          <GradientButton
+            start={{x: 0, y: 0}}
+            end={{x: 2, y: 0}}
+            colors={['#FFBA8C', '#FE5C6A']}
+            text="CALL UMPIRE"
+            style={{height: 48, width: '100%', marginTop: 0}}
+            textstyle={{
+              height: 16,
+              fontWeight: '500',
+              fontSize: 14,
+              letterSpacing: 0.5,
+              lineHeight: 19,
+            }}
+            onPress={() => {
+              if (route?.params?.phoneNo) {
+                const args = {
+                  number: route?.params?.phoneNo, // String value with the number to call
+                  prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call
+                  skipCanOpen: true, // Skip the canOpenURL check
+                };
+
+                call(args).catch(console.error);
+              } else {
+                SimpleToast.show('Umpire Number Not Found');
+              }
+            }}
+          />
+        ) : null}
+      </View>
     </View>
   );
 };
