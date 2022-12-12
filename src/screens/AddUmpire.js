@@ -183,8 +183,8 @@ const AddUmpire = ({navigation, route}) => {
                   lineWidth={1}
                   autoCapitalize="none"
                   activeLineWidth={1}
-                  onChangeText={handleChange('latitude')}
-                  onBlur={handleBlur('latitude')}
+                  onChangeText={handleChange('phoneNo')}
+                  onBlur={handleBlur('phoneNo')}
                   value={values.phoneNo}
                   style={{
                     fontFamily: 'Roboto-Medium',
