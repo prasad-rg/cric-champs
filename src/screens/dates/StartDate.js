@@ -21,6 +21,10 @@ const StartDate = ({navigation, route}) => {
   const [convertedEndDateFromRoute, setConvertedEndDate] = useState(
     moment(route?.params?.endDate).format('YYYY-MM-DD'),
   );
+
+
+  console.log("I am Route",route.params)
+
   const tournamentId = useSelector(
     state => state.tournamentdata.tournamentdata.tournamentid,
   );
