@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   profileDetailsContainer: {
-    height: 200,
+    height: 170,
     marginTop: 15,
   },
   backButtonImage: {

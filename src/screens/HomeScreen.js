@@ -24,6 +24,7 @@ import {getRecentActivities} from '../services/recentActivities';
 import {useIsFocused} from '@react-navigation/native';
 import {setEditEntity, setIsEdit, setIsView} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const HomeScreen = ({navigation}) => {
   const [code, setCode] = useState('');
@@ -86,6 +87,7 @@ const HomeScreen = ({navigation}) => {
           hidden={false}
           backgroundColor= 'rgba(0, 102, 226, 1)'
         />
+         <KeyboardAwareScrollView>
       <View style={styles.backgroundBeyondSafeArea}>
         <SafeAreaView>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -168,6 +170,7 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
