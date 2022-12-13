@@ -13,7 +13,7 @@ import React, {useEffect, useState} from 'react';
 import UserActions from '../components/UserActions';
 import {getUserDetails, logoutUser} from '../services/auth';
 import {useDispatch, useSelector} from 'react-redux';
-import {addUser} from '../redux/userSlice';
+import {addUser, deletUser} from '../redux/userSlice';
 import {logout, userLogout} from '../redux/authSlice';
 import Toast from 'react-native-simple-toast';
 
@@ -160,7 +160,10 @@ const UserControl = ({navigation}) => {
         {isLoggedIn ? (
           <TouchableOpacity
             style={styles.logout}
-            onPress={async () => dispatch(userLogout())}>
+            onPress={async () => {
+              dispatch(deletUser());
+              dispatch(userLogout());
+            }}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         ) : (

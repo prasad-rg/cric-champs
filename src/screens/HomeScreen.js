@@ -73,13 +73,13 @@ const HomeScreen = ({navigation}) => {
       const res = await getTournamentByCode(code);
       setIsLoading(false);
       if (res?.status === false) {
-        setInputTextError(res.message.toUpperCase());
+        setInputTextError(res?.message?.toUpperCase());
       } else {
         setInputTextError('');
         setCode('');
         dispatch(storeTournamentDetails(res));
-        dispatch(storeRecentActivities(res._id));
-        if (res.userId === userData._id) {
+        dispatch(storeRecentActivities(res?._id));
+        if (res?.userId === userData?._id) {
           navigation.navigate('ManageScreen');
         } else {
           navigation.navigate('ViewScreen');
