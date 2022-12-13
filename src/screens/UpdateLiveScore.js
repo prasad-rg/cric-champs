@@ -669,7 +669,8 @@ const UpdateLiveScore = ({navigation, route}) => {
               <Text style={[styles.comment, {color: '#C44343'}]}>
                 {wickets?.type}
               </Text>
-            ) : runsStatus?.runs == 4 || runsStatus?.runs == 6 ? (
+            ) : runs !== null &&
+              (runsStatus?.runs == 4 || runsStatus?.runs == 6) ? (
               <Text style={[styles.comment, {color: '#5FB100'}]}>
                 {runsStatus?.runs == 4 ? 'Boundary' : 'Sixer'}
               </Text>
@@ -686,7 +687,7 @@ const UpdateLiveScore = ({navigation, route}) => {
                       : 'Bye  '}
                   </Text>
                 )}
-                {runsStatus?.runs} Runs
+                {runs !== null && `${runsStatus?.runs} Runs`}
               </Text>
             )}
             {/* <DotBall style={{backgroundColor:"rgba(0,0,0,0.2)"}}/> */}
@@ -698,7 +699,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               </Text>
             ) : (
               <Text style={styles.calculatedFiled}>
-                {runsStatus?.runs} Runs
+                {runs !== null && `${runsStatus?.runs} Runs`}
               </Text>
             )}
           </View>
