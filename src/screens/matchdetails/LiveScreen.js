@@ -421,9 +421,12 @@ const LiveScreen = ({navigation, route}) => {
                     previousOver = liveScore?.over;
                     return (
                       <>
-                        {liveScore?.balls == 0 && (
-                          <Text style={styles.line}>|</Text>
-                        )}
+                        {liveScore?.balls == 0 &&
+                          liveScore?.status?.toString().toLowerCase() !==
+                            'wd' &&
+                          liveScore?.status?.toString().toLowerCase() !==
+                            'nb' && <Text style={styles.line}>|</Text>}
+
                         <View key={liveScore?._id}>
                           {liveScore?.status?.toString().toLowerCase() ===
                           'w' ? (
