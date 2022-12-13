@@ -263,7 +263,7 @@ const LiveScreen = ({navigation, route}) => {
               <Text style={styles.heading2}>REQ</Text>
               <Text style={styles.number3}>
                 {scoreBoard?.score?.requiredRunRate > 0
-                  ? scoreBoard?.score?.requiredRunRate
+                  ? Math.round(scoreBoard?.score?.requiredRunRate * 100) / 100
                   : ''}
               </Text>
             </View>
@@ -278,7 +278,7 @@ const LiveScreen = ({navigation, route}) => {
                 style={{
                   color: 'green',
                 }}>
-                {selectedItem?.name && `${selectedItem?.name} won the match`}
+                {scoreBoard?.statusMessage?.statusMessage}
               </Text>
             ) : (
               ''
@@ -421,9 +421,12 @@ const LiveScreen = ({navigation, route}) => {
                     previousOver = liveScore?.over;
                     return (
                       <>
-                        {liveScore?.balls == 0 && (
-                          <Text style={styles.line}>|</Text>
-                        )}
+                        {liveScore?.balls == 0 &&
+                          liveScore?.status?.toString().toLowerCase() !==
+                            'wd' &&
+                          liveScore?.status?.toString().toLowerCase() !==
+                            'nb' && <Text style={styles.line}>|</Text>}
+
                         <View key={liveScore?._id}>
                           {liveScore?.status?.toString().toLowerCase() ===
                           'w' ? (
