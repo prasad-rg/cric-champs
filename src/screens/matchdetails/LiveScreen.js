@@ -263,7 +263,7 @@ const LiveScreen = ({navigation, route}) => {
               <Text style={styles.heading2}>REQ</Text>
               <Text style={styles.number3}>
                 {scoreBoard?.score?.requiredRunRate > 0
-                  ? scoreBoard?.score?.requiredRunRate
+                  ? Math.round(scoreBoard?.score?.requiredRunRate * 100) / 100
                   : ''}
               </Text>
             </View>
