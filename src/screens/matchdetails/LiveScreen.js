@@ -273,7 +273,7 @@ const LiveScreen = ({navigation, route}) => {
             {scoreBoard?.score?.runsRequiredToWin > 0 ? (
               `${selectedItem?.name} need ${scoreBoard?.score?.runsRequiredToWin} runs to win`
             ) : scoreBoard?.score?.runsRequiredToWin == 0 &&
-              scoreBoard?.score?.inningsMessage !== 'Innings going on' ? (
+              scoreBoard?.score?.inningsMessage === 'Match ended' ? (
               <Text
                 style={{
                   color: 'green',

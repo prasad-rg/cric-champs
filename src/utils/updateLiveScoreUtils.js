@@ -203,7 +203,7 @@ export const convertLiveScoreData = (
     wickets: wickets,
   };
 
-  if (withCommentary.commentry.balls > 1) {
+  if (withCommentary.commentry.balls > 0) {
     withCommentary = {...withCommentary, matchStatus: 'on going'};
   }
   // console.log('-------Runs------', batsmanRuns);
