@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Table, TableWrapper, Row, Rows} from 'react-native-table-component';
@@ -125,7 +126,11 @@ const ScoreboardScreen = ({navigation, route}) => {
       }
     }
   };
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({
+    id: route?.params?.team1Id,
+    name: route?.params.team1Name,
+  });
+  const [isRefreshed, setIsRefreshed] = useState(false);
 
   useEffect(() => {
     if (selectedItem === null) {
@@ -133,7 +138,7 @@ const ScoreboardScreen = ({navigation, route}) => {
     } else {
       loadScoreBoard(selectedItem.id);
     }
-  }, [selectedItem]);
+  }, [selectedItem, isRefreshed]);
 
   const onSelect = item => {
     setSelectedItem(item);
@@ -146,7 +151,13 @@ const ScoreboardScreen = ({navigation, route}) => {
           <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => setIsRefreshed(!isRefreshed)}
+            />
+          }>
           <View style={styles.mainView}>
             <DropdownField
               data={teams}

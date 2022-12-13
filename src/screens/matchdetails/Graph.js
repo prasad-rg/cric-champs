@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LineChart} from 'react-native-chart-kit';
@@ -64,8 +65,9 @@ const MyLineChart = ({team1Name, team2Name, team1Values, team2Values}) => {
 const Graph = ({navigation, route}) => {
   const [team1Values, setTeam1Values] = useState([]);
   const [team2Values, setTeam2Values] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [matchNotStarted, setMatchNotStarted] = useState(true);
+  const [isRefreshed, setIsRefreshed] = useState(false);
 
   useEffect(() => {
     const fetchGraphValues = async () => {
@@ -107,7 +109,7 @@ const Graph = ({navigation, route}) => {
       }
     };
     fetchGraphValues();
-  }, []);
+  }, [isRefreshed]);
 
   console.warn(route.params);
   return (
@@ -117,7 +119,13 @@ const Graph = ({navigation, route}) => {
           <Text style={styles.noMatchText}>Match not yet started !!⏰</Text>
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => setIsRefreshed(!isRefreshed)}
+            />
+          }>
           <View style={styles.container}>
             <View>
               <MyLineChart
