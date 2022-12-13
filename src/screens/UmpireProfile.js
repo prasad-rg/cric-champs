@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   value: {
-    height: 24,
+    // height: 24,
     width: '50%',
     color: 'rgba(77,77,77,0.87)',
     fontFamily: 'Roboto-Medium',
