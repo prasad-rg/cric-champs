@@ -45,7 +45,13 @@ import {
   swapTeamPlayers,
 } from '../redux/updateLiveScore';
 import {changeUpdatePressedState} from '../redux/updateLiveScoreControls';
-import {DECLARE_END, TIME_TO_END_MATCH, TIME_TO_FLIP} from '../api/constants';
+import {
+  DECLARE_END,
+  TIME_TO_END_MATCH,
+  TIME_TO_FLIP,
+  TIME_TO_FLIP_IF_OVERS_COMPLETED,
+  TIME_TO_END_MATCH_IF_OVERS_COMPLETED,
+} from '../api/constants';
 
 const UpdateLiveScore = ({navigation, route}) => {
   const {tournamentDetails} = useSelector(state => state.tournamentDetails);
@@ -264,7 +270,10 @@ const UpdateLiveScore = ({navigation, route}) => {
     console.log('----------------------------------', update);
     let inningsTwoUpdate;
     if (update.status) {
-      if (update?.message === TIME_TO_FLIP) {
+      if (
+        update?.message === TIME_TO_FLIP ||
+        update?.message === TIME_TO_FLIP_IF_OVERS_COMPLETED
+      ) {
         dispatch(swapTeamId());
         dispatch(swapTeamPlayers());
         // console.log('=====Wait ======');
@@ -353,7 +362,8 @@ const UpdateLiveScore = ({navigation, route}) => {
       } else {
         if (
           update?.message === TIME_TO_END_MATCH ||
-          update?.message === DECLARE_END
+          update?.message === DECLARE_END ||
+          update?.message === TIME_TO_END_MATCH_IF_OVERS_COMPLETED
         ) {
           console.log(update);
           let lastData = convertLiveScoreData(
@@ -968,7 +978,7 @@ const UpdateLiveScore = ({navigation, route}) => {
               onPress={getRuns}
             />
           </View>
-          <View style={{width: '46%',paddingRight:1}}>
+          <View style={{width: '46%', paddingRight: 1}}>
             <Text style={styles.extras}>Extras</Text>
             <CustomExtrasButton
               radio_props={extra_props}
@@ -1102,7 +1112,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0,
     lineHeight: 19,
-   
+
     marginHorizontal: '10%',
   },
   wickets: {
