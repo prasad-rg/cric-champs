@@ -37,10 +37,10 @@ const EndTime = ({navigation, route}) => {
     checkForAmorPm(route.params?.params?.endTime),
   );
 
-  console.log(
-    `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
-    `${endTimeFromRoute}:00`,
-  );
+  // console.log(
+  //   `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
+  //   `${endTimeFromRoute}:00`,
+  // );
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -88,13 +88,13 @@ const EndTime = ({navigation, route}) => {
     [setVisible],
   );
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', e => {
-      dispatch(setEnd(true));
-      dispatch(setStart(false));
-    });
-    return unsubscribe;
-  }, [navigation]);
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', e => {
+  //     dispatch(setEnd(true));
+  //     dispatch(setStart(false));
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   const handlePress = async () => {
     setIsLoading(true);

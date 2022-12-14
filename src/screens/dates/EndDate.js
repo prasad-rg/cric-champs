@@ -71,12 +71,12 @@ const StartDate = ({navigation, route}) => {
     if (route.params?.params?.isManage) {
       dispatch(setEnd(true));
       dispatch(setStart(false));
+      dispatch(setEndDate(date2));
     }
 
     const unsubscribe = navigation.addListener('tabPress', e => {
       dispatch(setEnd(true));
       dispatch(setStart(false));
-      setConvertedEndDate(`${convertedEndDateFromRoute}:00`);
     });
     return unsubscribe;
   }, [navigation]);
@@ -296,7 +296,7 @@ const StartDate = ({navigation, route}) => {
 
             const response = await addDates(dateData);
             console.log('I am response for date', response.data);
-            if (response.data.status) {
+            if (response?.data?.status) {
               navigation.goBack();
             } else {
               SimpleToast.show('Something Went Wrong, Please try again  ');

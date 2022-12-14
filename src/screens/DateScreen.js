@@ -64,6 +64,8 @@ const DateScreen = ({navigation,route}) => {
   const endMonth = endmomentDate?.format('MMM');
   const endDate = endmomentDate?.format('DD');
 
+console.log("rgr..........",startDateSelector,endDateSelector)
+  
   return (
     <View style={styles.container}>
       <View style={styles.backgroundBeyondSafeArea}>
@@ -83,24 +85,24 @@ const DateScreen = ({navigation,route}) => {
             <Text style={styles.year}>
               {start
                 ? startYear
-                : end && endYear != 'Invalid date'
+                : end && endYear !== 'Invalid date'
                 ? endYear
                 : current_date.format('YYYY')}
             </Text>
             <Text style={styles.date}>
               {start
                 ? startDay
-                : end && endDay != 'Invalid date'
+                : end && endDay !== 'Invalid date'
                 ? endDay
                 : current_date.format('ddd,')}{' '}
               {start
                 ? startMonth
-                : end && endMonth != 'Invalid date'
+                : end && endMonth !== 'Invalid date'
                 ? endMonth
                 : current_date.format('MMM')}{' '}
               {start
                 ? startDate
-                : end && endDate != 'Invalid date'
+                : end && endDate !== 'Invalid date'
                 ? endDate
                 : current_date.format('DD')}
             </Text>

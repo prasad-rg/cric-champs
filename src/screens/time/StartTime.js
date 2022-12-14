@@ -95,13 +95,14 @@ const StartTime = ({navigation, route}) => {
     navigation.navigate('END OF PLAY');
   };
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', e => {
-      dispatch(setStart(true));
-      dispatch(setEnd(false));
-    });
-    return unsubscribe;
-  }, [navigation]);
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', e => {
+  //     console.log('Hellooooo');
+  //     dispatch(setStart(true));
+  //     dispatch(setEnd(false));
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <View style={styles.container}>

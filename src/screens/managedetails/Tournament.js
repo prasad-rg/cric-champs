@@ -198,7 +198,7 @@ const Tournament = ({navigation, disableRegenerateFixture = true}) => {
                   screen: 'END OF PLAY',
                   params: {
                     startTime: currentOverview?.startTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "09 AM" ,
-                    endTime: currentOverview?.endTimeNormalFormat ? currentOverview?.startTimeNormalFormat : "06 PM",
+                    endTime: currentOverview?.endTimeNormalFormat ? currentOverview?.endTimeNormalFormat : "06 PM",
                     isManage: true,
                   },
                 }),
