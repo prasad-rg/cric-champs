@@ -4,9 +4,9 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {NavigationContainer} from '@react-navigation/native';
 import StartDate from '../screens/dates/StartDate';
 import EndDate from '../screens/dates/EndDate';
+import { setEnd, setStart } from '../redux/MatchSlice';
 
-const DateTab = (props) => {
-
+const DateTab = props => {
   const Tab = createMaterialTopTabNavigator();
   return (
     // <NavigationContainer>
@@ -34,11 +34,24 @@ const DateTab = (props) => {
           width: '50%',
         },
       }}>
-       
-      <Tab.Screen name="START DATE">
+      <Tab.Screen
+        name="START DATE"
+        listeners={({navigation, route}) => ({
+          tabPress: e => {
+            dispatch(setStart(true));
+            dispatch(setEnd(false));
+          },
+        })}>
         {() => <StartDate showProps={true} {...props} />}
       </Tab.Screen>
-      <Tab.Screen name="END DATE">
+      <Tab.Screen
+        name="END DATE"
+        listeners={({navigation, route}) => ({
+          tabPress: e => {
+            dispatch(setStart(false));
+            dispatch(setEnd(true));
+          },
+        })}>
         {() => <EndDate showProps={true} {...props} />}
       </Tab.Screen>
     </Tab.Navigator>

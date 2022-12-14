@@ -29,11 +29,12 @@ const StartDate = ({navigation, route}) => {
 
   let total = date2.getUTCDate() - date1.getUTCDate() + 1;
 
+  console.log(convertedDateFromRoute,date1)
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
 
   const onDateChange = (date, type) => {
-  
+    // console.log(date)
     setDisabled(true);
     if (type === 'END_DATE') {
       dispatch(setEndDate(date));
@@ -48,6 +49,7 @@ const StartDate = ({navigation, route}) => {
     if (route.params?.isManage) {
       dispatch(setStart(true));
       dispatch(setEnd(false));
+      dispatch(setStartDate(date1))
     }
 
     const unsubscribe = navigation.addListener('tabPress', e => {
@@ -67,8 +69,8 @@ const StartDate = ({navigation, route}) => {
   // useLayoutEffect(() => {
   //   if (focus == true) {
   //     route.params?.isManage
-  //       ? (dispatch(setConvertedStartDate(`${convertedDateFromRoute}:00`)), dispatch(setEndDate(false)),dispatch(setStart(true)))
-  //       : null;
+  //       ? (dispatch(setConvertedStartDate(`${convertedDateFromRoute}:00`)))
+  //       : undefined;
   //   }
   // }, [focus]);
 

@@ -20,7 +20,7 @@ import moment from 'moment';
 import {getISOTime} from '../../utils/getISOTime';
 import Toast from 'react-native-simple-toast';
 import {checkForAmorPm} from '../../utils/checkForAmOrPm';
-import {useIsFocused} from '@react-navigation/native';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 
 const EndTime = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -37,10 +37,10 @@ const EndTime = ({navigation, route}) => {
     checkForAmorPm(route.params?.params?.endTime),
   );
 
-  console.log(
-    `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
-    `${endTimeFromRoute}:00`,
-  );
+  // console.log(
+  //   `${startTimeFromRoute}------>${startTimeFromRoute}:00`,
+  //   `${endTimeFromRoute}:00`,
+  // );
 
   const [visible, setVisible] = React.useState(false);
   const [hours, setHours] = useState(endTime);
@@ -88,13 +88,13 @@ const EndTime = ({navigation, route}) => {
     [setVisible],
   );
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', e => {
-      dispatch(setEnd(true));
-      dispatch(setStart(false));
-    });
-    return unsubscribe;
-  }, [navigation]);
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', e => {
+  //     dispatch(setEnd(true));
+  //     dispatch(setStart(false));
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   const handlePress = async () => {
     setIsLoading(true);
@@ -108,7 +108,8 @@ const EndTime = ({navigation, route}) => {
     console.log('I am response for time', response.data);
     setIsLoading(false);
     if (response.data.status) {
-      navigation.navigate('Overview');
+      navigation.dispatch(StackActions.push('Overview'))
+      // navigation.navigate('Overview');
     } else {
       Toast.show('Something Went Wrong, Please try again  ');
     }
@@ -202,7 +203,7 @@ const EndTime = ({navigation, route}) => {
                 letterSpacing: 0.5,
                 lineHeight: 19,
               }}
-              onPress={handlePress}
+              onPress={ disabled ? null : handlePress}
             />
           )}
         </View>

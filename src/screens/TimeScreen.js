@@ -19,6 +19,8 @@ const TimeScreen = ({navigation,route}) => {
   const start = useSelector(state => state.matchdata.start);
   const end = useSelector(state => state.matchdata.end);
 
+  // console.log("insode timeScreen",startTime,endTime,start,end)
+
   const handleBack = () => {
     navigation.goBack();
   };
