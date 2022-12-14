@@ -34,6 +34,7 @@ const TeamInfoScreen = ({navigation, route}) => {
 
   const handleEdit = () => {
     dispatch(setIsEdit(true));
+    // dispatch(setIsEdit(true));
     navigation.dispatch(
       StackActions.push('EditTeam', {
         title: 'Edit Team',
