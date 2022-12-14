@@ -107,6 +107,7 @@ const AddGround = ({navigation, route}) => {
                   navigation={navigation}
                   getImageUri={getDetails}
                   profilePictureUri={route?.params?.groundImage[0]}
+                  type='ground'
                 />
               ) : (
                 <AddProfileDetails
@@ -114,6 +115,7 @@ const AddGround = ({navigation, route}) => {
                   title={editEntity ? 'Edit Ground' : 'Add Ground'}
                   navigation={navigation}
                   getImageUri={getDetails}
+                  type='ground'
                 />
               )}
               <View style={styles.form}>

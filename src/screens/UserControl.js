@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addUser, deletUser} from '../redux/userSlice';
 import {logout, userLogout} from '../redux/authSlice';
 import Toast from 'react-native-simple-toast';
+import {setEditEntity, setIsEdit} from '../redux/manageTournamentSlice';
 
 const UserControl = ({navigation}) => {
   // const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -115,7 +116,9 @@ const UserControl = ({navigation}) => {
           imageSource={require('../../assets/images/cricketTournament.png')}
           title="Create Tournament"
           tintColor={isLoggedIn ? undefined : 'rgba(105, 105, 105, 0.9)'}
-          onPress={() => (isLoggedIn ? navigation.navigate('AppStack') : null)}
+          onPress={() => {
+            isLoggedIn ? navigation.navigate('AppStack') : null;
+          }}
         />
         <UserActions
           title="Manage Tournament"

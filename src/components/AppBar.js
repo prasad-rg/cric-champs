@@ -152,7 +152,31 @@ const AppBar = ({
                   style={[styles.backIcon, {...iconTint}]}
                 />
               </TouchableOpacity>
-            ) : !editEntity && type == 'addplayerinedit' ? (
+            ) : editEntity && type == 'ground' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setEditEntity(false));
+                  dispatch(setIsEdit(false));
+                  navigation.goBack();
+                }}>
+                <Image
+                  source={require('../../assets/images/back.png')}
+                  style={[styles.backIcon, {...iconTint}]}
+                />
+              </TouchableOpacity>
+            )  : editEntity && type == 'editumpire' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setEditEntity(false));
+                  dispatch(setIsEdit(false));
+                  navigation.goBack();
+                }}>
+                <Image
+                  source={require('../../assets/images/back.png')}
+                  style={[styles.backIcon, {...iconTint}]}
+                />
+              </TouchableOpacity>
+            ): !editEntity && type == 'addplayerinedit' ? (
               <TouchableOpacity
                 onPress={() => {
                   dispatch(setIsEdit(true));

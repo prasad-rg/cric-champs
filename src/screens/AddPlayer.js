@@ -15,7 +15,7 @@ import * as yup from 'yup';
 import {Alert} from 'react-native';
 import {createFormData} from '../utils/createFormData';
 import {updatePlayer} from '../services/manageTournament2';
-import {setEditEntity} from '../redux/manageTournamentSlice';
+import {setEditEntity, setIsEdit} from '../redux/manageTournamentSlice';
 import Toast from 'react-native-simple-toast';
 
 const AddPlayer = ({navigation, route}) => {

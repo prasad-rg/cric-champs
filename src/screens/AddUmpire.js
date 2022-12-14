@@ -23,7 +23,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {addUmpires} from '../services/manageTournament2';
 import {updateUmpire} from '../services/manageTournament2';
-import {setEditEntity} from '../redux/manageTournamentSlice';
+import {setEditEntity, setIsEdit} from '../redux/manageTournamentSlice';
 
 const AddUmpire = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +47,7 @@ const AddUmpire = ({navigation, route}) => {
     if (profilePictureUri !== '') {
       var formData = createFormData({
         ...values,
-        umpireId: route.params.umpireId,
+        umpireId: route?.params?.umpireId,
         teamId: teamId,
         tournamentId: tournamentId,
         image: profilePictureUri,
@@ -55,7 +55,7 @@ const AddUmpire = ({navigation, route}) => {
     } else {
       var formData = createFormData({
         ...values,
-        umpireId: route.params.umpireId,
+        umpireId: route?.params?.umpireId,
         teamId: teamId,
         tournamentId: tournamentId,
       });
@@ -77,7 +77,7 @@ const AddUmpire = ({navigation, route}) => {
       <Formik
         validationSchema={addPlayerValidationSchema}
         initialValues={{
-          name: editEntity ? route.params.umpireName : '',
+          name: editEntity ? route?.params?.umpireName : '',
           city: '',
           phoneNo: '',
         }}
@@ -115,7 +115,8 @@ const AddUmpire = ({navigation, route}) => {
                   title={editEntity ? 'Edit Umpire' : 'Add Umpire'}
                   navigation={navigation}
                   getImageUri={getDetails}
-                  profilePictureUri={route.params.umpireLogo}
+                  profilePictureUri={route?.params?.umpireLogo}
+                  type='editumpire'
                 />
               ) : (
                 <AddProfileDetails
@@ -123,6 +124,8 @@ const AddUmpire = ({navigation, route}) => {
                   title={editEntity ? 'Edit Umpire' : 'Add Umpire'}
                   navigation={navigation}
                   getImageUri={getDetails}
+                  type='editumpire'
+
                 />
               )}
               <View style={styles.form}>
