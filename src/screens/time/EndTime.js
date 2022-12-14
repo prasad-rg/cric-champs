@@ -20,7 +20,7 @@ import moment from 'moment';
 import {getISOTime} from '../../utils/getISOTime';
 import Toast from 'react-native-simple-toast';
 import {checkForAmorPm} from '../../utils/checkForAmOrPm';
-import {useIsFocused} from '@react-navigation/native';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 
 const EndTime = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -108,7 +108,8 @@ const EndTime = ({navigation, route}) => {
     console.log('I am response for time', response.data);
     setIsLoading(false);
     if (response.data.status) {
-      navigation.navigate('Overview');
+      navigation.dispatch(StackActions.push('Overview'))
+      // navigation.navigate('Overview');
     } else {
       Toast.show('Something Went Wrong, Please try again  ');
     }
@@ -202,7 +203,7 @@ const EndTime = ({navigation, route}) => {
                 letterSpacing: 0.5,
                 lineHeight: 19,
               }}
-              onPress={handlePress}
+              onPress={ disabled ? null : handlePress}
             />
           )}
         </View>
